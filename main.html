@@ -16,6 +16,8 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="main-calendar.css">
+    <!-- 숙소 추천 섹션 CSS -->
+    <link rel="stylesheet" href="recommend-stay.css">
 </head>
 <body>
     <!-- 헤더 -->
@@ -24,7 +26,7 @@
     </header>
 
     <!-- 메인 컨테이너 -->
-    <main class="main-wrapper">
+    <main class="main-wrapper main-page">
         <!-- 달력 섹션 (파란색 배경) -->
         <section class="calendar-section-wrapper">
             <div class="container-xxl px-5">
@@ -38,17 +40,18 @@
 
                     <!-- 검색 섹션 -->
                     <div class="search-section-container">
+                        <div class="slogan">끊임없는 여행</div>
+                        
                         <!-- 지역 검색 -->
                         <div class="search-card">
                             <div class="search-icon-box">
+                                <!-- 아이콘 -->
                                 <svg class="search-icon" viewBox="0 0 24 24" fill="none">
                                     <path d="M12 13.43a3.12 3.12 0 1 0 0-6.24 3.12 3.12 0 0 0 0 6.24Z" stroke="#9ca3af" stroke-width="1.5"/>
                                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Z" stroke="#9ca3af" stroke-width="1.5"/>
                                 </svg>
                             </div>
-                            <input type="text" 
-                                   class="search-input main-calendar-location-input" 
-                                   placeholder="어디로 떠나시나요?">
+                            <input type="text" class="search-input main-calendar-location-input" placeholder="어디로 떠나시나요?">
                         </div>
 
                         <!-- 날짜 선택 -->
@@ -58,11 +61,7 @@
                                     <path d="M8 2v3M16 2v3M3.5 9.09h17M21 8.5V17c0 3-1.5 5-5 5H8c-3.5 0-5-2-5-5V8.5c0-3 1.5-5 5-5h8c3.5 0 5 2 5 5Z" stroke="#9ca3af" stroke-width="1.5"/>
                                 </svg>
                             </div>
-                            <input type="text" 
-                                   class="search-input main-calendar-date-input" 
-                                   value="날짜를 선택해주세요"
-                                   readonly
-                                   style="cursor: pointer;">
+                            <input type="text" class="search-input main-calendar-date-input" value="날짜를 선택해주세요" readonly style="cursor: pointer;">
                         </div>
 
                         <!-- 인원 선택 -->
@@ -74,11 +73,7 @@
                                     <path d="M15 13.5H3.29C2.62 13.5 2.4 14.07 2.81 14.54C4.15 16 6.76 17.5 9 17.5" stroke="#9ca3af" stroke-width="1.5"/>
                                 </svg>
                             </div>
-                            <input type="text" 
-                                   class="search-input main-calendar-guest-input" 
-                                   value="성인 2명"
-                                   readonly
-                                   style="cursor: pointer;">
+                            <input type="text" class="search-input main-calendar-guest-input" value="성인 2명" readonly style="cursor: pointer;">
                             
                             <!-- 인원 선택 드롭다운 -->
                             <div class="guest-dropdown" style="display: none;">
@@ -134,15 +129,40 @@
             </div>
         </section>
         
-        <!-- 추가 콘텐츠 섹션 (흰색 배경) -->
+        <!-- 숙소 추천 섹션 -->
         <section class="additional-content-section">
             <div class="container-xxl px-5">
-                <div class="py-5">
-                    <div class="text-center text-muted">
-                        <h4>추가 콘텐츠 영역</h4>
-                        <p>여기에 다른 섹션들이 추가될 예정입니다.</p>
+                <section class="recommend-stay-section">
+                    <div class="recommend-stay-container">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <span class="username" id="recommendUsername">김여행</span>님 스타일의 숙소
+                            </h2>
+                            <p class="section-subtitle">
+                                <span class="location-name" id="recommendLocation">부산</span>을 좋아하시는 
+                                <span class="username-sub" id="recommendUsernameSub">○○○</span>님!
+                            </p>
+                        </div>
+                        
+                        <div class="content-wrapper">
+                            <!-- 숙소 리스트 (왼쪽) -->
+                            <div class="accommodation-list-container">
+                                <div class="accommodation-list" id="accommodationList">
+                                    <!-- 숙소 아이템들이 JavaScript로 동적 생성됩니다 -->
+                                </div>
+                            </div>
+                            
+                            <!-- 지도 영역 (오른쪽) -->
+                            <div class="map-container">
+                                <div class="map-placeholder">
+                                    <i class="fas fa-map-marker-alt map-icon"></i>
+                                    <p class="map-text">카카오맵 영역</p>
+                                    <small class="map-subtext">숙소 위치가 표시됩니다</small>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </section>
             </div>
         </section>
     </main>
@@ -158,5 +178,7 @@
 
     <!-- Custom JS -->
     <script src="main-calendar.js"></script>
+    <!-- 숙소 추천 섹션 JS -->
+    <script src="recommend-stay.js"></script>
 </body>
 </html>
