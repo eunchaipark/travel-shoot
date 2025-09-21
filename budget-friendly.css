@@ -1,0 +1,280 @@
+/* ==========================================================================
+   가격착한 숙소 섹션 CSS (budget-friendly.css) - main.html에 추가될 스타일
+   인기추천 숙소 섹션과 동일한 max-width, 다른 이미지 크기로 설계
+   ========================================================================== */
+
+/* ==========================================================================
+   추가 콘텐츠 섹션 내 가격착한 숙소 영역
+   ========================================================================== */
+
+.main-page .additional-content-section .budget-friendly-section {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px 0;
+    border-top: 1px solid #f0f0f0;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container {
+    width: 100%;
+}
+
+/* ==========================================================================
+   가격착한 숙소 섹션 제목 영역
+   ========================================================================== */
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-header {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0;
+    text-align: left;
+    flex-shrink: 0;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-title .budget-highlight {
+    color: #28a745;
+    font-weight: 800;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 0;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   메인 콘텐츠 래퍼
+   ========================================================================== */
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper {
+    width: 100%;
+}
+
+/* ==========================================================================
+   가격착한 숙소 그리드 컨테이너
+   ========================================================================== */
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    width: 100%;
+}
+
+/* ==========================================================================
+   가격착한 숙소 카드 스타일
+   ========================================================================== */
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid #f0f0f0;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-color: #e0e0e0;
+}
+
+/* ==========================================================================
+   카드 내부 - 이미지 영역 (기존보다 작게)
+   ========================================================================== */
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-image-container {
+    width: 100%;
+    height: 180px; /* 기존 200px에서 180px로 축소 */
+    overflow: hidden;
+    position: relative;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-image-container .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card:hover .card-image {
+    transform: scale(1.05);
+}
+
+/* 가성비 배지 */
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-image-container .budget-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 12px;
+    z-index: 5;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+/* 가격 배지 */
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-image-container .price-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 6px 10px;
+    border-radius: 16px;
+    z-index: 5;
+}
+
+/* ==========================================================================
+   카드 내부 - 정보 영역
+   ========================================================================== */
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* 카드 제목 */
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #333;
+    line-height: 1.4;
+    margin-bottom: 4px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 카드 위치 정보 */
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-location {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+
+/* 별점 영역 */
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-rating .stars {
+    display: flex;
+    gap: 2px;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-rating .stars .star {
+    font-size: 14px;
+    color: #ffc107;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-rating .stars .star.empty {
+    color: #e9ecef;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-rating .rating-score {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* 가격 정보 */
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-price {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-price .price-main {
+    font-size: 18px;
+    font-weight: 700;
+    color: #28a745;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-price .price-unit {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   반응형 디자인
+   ========================================================================== */
+
+/* 태블릿 (768px ~ 1024px) */
+@media (max-width: 1024px) {
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-title {
+        font-size: 28px;
+    }
+}
+
+/* 모바일 (768px 미만) */
+@media (max-width: 768px) {
+    .main-page .additional-content-section .budget-friendly-section {
+        padding: 40px 0;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-title {
+        font-size: 24px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-subtitle {
+        text-align: left;
+        font-size: 13px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-image-container {
+        height: 160px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info {
+        padding: 15px;
+    }
+}

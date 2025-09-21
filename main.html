@@ -18,6 +18,12 @@
     <link rel="stylesheet" href="main-calendar.css">
     <!-- 숙소 추천 섹션 CSS -->
     <link rel="stylesheet" href="recommend-stay.css">
+    <!-- 인기 급상승 섹션 CSS -->
+    <link rel="stylesheet" href="trending-section.css">
+    <!-- 가격착한 숙소 섹션 CSS -->
+    <link rel="stylesheet" href="budget-friendly.css">
+    <!-- 지금 떠나기 좋은 곳 섹션 CSS -->
+    <link rel="stylesheet" href="travel-now.css">
 </head>
 <body>
     <!-- 헤더 -->
@@ -129,9 +135,10 @@
             </div>
         </section>
         
-        <!-- 숙소 추천 섹션 -->
+        <!-- 추가 콘텐츠 섹션 (흰색 배경) -->
         <section class="additional-content-section">
             <div class="container-xxl px-5">
+                <!-- 숙소 추천 섹션 -->
                 <section class="recommend-stay-section">
                     <div class="recommend-stay-container">
                         <div class="section-header">
@@ -163,6 +170,114 @@
                         </div>
                     </div>
                 </section>
+
+                <!-- 인기 급상승 섹션 -->
+                <section class="trending-section">
+                    <div class="trending-container">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <span class="trending-highlight">인기 급상승</span>
+                            </h2>
+                            <p class="section-subtitle">(최근 7일 예약률 급상승)</p>
+                        </div>
+                        
+                        <!-- 탭 네비게이션 -->
+                        <div class="tab-navigation">
+                            <button class="tab-button active" data-tab="stay">숙소</button>
+                            <button class="tab-button" data-tab="restaurants">맛집</button>
+                            <button class="tab-button" data-tab="attractions">관광지</button>
+                        </div>
+                        
+                        <!-- 메인 콘텐츠 -->
+                        <div class="content-wrapper">
+                            <!-- 슬라이더 네비게이션 버튼 -->
+                            <button class="slider-nav slider-nav-prev">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="slider-nav slider-nav-next">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                            
+                            <!-- 슬라이더 컨테이너 -->
+                            <div class="slider-container">
+                                <div class="slider-wrapper" id="trendingSlider">
+                                    <!-- 숙소 탭 콘텐츠 -->
+                                    <div class="tab-content" data-tab="stay">
+                                        <div class="cards-grid" id="stayGrid">
+                                            <!-- 숙소 카드들이 JavaScript로 동적 생성됩니다 -->
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 맛집 탭 콘텐츠 -->
+                                    <div class="tab-content" data-tab="restaurants">
+                                        <div class="cards-grid" id="restaurantsGrid">
+                                            <!-- 맛집 카드들이 JavaScript로 동적 생성됩니다 -->
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 관광지 탭 콘텐츠 -->
+                                    <div class="tab-content" data-tab="attractions">
+                                        <div class="cards-grid" id="attractionsGrid">
+                                            <!-- 관광지 카드들이 JavaScript로 동적 생성됩니다 -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 가격착한 숙소 섹션 -->
+                <section class="budget-friendly-section">
+                    <div class="budget-friendly-container">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <span class="budget-highlight">가격착한 숙소</span>
+                            </h2>
+                            <p class="section-subtitle">우리 사이트 중요 대비 (1박당 숙박)</p>
+                        </div>
+                        
+                        <div class="content-wrapper">
+                            <!-- 가격착한 숙소 그리드 -->
+                            <div class="budget-grid" id="budgetGrid">
+                                <!-- 가격착한 숙소 카드들이 JavaScript로 동적 생성됩니다 -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 지금 떠나기 좋은 곳 섹션 -->
+                <section class="travel-now-section">
+                    <div class="travel-now-container">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <span class="travel-now-highlight">지금 떠나기 좋은 곳</span>
+                            </h2>
+                        </div>
+                        
+                        <div class="content-wrapper">
+                            <!-- 슬라이더 네비게이션 버튼 -->
+                            <button class="slider-nav slider-nav-prev" id="travelNowPrevBtn">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="slider-nav slider-nav-next" id="travelNowNextBtn">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                            
+                            <!-- 슬라이더 컨테이너 -->
+                            <div class="slider-container">
+                                <div class="slider-wrapper" id="travelNowSliderWrapper">
+                                    <!-- 각 페이지별 그리드가 JavaScript로 동적 생성됩니다 -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 슬라이더 인디케이터 -->
+                        <div class="slider-indicators" id="travelNowIndicators">
+                            <!-- 인디케이터들이 JavaScript로 동적 생성됩니다 -->
+                        </div>
+                    </div>
+                </section>
             </div>
         </section>
     </main>
@@ -176,9 +291,11 @@
     <!-- FullCalendar 한국어 -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales/ko.global.min.js"></script>
 
-    <!-- Custom JS -->
+    <!-- Custom JavaScript -->
     <script src="main-calendar.js"></script>
-    <!-- 숙소 추천 섹션 JS -->
     <script src="recommend-stay.js"></script>
+    <script src="trending-section.js"></script>
+    <script src="budget-friendly.js"></script>
+    <script src="travel-now.js"></script>
 </body>
 </html>

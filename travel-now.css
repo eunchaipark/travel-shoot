@@ -1,0 +1,608 @@
+/* ==========================================================================
+   지금 떠나기 좋은 곳 섹션 CSS (travel-now.css) - main.html에 추가될 스타일
+   인기추천 숙소 섹션과 동일한 max-width, 슬라이더 형태로 설계
+   ========================================================================== */
+
+/* ==========================================================================
+   추가 콘텐츠 섹션 내 지금 떠나기 좋은 곳 영역
+   ========================================================================== */
+
+.main-page .additional-content-section .travel-now-section {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px 0;
+    border-top: 1px solid #f0f0f0;
+}
+
+.main-page .additional-content-section .travel-now-section .travel-now-container {
+    width: 100%;
+}
+
+/* ==========================================================================
+   지금 떠나기 좋은 곳 섹션 제목 영역
+   ========================================================================== */
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .section-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .section-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0;
+}
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .section-title .travel-now-highlight {
+    color: #02B8EB;
+    font-weight: 800;
+}
+
+/* ==========================================================================
+   메인 콘텐츠 래퍼 (슬라이더 + 네비게이션)
+   ========================================================================== */
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+/* ==========================================================================
+   슬라이더 네비게이션 버튼
+   ========================================================================== */
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    font-size: 16px;
+    color: #333;
+}
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-nav:hover {
+    background: #f8f9fa;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-50%) scale(1.05);
+}
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-nav.slider-nav-prev {
+    left: -25px;
+}
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-nav.slider-nav-next {
+    right: -25px;
+}
+
+/* ==========================================================================
+   슬라이더 컨테이너
+   ========================================================================== */
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .slider-wrapper {
+    display: flex;
+    transition: transform 0.4s ease-in-out;
+    width: 300%; /* 3페이지 분량 (12개 카드 / 4개씩) */
+}
+
+/* ==========================================================================
+   지금 떠나기 좋은 곳 그리드 컨테이너 (4개 카드 배치)
+   ========================================================================== */
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .slider-wrapper .travel-now-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    width: 33.333%; /* 전체 슬라이더의 1/3 크기 */
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   지금 떠나기 좋은 곳 카드 스타일
+   ========================================================================== */
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+    cursor: pointer;
+    border: 1px solid #f0f0f0;
+    position: relative;
+}
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+    border-color: #02B8EB;
+}
+
+/* ==========================================================================
+   카드 내부 - 이미지 영역 (기존보다 크게)
+   ========================================================================== */
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-image-container {
+    width: 100%;
+    height: 240px; /* 기존 200px에서 240px로 확대 */
+    overflow: hidden;
+    position: relative;
+}
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-image-container .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card:hover .card-image {
+    transform: scale(1.1);
+}
+
+/* 그라데이션 오버레이 */
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-image-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+    z-index: 2;
+}
+
+/* 계절 배지 */
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-image-container .season-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: linear-gradient(135deg, #02B8EB 0%, #0056b3 100%);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 20px;
+    z-index: 5;
+    box-shadow: 0 3px 10px rgba(2, 184, 235, 0.4);
+}
+
+/* ==========================================================================
+   카드 내부 - 정보 영역 (이미지 위에 오버레이)
+   ========================================================================== */
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    color: white;
+    z-index: 3;
+}
+
+/* 카드 제목 */
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-info .card-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.4;
+    margin-bottom: 6px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 카드 위치 정보 */
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-info .card-location {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.4;
+    margin-bottom: 8px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+
+/* 특징 태그들 */
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-info .card-features {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-info .card-features .feature-tag {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* 숙소 개수 정보 */
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-info .accommodation-count {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================================
+   슬라이더 인디케이터 (선택사항)
+   ========================================================================== */
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .slider-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 30px;
+}
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .slider-indicators .indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ddd;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .slider-indicators .indicator.active {
+    background-color: #02B8EB;
+    transform: scale(1.2);
+}
+
+/* ==========================================================================
+   반응형 디자인
+   ========================================================================== */
+
+/* 대형 태블릿 (1200px ~ 1400px) */
+@media (max-width: 1200px) {
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .slider-wrapper {
+        width: 400%; /* 4페이지 분량 (12개 카드 / 3개씩) */
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .slider-wrapper .travel-now-grid {
+        width: 25%; /* 전체 슬라이더의 1/4 크기 */
+    }
+}
+
+/* 태블릿 (768px ~ 1024px) */
+@media (max-width: 1024px) {
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .section-title {
+        font-size: 28px;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-image-container {
+        height: 220px;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .slider-wrapper {
+        width: 600%; /* 6페이지 분량 (12개 카드 / 2개씩) */
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .slider-wrapper .travel-now-grid {
+        width: 16.666%; /* 전체 슬라이더의 1/6 크기 */
+    }
+}
+
+/* 모바일 (768px 미만) */
+@media (max-width: 768px) {
+    .main-page .additional-content-section .travel-now-section {
+        padding: 40px 0;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid {
+        grid-template-columns: repeat(3, 1fr); /* 모바일에서 3개씩 */
+        gap: 8px; /* 간격 줄임 */
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .section-title {
+        font-size: 24px;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card {
+        border-radius: 12px; /* 모바일에서 둥근 모서리 줄임 */
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-image-container {
+        height: 120px; /* 모바일에 적합한 이미지 높이 */
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-info {
+        padding: 10px;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-info .card-title {
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-info .card-location {
+        font-size: 11px;
+        margin-bottom: 6px;
+    }
+    
+    /* 모바일에서 키워드(feature) 태그 숨기기 */
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-info .card-features {
+        display: none;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-info .accommodation-count {
+        font-size: 10px;
+        margin-top: 0;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .slider-wrapper {
+        width: 400%; /* 4페이지 분량 (12개 카드 / 3개씩) */
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .slider-wrapper .travel-now-grid {
+        width: 25%; /* 전체 슬라이더의 1/4 크기 */
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-nav {
+        width: 35px;
+        height: 35px;
+        font-size: 12px;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-nav.slider-nav-prev {
+        left: -18px;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-nav.slider-nav-next {
+        right: -18px;
+    }
+    
+    /* 모바일에서 계절 배지 크기 조정 */
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-image-container .season-badge {
+        font-size: 10px;
+        padding: 4px 8px;
+        top: 8px;
+        left: 8px;
+    }
+    
+    /* 모바일에서 인디케이터 크기 조정 */
+    .main-page .additional-content-section .travel-now-section .travel-now-container .slider-indicators {
+        margin-top: 20px;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .slider-indicators .indicator {
+        width: 8px;
+        height: 8px;
+    }
+}
+
+/* ==========================================================================
+   카드 내부 - 이미지 영역 (기존보다 크게)
+   ========================================================================== */
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid .travel-now-card .card-image-container {
+    width: 100%;
+    height: 240px; /* 기존 200px에서 240px로 확대 */
+    overflow: hidden;
+    position: relative;
+}
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid .travel-now-card .card-image-container .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid .travel-now-card:hover .card-image {
+    transform: scale(1.1);
+}
+
+/* 그라데이션 오버레이 */
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid .travel-now-card .card-image-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+    z-index: 2;
+}
+
+/* 계절 배지 */
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid .travel-now-card .card-image-container .season-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: linear-gradient(135deg, #02B8EB 0%, #0056b3 100%);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 20px;
+    z-index: 5;
+    box-shadow: 0 3px 10px rgba(2, 184, 235, 0.4);
+}
+
+/* 추천도 배지 */
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid .travel-now-card .card-image-container .recommend-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #02B8EB;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 12px;
+    z-index: 5;
+    backdrop-filter: blur(5px);
+}
+
+/* ==========================================================================
+   카드 내부 - 정보 영역 (이미지 위에 오버레이)
+   ========================================================================== */
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid .travel-now-card .card-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    color: white;
+    z-index: 3;
+}
+
+/* 카드 제목 */
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid .travel-now-card .card-info .card-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.4;
+    margin-bottom: 6px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 카드 위치 정보 */
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid .travel-now-card .card-info .card-location {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.4;
+    margin-bottom: 8px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+
+/* 특징 태그들 */
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid .travel-now-card .card-info .card-features {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid .travel-now-card .card-info .card-features .feature-tag {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================================================
+   반응형 디자인
+   ========================================================================== */
+
+/* 대형 태블릿 (1200px ~ 1400px) */
+@media (max-width: 1200px) {
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+    }
+}
+
+/* 태블릿 (768px ~ 1024px) */
+@media (max-width: 1024px) {
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .section-title {
+        font-size: 28px;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid .travel-now-card .card-image-container {
+        height: 220px;
+    }
+}
+
+/* 모바일 (768px 미만) */
+@media (max-width: 768px) {
+    .main-page .additional-content-section .travel-now-section {
+        padding: 40px 0;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .section-title {
+        font-size: 24px;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid .travel-now-card .card-image-container {
+        height: 180px;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid .travel-now-card .card-info {
+        padding: 15px;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid .travel-now-card .card-info .card-title {
+        font-size: 16px;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid .travel-now-card .card-info .card-location {
+        font-size: 13px;
+    }
+}
+
+/* 작은 모바일 (480px 미만) */
+@media (max-width: 480px) {
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .travel-now-grid .travel-now-card .card-image-container {
+        height: 200px;
+    }
+}
