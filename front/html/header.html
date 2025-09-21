@@ -18,139 +18,149 @@
     <!-- Version 1 헤더 (검색창이 있는 상세한 헤더) -->
     <header class="app-header">
       <div class="container">
-        <div class="row align-items-center">
-          <div class="col-auto">
-            <a href="/">
-            <div class="logo" role="img" aria-label="트래블샷 아이콘"></div>
-            </a>
-          </div>
-          <div class="col">
-            <div class="search-container position-relative">
-              <div class="row g-0 align-items-center">
-                <div class="col-12 col-xxl-6 d-flex align-items-center">
-                  <div class="col-2 position-relative location-icon" role="img"></div>
-                  <input
-                    type="text"
-                    class="search-input position-relative flex-grow-1 ms-1"
-                    placeholder="SL 호텔 강릉"
-                    value="SL 호텔 강릉"
-                  />
-                  <!-- 드롭다운 suggestions -->
-                  <div class="dropdown-suggestions d-none">
-                    <button class="suggestion-item">
-                      <i class="fas fa-building"></i>
-                      <div>
-                        <div class="fw-bold">SL 호텔 강릉</div>
-                        <small class="text-muted"
-                          >강릉특별자치도 강릉시 OO----</small
-                        >
-                      </div>
-                    </button>
-                    <button class="suggestion-item">
-                      <i class="fas fa-home"></i>
-                      <div>
-                        <div class="fw-bold">유담리솜펜션</div>
-                        <small class="text-muted"
-                          >강릉특별자치도 강릉시 OO----</small
-                        >
-                      </div>
-                    </button>
-                    <button class="suggestion-item">
-                      <i class="fas fa-building"></i>
-                      <div>
-                        <div class="fw-bold">강릉씨고호텔</div>
-                        <small class="text-muted"
-                          >강릉특별자치도 강릉시 OO----</small
-                        >
-                      </div>
-                    </button>
-                  </div>
-                </div>
-                <div class="col-auto search-divider-con">
-                  <div class="search-divider mx-3"></div>
-                </div>
-                <div class="col-lg-auto col-md-12 d-flex align-items-center">
-                  <div class="col-2 position-relative calendar-icon" role="img"></div>
-
-                  <span
-                    class="ms-2 text-muted position-relative text-nowrap fw-semibold"
-                    id="dateDisplay"
-                    style="cursor: pointer"
-                    >09.08(월) ~ 09.10(수)</span
-                  >
-                  <!-- 캘린더 드롭다운 -->
-                  
-                </div>
-                <div class="col-auto search-divider-con">
-                  <div class="search-divider mx-3"></div>
-                </div>
-                <div class="col-lg-auto col-md-12 d-flex align-items-center">
-                  <div class="col-2 position-relative user-icon" role="img"></div>
-                  <span
-                    class="ms-2 text-muted position-relative text-nowrap fw-semibold"
-                    id="guestDisplay"
-                    style="cursor: pointer"
-                    >성인 2명</span
-                  >
-                  <!-- 인원 선택 드롭다운 -->
-                  <div class="guest-dropdown" id="guestDropdown">
-                    <div class="guest-type">
-                      <div class="guest-info">
-                        <h6>성인</h6>
-                        <small>18세 이상</small>
-                      </div>
-                      <div class="counter-controls">
-                        <button
-                          class="counter-btn"
-                          onclick="changeGuest('adult', -1)"
-                        >
-                          -
-                        </button>
-                        <span id="adultCount">2</span>
-                        <button
-                          class="counter-btn"
-                          onclick="changeGuest('adult', 1)"
-                        >
-                          +
-                        </button>
-                      </div>
+        <div class="row">
+          <div class="col-12 d-flex align-items-center justify-content-evenly">
+            <div class="col-sm-1 col-lg-1 col-2">
+              <a href="/">
+                <div class="logo" role="img" aria-label="트래블샷 아이콘"></div>
+              </a>
+            </div>
+            <div class="col-sm-7 col-lg-8 col-6">
+              <div class="search-container position-relative">
+                <div class="row g-0 align-items-center">
+                  <div class="col-12 col-xxl-6 d-flex align-items-center">
+                    <div
+                      class="col-2 position-relative search-input-icon location-icon"
+                      role="img"
+                    ></div>
+                    <input
+                      type="text"
+                      class="search-input position-relative flex-grow-1 ms-1"
+                      placeholder="SL 호텔 강릉"
+                      value="SL 호텔 강릉"
+                    />
+                    <!-- 드롭다운 suggestions -->
+                    <div class="dropdown-suggestions d-none">
+                      <button class="suggestion-item">
+                        <i class="fas fa-building"></i>
+                        <div>
+                          <div class="fw-bold">SL 호텔 강릉</div>
+                          <small class="text-muted"
+                            >강릉특별자치도 강릉시 OO----</small
+                          >
+                        </div>
+                      </button>
+                      <button class="suggestion-item">
+                        <i class="fas fa-home"></i>
+                        <div>
+                          <div class="fw-bold">유담리솜펜션</div>
+                          <small class="text-muted"
+                            >강릉특별자치도 강릉시 OO----</small
+                          >
+                        </div>
+                      </button>
+                      <button class="suggestion-item">
+                        <i class="fas fa-building"></i>
+                        <div>
+                          <div class="fw-bold">강릉씨고호텔</div>
+                          <small class="text-muted"
+                            >강릉특별자치도 강릉시 OO----</small
+                          >
+                        </div>
+                      </button>
                     </div>
-                    <div class="guest-type">
-                      <div class="guest-info">
-                        <h6>어린이</h6>
-                        <small>0 - 17세</small>
+                  </div>
+                  <div class="col-auto search-divider-con">
+                    <div class="search-divider mx-3"></div>
+                  </div>
+                  <div class="col-lg-auto col-md-12 d-flex align-items-center">
+                    <div
+                      class="col-2 position-relative search-input-icon calendar-icon"
+                      role="img"
+                    ></div>
+
+                    <span
+                      class="ms-2 text-muted position-relative text-nowrap fw-medium"
+                      id="dateDisplay"
+                      style="cursor: pointer"
+                      >09.08(월) ~ 09.10(수)</span
+                    >
+                    <!-- 캘린더 드롭다운 -->
+                  </div>
+                  <div class="col-auto search-divider-con">
+                    <div class="search-divider mx-3"></div>
+                  </div>
+                  <div class="col-lg-auto col-md-12 d-flex align-items-center">
+                    <div
+                      class="col-2 position-relative search-input-icon user-icon"
+                      role="img"
+                    ></div>
+                    <span
+                      class="ms-2 text-muted position-relative text-nowrap fw-medium"
+                      id="guestDisplay"
+                      style="cursor: pointer"
+                      >성인 2명</span
+                    >
+                    <!-- 인원 선택 드롭다운 -->
+                    <div class="guest-dropdown" id="guestDropdown">
+                      <div class="guest-type">
+                        <div class="guest-info">
+                          <h6>성인</h6>
+                          <small>18세 이상</small>
+                        </div>
+                        <div class="counter-controls">
+                          <button
+                            class="counter-btn"
+                            onclick="changeGuest('adult', -1)"
+                          >
+                            -
+                          </button>
+                          <span id="adultCount">2</span>
+                          <button
+                            class="counter-btn"
+                            onclick="changeGuest('adult', 1)"
+                          >
+                            +
+                          </button>
+                        </div>
                       </div>
-                      <div class="counter-controls">
-                        <button
-                          class="counter-btn"
-                          onclick="changeGuest('child', -1)"
-                        >
-                          -
-                        </button>
-                        <span id="childCount">0</span>
-                        <button
-                          class="counter-btn"
-                          onclick="changeGuest('child', 1)"
-                        >
-                          +
-                        </button>
+                      <div class="guest-type">
+                        <div class="guest-info">
+                          <h6>어린이</h6>
+                          <small>0 - 17세</small>
+                        </div>
+                        <div class="counter-controls">
+                          <button
+                            class="counter-btn"
+                            onclick="changeGuest('child', -1)"
+                          >
+                            -
+                          </button>
+                          <span id="childCount">0</span>
+                          <button
+                            class="counter-btn"
+                            onclick="changeGuest('child', 1)"
+                          >
+                            +
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="col-auto px-0">
-            <button class="icon-button me-5">
-              <div class="search-icon"></div>
-            </button>
-            <button class="icon-button me-2">
-              <div class="user-white-icon"></div>
-            </button>
-            <button class="icon-button">
-              <div class="heart-icon"></div>
-            </button>
+            <div class="col-md-3 col-3 px-0">
+              <button class="icon-button">
+                <div class="search-icon"></div>
+              </button>
+              <button class="icon-button">
+                <div class="user-white-icon"></div>
+              </button>
+              <button class="icon-button">
+                <div class="heart-icon"></div>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -160,109 +170,6 @@
     <main class="content-area">
       <h1>영역</h1>
     </main>
-
-    <!-- Version 2 헤더 (간단한 검색창) -->
-    <header class="app-header">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-auto">
-            <div class="logo" role="img" aria-label="트래블샷 아이콘"></div>
-          </div>
-          <div class="col mx-auto">
-            <input
-              type="text"
-              class="simple-search"
-              placeholder="어디로 떠나볼까요?"
-            />
-          </div>
-          <div class="col-auto px-0">
-            <button class="icon-button me-5">
-              <div class="search-icon"></div>
-            </button>
-            <button class="icon-button me-2">
-              <div class="user-white-icon"></div>
-            </button>
-            <button class="icon-button">
-              <div class="heart-icon"></div>
-            </button>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <!-- 메인 컨텐츠 영역 (데모용) -->
-    <main class="content-area">
-      <h1>영역</h1>
-    </main>
-
-    <!-- 푸터 -->
-    <footer class="footer">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-3 col-md-6 mb-4">
-            <h5>Travel Shot</h5>
-            <p class="text-muted">
-              전 세계 최고의 숙소를 찾아보세요. 특별한 여행의 시작은 Travel
-              Shot에서.
-            </p>
-            <div class="social-links">
-              <a href="#"><i class="fab fa-facebook"></i></a>
-              <a href="#"><i class="fab fa-twitter"></i></a>
-              <a href="#"><i class="fab fa-instagram"></i></a>
-              <a href="#"><i class="fab fa-youtube"></i></a>
-            </div>
-          </div>
-          <div class="col-lg-2 col-md-6 mb-4">
-            <h5>서비스</h5>
-            <ul class="list-unstyled">
-              <li><a href="#">숙소 예약</a></li>
-              <li><a href="#">체험 예약</a></li>
-              <li><a href="#">항공권</a></li>
-              <li><a href="#">렌터카</a></li>
-            </ul>
-          </div>
-          <div class="col-lg-2 col-md-6 mb-4">
-            <h5>호스트</h5>
-            <ul class="list-unstyled">
-              <li><a href="#">숙소 등록</a></li>
-              <li><a href="#">호스트 센터</a></li>
-              <li><a href="#">호스트 가이드</a></li>
-              <li><a href="#">커뮤니티</a></li>
-            </ul>
-          </div>
-          <div class="col-lg-2 col-md-6 mb-4">
-            <h5>고객지원</h5>
-            <ul class="list-unstyled">
-              <li><a href="#">도움말</a></li>
-              <li><a href="#">문의하기</a></li>
-              <li><a href="#">취소 정책</a></li>
-              <li><a href="#">안전 센터</a></li>
-            </ul>
-          </div>
-          <div class="col-lg-3 col-md-6 mb-4">
-            <h5>회사 정보</h5>
-            <ul class="list-unstyled">
-              <li><a href="#">회사 소개</a></li>
-              <li><a href="#">채용</a></li>
-              <li><a href="#">언론 보도</a></li>
-              <li><a href="#">투자자 정보</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="footer-bottom">
-          <div class="row align-items-center">
-            <div class="col-md-6">
-              <p class="mb-0">&copy; 2025 Travel Shot. All rights reserved.</p>
-            </div>
-            <div class="col-md-6 text-md-end">
-              <a href="#" class="me-3">개인정보처리방침</a>
-              <a href="#" class="me-3">이용약관</a>
-              <a href="#">쿠키 설정</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -375,7 +282,6 @@
         }
         document.getElementById("guestDisplay").textContent = displayText;
       }
-
     </script>
   </body>
 </html>
