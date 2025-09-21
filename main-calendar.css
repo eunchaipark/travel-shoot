@@ -994,6 +994,10 @@ body {
         width: calc(100% - 10px);
         overflow: visible !important;
     }
+    .main-page .px-5 {
+        padding-left: 12px !important;
+        padding-right: 23px !important;
+    }
     
     .main-page .calendar-section-wrapper .calendar-search-container .search-section-container {
         margin: 0 5px;

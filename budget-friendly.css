@@ -1,12 +1,8 @@
 /* ==========================================================================
-   가격착한 숙소 섹션 CSS (budget-friendly.css) - main.html에 추가될 스타일
-   인기추천 숙소 섹션과 동일한 max-width, 다른 이미지 크기로 설계
+   가격착한 숙소 슬라이더 CSS - 완전히 독립된 슬라이더 구조
    ========================================================================== */
 
-/* ==========================================================================
-   추가 콘텐츠 섹션 내 가격착한 숙소 영역
-   ========================================================================== */
-
+/* === 메인 컨테이너 === */
 .main-page .additional-content-section .budget-friendly-section {
     width: 100%;
     max-width: 1400px;
@@ -19,10 +15,7 @@
     width: 100%;
 }
 
-/* ==========================================================================
-   가격착한 숙소 섹션 제목 영역
-   ========================================================================== */
-
+/* === 헤더 영역 === */
 .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-header {
     display: flex;
     align-items: flex-end;
@@ -53,114 +46,174 @@
     flex-shrink: 0;
 }
 
-/* ==========================================================================
-   메인 콘텐츠 래퍼
-   ========================================================================== */
-
+/* === 슬라이더 컨테이너 === */
 .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper {
+    position: relative;
     width: 100%;
 }
 
-/* ==========================================================================
-   가격착한 숙소 그리드 컨테이너
-   ========================================================================== */
+/* === 네비게이션 버튼 === */
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    font-size: 16px;
+    color: #333;
+}
 
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid {
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-nav:hover {
+    background: #f8f9fa;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-50%) scale(1.05);
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-prev {
+    left: -25px;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-next {
+    right: -25px;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-nav:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* === 슬라이더 컨테이너 === */
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-container {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-container .budget-slider-wrapper {
+    display: flex;
+    transition: transform 0.4s ease-in-out;
+    width: 200%; /* 기본: 2슬라이드 (6개 카드 / 3개씩) */
+}
+
+/* === 슬라이드 그리드 === */
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-container .budget-slider-wrapper .budget-slide-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    width: 100%;
+    grid-template-columns: repeat(3, 1fr); /* 데스크톱: 3개씩 */
+    gap: 24px;
+    width: 50%; /* 전체 슬라이더의 1/2 크기 */
+    flex-shrink: 0;
 }
 
-/* ==========================================================================
-   가격착한 숙소 카드 스타일
-   ========================================================================== */
+/* 부분적인 그리드 (카드가 적을 때) */
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-container .budget-slider-wrapper .budget-partial-grid {
+    justify-content: flex-start;
+}
 
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card {
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-container .budget-slider-wrapper .budget-grid-1 {
+    grid-template-columns: 1fr;
+    justify-content: center;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-container .budget-slider-wrapper .budget-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-container .budget-slider-wrapper .budget-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* === 카드 스타일 === */
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card {
     background: white;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
+    box-shadow: none;
+    transition: all 0.4s ease;
     cursor: pointer;
-    border: 1px solid #f0f0f0;
+    border: 1px solid #e9ecef;
+    position: relative;
 }
 
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    border-color: #e0e0e0;
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card:hover {
+    transform: translateY(-8px);
+    box-shadow: none;
+    background: #f0f8ff;
+    border-color: #e9ecef;
 }
 
-/* ==========================================================================
-   카드 내부 - 이미지 영역 (기존보다 작게)
-   ========================================================================== */
-
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-image-container {
+/* === 카드 이미지 === */
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image {
     width: 100%;
-    height: 180px; /* 기존 200px에서 180px로 축소 */
+    height: 380px;
+    border-radius: 10px;
     overflow: hidden;
     position: relative;
 }
 
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-image-container .card-image {
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image .budget-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s ease;
 }
 
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card:hover .card-image {
-    transform: scale(1.05);
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card:hover .budget-img {
+    transform: scale(1.1);
 }
 
-/* 가성비 배지 */
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-image-container .budget-badge {
+/* 배지들 */
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image .budget-type-badge {
     position: absolute;
     top: 12px;
     left: 12px;
     background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
     color: white;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
-    padding: 4px 8px;
-    border-radius: 12px;
+    padding: 4px 10px;
+    border-radius: 15px;
     z-index: 5;
-    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+    box-shadow: 0 2px 6px rgba(40, 167, 69, 0.4);
 }
 
-/* 가격 배지 */
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-image-container .price-badge {
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image .budget-discount-badge {
     position: absolute;
     top: 12px;
     right: 12px;
-    background: rgba(0, 0, 0, 0.7);
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
     color: white;
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 700;
-    padding: 6px 10px;
-    border-radius: 16px;
+    padding: 4px 10px;
+    border-radius: 15px;
     z-index: 5;
+    box-shadow: 0 2px 6px rgba(220, 53, 69, 0.4);
 }
 
-/* ==========================================================================
-   카드 내부 - 정보 영역
-   ========================================================================== */
-
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info {
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+/* === 카드 정보 === */
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content {
+    padding: 16px;
+    background: white;
+    color: #333;
 }
 
-/* 카드 제목 */
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-title {
-    font-size: 17px;
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-title {
+    font-size: 16px;
     font-weight: 700;
     color: #333;
     line-height: 1.4;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
@@ -168,113 +221,218 @@
     text-overflow: ellipsis;
 }
 
-/* 카드 위치 정보 */
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-location {
-    font-size: 14px;
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-location {
+    font-size: 13px;
     color: #666;
     line-height: 1.4;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
 }
 
-/* 별점 영역 */
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-rating {
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-rating {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
+    gap: 6px;
+    margin-bottom: 12px;
 }
 
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-rating .stars {
-    display: flex;
-    gap: 2px;
-}
-
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-rating .stars .star {
-    font-size: 14px;
-    color: #ffc107;
-}
-
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-rating .stars .star.empty {
-    color: #e9ecef;
-}
-
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-rating .rating-score {
-    font-size: 14px;
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-rating .budget-stars {
+    font-size: 13px;
     font-weight: 600;
-    color: #333;
+    color: #FFB800;
 }
 
-/* 가격 정보 */
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-price {
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-rating .budget-reviews {
+    font-size: 11px;
+    color: #666;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-pricing {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 4px;
 }
 
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-price .price-main {
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-pricing .budget-main-price {
     font-size: 18px;
     font-weight: 700;
     color: #28a745;
 }
 
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info .card-price .price-unit {
-    font-size: 14px;
-    color: #666;
-    font-weight: 500;
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-pricing .budget-original-price {
+    font-size: 13px;
+    color: #999;
+    text-decoration: line-through;
 }
 
 /* ==========================================================================
    반응형 디자인
    ========================================================================== */
 
-/* 태블릿 (768px ~ 1024px) */
-@media (max-width: 1024px) {
-    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid {
-        grid-template-columns: repeat(2, 1fr);
+/* 대형 태블릿 (1200px 이하) */
+@media (max-width: 1200px) {
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid {
         gap: 20px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image {
+        height: 360px;
+    }
+}
+
+/* 태블릿 (1024px 이하) */
+@media (max-width: 1024px) {
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-container .budget-slider-wrapper {
+        width: 300%; /* 3슬라이드 (6개 카드 / 2개씩) */
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2개씩 */
+        gap: 18px;
+        width: 33.333%; /* 전체 슬라이더의 1/3 크기 */
+    }
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-container .budget-slider-wrapper .budget-slide-grid {
+        width: 33.33%;
+    }
+    /* 모바일에서 부분 그리드 재정의 */
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-container .budget-slider-wrapper .budget-grid-1 {
+        grid-template-columns: 1fr;
+        justify-content: center;
+    }
+
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-container .budget-slider-wrapper .budget-grid-2 {
+        grid-template-columns: repeat(2, 1fr);
     }
     
     .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-title {
         font-size: 28px;
     }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image {
+        height: 340px;
+    }
 }
 
-/* 모바일 (768px 미만) */
+/* 모바일 (768px 이하) */
 @media (max-width: 768px) {
     .main-page .additional-content-section .budget-friendly-section {
         padding: 40px 0;
     }
     
-    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid {
+        gap: 12px;
     }
-    
-    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-container .budget-slider-wrapper .budget-slide-grid {
+        width: 33.33%;
     }
-    
     .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-title {
         font-size: 24px;
     }
     
-    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-subtitle {
-        text-align: left;
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card {
+        border-radius: 12px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image {
+        height: 280px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image .budget-type-badge,
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image .budget-discount-badge {
+        top: 8px;
+        font-size: 9px;
+        padding: 3px 8px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image .budget-type-badge {
+        left: 8px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image .budget-discount-badge {
+        right: 8px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content {
+        padding: 12px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-title {
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-location {
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-rating .budget-stars {
+        font-size: 12px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-rating .budget-reviews {
+        font-size: 10px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-pricing .budget-main-price {
+        font-size: 16px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-pricing .budget-original-price {
+        font-size: 12px;
+    }
+    
+    /* 네비게이션 버튼 모바일 조정 */
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid #28a745;
+        z-index: 20;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-prev {
+        left: 5px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-next {
+        right: 5px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-nav:hover {
+        background: #28a745;
+        color: white;
+        transform: translateY(-50%) scale(1.1);
+    }
+}
+
+/* 작은 모바일 (480px 이하) */
+@media (max-width: 480px) {
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid {
+        gap: 10px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image {
+        height: 200px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content {
+        padding: 10px;
+    }
+    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-title {
         font-size: 13px;
     }
     
-    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-image-container {
-        height: 160px;
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-location {
+        font-size: 11px;
     }
     
-    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-grid .budget-card .card-info {
-        padding: 15px;
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-pricing .budget-main-price {
+        font-size: 15px;
     }
 }

@@ -1,12 +1,8 @@
 /* ==========================================================================
-   인기 급상승 섹션 CSS (trending-section.css) - main.html에 추가될 스타일
-   추천 숙소 섹션과 동일한 크기와 구조로 설계
+   인기 급상승 섹션 CSS - travel-now 크기 기반 최종 정리 버전
    ========================================================================== */
 
-/* ==========================================================================
-   추가 콘텐츠 섹션 내 인기 급상승 영역
-   ========================================================================== */
-
+/* === 메인 컨테이너 === */
 .main-page .additional-content-section .trending-section {
     width: 100%;
     max-width: 1400px;
@@ -19,10 +15,7 @@
     width: 100%;
 }
 
-/* ==========================================================================
-   인기 급상승 섹션 제목 영역
-   ========================================================================== */
-
+/* === 헤더 영역 === */
 .main-page .additional-content-section .trending-section .trending-container .section-header {
     display: flex;
     align-items: flex-end;
@@ -41,7 +34,7 @@
 }
 
 .main-page .additional-content-section .trending-section .trending-container .section-title .trending-highlight {
-    color: #000000;
+    color: #FF8888;
     font-weight: 800;
 }
 
@@ -53,10 +46,7 @@
     flex-shrink: 0;
 }
 
-/* ==========================================================================
-   탭 네비게이션 영역
-   ========================================================================== */
-
+/* === 탭 네비게이션 === */
 .main-page .additional-content-section .trending-section .trending-container .tab-navigation {
     display: flex;
     gap: 0;
@@ -87,19 +77,25 @@
     background-color: #f8f9fa;
 }
 
-/* ==========================================================================
-   메인 콘텐츠 래퍼 (슬라이더 + 네비게이션)
-   ========================================================================== */
-
+/* === 슬라이더 컨테이너 === */
 .main-page .additional-content-section .trending-section .trending-container .content-wrapper {
     position: relative;
     width: 100%;
 }
 
-/* ==========================================================================
-   슬라이더 네비게이션 버튼
-   ========================================================================== */
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 12px;
+}
 
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .slider-wrapper {
+    display: flex;
+    transition: transform 0.4s ease-in-out;
+    width: 300%; /* 데스크톱: 3슬라이드 */
+}
+
+/* === 네비게이션 버튼 === */
 .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-nav {
     position: absolute;
     top: 50%;
@@ -140,113 +136,83 @@
     pointer-events: none;
 }
 
-/* ==========================================================================
-   슬라이더 컨테이너
-   ========================================================================== */
-
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container {
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-}
-
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .slider-wrapper {
-    display: flex;
-    transition: transform 0.5s ease;
-    width: 100%;
-}
-
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .slider-wrapper .tab-content {
-    min-width: 100%;
+/* === 그리드 레이아웃 === */
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .slider-wrapper .trending-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 데스크톱: 4개 */
+    gap: 20px;
+    width: 33.333%;
     flex-shrink: 0;
 }
 
-/* ==========================================================================
-   카드 그리드 (4개씩 한 줄에 표시)
-   ========================================================================== */
-
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    width: 100%;
-}
-
-/* ==========================================================================
-   개별 카드 스타일
-   ========================================================================== */
-
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card {
+/* === 카드 스타일 === */
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card {
     background: white;
-    border-radius: 16px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
     overflow: hidden;
-    transition: all 0.3s ease;
+    box-shadow: none; /* 그림자 제거 */
+    transition: all 0.4s ease;
     cursor: pointer;
-    border: 1px solid #f0f0f0;
+    border: 1px solid #e9ecef; /* 연한 회색 테두리 추가 */
     position: relative;
 }
 
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card:hover {
+    transform: translateY(-8px);
+    box-shadow: none; /* 호버 시에도 그림자 없음 */
+    background: #f0f8ff; /* 연한 파란색 배경으로 변경 */
+    border-color: #e9ecef; /* 테두리 색상 유지 */
 }
 
-/* ==========================================================================
-   카드 내부 - 이미지 영역
-   ========================================================================== */
-
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-image-container {
+/* === 카드 이미지 === */
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-image-container {
     width: 100%;
-    height: 200px;
+    height: 200px; /* 이미지 높이 조정 */
     overflow: hidden;
     position: relative;
 }
 
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-image-container .card-image {
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-image-container .card-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s ease;
 }
 
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card:hover .card-image {
-    transform: scale(1.05);
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card:hover .card-image {
+    transform: scale(1.1);
 }
 
-/* 급상승 배지 */
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-image-container .trending-badge {
+/* 카테고리 배지 (그라데이션 오버레이 제거) */
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-image-container .category-badge {
     position: absolute;
-    top: 17px;
-    left: 245px;
+    top: 12px;
+    left: 12px;
     background: linear-gradient(135deg, #FF8888 0%, #FF6B6B 100%);
     color: white;
-    font-size: 19px;
+    font-size: 11px;
     font-weight: 700;
-    padding: 6px 10px;
-    border-radius: 20px;
+    padding: 4px 10px;
+    border-radius: 15px;
     z-index: 5;
-    box-shadow: 0 2px 8px rgba(255, 136, 136, 0.3);
+    box-shadow: 0 2px 6px rgba(255, 136, 136, 0.4);
 }
 
-/* ==========================================================================
-   카드 내부 - 정보 영역
-   ========================================================================== */
-
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-info {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+/* === 카드 정보 (이미지 하단) === */
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info {
+    position: relative; /* absolute에서 relative로 변경 */
+    padding: 15px;
+    background: white;
+    color: #333; /* 텍스트 색상 변경 */
 }
 
-/* 카드 제목 */
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-info .card-title {
-    font-size: 18px;
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .card-title {
+    font-size: 16px;
     font-weight: 700;
-    color: #333;
+    color: #333; /* 검정색으로 변경 */
     line-height: 1.4;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
+    text-shadow: none; /* 그림자 제거 */
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
@@ -254,228 +220,215 @@
     text-overflow: ellipsis;
 }
 
-/* 위치/카테고리 정보 */
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-info .card-location {
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .card-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .rating-info {
     display: flex;
     align-items: center;
     gap: 6px;
-    margin-bottom: 8px;
 }
 
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-info .card-location .location-icon {
-    color: #FF8888;
-    font-size: 12px;
-}
-
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-info .card-location .location-text {
-    font-size: 14px;
-    color: #666;
-    font-weight: 500;
-}
-
-/* 평점 영역 */
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-info .card-rating {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-}
-
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-info .card-rating .star-rating {
-    display: flex;
-    gap: 2px;
-}
-
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-info .card-rating .star-rating .star {
-    color: #FFD700;
-    font-size: 14px;
-}
-
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-info .card-rating .star-rating .star.empty {
-    color: #ddd;
-}
-
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-info .card-rating .rating-text {
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .rating-info .rating {
     font-size: 13px;
+    font-weight: 600;
+    color: #FFB800; /* 별점 색상 */
+    text-shadow: none;
+}
+
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .rating-info .reviews {
+    font-size: 11px;
     color: #666;
-    font-weight: 500;
+    text-shadow: none;
 }
 
-/* 가격 영역 (숙소 전용) */
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-info .card-price {
-    display: flex;
-    align-items: baseline;
-    gap: 4px;
-    margin-top: auto;
-    justify-content: flex-end;
-}
-
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-info .card-price .price-text {
-    font-size: 20px;
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .price {
+    font-size: 14px;
     font-weight: 700;
-    color: #333;
-}
-
-.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-info .card-price .price-unit {
-    font-size: 12px;
-    color: #675C5C;
-    font-weight: 500;
+    color: #FF8888; /* 가격 강조 색상 */
+    text-shadow: none;
 }
 
 /* ==========================================================================
    반응형 디자인
    ========================================================================== */
 
-/* 대형 화면 (1400px 이하) */
-@media (max-width: 1400px) {
-    .main-page .additional-content-section .trending-section {
-        max-width: 1400px;
+/* 대형 태블릿 (1200px 이하) */
+@media (max-width: 1200px) {
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
     }
-    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-image-container .trending-badg{
-        left: 185px;
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container{
+        width: 133.33%;
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .slider-wrapper {
+        width: 400%; /* 4슬라이드 */
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .slider-wrapper .trending-grid {
+        width: 25%;
     }
 }
 
-/* 중형 화면 (1200px 이하) */
-@media (max-width: 1200px) {
-    .main-page .additional-content-section .trending-section {
-        max-width: 1200px;
+/* 태블릿 (1024px 이하) */
+@media (max-width: 1024px) {
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid {
+        gap: 16px;
     }
-    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-image-container .trending-badg{
-        left:170px;
-    }
+    
     .main-page .additional-content-section .trending-section .trending-container .section-title {
         font-size: 28px;
     }
     
-    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid {
-        grid-template-columns: repeat(3, 1fr);
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-nav {
+        width: 45px;
+        height: 45px;
+        font-size: 16px;
+        background: rgba(255, 255, 255, 0.95);
+        border: 2px solid #FF8888;
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-image-container {
+        height: 180px; /* 태블릿 이미지 높이 */
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info {
+        padding: 12px;
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .card-title {
+        font-size: 15px;
     }
 }
 
-/* 태블릿 화면 (992px 이하) */
-@media (max-width: 992px) {
-    .main-page .additional-content-section .trending-section .trending-container .section-title {
-        font-size: 24px;
-        text-align: center;
+/* 모바일 (768px 이하) */
+@media (max-width: 768px) {
+    .main-page .additional-content-section .trending-section {
+        padding: 40px 0;
     }
     
-    .main-page .additional-content-section .trending-section .trending-container .section-subtitle {
-        text-align: center;
-    }
-    
-    .main-page .additional-content-section .trending-section .trending-container .section-header {
-        justify-content: center;
-        flex-direction: column;
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid {
         gap: 8px;
     }
     
-    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .slider-wrapper .trending-grid {
+        gap: 2px;
     }
     
+    .main-page .additional-content-section .trending-section .trending-container .section-title {
+        font-size: 24px;
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card {
+        border-radius: 12px;
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-image-container {
+        height: 120px; /* 모바일 이미지 높이 */
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-image-container .category-badge {
+        top: 8px;
+        left: 8px;
+        font-size: 9px;
+        padding: 3px 8px;
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info {
+        padding: 10px;
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .card-title {
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .rating-info .rating {
+        font-size: 11px;
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .rating-info .reviews {
+        font-size: 10px;
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .price {
+        font-size: 12px;
+    }
+    
+    /* 네비게이션 버튼 모바일 조정 */
     .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid #FF8888;
+        z-index: 20;
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-nav.slider-nav-prev {
+        display: none;
+        left: 5px;
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-nav.slider-nav-next {
+        right: 5px;
         display: none;
     }
     
-    .main-page .additional-content-section .trending-section .trending-container .tab-navigation {
-        justify-content: center;
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-nav:hover {
+        background: #FF8888;
+        color: white;
+        transform: translateY(-50%) scale(1.1);
     }
     
+    /* 탭 네비게이션 모바일 조정 */
     .main-page .additional-content-section .trending-section .trending-container .tab-navigation .tab-button {
         padding: 12px 20px;
         font-size: 16px;
     }
 }
 
-/* 모바일 화면 (768px 이하) */
-@media (max-width: 768px) {
-    .main-page .additional-content-section .trending-section {
-        padding: 40px 0;
+/* 작은 모바일 (480px 이하) */
+@media (max-width: 480px) {
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid {
+        gap: 6px;
     }
     
-    .main-page .additional-content-section .trending-section .trending-container .section-header {
-        display: flex;
-        margin-bottom: 1px;
-        align-items: center;
-    }
-    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-image-container .trending-badge{
-        left: 288px;
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-image-container {
+        height: 100px; /* 작은 모바일 이미지 높이 */
     }
     
-    .main-page .additional-content-section .trending-section .trending-container .section-title {
-        font-size: 20px;
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info {
+        padding: 8px;
     }
     
-    .main-page .additional-content-section .trending-section .trending-container .section-subtitle {
-        font-size: 13px;
-    }
-    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-info .card-price{
-        margin-top: -43px;
-        gap: 5px;
-    }
-    .main-page .additional-content-section .trending-section .trending-container .tab-navigation {
-        margin-bottom: 30px;
-        overflow-x: auto;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-    
-    .main-page .additional-content-section .trending-section .trending-container .tab-navigation::-webkit-scrollbar {
-        display: none;
-    }
-    
-    .main-page .additional-content-section .trending-section .trending-container .tab-navigation .tab-button {
-        padding: 10px 16px;
-        font-size: 14px;
-        white-space: nowrap;
-    }
-    
-    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-    }
-    
-    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-image-container {
-        height: 150px;
-    }
-    
-    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-info {
-        padding: 15px;
-    }
-    
-    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-info .card-title {
-        font-size: 16px;
-    }
-    
-    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-info .card-price .price-text {
-        font-size: 18px;
-    }
-    
-    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-nav {
-        display: none;
-    }
-}
-
-/* 작은 모바일 화면 (576px 이하) */
-@media (max-width: 576px) {
-    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-    
-    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card {
-        max-width: 100%;
-    }
-    
-    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .cards-grid .trending-card .card-image-container {
-        height: 180px;
-    }
-    
-    .main-page .additional-content-section .trending-section .trending-container .section-title {
-        font-size: 18px;
-    }
-    .main-page .additional-content-section .trending-section .trending-container .section-subtitle {
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .card-title {
         font-size: 12px;
+        margin-bottom: 4px;
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .card-details {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .rating-info .rating {
+        font-size: 10px;
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .rating-info .reviews {
+        font-size: 9px;
+    }
+    
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .price {
+        font-size: 11px;
+        font-weight: 700;
     }
 }

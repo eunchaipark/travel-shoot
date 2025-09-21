@@ -1,525 +1,308 @@
 /**
- * 인기 급상승 섹션 JavaScript (trending-section.js)
- * 3개 탭(숙소/맛집/관광지) 슬라이더 기능
+ * Trending Section 슬라이더 관리 스크립트
+ * travel-now와 완전 분리된 네임스페이스로 충돌 방지
  */
 
-// 현재 활성 탭과 슬라이더 인덱스
-let currentTab = 'stay';
-let currentSlideIndex = 0;
+const TrendingSlider = {
+    // === 설정 및 상태 ===
+    state: {
+        currentSlideIndex: 0,
+        currentTab: 'stay',
+        cardsPerSlide: 4,
+        totalSlides: 3,
+        isDragging: false,
+        touchStart: { x: 0, y: 0 },
+        touchCurrent: { x: 0, y: 0 }
+    },
 
-// 인기 급상승 데이터 (예시)
-const TRENDING_DATA = {
-    stay: [
-        {
-            id: 1,
-            title: "제주 오션뷰 프리미엄 펜션",
-            image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop",
-            rating: 4.8,
-            location: "제주 서귀포시",
-            price: 185000,
-            badge: "+45%"
-        },
-        {
-            id: 2,
-            title: "부산 해운대 스카이 호텔",
-            image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=400&h=300&fit=crop",
-            rating: 4.6,
-            location: "부산 해운대구",
-            price: 145000,
-            badge: "+38%"
-        },
-        {
-            id: 3,
-            title: "강릉 바다뷰 모던 펜션",
-            image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop",
-            rating: 4.7,
-            location: "강원 강릉시",
-            price: 125000,
-            badge: "+42%"
-        },
-        {
-            id: 4,
-            title: "서울 명동 프리미엄 호텔",
-            image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=400&h=300&fit=crop",
-            rating: 4.5,
-            location: "서울 중구",
-            price: 195000,
-            badge: "+33%"
+    // === 데이터 ===
+    data: {
+        stay: [
+            { id: 1, title: "부산 해운대 럭셔리 호텔", image: "/images/trending/stay1.jpg", rating: "4.8", reviews: "2,840", price: "180,000원", category: "호텔" },
+            { id: 2, title: "서울 강남 부티크 호텔", image: "/images/trending/stay2.jpg", rating: "4.7", reviews: "1,920", price: "220,000원", category: "호텔" },
+            { id: 3, title: "제주 감귤농장 펜션", image: "/images/trending/stay3.jpg", rating: "4.9", reviews: "850", price: "120,000원", category: "펜션" },
+            { id: 4, title: "속초 해변 리조트", image: "/images/trending/stay4.jpg", rating: "4.6", reviews: "3,200", price: "250,000원", category: "리조트" },
+            { id: 5, title: "경주 한옥 게스트하우스", image: "/images/trending/stay5.jpg", rating: "4.8", reviews: "1,150", price: "95,000원", category: "한옥" },
+            { id: 6, title: "인천공항 캡슐호텔", image: "/images/trending/stay6.jpg", rating: "4.5", reviews: "2,400", price: "80,000원", category: "캡슐호텔" },
+            { id: 7, title: "대전 비즈니스 호텔", image: "/images/trending/stay7.jpg", rating: "4.4", reviews: "980", price: "110,000원", category: "호텔" },
+            { id: 8, title: "울산 온천 리조트", image: "/images/trending/stay8.jpg", rating: "4.7", reviews: "1,680", price: "190,000원", category: "리조트" },
+            { id: 9, title: "강릉 바다뷰 펜션", image: "/images/trending/stay9.jpg", rating: "4.6", reviews: "720", price: "140,000원", category: "펜션" },
+            { id: 10, title: "양평 힐링 스테이", image: "/images/trending/stay10.jpg", rating: "4.8", reviews: "950", price: "160,000원", category: "펜션" },
+            { id: 11, title: "전주 한옥 호텔", image: "/images/trending/stay11.jpg", rating: "4.7", reviews: "1,300", price: "130,000원", category: "한옥" },
+            { id: 12, title: "남해 글램핑장", image: "/images/trending/stay12.jpg", rating: "4.5", reviews: "680", price: "170,000원", category: "글램핑" }
+        ],
+        restaurants: [
+            { id: 13, title: "강남 미슐랭 레스토랑", image: "/images/trending/restaurant1.jpg", rating: "4.9", reviews: "3,500", price: "150,000원", category: "파인다이닝" },
+            { id: 14, title: "부산 해산물 전문점", image: "/images/trending/restaurant2.jpg", rating: "4.8", reviews: "2,100", price: "45,000원", category: "해산물" },
+            { id: 15, title: "제주 흑돼지 맛집", image: "/images/trending/restaurant3.jpg", rating: "4.7", reviews: "1,800", price: "35,000원", category: "한식" },
+            { id: 16, title: "명동 전통 한정식", image: "/images/trending/restaurant4.jpg", rating: "4.6", reviews: "2,800", price: "80,000원", category: "한정식" },
+            { id: 17, title: "이태원 퓨전 요리", image: "/images/trending/restaurant5.jpg", rating: "4.5", reviews: "1,200", price: "65,000원", category: "퓨전" },
+            { id: 18, title: "홍대 브런치 카페", image: "/images/trending/restaurant6.jpg", rating: "4.4", reviews: "950", price: "25,000원", category: "브런치" },
+            { id: 19, title: "광주 전통 시장 맛집", image: "/images/trending/restaurant7.jpg", rating: "4.8", reviews: "1,500", price: "18,000원", category: "향토음식" },
+            { id: 20, title: "대구 치킨 전문점", image: "/images/trending/restaurant8.jpg", rating: "4.6", reviews: "3,200", price: "28,000원", category: "치킨" },
+            { id: 21, title: "인사동 전통차 카페", image: "/images/trending/restaurant9.jpg", rating: "4.5", reviews: "890", price: "15,000원", category: "카페" },
+            { id: 22, title: "용산 스테이크 하우스", image: "/images/trending/restaurant10.jpg", rating: "4.7", reviews: "1,640", price: "120,000원", category: "스테이크" },
+            { id: 23, title: "여의도 일식당", image: "/images/trending/restaurant11.jpg", rating: "4.6", reviews: "2,100", price: "90,000원", category: "일식" },
+            { id: 24, title: "압구정 이탈리안", image: "/images/trending/restaurant12.jpg", rating: "4.8", reviews: "1,750", price: "85,000원", category: "이탈리안" }
+        ],
+        attractions: [
+            { id: 25, title: "경복궁 야간 관람", image: "/images/trending/attraction1.jpg", rating: "4.9", reviews: "5,200", price: "20,000원", category: "문화재" },
+            { id: 26, title: "롯데월드 자유이용권", image: "/images/trending/attraction2.jpg", rating: "4.7", reviews: "8,900", price: "62,000원", category: "테마파크" },
+            { id: 27, title: "제주 성산일출봉", image: "/images/trending/attraction3.jpg", rating: "4.8", reviews: "4,100", price: "5,000원", category: "자연명소" },
+            { id: 28, title: "부산 감천문화마을", image: "/images/trending/attraction4.jpg", rating: "4.6", reviews: "3,800", price: "무료", category: "문화마을" },
+            { id: 29, title: "여수 밤바다 유람선", image: "/images/trending/attraction5.jpg", rating: "4.8", reviews: "2,400", price: "35,000원", category: "액티비티" },
+            { id: 30, title: "속초 설악산 케이블카", image: "/images/trending/attraction6.jpg", rating: "4.5", reviews: "1,900", price: "15,000원", category: "자연명소" },
+            { id: 31, title: "전주 한옥마을 투어", image: "/images/trending/attraction7.jpg", rating: "4.7", reviews: "2,600", price: "12,000원", category: "문화체험" },
+            { id: 32, title: "안동 하회마을", image: "/images/trending/attraction8.jpg", rating: "4.6", reviews: "1,500", price: "8,000원", category: "문화재" },
+            { id: 33, title: "경주 불국사", image: "/images/trending/attraction9.jpg", rating: "4.8", reviews: "3,300", price: "6,000원", category: "문화재" },
+            { id: 34, title: "지리산 둘레길", image: "/images/trending/attraction10.jpg", rating: "4.7", reviews: "1,200", price: "무료", category: "트레킹" },
+            { id: 35, title: "통영 케이블카", image: "/images/trending/attraction11.jpg", rating: "4.5", reviews: "980", price: "18,000원", category: "액티비티" },
+            { id: 36, title: "담양 죽녹원", image: "/images/trending/attraction12.jpg", rating: "4.6", reviews: "1,850", price: "3,000원", category: "자연명소" }
+        ]
+    },
+
+    // === DOM 요소 캐싱 ===
+    elements: {
+        slider: null,
+        tabButtons: null,
+        navButtons: { prev: null, next: null },
+        sliderContainer: null
+    },
+
+    // === 초기화 ===
+    init() {
+        this.cacheElements();
+        this.updateResponsiveSettings();
+        this.bindEvents();
+        this.render();
+        console.log('Trending Slider 초기화 완료');
+    },
+
+    // DOM 요소 캐싱
+    cacheElements() {
+        this.elements.slider = document.getElementById('trendingSlider');
+        this.elements.tabButtons = document.querySelectorAll('.trending-section .tab-button');
+        this.elements.navButtons.prev = document.querySelector('.trending-section .slider-nav-prev');
+        this.elements.navButtons.next = document.querySelector('.trending-section .slider-nav-next');
+        this.elements.sliderContainer = document.querySelector('.trending-section .slider-container');
+    },
+
+    // === 반응형 설정 ===
+    updateResponsiveSettings() {
+        const width = window.innerWidth;
+        const prevCards = this.state.cardsPerSlide;
+        
+        // travel-now와 동일한 반응형 로직
+        if (width <= 768) this.state.cardsPerSlide = 3;
+        else if (width <= 1200) this.state.cardsPerSlide = 3;
+        else this.state.cardsPerSlide = 4;
+        
+        this.state.totalSlides = Math.ceil(12 / this.state.cardsPerSlide);
+        
+        // 현재 슬라이드 인덱스 보정
+        if (this.state.currentSlideIndex >= this.state.totalSlides) {
+            this.state.currentSlideIndex = this.state.totalSlides - 1;
         }
-    ],
-    restaurants: [
-        {
-            id: 1,
-            title: "제주 흑돼지 맛집",
-            image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop",
-            rating: 4.7,
-            location: "제주 제주시",
-            category: "한식",
-            badge: "+52%"
-        },
-        {
-            id: 2,
-            title: "부산 자갈치 해산물",
-            image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=300&fit=crop",
-            rating: 4.6,
-            location: "부산 중구",
-            category: "해산물",
-            badge: "+48%"
-        },
-        {
-            id: 3,
-            title: "강릉 커피거리 명소",
-            image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=400&h=300&fit=crop",
-            rating: 4.4,
-            location: "강원 강릉시",
-            category: "카페",
-            badge: "+41%"
-        },
-        {
-            id: 4,
-            title: "서울 홍대 맛집거리",
-            image: "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=400&h=300&fit=crop",
-            rating: 4.5,
-            location: "서울 마포구",
-            category: "분식",
-            badge: "+37%"
+        
+        // 카드 개수가 변경되었으면 재렌더링
+        if (prevCards !== this.state.cardsPerSlide) {
+            this.render();
         }
-    ],
-    attractions: [
-        {
-            id: 1,
-            title: "제주 한라산 국립공원",
-            image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
-            rating: 4.8,
-            location: "제주 제주시",
-            category: "자연관광",
-            badge: "+56%"
-        },
-        {
-            id: 2,
-            title: "부산 감천문화마을",
-            image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop",
-            rating: 4.5,
-            location: "부산 사하구",
-            category: "문화관광",
-            badge: "+44%"
-        },
-        {
-            id: 3,
-            title: "강릉 정동진 해수욕장",
-            image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop",
-            rating: 4.6,
-            location: "강원 강릉시",
-            category: "해수욕장",
-            badge: "+39%"
-        },
-        {
-            id: 4,
-            title: "서울 경복궁",
-            image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop",
-            rating: 4.7,
-            location: "서울 종로구",
-            category: "역사관광",
-            badge: "+35%",
-        }
-    ]
-};
+    },
 
-/**
- * 페이지 로드 시 초기화
- */
-document.addEventListener('DOMContentLoaded', function() {
-    // main-calendar.js의 isLoggedIn 변수 확인
-    if (typeof isLoggedIn !== 'undefined' && isLoggedIn) {
-        initializeTrendingSection();
-    } else {
-        hideTrendingSection();
-    }
-});
-
-/**
- * 인기 급상승 섹션 숨기기 (비로그인 상태)
- */
-function hideTrendingSection() {
-    const trendingSection = document.querySelector('.trending-section');
-    if (trendingSection) {
-        trendingSection.style.display = 'none';
-    }
-}
-
-/**
- * 인기 급상승 섹션 초기화
- */
-function initializeTrendingSection() {
-    renderAllTabContent();
-    setupTabNavigation();
-    setupSliderNavigation();
-    
-    // 초기 슬라이더 위치 설정
-    updateSliderPosition();
-}
-
-/**
- * 숫자를 천 단위 콤마로 포맷팅
- * @param {number} number - 포맷팅할 숫자
- * @returns {string} 포맷팅된 문자열
- */
-function formatPrice(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
-/**
- * 별점 HTML 생성 함수 (5점 만점)
- * @param {number} rating - 평점 (0-5)
- * @returns {string} 별점 HTML
- */
-function generateStarRating(rating) {
-    const maxStars = 5;
-    let starsHTML = '';
-    
-    for (let i = 1; i <= maxStars; i++) {
-        if (i <= Math.floor(rating)) {
-            starsHTML += '<i class="fas fa-star star"></i>';
-        } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
-            starsHTML += '<i class="fas fa-star-half-alt star"></i>';
-        } else {
-            starsHTML += '<i class="far fa-star star empty"></i>';
-        }
-    }
-    
-    return starsHTML;
-}
-
-/**
- * 숙소 카드 HTML 생성
- * @param {Object} item - 숙소 정보 객체
- * @returns {string} 카드 HTML
- */
-function createAccommodationCard(item) {
-    const formattedPrice = formatPrice(item.price);
-    const starsHTML = generateStarRating(item.rating);
-    
-    return `
-        <div class="trending-card" data-id="${item.id}" data-type="accommodation">
-            <div class="card-image-container">
-                <div class="trending-badge">${item.badge}</div>
-                <img src="${item.image}" 
-                     alt="${item.title}" 
-                     class="card-image"
-                     onerror="this.src='https://via.placeholder.com/400x300/f0f0f0/666?text=No+Image'">
-            </div>
-            <div class="card-info">
-                <h3 class="card-title">${item.title}</h3>
-                <div class="card-location">
-                    <i class="fas fa-map-marker-alt location-icon"></i>
-                    <span class="location-text">${item.location}</span>
-                </div>
-                <div class="card-rating">
-                    <div class="star-rating">
-                        ${starsHTML}
-                    </div>
-                    <span class="rating-text">(${item.rating}/5)</span>
-                </div>
-                <div class="card-price">
-                    <span class="price-text">₩ ${formattedPrice}</span>
-                    <span class="price-unit">1박당 요금</span>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-/**
- * 맛집 카드 HTML 생성
- * @param {Object} item - 맛집 정보 객체
- * @returns {string} 카드 HTML
- */
-function createRestaurantCard(item) {
-    const starsHTML = generateStarRating(item.rating);
-    
-    return `
-        <div class="trending-card" data-id="${item.id}" data-type="restaurant">
-            <div class="card-image-container">
-                <div class="trending-badge">${item.badge}</div>
-                <img src="${item.image}" 
-                     alt="${item.title}" 
-                     class="card-image"
-                     onerror="this.src='https://via.placeholder.com/400x300/f0f0f0/666?text=No+Image'">
-            </div>
-            <div class="card-info">
-                <h3 class="card-title">${item.title}</h3>
-                <div class="card-location">
-                    <i class="fas fa-utensils location-icon"></i>
-                    <span class="location-text">${item.category} • ${item.location}</span>
-                </div>
-                <div class="card-rating">
-                    <div class="star-rating">
-                        ${starsHTML}
-                    </div>
-                    <span class="rating-text">(${item.rating}/5)</span>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-/**
- * 관광지 카드 HTML 생성
- * @param {Object} item - 관광지 정보 객체
- * @returns {string} 카드 HTML
- */
-function createAttractionCard(item) {
-    const starsHTML = generateStarRating(item.rating);
-    
-    return `
-        <div class="trending-card" data-id="${item.id}" data-type="attraction">
-            <div class="card-image-container">
-                <div class="trending-badge">${item.badge}</div>
-                <img src="${item.image}" 
-                     alt="${item.title}" 
-                     class="card-image"
-                     onerror="this.src='https://via.placeholder.com/400x300/f0f0f0/666?text=No+Image'">
-            </div>
-            <div class="card-info">
-                <h3 class="card-title">${item.title}</h3>
-                <div class="card-location">
-                    <i class="fas fa-camera location-icon"></i>
-                    <span class="location-text">${item.category} • ${item.location}</span>
-                </div>
-                <div class="card-rating">
-                    <div class="star-rating">
-                        ${starsHTML}
-                    </div>
-                    <span class="rating-text">(${item.rating}/5)</span>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-/**
- * 모든 탭 콘텐츠 렌더링
- */
-function renderAllTabContent() {
-    // 숙소 탭
-    const stayGrid = document.getElementById('stayGrid');
-    if (stayGrid) {
-        let stayHTML = '';
-        TRENDING_DATA.stay.forEach(item => {
-            stayHTML += createAccommodationCard(item);
+    // === 이벤트 바인딩 ===
+    bindEvents() {
+        // 탭 버튼 이벤트
+        this.elements.tabButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const tab = e.target.getAttribute('data-tab');
+                if (tab !== this.state.currentTab) this.switchTab(tab);
+            });
         });
-        stayGrid.innerHTML = stayHTML;
-    }
-    
-    // 맛집 탭
-    const restaurantsGrid = document.getElementById('restaurantsGrid');
-    if (restaurantsGrid) {
-        let restaurantsHTML = '';
-        TRENDING_DATA.restaurants.forEach(item => {
-            restaurantsHTML += createRestaurantCard(item);
-        });
-        restaurantsGrid.innerHTML = restaurantsHTML;
-    }
-    
-    // 관광지 탭
-    const attractionsGrid = document.getElementById('attractionsGrid');
-    if (attractionsGrid) {
-        let attractionsHTML = '';
-        TRENDING_DATA.attractions.forEach(item => {
-            attractionsHTML += createAttractionCard(item);
-        });
-        attractionsGrid.innerHTML = attractionsHTML;
-    }
-    
-    // 카드 클릭 이벤트 추가
-    addCardClickEvents();
-}
 
-/**
- * 탭 네비게이션 설정
- */
-function setupTabNavigation() {
-    const tabButtons = document.querySelectorAll('.tab-button');
-    
-    tabButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const selectedTab = this.getAttribute('data-tab');
+        // 네비게이션 버튼 이벤트
+        if (this.elements.navButtons.prev) {
+            this.elements.navButtons.prev.addEventListener('click', () => this.prevSlide());
+        }
+        if (this.elements.navButtons.next) {
+            this.elements.navButtons.next.addEventListener('click', () => this.nextSlide());
+        }
+
+        // 터치 이벤트
+        this.bindTouchEvents();
+
+        // 리사이즈 이벤트
+        window.addEventListener('resize', () => this.updateResponsiveSettings());
+    },
+
+    // 터치 이벤트 바인딩
+    bindTouchEvents() {
+        if (!this.elements.sliderContainer) return;
+
+        this.elements.sliderContainer.addEventListener('touchstart', (e) => {
+            this.state.touchStart.x = e.touches[0].clientX;
+            this.state.touchStart.y = e.touches[0].clientY;
+            this.state.isDragging = true;
+        }, { passive: true });
+
+        this.elements.sliderContainer.addEventListener('touchmove', (e) => {
+            if (!this.state.isDragging) return;
             
-            if (selectedTab !== currentTab) {
-                // 탭 버튼 상태 변경
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                
-                // 현재 탭 업데이트
-                currentTab = selectedTab;
-                
-                // 슬라이더 인덱스 업데이트
-                const tabOrder = ['stay', 'restaurants', 'attractions'];
-                currentSlideIndex = tabOrder.indexOf(selectedTab);
-                
-                // 슬라이더 이동
-                updateSliderPosition();
-                
-                console.log('탭 변경:', selectedTab);
-            }
-        });
-    });
-}
+            this.state.touchCurrent.x = e.touches[0].clientX;
+            this.state.touchCurrent.y = e.touches[0].clientY;
+            
+            const diffX = Math.abs(this.state.touchCurrent.x - this.state.touchStart.x);
+            const diffY = Math.abs(this.state.touchCurrent.y - this.state.touchStart.y);
+            
+            if (diffX > diffY && diffX > 10) e.preventDefault();
+        }, { passive: false });
 
-/**
- * 슬라이더 네비게이션 설정
- */
-function setupSliderNavigation() {
-    const prevButton = document.querySelector('.slider-nav-prev');
-    const nextButton = document.querySelector('.slider-nav-next');
-    
-    if (prevButton) {
-        prevButton.addEventListener('click', function() {
-            if (currentSlideIndex > 0) {
-                currentSlideIndex--;
-                updateSliderPosition();
-                updateActiveTab();
+        this.elements.sliderContainer.addEventListener('touchend', () => {
+            if (!this.state.isDragging) return;
+            this.state.isDragging = false;
+            
+            const diffX = this.state.touchStart.x - this.state.touchCurrent.x;
+            const diffY = Math.abs(this.state.touchStart.y - this.state.touchCurrent.y);
+            const threshold = 50;
+            
+            if (Math.abs(diffX) > threshold && Math.abs(diffX) > diffY) {
+                diffX > 0 ? this.nextSlide() : this.prevSlide();
             }
-        });
-    }
-    
-    if (nextButton) {
-        nextButton.addEventListener('click', function() {
-            if (currentSlideIndex < 2) { // 3개 탭이므로 인덱스는 0-2
-                currentSlideIndex++;
-                updateSliderPosition();
-                updateActiveTab();
-            }
-        });
-    }
-    
-    // 초기 버튼 상태 업데이트
-    updateNavigationButtons();
-}
+        }, { passive: true });
+    },
 
-/**
- * 슬라이더 위치 업데이트
- */
-function updateSliderPosition() {
-    const sliderWrapper = document.getElementById('trendingSlider');
-    if (sliderWrapper) {
-        const translateX = -(currentSlideIndex * 100);
-        sliderWrapper.style.transform = `translateX(${translateX}%)`;
-    }
-    
-    updateNavigationButtons();
-}
-
-/**
- * 활성 탭 업데이트 (슬라이더 네비게이션 사용 시)
- */
-function updateActiveTab() {
-    const tabOrder = ['stay', 'restaurants', 'attractions'];
-    const newTab = tabOrder[currentSlideIndex];
-    
-    if (newTab !== currentTab) {
-        currentTab = newTab;
+    // === 탭 전환 ===
+    switchTab(newTab) {
+        this.state.currentTab = newTab;
+        this.state.currentSlideIndex = 0;
         
         // 탭 버튼 상태 업데이트
-        const tabButtons = document.querySelectorAll('.tab-button');
-        tabButtons.forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.getAttribute('data-tab') === currentTab) {
-                btn.classList.add('active');
-            }
+        this.elements.tabButtons.forEach(btn => {
+            btn.classList.toggle('active', btn.getAttribute('data-tab') === newTab);
+        });
+        
+        this.updateResponsiveSettings();
+        this.render();
+    },
+
+    // === 렌더링 ===
+    render() {
+        this.renderSlides();
+        this.updateSliderPosition();
+        this.bindCardEvents();
+    },
+
+    renderSlides() {
+        if (!this.elements.slider) return;
+        
+        const currentData = this.data[this.state.currentTab];
+        let html = '';
+        
+        for (let i = 0; i < this.state.totalSlides; i++) {
+            const start = i * this.state.cardsPerSlide;
+            const end = Math.min(start + this.state.cardsPerSlide, currentData.length);
+            const slideData = currentData.slice(start, end);
+            
+            html += `<div class="trending-grid">${slideData.map(item => this.createCard(item)).join('')}</div>`;
+        }
+        
+        this.elements.slider.innerHTML = html;
+    },
+
+    createCard(item) {
+        return `
+            <div class="trending-card" data-id="${item.id}" data-type="${this.state.currentTab}">
+                <div class="card-image-container">
+                    <img src="${item.image}" alt="${item.title}" class="card-image">
+                    <div class="category-badge">${item.category}</div>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">${item.title}</h3>
+                    <div class="card-details">
+                        <div class="rating-info">
+                            <span class="rating">★ ${item.rating}</span>
+                            <span class="reviews">(${item.reviews})</span>
+                        </div>
+                        <div class="price">${item.price}</div>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    // === 슬라이드 제어 ===
+    prevSlide() {
+        if (this.state.currentSlideIndex > 0) {
+            this.state.currentSlideIndex--;
+            this.updateSliderPosition();
+        }
+    },
+
+    nextSlide() {
+        if (this.state.currentSlideIndex < this.state.totalSlides - 1) {
+            this.state.currentSlideIndex++;
+            this.updateSliderPosition();
+        }
+    },
+
+    goToSlide(index) {
+        if (index >= 0 && index < this.state.totalSlides) {
+            this.state.currentSlideIndex = index;
+            this.updateSliderPosition();
+        }
+    },
+
+    updateSliderPosition() {
+        if (!this.elements.slider) return;
+        
+        const translateX = -(this.state.currentSlideIndex * (100 / this.state.totalSlides));
+        this.elements.slider.style.transform = `translateX(${translateX}%)`;
+        
+        this.updateNavigationButtons();
+    },
+
+    updateNavigationButtons() {
+        const { prev, next } = this.elements.navButtons;
+        const { currentSlideIndex, totalSlides } = this.state;
+        
+        if (prev) {
+            prev.style.opacity = currentSlideIndex === 0 ? '0.5' : '1';
+            prev.disabled = currentSlideIndex === 0;
+        }
+        
+        if (next) {
+            next.style.opacity = currentSlideIndex === totalSlides - 1 ? '0.5' : '1';
+            next.disabled = currentSlideIndex === totalSlides - 1;
+        }
+    },
+
+    // === 카드 이벤트 ===
+    bindCardEvents() {
+        document.querySelectorAll('.trending-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const cardId = this.getAttribute('data-id');
+                const cardType = this.getAttribute('data-type');
+                console.log('Trending 카드 클릭:', cardType, cardId);
+                
+                // 여기에 카드 클릭 시 동작 구현
+                // 예: 상세 페이지 이동, 모달 표시 등
+            });
         });
     }
-}
+};
 
-/**
- * 네비게이션 버튼 상태 업데이트
- */
-function updateNavigationButtons() {
-    const prevButton = document.querySelector('.slider-nav-prev');
-    const nextButton = document.querySelector('.slider-nav-next');
-    
-    if (prevButton) {
-        prevButton.disabled = currentSlideIndex === 0;
+// === 전역 API ===
+window.TrendingSection = {
+    init: () => TrendingSlider.init(),
+    next: () => TrendingSlider.nextSlide(),
+    prev: () => TrendingSlider.prevSlide(),
+    goTo: (index) => TrendingSlider.goToSlide(index),
+    switchTab: (tab) => TrendingSlider.switchTab(tab)
+};
+
+// === 자동 초기화 ===
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.querySelector('.trending-section')) {
+        TrendingSlider.init();
     }
-    
-    if (nextButton) {
-        nextButton.disabled = currentSlideIndex === 2;
-    }
-}
-
-/**
- * 카드 클릭 이벤트 추가
- */
-function addCardClickEvents() {
-    const trendingCards = document.querySelectorAll('.trending-card');
-    
-    trendingCards.forEach(card => {
-        card.addEventListener('click', function() {
-            const cardId = this.getAttribute('data-id');
-            const cardType = this.getAttribute('data-type');
-            
-            console.log('카드 클릭:', cardType, cardId);
-            
-            // 실제 구현에서는 다음과 같은 동작을 수행:
-            // 1. 상세 페이지로 이동
-            // 2. 모달창으로 상세 정보 표시
-            // 3. 관련 정보 표시
-            
-            // 예시: 간단한 알림
-            let selectedItem;
-            switch(cardType) {
-                case 'accommodation':
-                    selectedItem = TRENDING_DATA.stay.find(item => item.id == cardId);
-                    break;
-                case 'restaurant':
-                    selectedItem = TRENDING_DATA.restaurants.find(item => item.id == cardId);
-                    break;
-                case 'attraction':
-                    selectedItem = TRENDING_DATA.attractions.find(item => item.id == cardId);
-                    break;
-            }
-            
-            if (selectedItem) {
-                alert(`선택한 ${getTypeKorean(cardType)}: ${selectedItem.title}\n급상승률: ${selectedItem.trendingRate}`);
-            }
-        });
-    });
-}
-
-/**
- * 영문 타입을 한글로 변환
- * @param {string} type - 영문 타입
- * @returns {string} 한글 타입
- */
-function getTypeKorean(type) {
-    const typeMap = {
-        'accommodation': '숙소',
-        'restaurant': '맛집',
-        'attraction': '관광지'
-    };
-    return typeMap[type] || type;
-}
-
-/**
- * 화면 크기 변경 감지 및 대응
- */
-function handleScreenResize() {
-    // 모바일에서는 슬라이더 네비게이션 숨김
-    const isMobile = window.innerWidth <= 992;
-    const sliderNavs = document.querySelectorAll('.slider-nav');
-    
-    sliderNavs.forEach(nav => {
-        nav.style.display = isMobile ? 'none' : 'flex';
-    });
-}
-
-// 화면 크기 변경 이벤트 리스너
-window.addEventListener('resize', function() {
-    clearTimeout(window.resizeTimeout);
-    window.resizeTimeout = setTimeout(handleScreenResize, 250);
-});
-
-// 초기 화면 크기 체크
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(handleScreenResize, 100);
 });
