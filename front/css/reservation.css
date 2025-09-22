@@ -122,12 +122,6 @@
   height: 60px;
 }
 
-.course-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
 .reservation-detail-page .day-tabs .nav-link {
   background-color: #f8f9fa;
   color: #6c757d;
@@ -144,7 +138,7 @@
   border-color: #17a1fa;
 }
 
-.map-placeholder {
+.reservation-detail-page .map-placeholder {
   height: 350px;
   background-color: #f8f9fa;
   border: 2px dashed #dee2e6;
@@ -287,13 +281,6 @@
   color: #495057;
   font-size: 0.75em;
   padding-top: 3px;
-}
-
-@media (max-width: 992px) {
-  /* .reservation-detail-page .lodging-image {
-    width: 105px;
-    height: 142px;
-  } */
 }
 
 @media (max-width: 768px) {
