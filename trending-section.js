@@ -66,7 +66,8 @@ const TrendingSlider = {
         slider: null,
         tabButtons: null,
         navButtons: { prev: null, next: null },
-        sliderContainer: null
+        sliderContainer: null,
+        indicators: null
     },
 
     // === 초기화 ===
@@ -75,6 +76,7 @@ const TrendingSlider = {
         this.updateResponsiveSettings();
         this.bindEvents();
         this.render();
+        this.renderIndicators();
         console.log('Trending Slider 초기화 완료');
     },
 
@@ -85,6 +87,7 @@ const TrendingSlider = {
         this.elements.navButtons.prev = document.querySelector('.trending-section .slider-nav-prev');
         this.elements.navButtons.next = document.querySelector('.trending-section .slider-nav-next');
         this.elements.sliderContainer = document.querySelector('.trending-section .slider-container');
+        this.elements.indicators = document.getElementById('trendingIndicators');
     },
 
     // === 반응형 설정 ===
@@ -92,10 +95,10 @@ const TrendingSlider = {
         const width = window.innerWidth;
         const prevCards = this.state.cardsPerSlide;
         
-        // travel-now와 동일한 반응형 로직
-        if (width <= 768) this.state.cardsPerSlide = 3;
-        else if (width <= 1200) this.state.cardsPerSlide = 3;
-        else this.state.cardsPerSlide = 4;
+        // 모바일에서도 3개씩, 태블릿에서는 3개씩, 데스크톱에서는 4개씩
+        if (width <= 768) this.state.cardsPerSlide = 3;      // 모바일: 3개씩
+        else if (width <= 1200) this.state.cardsPerSlide = 3; // 태블릿: 3개씩
+        else this.state.cardsPerSlide = 4;                    // 데스크톱: 4개씩
         
         this.state.totalSlides = Math.ceil(12 / this.state.cardsPerSlide);
         
@@ -104,9 +107,15 @@ const TrendingSlider = {
             this.state.currentSlideIndex = this.state.totalSlides - 1;
         }
         
+        // 인디케이터 표시/숨김 (모바일에서만 표시)
+        if (this.elements.indicators) {
+            this.elements.indicators.style.display = width <= 768 ? 'flex' : 'none';
+        }
+        
         // 카드 개수가 변경되었으면 재렌더링
         if (prevCards !== this.state.cardsPerSlide) {
             this.render();
+            this.renderIndicators();
         }
     },
 
@@ -183,12 +192,14 @@ const TrendingSlider = {
         
         this.updateResponsiveSettings();
         this.render();
+        this.renderIndicators();
     },
 
     // === 렌더링 ===
     render() {
         this.renderSlides();
         this.updateSliderPosition();
+        this.updateIndicators();
         this.bindCardEvents();
     },
 
@@ -235,6 +246,7 @@ const TrendingSlider = {
         if (this.state.currentSlideIndex > 0) {
             this.state.currentSlideIndex--;
             this.updateSliderPosition();
+            this.updateIndicators();
         }
     },
 
@@ -242,6 +254,7 @@ const TrendingSlider = {
         if (this.state.currentSlideIndex < this.state.totalSlides - 1) {
             this.state.currentSlideIndex++;
             this.updateSliderPosition();
+            this.updateIndicators();
         }
     },
 
@@ -249,6 +262,7 @@ const TrendingSlider = {
         if (index >= 0 && index < this.state.totalSlides) {
             this.state.currentSlideIndex = index;
             this.updateSliderPosition();
+            this.updateIndicators();
         }
     },
 
@@ -274,6 +288,34 @@ const TrendingSlider = {
             next.style.opacity = currentSlideIndex === totalSlides - 1 ? '0.5' : '1';
             next.disabled = currentSlideIndex === totalSlides - 1;
         }
+    },
+
+    // === 인디케이터 렌더링 ===
+    renderIndicators() {
+        if (!this.elements.indicators) return;
+        
+        let html = '';
+        for (let i = 0; i < this.state.totalSlides; i++) {
+            html += `<div class="indicator ${i === this.state.currentSlideIndex ? 'active' : ''}" data-slide="${i}"></div>`;
+        }
+        
+        this.elements.indicators.innerHTML = html;
+        
+        // 인디케이터 클릭 이벤트
+        this.elements.indicators.querySelectorAll('.indicator').forEach(indicator => {
+            indicator.addEventListener('click', () => {
+                const slideIndex = parseInt(indicator.dataset.slide);
+                this.goToSlide(slideIndex);
+            });
+        });
+    },
+
+    updateIndicators() {
+        if (!this.elements.indicators) return;
+        
+        this.elements.indicators.querySelectorAll('.indicator').forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === this.state.currentSlideIndex);
+        });
     },
 
     // === 카드 이벤트 ===

@@ -23,9 +23,7 @@ const BudgetSlider = {
             image: "https://images.unsplash.com/photo-1586375300773-8384e3e4916f?w=500&h=350&fit=crop",
             rating: 4.2,
             price: 35000,
-            originalPrice: 45000,
             discount: 22,
-            badge: "가성비",
             reviews: "1,240"
         },
         {
@@ -35,9 +33,7 @@ const BudgetSlider = {
             image: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=500&h=350&fit=crop",
             rating: 4.0,
             price: 42000,
-            originalPrice: 55000,
             discount: 24,
-            badge: "특가",
             reviews: "890"
         },
         {
@@ -47,9 +43,7 @@ const BudgetSlider = {
             image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=500&h=350&fit=crop",
             rating: 3.8,
             price: 28000,
-            originalPrice: 38000,
             discount: 26,
-            badge: "최저가",
             reviews: "2,150"
         },
         {
@@ -59,9 +53,7 @@ const BudgetSlider = {
             image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=500&h=350&fit=crop",
             rating: 4.5,
             price: 68000,
-            originalPrice: 89000,
             discount: 24,
-            badge: "인기",
             reviews: "756"
         },
         {
@@ -71,9 +63,7 @@ const BudgetSlider = {
             image: "https://images.unsplash.com/photo-1590736969955-71cc94901144?w=500&h=350&fit=crop",
             rating: 4.1,
             price: 52000,
-            originalPrice: 68000,
             discount: 24,
-            badge: "할인",
             reviews: "1,456"
         },
         {
@@ -83,9 +73,7 @@ const BudgetSlider = {
             image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=500&h=350&fit=crop",
             rating: 4.3,
             price: 75000,
-            originalPrice: 95000,
             discount: 21,
-            badge: "추천",
             reviews: "623"
         }
     ],
@@ -95,7 +83,8 @@ const BudgetSlider = {
         container: null,
         sliderWrapper: null,
         prevButton: null,
-        nextButton: null
+        nextButton: null,
+        indicators: null
     },
 
     // === 초기화 ===
@@ -105,6 +94,7 @@ const BudgetSlider = {
         this.updateResponsiveConfig();
         this.bindEvents();
         this.renderSlides();
+        this.renderIndicators();
         this.updateSliderPosition();
         console.log('Budget Slider 초기화 완료');
     },
@@ -133,6 +123,11 @@ const BudgetSlider = {
                     <!-- 슬라이드들이 여기에 동적으로 생성됩니다 -->
                 </div>
             </div>
+            
+            <!-- 인디케이터 (모바일용) -->
+            <div class="slider-indicators" id="budgetIndicators" style="display: none;">
+                <!-- 인디케이터들이 JavaScript로 동적 생성됩니다 -->
+            </div>
         `;
     },
 
@@ -142,6 +137,7 @@ const BudgetSlider = {
         this.elements.sliderWrapper = document.getElementById('budgetSliderWrapper');
         this.elements.prevButton = document.getElementById('budgetPrevBtn');
         this.elements.nextButton = document.getElementById('budgetNextBtn');
+        this.elements.indicators = document.getElementById('budgetIndicators');
     },
 
     // === 반응형 설정 ===
@@ -159,8 +155,14 @@ const BudgetSlider = {
             this.config.currentSlide = this.config.totalSlides - 1;
         }
         
+        // 인디케이터 표시/숨김 (모바일에서만 표시)
+        if (this.elements.indicators) {
+            this.elements.indicators.style.display = width <= 768 ? 'flex' : 'none';
+        }
+        
         if (prevItems !== this.config.itemsPerSlide) {
             this.renderSlides();
+            this.renderIndicators();
         }
     },
 
@@ -247,13 +249,12 @@ const BudgetSlider = {
 
     createBudgetCard(item) {
         const formattedPrice = this.formatNumber(item.price);
-        const formattedOriginalPrice = this.formatNumber(item.originalPrice);
         
         return `
             <div class="budget-item-card" data-id="${item.id}">
                 <div class="budget-card-image">
-                    <img src="${item.image}" alt="${item.name}" class="budget-img">
-                    <div class="budget-type-badge">${item.badge}</div>
+                    <img src="${item.image}" alt="${item.name}" class="budget-img" 
+                         onerror="this.src='https://via.placeholder.com/500x350/f0f0f0/666?text=No+Image'">
                     <div class="budget-discount-badge">${item.discount}% 할인</div>
                 </div>
                 <div class="budget-card-content">
@@ -265,11 +266,38 @@ const BudgetSlider = {
                     </div>
                     <div class="budget-pricing">
                         <div class="budget-main-price">₩${formattedPrice}</div>
-                        <div class="budget-original-price">₩${formattedOriginalPrice}</div>
                     </div>
                 </div>
             </div>
         `;
+    },
+
+    // === 인디케이터 렌더링 ===
+    renderIndicators() {
+        if (!this.elements.indicators) return;
+        
+        let html = '';
+        for (let i = 0; i < this.config.totalSlides; i++) {
+            html += `<div class="indicator ${i === this.config.currentSlide ? 'active' : ''}" data-slide="${i}"></div>`;
+        }
+        
+        this.elements.indicators.innerHTML = html;
+        
+        // 인디케이터 클릭 이벤트
+        this.elements.indicators.querySelectorAll('.indicator').forEach(indicator => {
+            indicator.addEventListener('click', () => {
+                const slideIndex = parseInt(indicator.dataset.slide);
+                this.goToSlideIndex(slideIndex);
+            });
+        });
+    },
+
+    updateIndicators() {
+        if (!this.elements.indicators) return;
+        
+        this.elements.indicators.querySelectorAll('.indicator').forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === this.config.currentSlide);
+        });
     },
 
     // === 슬라이드 제어 ===
@@ -277,6 +305,7 @@ const BudgetSlider = {
         if (this.config.currentSlide > 0) {
             this.config.currentSlide--;
             this.updateSliderPosition();
+            this.updateIndicators();
         }
     },
 
@@ -284,6 +313,7 @@ const BudgetSlider = {
         if (this.config.currentSlide < this.config.totalSlides - 1) {
             this.config.currentSlide++;
             this.updateSliderPosition();
+            this.updateIndicators();
         }
     },
 
@@ -291,6 +321,7 @@ const BudgetSlider = {
         if (index >= 0 && index < this.config.totalSlides) {
             this.config.currentSlide = index;
             this.updateSliderPosition();
+            this.updateIndicators();
         }
     },
 

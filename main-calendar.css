@@ -257,6 +257,7 @@ body {
     transition: all 0.2s ease;
 }
 
+
 .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .search-card .guest-dropdown .guest-btn:hover {
     background-color: #f8f9fa;
     border-color: #adb5bd;

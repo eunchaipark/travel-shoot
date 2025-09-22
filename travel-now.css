@@ -24,7 +24,7 @@
    ========================================================================== */
 
 .main-page .additional-content-section .travel-now-section .travel-now-container .section-header {
-    text-align: center;
+    text-align: left;
     margin-bottom: 40px;
 }
 
@@ -36,8 +36,9 @@
 }
 
 .main-page .additional-content-section .travel-now-section .travel-now-container .section-title .travel-now-highlight {
-    color: #02B8EB;
-    font-weight: 800;
+    color: #343a40;
+    font-weight: 600;
+    font-size: 30px;
 }
 
 /* ==========================================================================
@@ -80,10 +81,12 @@
 }
 
 .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-nav.slider-nav-prev {
+    display: none;
     left: -25px;
 }
 
 .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-nav.slider-nav-next {
+    display: none;
     right: -25px;
 }
 
@@ -317,9 +320,15 @@
 /* 모바일 (768px 미만) */
 @media (max-width: 768px) {
     .main-page .additional-content-section .travel-now-section {
-        padding: 40px 0px; /* 좌우 패딩 줄임 */
+        padding-top: 85px; /* 좌우 패딩 줄임 */
+        padding-bottom: 50px;
     }
-    
+    .main-page .additional-content-section .travel-now-section .travel-now-container .section-title .travel-now-highlight {
+    color: #343a40;
+    font-weight: 600;
+    font-size: 24px;
+    }
+
     .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid {
 
         grid-template-columns: repeat(3, 1fr); /* 모바일에서 3개씩 */

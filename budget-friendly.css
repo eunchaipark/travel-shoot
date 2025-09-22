@@ -34,8 +34,9 @@
 }
 
 .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-title .budget-highlight {
-    color: #28a745;
-    font-weight: 800;
+    color: #343a40;
+    font-weight: 600;
+    font-size: 30px;
 }
 
 .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-subtitle {
@@ -81,10 +82,12 @@
 
 .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-prev {
     left: -25px;
+    display: none;
 }
 
 .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-next {
     right: -25px;
+    display: none;
 }
 
 .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-nav:disabled {
@@ -173,25 +176,12 @@
 }
 
 /* 배지들 */
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image .budget-type-badge {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    color: white;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 15px;
-    z-index: 5;
-    box-shadow: 0 2px 6px rgba(40, 167, 69, 0.4);
-}
 
 .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image .budget-discount-badge {
     position: absolute;
     top: 12px;
     right: 12px;
-    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    background: linear-gradient(135deg, #31C6C3 0%, #31C6C3 100%);
     color: white;
     font-size: 11px;
     font-weight: 700;
@@ -216,7 +206,7 @@
     margin-bottom: 8px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    line-clamp: 2;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -228,7 +218,7 @@
     margin-bottom: 10px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
+    line-clamp: 1;
     overflow: hidden;
 }
 
@@ -242,7 +232,7 @@
 .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-rating .budget-stars {
     font-size: 13px;
     font-weight: 600;
-    color: #FFB800;
+    color: #F89494;
 }
 
 .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-rating .budget-reviews {
@@ -259,13 +249,39 @@
 .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-pricing .budget-main-price {
     font-size: 18px;
     font-weight: 700;
-    color: #28a745;
+    color: #343a40;
 }
 
-.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-pricing .budget-original-price {
-    font-size: 13px;
-    color: #999;
-    text-decoration: line-through;
+
+/* === 인디케이터 스타일 (모바일용) === */
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .slider-indicators {
+    display: none; /* 기본적으로 숨김 */
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    padding: 0;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .slider-indicators .indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #d1d5db;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    padding: 0;
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .slider-indicators .indicator.active {
+    background-color: #28a745;
+    transform: scale(1.2);
+}
+
+.main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .slider-indicators .indicator:hover:not(.active) {
+    background-color: #9ca3af;
+    transform: scale(1.1);
 }
 
 /* ==========================================================================
@@ -319,7 +335,14 @@
 /* 모바일 (768px 이하) */
 @media (max-width: 768px) {
     .main-page .additional-content-section .budget-friendly-section {
-        padding: 40px 0;
+        /* padding: 40px 0; */
+        padding-bottom: 0px;
+        padding-top: 85px;
+    }
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-title .budget-highlight {
+    color: #343a40;
+    font-weight: 600;
+    font-size: 24px;
     }
     
     .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid {
@@ -340,17 +363,12 @@
         height: 280px;
     }
     
-    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image .budget-type-badge,
     .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image .budget-discount-badge {
         top: 8px;
-        font-size: 9px;
+        font-size: 10px;
         padding: 3px 8px;
     }
-    
-    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image .budget-type-badge {
-        left: 8px;
-    }
-    
+
     .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image .budget-discount-badge {
         right: 8px;
     }
@@ -381,10 +399,6 @@
         font-size: 16px;
     }
     
-    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-pricing .budget-original-price {
-        font-size: 12px;
-    }
-    
     /* 네비게이션 버튼 모바일 조정 */
     .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slider-nav {
         width: 40px;
@@ -408,6 +422,11 @@
         color: white;
         transform: translateY(-50%) scale(1.1);
     }
+    
+    /* 모바일에서 인디케이터 표시 */
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .slider-indicators {
+        display: flex !important;
+    }
 }
 
 /* 작은 모바일 (480px 이하) */
@@ -416,6 +435,7 @@
         gap: 10px;
     }
     
+
     .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image {
         height: 200px;
     }

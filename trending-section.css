@@ -34,8 +34,9 @@
 }
 
 .main-page .additional-content-section .trending-section .trending-container .section-title .trending-highlight {
-    color: #FF8888;
-    font-weight: 800;
+    color: #343a40;
+    font-weight: 600;
+    font-size: 30px;
 }
 
 .main-page .additional-content-section .trending-section .trending-container .section-subtitle {
@@ -68,8 +69,11 @@
 }
 
 .main-page .additional-content-section .trending-section .trending-container .tab-navigation .tab-button.active {
-    color: #FF8888;
-    border-bottom-color: #FF8888;
+    color: #343a40;
+    border-bottom-color: #343a40;
+    border-bottom-width: 3px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
 }
 
 .main-page .additional-content-section .trending-section .trending-container .tab-navigation .tab-button:hover:not(.active) {
@@ -236,7 +240,7 @@
 .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .rating-info .rating {
     font-size: 13px;
     font-weight: 600;
-    color: #FFB800; /* 별점 색상 */
+    color: #FF8888; /* 별점 색상 */
     text-shadow: none;
 }
 
@@ -249,8 +253,39 @@
 .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .price {
     font-size: 14px;
     font-weight: 700;
-    color: #FF8888; /* 가격 강조 색상 */
+    color: #675C5C; /* 가격 강조 색상 */
     text-shadow: none;
+}
+
+/* === 인디케이터 스타일 (모바일용) === */
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-indicators {
+    display: none; /* 기본적으로 숨김 */
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    padding: 0;
+}
+
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-indicators .indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #d1d5db;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    padding: 0;
+}
+
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-indicators .indicator.active {
+    background-color: #343a40;
+    transform: scale(1.2);
+}
+
+.main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-indicators .indicator:hover:not(.active) {
+    background-color: #9ca3af;
+    transform: scale(1.1);
 }
 
 /* ==========================================================================
@@ -310,15 +345,33 @@
 /* 모바일 (768px 이하) */
 @media (max-width: 768px) {
     .main-page .additional-content-section .trending-section {
-        padding: 40px 0;
+        padding-top: 85px;
+        padding-bottom: 0px;
     }
     
+    .main-page .additional-content-section .trending-section .trending-container .section-title .trending-highlight {
+        color: #343a40;
+        font-weight: 600;
+        font-size: 24px;
+    }
+
+    /* 모바일에서 3개씩 컴팩트하게 배치 */
     .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid {
-        gap: 8px;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+        width: 25% !important; /* 4슬라이드로 복원 */
+    }
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container {
+        width: 100%;
+    }
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .slider-wrapper {
+        width: 400% !important; /* 4슬라이드 */
     }
     
     .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .slider-wrapper .trending-grid {
-        gap: 2px;
+        width: 25% !important;
+        gap: 8px !important;
+        padding: 0 5px; /* 좌우 여백 추가 */
     }
     
     .main-page .additional-content-section .trending-section .trending-container .section-title {
@@ -391,6 +444,11 @@
     .main-page .additional-content-section .trending-section .trending-container .tab-navigation .tab-button {
         padding: 12px 20px;
         font-size: 16px;
+    }
+    
+    /* 모바일에서 인디케이터 표시 */
+    .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-indicators {
+        display: flex !important;
     }
 }
 
