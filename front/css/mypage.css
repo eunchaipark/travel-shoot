@@ -83,7 +83,7 @@
 }
 
 .mypage .form-title {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 600;
   color: #333;
   margin-bottom: 30px;
@@ -112,6 +112,10 @@
 .mypage .form-control:focus {
   border-color: #1fb7ea;
   box-shadow: 0 0 0 0.2rem rgba(31, 183, 234, 0.25);
+}
+
+.mypage .form-control::placeholder{
+    color:#acacac;
 }
 
 .mypage .verify-btn {
@@ -160,6 +164,16 @@
   font-weight: 500;
   cursor: pointer;
   text-align: center;
+}
+
+.mypage .form-actions .btn-form-submit{
+  background: #FF8888;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 30px;
+  font-weight: 500;
+  width: 50%;
 }
 
 .mypage .email-group {
@@ -427,6 +441,10 @@
 
   .modal-overlay .modal-actions {
     flex-direction: column;
+  }
+
+  .mypage .form-actions .btn-form-submit{
+    width: 100%;
   }
 }
 
