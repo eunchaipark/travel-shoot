@@ -109,9 +109,6 @@
   font-size: 1.2em;
 }
 
-.reservation-detail-page .dotted-line {
-  border-bottom: 3px dotted #ccc;
-}
 
 .reservation-detail-page .pay-line-con {
   text-align: right;

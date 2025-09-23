@@ -102,7 +102,7 @@ body {
 }
 
 .app-header .icon-button:first-child {
-  margin-right: 48px;
+  margin-right: 30px;
 }
 
 .app-header .icon-button:hover {
@@ -358,13 +358,17 @@ body {
   font-weight: 300;
 }
 
+.payment-info-dotted-line {
+  border-bottom: 3px dotted #ccc;
+}
+
 @media (max-width: 1400px) {
   .app-header .search-divider-con:nth-child(2) {
     display: none;
   }
 
   .app-header .icon-button:first-child {
-    margin-right: 30px;
+    margin-right: 13px;
   }
 }
 
@@ -408,7 +412,7 @@ body {
   }
 
   .app-header .container {
-    margin: 0 20px;
+    margin: 0 0;
     width: 100vw; /* 뷰포트 전체 너비 */
     overflow-x: visible; /* 숨겨진 내용 보이게 */
     max-width: 100%;
@@ -442,7 +446,6 @@ body {
   }
 
   .app-header .container {
-    margin: 0 5px;
     max-width: 100%;
   }
 
