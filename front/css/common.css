@@ -408,7 +408,7 @@ body {
   }
 
   .app-header .container {
-    margin: 0 20px;
+    margin: 0 0;
     width: 100vw; /* 뷰포트 전체 너비 */
     overflow-x: visible; /* 숨겨진 내용 보이게 */
     max-width: 100%;
@@ -442,7 +442,6 @@ body {
   }
 
   .app-header .container {
-    margin: 0 5px;
     max-width: 100%;
   }
 
