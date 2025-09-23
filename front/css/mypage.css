@@ -263,6 +263,8 @@
 .mypage .booking-list .booking-details-link::after {
   content: "›";
   font-size: 1.2rem;
+  top: -1px;
+  position: relative;
 }
 
 .mypage .booking-list .booking-number {
@@ -346,6 +348,7 @@
   font-weight: 500;
   height: fit-content;
   cursor: pointer;
+  text-align: center;
 }
 
 .mypage .booking-list .btn-review {
@@ -358,6 +361,15 @@
   font-weight: 500;
   height: fit-content;
   cursor: pointer;
+}
+
+.mypage .booking-list .write-date {
+  color: #666;
+  text-decoration: none;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .modal-checkbox {
@@ -449,8 +461,8 @@
   margin-bottom: 25px;
 }
 
-.modal-overlay .notice-box .refund-info{
-    font-size:13px;
+.modal-overlay .notice-box .refund-info {
+  font-size: 13px;
 }
 
 .modal-overlay .notice-box .pay-line-con {
@@ -458,17 +470,16 @@
   padding-right: 14px;
 }
 
-
-.modal-overlay .notice-box .pay-line-con .pay-line{
-    height: 51px;
+.modal-overlay .notice-box .pay-line-con .pay-line {
+  height: 51px;
 }
 
-.modal-overlay .notice-box .refund-price{
-    color: #1565C0;
-    font-weight: 700;
-    text-align: right;
-    padding-right: 9px;
-    font-size:17px;
+.modal-overlay .notice-box .refund-price {
+  color: #1565c0;
+  font-weight: 700;
+  text-align: right;
+  padding-right: 9px;
+  font-size: 17px;
 }
 
 .modal-overlay .notice-box .notice-title {
@@ -772,7 +783,7 @@
     font-size: 14px;
   }
 
-  .modal-overlay .warning-box .warning-item{
-    font-size:13px;
+  .modal-overlay .warning-box .warning-item {
+    font-size: 13px;
   }
 }
