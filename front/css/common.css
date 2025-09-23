@@ -358,6 +358,10 @@ body {
   font-weight: 300;
 }
 
+.payment-info-dotted-line {
+  border-bottom: 3px dotted #ccc;
+}
+
 @media (max-width: 1400px) {
   .app-header .search-divider-con:nth-child(2) {
     display: none;
