@@ -89,7 +89,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    position: relative;
 }
 
 .survey-modal-container .progress-container .progress-steps .step {
@@ -97,6 +97,8 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 8px;
+    position: relative;
+    z-index: 2;
 }
 
 .survey-modal-container .progress-container .progress-steps .step .step-number {
@@ -138,11 +140,22 @@ body {
     color: #FF8888;
 }
 
+/* 프로그레스 라인 스타일 */
 .survey-modal-container .progress-container .progress-steps .progress-line {
-    width: 60px;
+    top: -12px;
+    flex: 1;
     height: 2px;
     background: #e0e0e0;
     margin: 0 10px;
+    position: relative;
+    z-index: 1;
+    transition: background 0.3s ease;
+    max-width: 60px;
+}
+
+/* 완료된 라인은 활성화된 색상으로 변경 */
+.survey-modal-container .progress-container .progress-steps .progress-line.completed {
+    background: #FF8888;
 }
 
 /* ====================
@@ -371,11 +384,12 @@ body {
     }
     
     .survey-modal-container .progress-container .progress-steps {
-        gap: 12px;
+        gap: 0px;
     }
     
     .survey-modal-container .progress-container .progress-steps .progress-line {
-        width: 30px;
+        max-width: 30px;
+        margin: 0 5px;
     }
     
     .survey-modal-container .progress-container .progress-steps .step .step-number {
@@ -456,7 +470,12 @@ body {
     
     .survey-modal-container .progress-container .progress-steps {
         margin-top: 40px;
-        gap: 9px;
+        gap: 0px;
+    }
+    
+    .survey-modal-container .progress-container .progress-steps .progress-line {
+        max-width: 20px;
+        margin: 0 3px;
     }
     
     .survey-modal-container .survey-content {
@@ -470,11 +489,15 @@ body {
     }
     
     .survey-modal-container .survey-content .survey-step .question-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         margin-bottom: -10px;
     }
     
     .survey-modal-container .survey-content .survey-step .question-container .question-subtitle {
         margin-bottom: 20px;
+        max-width: 234px;
     }
     
     /* 2번째 설문조사(숙소 유형)에서만 적용 */

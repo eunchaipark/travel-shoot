@@ -245,10 +245,13 @@ class SurveyModal {
     }
 
     /**
-     * 진행 단계 업데이트
+     * 진행 단계 업데이트 - 프로그레스 라인 애니메이션 기능 추가
      */
     updateProgressSteps() {
-        document.querySelectorAll('.step').forEach((step, index) => {
+        const steps = document.querySelectorAll('.step');
+        const progressLines = document.querySelectorAll('.progress-line');
+
+        steps.forEach((step, index) => {
             const stepNumber = index + 1;
             
             // 클래스 초기화
@@ -262,6 +265,20 @@ class SurveyModal {
                 step.classList.add('completed');
             }
             // stepNumber > this.currentStep인 경우는 기본 상태 (회색)
+        });
+
+        // 프로그레스 라인 상태 업데이트
+        progressLines.forEach((line, index) => {
+            // 라인은 단계보다 하나씩 적음 (step1과 step2 사이의 라인이 첫 번째 라인)
+            const lineStepNumber = index + 1;
+            
+            // 기존 클래스 제거
+            line.classList.remove('completed');
+            
+            // 현재 단계보다 작은 라인들은 완료 상태로 표시
+            if (lineStepNumber < this.currentStep) {
+                line.classList.add('completed');
+            }
         });
     }
 
