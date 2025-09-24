@@ -6,7 +6,8 @@
     <title>Travel Shoot</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="/front/css/staysList.css" rel="stylesheet">
+    <link href="../css/staysList.css" rel="stylesheet">
+    <link href="../css/common.css" rel="stylesheet" />
 </head>
 <body>
     <div class="header">
@@ -21,9 +22,9 @@
 
                 <div class="filter-section">
                      <div class="map-finder" onclick="">
-                        <img class="map-finder__image" src="/front/img/stays_map_modal.svg">
+                        <img class="map-finder__image" src="../img/stays_map_modal.svg">
                         <div class="map-finder__overlay">
-                            <img class="map-icon" src="/front/img/stayslist_map_icon.svg">
+                            <img class="map-icon" src="../img/stayslist_map_icon.svg">
                             <span class="map-finder__text">지도에서 숙소보기</span>
                         </div>
                     </div>
@@ -31,10 +32,7 @@
 
                 <div class="filter-section">
                     <h3 class="filter-section__title">1박당 요금</h3>
-                    <div class="filter-section__labels">
-                        <span>이상</span>
-                        <span>이하</span>
-                    </div>
+
                     <div class="form-price-range">
                         <span class="form-price-range__currency">₩</span>
                         <input type="number" class="form-input form-input--price" placeholder="최소금액" min="0">
@@ -50,52 +48,38 @@
                     <div class="filter-checkbox-group">
                         <label class="form-checkbox">
                             <input type="checkbox" class="form-checkbox__input">
-                            <span class="form-checkbox__text"><img class="stays_image" src="/front/img/hotel_icon.svg">호텔</span>
+                            <span class="form-checkbox__text"><img class="stays_image" src="../img/hotel_icon.svg">호텔</span>
                         </label>
                         <label class="form-checkbox">
                             <input type="checkbox" class="form-checkbox__input">
-                            <span class="form-checkbox__text"><img class="stays_image" src="/front/img/motel_icon.svg">모텔</span>
+                            <span class="form-checkbox__text"><img class="stays_image" src="../img/motel_icon.svg">모텔</span>
                         </label>
                         <label class="form-checkbox">
                             <input type="checkbox" class="form-checkbox__input">
-                            <span class="form-checkbox__text"><img class="stays_image" src="/front/img/pension_icon.svg">펜션</span>
+                            <span class="form-checkbox__text"><img class="stays_image" src="../img/pension_icon.svg">펜션</span>
                         </label>
                     </div>
                 </div>
 
                 <div class="filter-section">
                     <h3 class="filter-section__title">숙소 특성</h3>
-                    <div class="filter-subsection">
-                        <h4 class="filter-subsection__title">침실 수</h4>
-                        <div class="filter-radio-group">
-                            <label class="form-radio">
-                                <input type="radio" name="bedroom" value="1" class="form-radio__input">
-                                <span class="form-radio__text">1개</span>
-                            </label>
-                            <label class="form-radio">
-                                <input type="radio" name="bedroom" value="2" class="form-radio__input">
-                                <span class="form-radio__text">2개</span>
-                            </label>
-                            <label class="form-radio">
-                                <input type="radio" name="bedroom" value="3+" class="form-radio__input">
-                                <span class="form-radio__text">3개 이상</span>
-                            </label>
-                        </div>
+
+                <div class="mobile-feature-section">
+                    <h4 class="filter-subsection__title">침실 수</h4>
+                    <div class=".mfilter-cnt-btn" id="bedroom-buttons">
+                        <button class="filter-cnt-btn" data-bedroom="1">1개</button>
+                        <button class="filter-cnt-btn" data-bedroom="2">2개</button>
+                        <button class="filter-cnt-btn" data-bedroom="3+">3개 이상</button>
                     </div>
-                    
-                    <div class="filter-subsection">
-                        <h4 class="filter-subsection__title">욕실 수</h4>
-                        <div class="filter-radio-group">
-                            <label class="form-radio">
-                                <input type="radio" name="bathroom" value="1" class="form-radio__input">
-                                <span class="form-radio__text">1개</span>
-                            </label>
-                            <label class="form-radio">
-                                <input type="radio" name="bathroom" value="2" class="form-radio__input">
-                                <span class="form-radio__text">2개 이상</span>
-                            </label>
-                        </div>
+                </div>
+                
+                <div class="filter-subsection">
+                    <h4 class="filter-subsection__title">욕실 수</h4>
+                    <div class="filter-cnt-btn2">
+                        <button class="filter-cnt-btn" data-bathroom="1">1개</button>
+                        <button class="filter-cnt-btn" data-bathroom="2+">2개 이상</button>
                     </div>
+                </div>
                     
                     <div class="filter-subsection">
                         <h4 class="filter-subsection__title">수용 인원</h4>
@@ -114,41 +98,41 @@
                         <label class="form-rating">
                             <input type="checkbox" class="form-rating__input">
                             <div class="star-display">
-                                <img src="/front/img/stayfilter-star.svg">
-                                <img src="/front/img/stayfilter-star.svg">
-                                <img src="/front/img/stayfilter-star.svg">
-                                <img src="/front/img/stayfilter-star.svg">
-                                <img src="/front/img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
                             </div>
                         </label>
                         <label class="form-rating">
                             <input type="checkbox" class="form-rating__input">
                             <div class="star-display">
-                                <img src="/front/img/stayfilter-star.svg">
-                                <img src="/front/img/stayfilter-star.svg">
-                                <img src="/front/img/stayfilter-star.svg">
-                                <img src="/front/img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
                             </div>
                         </label>
                         <label class="form-rating">
                             <input type="checkbox" class="form-rating__input">
                             <div class="star-display">
-                                <img src="/front/img/stayfilter-star.svg">
-                                <img src="/front/img/stayfilter-star.svg">
-                                <img src="/front/img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
                             </div>
                         </label>
                         <label class="form-rating">
                             <input type="checkbox" class="form-rating__input">
                             <div class="star-display">
-                                <img src="/front/img/stayfilter-star.svg">
-                                <img src="/front/img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
                             </div>
                         </label>
                         <label class="form-rating">
                             <input type="checkbox" class="form-rating__input">
                             <div class="star-display">
-                                <img src="/front/img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
                             </div>
                         </label>
                     </div>
@@ -207,7 +191,7 @@
             <section class="results-section">
                 <div class="hotel-card">
                     <div class="hotel-card__image">
-                        <img src="/front/img/payment_hotel_imgae.jpg">
+                        <img src="../img/payment_hotel_imgae.jpg">
                             <button class="btn-favorite">
                                 <svg class="heart-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
@@ -226,10 +210,10 @@
                                         <span class="inactive">★</span>
                                         <span class="inactive">★</span>
                                     </span>
-                                    <span class="rating-score">(3.5/5)</span>
+                                    <span class="rating-score">(3.5 / 5)</span>
                                 </div>
                                 <div class="hotel-card__location">
-                                    <img class="location_icon" src="/front/img/payment_location_icon.svg">해운대구, 부산
+                                    <img class="location_icon" src="../img/payment_location_icon.svg">해운대구, 부산
                                 </div>
                             </div>
                             <div class="hotel-card__description">이용가능한 서비스 / 옵션</div>
@@ -251,7 +235,7 @@
 
                 <div class="hotel-card">
                     <div class="hotel-card__image">
-                        <img src="/front/img/payment_hotel_imgae.jpg" alt="캐리비안 베이 제곧어">
+                        <img src="../img/payment_hotel_imgae.jpg" alt="캐리비안 베이 제곧어">
                             <button class="btn-favorite">
                                 <svg class="heart-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
@@ -270,10 +254,10 @@
                                         <span class="inactive">★</span>
                                         <span class="inactive">★</span>
                                     </span>
-                                    <span class="rating-score">(3.5/5)</span>
+                                    <span class="rating-score">(3.5 / 5)</span>
                                 </div>
                                 <div class="hotel-card__location">
-                                    <img class="location_icon" src="/front/img/payment_location_icon.svg">해운대구, 부산
+                                    <img class="location_icon" src="../img/payment_location_icon.svg">해운대구, 부산
                                 </div>
                             </div>
                             <div class="hotel-card__description">이용가능한 서비스 / 옵션</div>
@@ -294,7 +278,7 @@
 
                 <div class="hotel-card">
                     <div class="hotel-card__image">
-                        <img src="/front/img/payment_hotel_imgae.jpg" alt="캐리비안 베이 제곧어">
+                        <img src="../img/payment_hotel_imgae.jpg" alt="캐리비안 베이 제곧어">
                             <button class="btn-favorite">
                                 <svg class="heart-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
@@ -313,10 +297,10 @@
                                         <span class="inactive">★</span>
                                         <span class="inactive">★</span>
                                     </span>
-                                    <span class="rating-score">(3.5/5)</span>
+                                    <span class="rating-score">(3.5 / 5)</span>
                                 </div>
                                 <div class="hotel-card__location">
-                                    <img class="location_icon" src="/front/img/payment_location_icon.svg">해운대구, 부산
+                                    <img class="location_icon" src="../img/payment_location_icon.svg">해운대구, 부산
                                 </div>
                             </div>
                             <div class="hotel-card__description">이용가능한 서비스 / 옵션</div>
@@ -346,11 +330,11 @@
     <div class="mobile-floating-buttons">
         <button class="floating-btn" onclick="toggleFloatingMenu()">
             <span onclick="openMobileMap(event)">
-                <img src="/front/img/map_modal_icon.svg"> 지도
+                <img src="../img/map_modal_icon.svg"> 지도
             </span>
             <div class="floating-btn-divider"></div>
             <span onclick="openMobileFilter(event)">
-                <img src="/front/img/filter_icon.svg"> 조건검색
+                <img src="../img/filter_icon.svg"> 조건검색
             </span>
         </button>
     </div>
@@ -359,9 +343,9 @@
     <!-- 모바일 필터 모달 - 일단 pc 버전이랑 동일하게 넣어둠 -->
     <div class="mobile-filter-modal" id="mobileFilterModal">
         <div class="mobile-filter-header">
-            <button class="mobile-filter-close" onclick="closeMobileFilter()"><img src="/front/img/stayfilter-modal-close.svg"></button>
+            <button class="mobile-filter-close" onclick="closeMobileFilter()"><img src="../img/stayfilter-modal-close.svg"></button>
             <h3 class="mobile-filter-title">조건검색</h3>
-            <button class="mobile-filter-home"><img src="/front/img/payment_home_icon.svg"></button>
+            <button class="mobile-filter-home"><img src="../img/payment_home_icon.svg"></button>
         </div>
         
         <div class="mobile-filter-content">
@@ -371,7 +355,7 @@
                 <div class="form-price-range">
                     <span class="form-price-range__currency">₩</span>
                     <input type="number" class="form-input form-input--price" placeholder="최소금액" min="0">
-                    <span class="form-guest-range__separator"><img src="/front/img/staylist-line.svg"></span>
+                    <span class="form-guest-range__separator"><img src="../img/staylist-line.svg"></span>
                     <span class="form-price-range__currency">₩</span>
                     <input type="number" class="form-input form-input--price" placeholder="최대금액" min="0">
                 </div>
@@ -381,13 +365,13 @@
                 <h3 class="filter-section__title">숙소 유형</h3>
                 <div class="mobile-stays-group"> 
                     <button class="mfilterstays-btn" data-type="hotel">
-                        <img class="stays_image-m" src="/front/img/hotel_icon.svg">호텔
+                        <img class="stays_image-m" src="../img/hotel_icon.svg">호텔
                     </button>                    
                     <button class="mfilterstays-btn" data-type="motel">
-                        <img class="stays_image-m" src="/front/img/motel_icon.svg">모텔
+                        <img class="stays_image-m" src="../img/motel_icon.svg">모텔
                     </button>                    
                     <button class="mfilterstays-btn" data-type="pension">
-                        <img class="stays_image-m" src="/front/img/pension_icon.svg">펜션
+                        <img class="stays_image-m" src="../img/pension_icon.svg">펜션
                     </button>
                 </div>
             </div>
@@ -399,7 +383,7 @@
                 <div class="mobile-feature-section">
                     <h4 class="filter-subsection__title">침실 수</h4>
                     <div class=".mfilter-cnt-btn" id="bedroom-buttons">
-                        <button class="filter-cnt-btn filter-cnt-btn-selected" data-bedroom="1">1개</button>
+                        <button class="filter-cnt-btn" data-bedroom="1">1개</button>
                         <button class="filter-cnt-btn" data-bedroom="2">2개</button>
                         <button class="filter-cnt-btn" data-bedroom="3+">3개 이상</button>
                     </div>
@@ -408,7 +392,7 @@
                 <div class="filter-subsection">
                     <h4 class="filter-subsection__title">욕실 수</h4>
                     <div class="mfilter-cnt-btn">
-                        <button class="filter-cnt-btn filter-cnt-btn-selected" data-bathroom="1">1개</button>
+                        <button class="filter-cnt-btn" data-bathroom="1">1개</button>
                         <button class="filter-cnt-btn" data-bathroom="2+">2개 이상</button>
                     </div>
                 </div>
@@ -429,19 +413,19 @@
                 <h3 class="filter-section__title">숙소 평점</h3>
                 <div class="mobile-rating-buttons">
                     <button class="filter-cnt-btn" data-rating="1">
-                        <span class="star-content"><img class="star-icons-img" src="/front/img/stayfilter-star.svg">1개</span>
+                        <span class="star-content"><img class="star-icons-img" src="../img/stayfilter-star.svg">1개</span>
                     </button>
                     <button class="filter-cnt-btn" data-rating="2">
-                        <span class="star-content"> <img class="star-icons-img" src="/front/img/stayfilter-star.svg">2개</span>
+                        <span class="star-content"> <img class="star-icons-img" src="../img/stayfilter-star.svg">2개</span>
                     </button>
                     <button class="filter-cnt-btn" data-rating="3">
-                        <span class="star-content"> <img class="star-icons-img" src="/front/img/stayfilter-star.svg">3개</span>
+                        <span class="star-content"> <img class="star-icons-img" src="../img/stayfilter-star.svg">3개</span>
                     </button>
                     <button class="filter-cnt-btn" data-rating="4">
-                        <span class="star-content"> <img class="star-icons-img" src="/front/img/stayfilter-star.svg">4개</span>
+                        <span class="star-content"> <img class="star-icons-img" src="../img/stayfilter-star.svg">4개</span>
                     </button>
                     <button class="filter-cnt-btn" data-rating="5">
-                        <span class="star-content"> <img class="star-icons-img" src="/front/img/stayfilter-star.svg">5개</span>
+                        <span class="star-content"> <img class="star-icons-img" src="../img/stayfilter-star.svg">5개</span>
                     </button>
                 </div>
             </div>
