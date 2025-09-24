@@ -102,17 +102,22 @@ function showGuestMessage() {
     const calendarCard = document.querySelector('.calendar-card');
     if (!calendarCard) return;
     
-    // 기존 메시지 제거
-    const existingMessage = calendarCard.querySelector('.calendar-guest-message');
-    if (existingMessage) {
-        existingMessage.remove();
-    }
+    // 기존 메시지들 제거
+    const existingMessages = calendarCard.querySelectorAll('.calendar-guest-message, .calendar-signup-message');
+    existingMessages.forEach(message => message.remove());
     
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'calendar-guest-message';
-    messageDiv.textContent = '회원가입 후 설정된 사용자 맞춤형 여행 코스 추천을 확인합니다.';
+    // 첫 번째 메시지: 달력 오른쪽 위 (기존 메시지)
+    const topMessageDiv = document.createElement('div');
+    topMessageDiv.className = 'calendar-guest-message';
+    topMessageDiv.textContent = '회원가입 후 설정된 사용자 맞춤형 여행 코스 추천을 확인합니다.';
     
-    calendarCard.appendChild(messageDiv);
+    // 두 번째 메시지: 달력 왼쪽 아래 (새로운 메시지)
+    const bottomMessageDiv = document.createElement('div');
+    bottomMessageDiv.className = 'calendar-signup-message';
+    bottomMessageDiv.textContent = '회원가입 후 더 많은 서비스를 만나보세요';
+    
+    calendarCard.appendChild(topMessageDiv);
+    calendarCard.appendChild(bottomMessageDiv);
 }
 
 /* ==========================================================================
