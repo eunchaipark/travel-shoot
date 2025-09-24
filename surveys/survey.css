@@ -226,7 +226,7 @@ body {
 
 .survey-modal-container .survey-content .survey-step .options-grid .option-card .option-label {
     font-size: 16px;
-    font-weight: 800;
+    font-weight: 650;
     color: #333;
     text-align: center;
     transition: color 0.2s ease;
@@ -270,9 +270,9 @@ body {
     background: #fff5f5;
 }
 
-.survey-modal-container .survey-content .survey-step .options-list .option-row .option-info {
+/* .survey-modal-container .survey-content .survey-step .options-list .option-row .option-info {
 }
-
+ */
 .survey-modal-container .survey-content .survey-step .options-list .option-row .option-info h3 {
     font-size: 18px;
     color: #333;
@@ -462,12 +462,19 @@ body {
     
     .survey-modal-container .survey-content .survey-step .question-container{
         margin-bottom: -10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
     
     .survey-modal-container .survey-content .survey-step .question-container .question-subtitle {
         margin-bottom: 20px;
+        max-width: 220px;
     }
-    
+    .survey-modal-container .survey-content .survey-step[data-step="2"] .question-container .question-subtitle {
+        margin-bottom: 20px;
+        max-width: 251px;
+    }
     .survey-modal-container .survey-content .survey-step .options-grid {
         gap: 12px;
         margin-bottom: 20px;
