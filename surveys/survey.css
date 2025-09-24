@@ -129,6 +129,15 @@ body {
     color: #FF8888;
 }
 
+.survey-modal-container .progress-container .progress-steps .step.completed .step-number {
+    background: #FF8888;
+    color: white;
+}
+
+.survey-modal-container .progress-container .progress-steps .step.completed .step-label {
+    color: #FF8888;
+}
+
 .survey-modal-container .progress-container .progress-steps .progress-line {
     width: 60px;
     height: 2px;
@@ -225,8 +234,8 @@ body {
 }
 
 .survey-modal-container .survey-content .survey-step .options-grid .option-card .option-label {
-    font-size: 16px;
-    font-weight: 650;
+    font-size: 14px;
+    font-weight: 700;
     color: #333;
     text-align: center;
     transition: color 0.2s ease;
@@ -270,9 +279,9 @@ body {
     background: #fff5f5;
 }
 
-/* .survey-modal-container .survey-content .survey-step .options-list .option-row .option-info {
+.survey-modal-container .survey-content .survey-step .options-list .option-row .option-info {
 }
- */
+
 .survey-modal-container .survey-content .survey-step .options-list .option-row .option-info h3 {
     font-size: 18px;
     color: #333;
@@ -462,19 +471,18 @@ body {
     
     .survey-modal-container .survey-content .survey-step .question-container{
         margin-bottom: -10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
     }
     
     .survey-modal-container .survey-content .survey-step .question-container .question-subtitle {
         margin-bottom: 20px;
-        max-width: 220px;
     }
+    
+    /* 2번째 설문조사(숙소 유형)에서만 적용 */
     .survey-modal-container .survey-content .survey-step[data-step="2"] .question-container .question-subtitle {
         margin-bottom: 20px;
         max-width: 251px;
     }
+    
     .survey-modal-container .survey-content .survey-step .options-grid {
         gap: 12px;
         margin-bottom: 20px;
