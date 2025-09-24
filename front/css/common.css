@@ -362,6 +362,264 @@ body {
   border-bottom: 3px dotted #ccc;
 }
 
+.modal-overlay .modal-content {
+  padding: 25px 20px;
+  margin: 20px;
+  width: calc(100% - 40px);
+}
+
+.modal-overlay .modal-title {
+  font-size: 18px;
+}
+
+.modal-overlay .modal-question {
+  font-size: 1rem;
+}
+
+.modal-overlay .warning-box {
+  padding: 15px;
+}
+
+.modal-overlay .modal-actions {
+  flex-direction: column;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-checkbox:checked + .modal-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-overlay .modal-content {
+  background: white;
+  border-radius: 15px;
+  padding: 28px;
+  width: 90%;
+  max-width: 470px;
+  /* position, top, left, transform 모두 제거 */
+  transition: transform 0.3s ease;
+  transform: scale(0.8);
+  border: 1px solid #d9d9d9;
+}
+
+.modal-checkbox:checked + .modal-overlay .modal-content {
+  transform: scale(1);
+}
+
+.modal-overlay .modal-header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.modal-overlay .modal-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+}
+
+.modal-overlay .modal-close {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #000;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  align-items: flex-end;
+  right: 0;
+  font-weight: 100;
+}
+
+.modal-overlay .modal-question {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.modal-overlay .notice-box {
+  background: #e3f2fd;
+  border: 1px solid #1565c0;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 25px;
+}
+
+.modal-overlay .notice-box .refund-info {
+  font-size: 13px;
+}
+
+.modal-overlay .notice-box .pay-line-con {
+  text-align: right;
+  padding-right: 14px;
+}
+
+.modal-overlay .notice-box .pay-line-con .pay-line {
+  height: 51px;
+}
+
+.modal-overlay .notice-box .refund-price {
+  color: #1565c0;
+  font-weight: 700;
+  text-align: right;
+  padding-right: 9px;
+  font-size: 17px;
+}
+
+.modal-overlay .notice-box .notice-title {
+  color: #1565c0;
+  font-weight: 700;
+}
+
+.modal-overlay .notice-box .warning-item {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 8px;
+  position: relative;
+  padding-left: 15px;
+}
+
+.modal-overlay .notice-box .warning-item::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #666;
+}
+
+.modal-overlay .notice-box .warning-item:last-child {
+  margin-bottom: 0;
+}
+
+.modal-overlay .warning-box {
+  background: #fff8e1;
+  border: 1px solid #ffcc02;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 25px;
+}
+
+.modal-overlay .warning-box .warning-item {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 8px;
+  position: relative;
+  padding-left: 15px;
+}
+
+.modal-overlay .warning-box .warning-item::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #666;
+}
+
+.modal-overlay .warning-box .warning-item:last-child {
+  margin-bottom: 0;
+}
+
+.modal-overlay .input-section {
+  margin-bottom: 30px;
+}
+
+.modal-overlay .input-section .input-label {
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.modal-overlay .input-section .form-control {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.modal-overlay .input-section .form-control:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(113, 146, 157, 0.1);
+}
+
+.modal-overlay .input-section .form-control::placeholder {
+  color: #acacac;
+}
+
+.modal-overlay .required-star {
+  color: #f56770;
+  font-size: 20px;
+}
+
+.modal-overlay .modal-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.modal-overlay .btn-cancel {
+  flex: 1;
+  background: #888888;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 13px 15px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  width:50%
+}
+
+.modal-overlay .btn-cancel:hover {
+  background: #5a6268;
+}
+
+.modal-overlay .btn-withdraw {
+  flex: 1;
+  background: #ff8888;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 13px 15px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  width:50%
+}
+
+.modal-overlay .btn-withdraw:hover {
+  background: #ff6b6b;
+}
+
+.modal-checkbox {
+  display: none;
+}
+
 @media (max-width: 1400px) {
   .app-header .search-divider-con:nth-child(2) {
     display: none;
@@ -495,7 +753,11 @@ body {
     height: 23px;
   }
 
-  .app-header .icon-button:first-child{
+  .app-header .icon-button:first-child {
     margin-right: 6px;
+  }
+
+  .modal-overlay .warning-box .warning-item {
+    font-size: 13px;
   }
 }
