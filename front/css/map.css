@@ -1,0 +1,207 @@
+.map-page .title-text {
+  font-size: 15px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.map-page .title-icon {
+  width: 18px;
+  height: 18px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-right: 6px;
+}
+
+.map-page .lodging-card .motel-icon {
+  background-image: url(../img/motel-icon.svg);
+}
+
+.map-page .restaurant-card .restaurant-icon {
+  background-image: url(../img/restaurant-black-icon.svg);
+}
+
+.map-page .attraction-card .attraction-icon {
+  background-image: url(../img/attraction-black-icon.svg);
+  width: 17px;
+  height: 17px;
+}
+
+.map-page .card-custom {
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: none;
+  background-color: #f8f9fa;
+  padding: 10px;
+  width: 320px;
+  height: 140px;
+}
+
+.map-page .restaurant-card.card-custom {
+  padding: 20px 20px;
+  width: 275px;
+}
+
+.map-page .attraction-card.card-custom {
+  padding: 20px 20px;
+  width: 275px;
+}
+
+.map-page .lodging-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 7px;
+}
+
+.map-page .star-rating {
+  color: #f89494;
+}
+
+.map-page .star-rating-text {
+  color: #675c5c;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.map-page .lodging-card .standard-text {
+  font-size: 10px;
+  color: #f56770;
+}
+
+.map-page .lodging-card .price-text {
+  color: #f56770;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.map-page .btn-search {
+  background-color: #ff8888;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  padding: 6px 15px;
+  font-size: 11px;
+}
+
+.map-page .btn-search:hover {
+  background-color: #ff5252;
+  color: white;
+}
+
+.map-page .attraction-card .location-text {
+  font-size: 11px;
+  color: #675c5c;
+  font-weight: 500;
+}
+
+.map-page .location-icon {
+  width: 14px;
+  height: 14px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url(../img/header-location-icon.svg);
+}
+
+.map-page .map-tag .tag-content {
+  border-radius: 20px;
+  padding: 2px 7px;
+  border-width: 2px;
+  border-style: solid;
+  color: black;
+  font-size: 13px;
+  font-weight: 600;
+  width: fit-content;
+  position: relative;
+}
+
+.map-page .map-tag .tag-content:after {
+  content: "";
+  position: absolute;
+  bottom: -17px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-top: 10px solid;
+}
+
+.map-page .map-tag .tag-content.lodging:after {
+  border-top-color: #1e3a8a; /* 배경색과 같게 */
+}
+
+.map-page .map-tag .tag-content.restaurant:after {
+  border-top-color: #f05650; /* 배경색과 같게 */
+}
+
+.map-page .map-tag .tag-content.attraction:after {
+  border-top-color: #75b611; /* 배경색과 같게 */
+}
+
+.map-page .map-tag .tag-content.lodging {
+  background-color: #eff1f7;
+  border-color: #1e3a8a;
+}
+
+.map-page .map-tag .tag-content.lodging.active {
+  background-color: #1e3a8a;
+  color: white;
+}
+
+.map-page .map-tag .tag-content.restaurant {
+  background-color: #fff4ec;
+  border-color: #f05650;
+}
+
+.map-page .map-tag .tag-content.restaurant.active {
+  background-color: #f05650;
+  color: white;
+}
+
+.map-page .map-tag .tag-content.attraction {
+  background-color: #f7ffec;
+  border-color: #75b611;
+}
+
+.map-page .map-tag .tag-content.attraction.active {
+  background-color: #75b611;
+  color: white;
+}
+
+.map-page .map-tag .tag-content .icon {
+  width: 14px;
+  height: 14px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-right: 8px;
+}
+
+.map-page .map-tag .tag-content.lodging .icon {
+  background-image: url(../img/lodging-black-icon.svg);
+}
+
+.map-page .map-tag .tag-content.lodging.active .icon {
+  background-image: url(../img/lodging-white-icon.svg);
+}
+
+.map-page .map-tag .tag-content.restaurant .icon {
+  background-image: url(../img/restaurant-black-icon.svg);
+}
+
+.map-page .map-tag .tag-content.restaurant.active .icon {
+  background-image: url(../img/restaurant-white-icon.svg);
+}
+
+.map-page .map-tag .tag-content.attraction .icon {
+  background-image: url(../img/attraction-black-icon.svg);
+}
+
+.map-page .map-tag .tag-content.attraction.active .icon {
+  background-image: url(../img/attraction-white-icon.svg);
+}
