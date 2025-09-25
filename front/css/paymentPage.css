@@ -57,9 +57,10 @@
 .payment-page .price-highlight {
     color: #f56770;
     font-weight: 800;
-    font-size: 1.2em;
+    font-size: 1.4em;
     display: flex;
     justify-content: flex-end;
+    align-items: baseline;
 }
 
 .payment-page .small-text {
@@ -67,7 +68,18 @@
   color: #666;
 }
 
+/* 숙박/1박당이랑 31000원 수평정렬하고 싶어서 추가함 */
+.payment-page .price-highlight .small-text {
+    font-size: 0.9em;
+    margin-bottom: 0 !important;
+    align-self: baseline;
+}
+
 /* 은비님 css 코드 발췌 ====== end */
+
+.payment-page .section-card .final-payment-info .d-flex {
+    align-items: center;
+}
 
 .stay-info .checkin-checkout{
     align-items:center;
@@ -783,5 +795,14 @@
     .payment-page .col-lg-4 {
         order: 2;
         margin-top: 20px;
+    }
+
+    /* 모바일 버전에서 col1 , col11 간격 맞추기 위해 추가함 */
+    .payment-page .section-card .final-payment-info .col-1 {
+        margin-right: -10px;
+    }
+    
+    .payment-page .section-card .final-payment-info .col-11 {
+        padding-left: 5px;
     }
 }
