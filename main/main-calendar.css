@@ -83,8 +83,9 @@ body {
     justify-content: center;
     gap: 5rem;
     width: 100%;
-    max-width: 1200px;
+    max-width: none; /* 기존 1200px 제한 제거 */
     margin: 0 auto;
+    padding: 0 20px
 }
 
 /* ==========================================================================
@@ -92,7 +93,10 @@ body {
    ========================================================================== */
 
 .main-page .calendar-section-wrapper .calendar-search-container .calendar-card {
-    width: 750px;
+    width: auto; /* 고정 750px에서 유연하게 변경 */
+    min-width: 600px; /* 최소 크기 보장 */
+    flex: 1; /* 사용 가능한 공간 활용 */
+    max-width: 800px; /* 너무 커지지 않도록 제한 */
     height: auto;
     min-height: auto;
     flex-shrink: 0;
@@ -117,8 +121,11 @@ body {
    ========================================================================== */
 
 .main-page .calendar-section-wrapper .calendar-search-container .search-section-container {
-    width: 550px;
-    flex-shrink: 0;
+    width: auto; /* 고정 550px에서 유연하게 변경 */
+    min-width: 500px; /* 최소 크기 보장 */
+    flex: 0 0 auto; /* 고정 크기 유지하되 유연성 허용 */
+    max-width: 600px; /* 최대 크기 제한 */
+    flex-shrink: 1; /* 필요시 축소 허용 */
 }
 
 .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .slogan {
@@ -791,7 +798,9 @@ body {
         padding-left: 20px !important;
         padding-right: 20px !important;
     }
-    
+    .main-page .calendar-section-wrapper .calendar-search-container .search-section-container{
+        min-width: 600px;
+    }
     .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .slogan {
         display: none;
     }
@@ -819,173 +828,6 @@ body {
 }
 
 /* 모바일 화면 (768px 이하) - 개선된 텍스트 표시 */
-@media (max-width: 768px) {
-    .main-page {
-        padding-top: 80px;
-    }
-    
-    .header-placeholder {
-        height: 80px;
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .slogan {
-        display: none;
-    }
-    
-    .main-page .calendar-section-wrapper {
-        padding: 20px 0;
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container {
-        gap: 1em;
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .calendar-card {
-        margin: 0 10px;
-        width: calc(100% - 20px);
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .search-section-container {
-        margin: 0 10px;
-        width: calc(100% - 20px);
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .search-card {
-        height: 60px;
-        margin-bottom: 0.8rem;
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .search-card .search-icon-box {
-        width: 50px;
-        height: 60px;
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .search-card .search-icon-box .search-icon {
-        width: 30px;
-        height: 30px;
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .search-card .search-input {
-        font-size: 16px;
-        padding: 0 15px;
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .search-card .search-input::placeholder {
-        font-size: 16px;
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .search-button {
-        height: 60px;
-        font-size: 18px;
-        margin-top: 0.8rem;
-    }
-    
-    /* 모바일 달력 최적화 - 칸 크기 줄이고 일정 표시 개선 */
-    .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-toolbar-title {
-        font-size: 20px !important;
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-button {
-        padding: 6px 12px !important;
-        font-size: 12px !important;
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-daygrid-day {
-        min-height: 60px !important;
-        overflow: visible !important;
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-daygrid-day-frame {
-        min-height: 60px !important;
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-daygrid-day-events {
-        margin: 1px 2px 0 2px !important;
-        min-height: 40px !important;
-        overflow: visible !important;
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-daygrid-day-number {
-        padding: 3px 4px !important;
-        font-size: 12px !important;
-        text-decoration: none !important;
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-daygrid-event {
-        font-size: 8px !important;
-        padding: 1px 2px !important;
-        margin: 0.5px 0 !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        display: flex !important;
-        align-items: center !important;
-        min-height: 12px !important;
-        max-width: 100% !important;
-        width: calc(100% - 4px) !important;
-    }
-    
-    /* 모바일에서 일정 텍스트 더 작게 */
-    .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-event.fc-event-schedule .schedule-event-content {
-        gap: 2px !important;
-        font-size: 8px !important;
-        max-width: 100% !important;
-        overflow: hidden !important;
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-event.fc-event-schedule .schedule-dot {
-        width: 4px !important;
-        height: 4px !important;
-        flex-shrink: 0 !important;
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-event.fc-event-schedule .schedule-text {
-        font-size: 8px !important;
-        line-height: 1.1 !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        max-width: calc(100% - 8px) !important;
-    }
-    
-    /* 모바일에서 메인 예약은 여전히 넘어가도 보이게 */
-    .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-event .reservation-event-content {
-        font-size: 8px !important;
-        padding: 1px 2px !important;
-        line-height: 1.1 !important;
-        overflow: visible !important;
-        max-width: none !important;
-    }
-    
-    /* 모바일 더보기 링크 크기 조정 */
-    .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-more-link {
-        font-size: 8px !important;
-        padding: 1px 2px !important;
-        margin: 0.5px 0 !important;
-    }
-    
-    /* 모바일 미니 달력 최적화 */
-    .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .date-dropdown-container .mini-calendar-day {
-        min-height: 32px !important;
-        font-size: 13px !important;
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .date-dropdown-container .mini-calendar-header {
-        font-size: 14px !important;
-        margin-bottom: 10px !important;
-    }
-    
-    .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .date-dropdown-container .mini-cal-prev,
-    .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .date-dropdown-container .mini-cal-next {
-        padding: 6px 8px !important;
-        font-size: 14px !important;
-    }
-    
-    /* 드롭다운 컨테이너 너비 100% */
-    .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .date-dropdown-container,
-    .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .guest-dropdown-container {
-        width: 100% !important;
-    }
-}
-
 /* 작은 모바일 화면 (576px 이하) - 더욱 작은 텍스트 */
 @media (max-width: 576px) {
     .main-page .calendar-section-wrapper .calendar-search-container .calendar-card {
@@ -994,16 +836,59 @@ body {
         margin: 0 5px;
         width: calc(100% - 10px);
         overflow: visible !important;
+        /* 달력 카드 크기 제한 완전 제거 */
+        min-width: 0 !important;
+        max-width: 100% !important;
     }
+    
     .main-page .px-5 {
-        padding-left: 12px !important;
-        padding-right: 23px !important;
+        padding-left:  0px !important;
+        padding-right: 0px !important; 
     }
     
     .main-page .calendar-section-wrapper .calendar-search-container .search-section-container {
+        min-width: 100%;
         margin: 0 5px;
         width: calc(100% - 10px);
     }
+    
+    /* ==========================================================================
+       달력 테이블 반응형 핵심 수정 (576px)
+       ========================================================================== */
+    
+    /* 달력 전체를 더 작은 화면에 맞게 조정 */
+    .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-scrollgrid {
+        width: 100% !important;
+        table-layout: fixed !important;
+        font-size: 10px !important; /* 768px의 12px에서 10px로 감소 */
+    }
+    
+    /* 달력 테이블 자체 반응형 */
+    .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-scrollgrid table {
+        width: 100% !important;
+        table-layout: fixed !important;
+        border-collapse: collapse !important;
+    }
+    
+    /* 각 날짜 칸을 7등분으로 균등 분할 */
+    .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-col-header-cell,
+    .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-daygrid-day {
+        width: 14.28% !important; /* 100% ÷ 7 = 14.28% */
+        min-width: 0 !important;
+        max-width: none !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* 요일 헤더 더 작게 조정 */
+    .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-col-header-cell-cushion {
+        font-size: 9px !important; /* 768px의 11px에서 9px로 감소 */
+        padding: 3px 1px !important;
+        text-align: center !important;
+    }
+    
+    /* ==========================================================================
+       달력 툴바 및 버튼 조정
+       ========================================================================== */
     
     .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-toolbar-title {
         font-size: 18px !important;
@@ -1013,6 +898,10 @@ body {
         padding: 4px 8px !important;
         font-size: 11px !important;
     }
+    
+    /* ==========================================================================
+       달력 칸 및 내용 조정
+       ========================================================================== */
     
     .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-daygrid-day {
         min-height: 55px !important;
@@ -1030,8 +919,9 @@ body {
     }
     
     .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-daygrid-day-number {
-        padding: 2px 3px !important;
+        padding: 2px 1px !important; /* 좌우 패딩 더 줄임 */
         font-size: 11px !important;
+        text-align: center !important;
     }
     
     .main-page .calendar-section-wrapper .calendar-search-container .calendar-card .fc .fc-daygrid-event {
@@ -1075,6 +965,10 @@ body {
         overflow: visible !important;
         max-width: none !important;
     }
+    
+    /* ==========================================================================
+       검색 섹션 조정
+       ========================================================================== */
     
     .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .search-card {
         height: 55px;
@@ -1128,120 +1022,11 @@ body {
         margin-left: 0 !important;
         margin-right: 0 !important;
     }
-}
-
-/* ==========================================================================
-   비로그인 상태 달력 안내 메시지
-   ========================================================================== */
-
-/* 달력 오른쪽 위에 고정 표시되는 안내 메시지 */
-.calendar-guest-message {
-    position: absolute;
-    top: 150px;
-    right: 35px;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 8px;
-    padding: 14px 18px;
-    font-size: 15px;
-    font-weight: 500;
-    color: #666;
-    z-index: 10;
-    display: none;
-    max-width: 500px;
-    line-height: 1.4;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-}
-
-.calendar-signup-message {
-    position: absolute;
-    bottom: 113px;
-    left: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    color: #666;
-    border-radius: 8px;
-    padding: 14px 18px;
-    font-size: 15px;
-    font-weight: 500;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-    z-index: 10;
-    max-width: 300px;
-    line-height: 1.4;
-}
-
-/* 비로그인 모드일 때만 표시 */
-.calendar-card.guest-mode .calendar-guest-message,
-.calendar-card.guest-mode .calendar-signup-message {
-    display: block;
-}
-
-/* 비로그인 상태에서 달력은 흐리게 하지 않음 - 정상 표시 */
-.calendar-card.logged-in .calendar-guest-message,
-.calendar-card.logged-in .calendar-signup-message {
-    display: none;
-}
-
-.calendar-card.guest-mode {
-    position: relative;
-}
-
-/* 날짜 칸에 작은 텍스트는 제거 - 중앙 메시지만 사용 */
-
-/* ==========================================================================
-   로그인 상태별 달력 이벤트 표시/숨김
-   ========================================================================== */
-
-/* 로그인 상태에서는 예약 이벤트들 정상 표시 */
-.calendar-card.logged-in .fc-event.fc-event-reservation,
-.calendar-card.logged-in .fc-event.fc-event-schedule {
-    opacity: 1;
-    pointer-events: all;
-}
-
-/* 비로그인 상태에서는 예약 이벤트 완전 숨김 */
-.calendar-card.guest-mode .fc-event.fc-event-reservation,
-.calendar-card.guest-mode .fc-event.fc-event-schedule {
-    display: none !important;
-}
-
-/* ==========================================================================
-   반응형 디자인
-   ========================================================================== */
-
-@media (max-width: 768px) {
-    .calendar-guest-message {
-        left: 122px;
-        top: 130px;
-        max-width: 182px;
-        right: 10px;
-        font-size: 12px;
-        padding: 10px 12px;
-        max-width: 200px;
-    }
     
-    .calendar-signup-message {
-
-        bottom: 78px;
-        left: 37px;
-        font-size: 12px;
-        padding: 10px 12px;
-        max-width: 300px;
-    }
+    /* ==========================================================================
+       비로그인 상태 메시지 위치 조정
+       ========================================================================== */
     
-    .calendar-guest-message h4 {
-        font-size: 1rem;
-    }
-    
-    .calendar-guest-message p {
-        font-size: 0.85rem;
-    }
-    
-    .calendar-card.guest-mode .fc-daygrid-day::after {
-        font-size: 7px;
-        padding: 0.5px 2px;
-    }
-}
-
-@media (max-width: 576px) {
     .calendar-guest-message {
         top: 116px;
         padding: 0.4rem;

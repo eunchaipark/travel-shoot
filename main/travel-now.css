@@ -365,7 +365,7 @@
     }
     
     .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid .travel-now-card .card-info .card-title {
-        font-size: 13px;
+        font-size: 15px;
         margin-bottom: 4px;
     }
     
@@ -434,6 +434,10 @@
 
 /* 작은 모바일 (480px 미만) */
 @media (max-width: 480px) {
+    .main-page .additional-content-section .travel-now-section{
+        padding-left: 15px;
+        padding-right: 15px;
+    }
     .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .travel-now-grid {
         grid-template-columns: repeat(3, 1fr); /* 작은 모바일에서도 3개씩 유지 */
         gap: 6px;

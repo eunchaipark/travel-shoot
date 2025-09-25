@@ -183,8 +183,8 @@
     right: 12px;
     background: linear-gradient(135deg, #31C6C3 0%, #31C6C3 100%);
     color: white;
-    font-size: 11px;
-    font-weight: 700;
+    font-size: 15.5px;
+    font-weight: 500;
     padding: 4px 10px;
     border-radius: 15px;
     z-index: 5;
@@ -199,8 +199,8 @@
 }
 
 .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-title {
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 19px;
+    font-weight: 500;
     color: #333;
     line-height: 1.4;
     margin-bottom: 8px;
@@ -212,7 +212,7 @@
 }
 
 .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-location {
-    font-size: 13px;
+    font-size: 15px;
     color: #666;
     line-height: 1.4;
     margin-bottom: 10px;
@@ -230,26 +230,26 @@
 }
 
 .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-rating .budget-stars {
-    font-size: 13px;
+    font-size: 18px;
     font-weight: 600;
-    color: #F89494;
+    color: #FF8888;
 }
 
 .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-rating .budget-reviews {
-    font-size: 11px;
+    font-size: 14px;
     color: #666;
 }
 
 .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-pricing {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
 .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-pricing .budget-main-price {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 700;
-    color: #343a40;
+    color: #675C5C;
 }
 
 
@@ -396,15 +396,15 @@
     }
     
     .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-rating .budget-stars {
-        font-size: 12px;
+        font-size: 15px;
     }
     
     .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-rating .budget-reviews {
-        font-size: 10px;
+        font-size: 13px;
     }
     
     .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-pricing .budget-main-price {
-        font-size: 16px;
+        font-size: 18px;
     }
     
     /* 네비게이션 버튼 모바일 조정 */
@@ -439,10 +439,19 @@
 
 /* 작은 모바일 (480px 이하) */
 @media (max-width: 480px) {
+    .main-page .additional-content-section .budget-friendly-section{
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image .budget-discount-badge{
+        font-size: 13px;
+    }
     .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid {
         gap: 10px;
     }
-    
+    .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-rating{
+        margin-bottom: 3px;
+    }
 
     .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image {
         height: 200px;
@@ -458,6 +467,7 @@
     
     .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-location {
         font-size: 11px;
+        min-height: 31px;
     }
     
     .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-content .budget-pricing .budget-main-price {

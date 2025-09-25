@@ -167,11 +167,11 @@
 /* 숙소 배지 - 웹(데스크톱)에서는 카드 오른쪽 상단 */
 .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper .accommodation-list-container .accommodation-list .accommodation-item .accommodation-badge {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    top: 7px;
+    right: 9px;
     background: #FF8888;
     color: white;
-    font-size: 17px;
+    font-size: 13px;
     font-weight: 600;
     padding: 4px 8px;
     border-radius: 12px;
@@ -219,7 +219,7 @@
 }
 
 .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper .accommodation-list-container .accommodation-list .accommodation-item .accommodation-info .accommodation-header .accommodation-rating .star-rating .star {
-    color: #FFD700;
+    color: #FF8888;
     font-size: 14px;
 }
 
@@ -477,7 +477,7 @@
     }
     
     .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper .accommodation-list-container .accommodation-list .accommodation-item .accommodation-info .accommodation-price .checkin-time {
-        font-size: 9px;
+        font-size: 10px;
     }
     
     .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper .accommodation-list-container .accommodation-list .accommodation-item .accommodation-info .accommodation-price .price-text {
@@ -504,6 +504,11 @@
 
 /* 작은 모바일 화면 (576px 이하) */
 @media (max-width: 576px) {
+
+    .main-page .additional-content-section .recommend-stay-section {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
     .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper .accommodation-list-container .accommodation-list .accommodation-item {
         display: flex;
         flex-direction: row;

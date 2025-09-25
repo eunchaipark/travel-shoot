@@ -191,10 +191,10 @@
 .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-image-container .category-badge {
     position: absolute;
     top: 12px;
-    left: 12px;
+    right: 12px;
     background: linear-gradient(135deg, #FF8888 0%, #FF6B6B 100%);
     color: white;
-    font-size: 11px;
+    font-size: 15.5px;
     font-weight: 700;
     padding: 4px 10px;
     border-radius: 15px;
@@ -211,7 +211,7 @@
 }
 
 .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .card-title {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 700;
     color: #333; /* 검정색으로 변경 */
     line-height: 1.4;
@@ -219,7 +219,7 @@
     text-shadow: none; /* 그림자 제거 */
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    line-clamp: 2;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -238,20 +238,20 @@
 }
 
 .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .rating-info .rating {
-    font-size: 13px;
+    font-size: 17px;
     font-weight: 600;
     color: #FF8888; /* 별점 색상 */
     text-shadow: none;
 }
 
 .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .rating-info .reviews {
-    font-size: 11px;
+    font-size: 14px;
     color: #666;
     text-shadow: none;
 }
 
 .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .price {
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 700;
     color: #675C5C; /* 가격 강조 색상 */
     text-shadow: none;
@@ -388,9 +388,10 @@
     
     .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-image-container .category-badge {
         top: 8px;
-        left: 8px;
-        font-size: 9px;
+        right: 8px;
+        font-size: 12px;
         padding: 3px 8px;
+        font-weight: 500;
     }
     
     .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info {
@@ -398,20 +399,20 @@
     }
     
     .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .card-title {
-        font-size: 13px;
+        font-size: 14.5px;
         margin-bottom: 6px;
     }
     
     .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .rating-info .rating {
-        font-size: 11px;
+        font-size: 13px;
     }
     
     .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .rating-info .reviews {
-        font-size: 10px;
+        font-size: 12px;
     }
     
     .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .price {
-        font-size: 12px;
+        font-size: 14.5px;
     }
     
     /* 네비게이션 버튼 모바일 조정 */
@@ -454,6 +455,11 @@
 
 /* 작은 모바일 (480px 이하) */
 @media (max-width: 480px) {
+    .main-page .additional-content-section .trending-section{
+        padding-left: 15px;
+        padding-right: 15px;
+
+    }
     .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid {
         gap: 6px;
     }
@@ -469,6 +475,7 @@
     .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .card-title {
         font-size: 12px;
         margin-bottom: 4px;
+        min-height: 34px;
     }
     
     .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .card-details {
@@ -478,15 +485,15 @@
     }
     
     .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .rating-info .rating {
-        font-size: 10px;
+        font-size: 12px;
     }
     
     .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .rating-info .reviews {
-        font-size: 9px;
+        font-size: 10px;
     }
     
     .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid .trending-card .card-info .price {
-        font-size: 11px;
+        font-size: 13px;
         font-weight: 700;
     }
 }

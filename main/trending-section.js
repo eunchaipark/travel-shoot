@@ -18,46 +18,46 @@ const TrendingSlider = {
     // === 데이터 ===
     data: {
         stay: [
-            { id: 1, title: "부산 해운대 럭셔리 호텔", image: "../img/calendar/a_hotel.svg", rating: "4.8", reviews: "2,840", price: "180,000원", category: "호텔" },
-            { id: 2, title: "서울 강남 부티크 호텔", image: "../img/calendar/a_hotel.svg", rating: "4.7", reviews: "1,920", price: "220,000원", category: "호텔" },
-            { id: 3, title: "제주 감귤농장 펜션", image: "../img/calendar/a_hotel.svg", rating: "4.9", reviews: "850", price: "120,000원", category: "펜션" },
-            { id: 4, title: "속초 해변 리조트", image: "../img/calendar/a_hotel.svg", rating: "4.6", reviews: "3,200", price: "250,000원", category: "리조트" },
-            { id: 5, title: "경주 한옥 게스트하우스", image: "../img/calendar/a_hotel.svg", rating: "4.8", reviews: "1,150", price: "95,000원", category: "한옥" },
-            { id: 6, title: "인천공항 캡슐호텔", image: "../img/calendar/a_hotel.svg", rating: "4.5", reviews: "2,400", price: "80,000원", category: "캡슐호텔" },
-            { id: 7, title: "대전 비즈니스 호텔", image: "../img/calendar/a_hotel.svg", rating: "4.4", reviews: "980", price: "110,000원", category: "호텔" },
-            { id: 8, title: "울산 온천 리조트", image: "../img/calendar/a_hotel.svg", rating: "4.7", reviews: "1,680", price: "190,000원", category: "리조트" },
-            { id: 9, title: "강릉 바다뷰 펜션", image: "../img/calendar/a_hotel.svg", rating: "4.6", reviews: "720", price: "140,000원", category: "펜션" },
-            { id: 10, title: "양평 힐링 스테이", image: "../img/calendar/a_hotel.svg", rating: "4.8", reviews: "950", price: "160,000원", category: "펜션" },
-            { id: 11, title: "전주 한옥 호텔", image: "../img/calendar/a_hotel.svg", rating: "4.7", reviews: "1,300", price: "130,000원", category: "한옥" },
-            { id: 12, title: "남해 글램핑장", image: "../img/calendar/a_hotel.svg", rating: "4.5", reviews: "680", price: "170,000원", category: "글램핑" }
+            { id: 1, title: "부산 해운대 럭셔리 호텔", image: "../img/calendar/a_hotel.svg", rating: "4.8", reviews: "2,840", price: "180,000", category: "호텔" },
+            { id: 2, title: "서울 강남 부티크 호텔", image: "../img/calendar/a_hotel.svg", rating: "4.7", reviews: "1,920", price: "220,000", category: "호텔" },
+            { id: 3, title: "제주 감귤농장 펜션", image: "../img/calendar/a_hotel.svg", rating: "4.9", reviews: "850", price: "120,000", category: "펜션" },
+            { id: 4, title: "속초 해변 리조트", image: "../img/calendar/a_hotel.svg", rating: "4.6", reviews: "3,200", price: "250,000", category: "모텔" },
+            { id: 5, title: "경주 한옥 게스트하우스", image: "../img/calendar/a_hotel.svg", rating: "4.8", reviews: "1,150", price: "95,000", category: "한옥" },
+            { id: 6, title: "인천공항 캡슐호텔", image: "../img/calendar/a_hotel.svg", rating: "4.5", reviews: "2,400", price: "80,000", category: "호텔" },
+            { id: 7, title: "대전 비즈니스 호텔", image: "../img/calendar/a_hotel.svg", rating: "4.4", reviews: "980", price: "110,000", category: "호텔" },
+            { id: 8, title: "울산 온천 리조트", image: "../img/calendar/a_hotel.svg", rating: "4.7", reviews: "1,680", price: "190,000", category: "모텔" },
+            { id: 9, title: "강릉 바다뷰 펜션", image: "../img/calendar/a_hotel.svg", rating: "4.6", reviews: "720", price: "140,000", category: "펜션" },
+            { id: 10, title: "양평 힐링 스테이", image: "../img/calendar/a_hotel.svg", rating: "4.8", reviews: "950", price: "160,000", category: "펜션" },
+            { id: 11, title: "전주 한옥 호텔", image: "../img/calendar/a_hotel.svg", rating: "4.7", reviews: "1,300", price: "130,000", category: "모텔" },
+            { id: 12, title: "남해 글램핑장", image: "../img/calendar/a_hotel.svg", rating: "4.5", reviews: "680", price: "170,000", category: "모텔" }
         ],
         restaurants: [
-            { id: 13, title: "강남 미슐랭 레스토랑", image: "../img/calendar/a_hotel.svg", rating: "4.9", reviews: "3,500", price: "150,000원", category: "파인다이닝" },
-            { id: 14, title: "부산 해산물 전문점", image: "../img/calendar/a_hotel.svg", rating: "4.8", reviews: "2,100", price: "45,000원", category: "해산물" },
-            { id: 15, title: "제주 흑돼지 맛집", image: "../img/calendar/a_hotel.svg", rating: "4.7", reviews: "1,800", price: "35,000원", category: "한식" },
-            { id: 16, title: "명동 전통 한정식", image: "../img/calendar/a_hotel.svg", rating: "4.6", reviews: "2,800", price: "80,000원", category: "한정식" },
-            { id: 17, title: "이태원 퓨전 요리", image: "../img/calendar/a_hotel.svg", rating: "4.5", reviews: "1,200", price: "65,000원", category: "퓨전" },
-            { id: 18, title: "홍대 브런치 카페", image: "../img/calendar/a_hotel.svg", rating: "4.4", reviews: "950", price: "25,000원", category: "브런치" },
-            { id: 19, title: "광주 전통 시장 맛집", image: "../img/calendar/a_hotel.svg", rating: "4.8", reviews: "1,500", price: "18,000원", category: "향토음식" },
-            { id: 20, title: "대구 치킨 전문점", image: "../img/calendar/a_hotel.svg", rating: "4.6", reviews: "3,200", price: "28,000원", category: "치킨" },
-            { id: 21, title: "인사동 전통차 카페", image: "../img/calendar/a_hotel.svg", rating: "4.5", reviews: "890", price: "15,000원", category: "카페" },
-            { id: 22, title: "용산 스테이크 하우스", image: "../img/calendar/a_hotel.svg", rating: "4.7", reviews: "1,640", price: "120,000원", category: "스테이크" },
-            { id: 23, title: "여의도 일식당", image: "../img/calendar/a_hotel.svg", rating: "4.6", reviews: "2,100", price: "90,000원", category: "일식" },
-            { id: 24, title: "압구정 이탈리안", image: "../img/calendar/a_hotel.svg", rating: "4.8", reviews: "1,750", price: "85,000원", category: "이탈리안" }
+            { id: 13, title: "강남 미슐랭 레스토랑", image: "../img/calendar/a_hotel.svg", rating: "4.9", reviews: "3,500", price: "150,000", category: "한식" },
+            { id: 14, title: "부산 해산물 전문점", image: "../img/calendar/a_hotel.svg", rating: "4.8", reviews: "2,100", price: "45,000", category: "일식" },
+            { id: 15, title: "제주 흑돼지 맛집", image: "../img/calendar/a_hotel.svg", rating: "4.7", reviews: "1,800", price: "35,000", category: "한식" },
+            { id: 16, title: "명동 전통 한정식", image: "../img/calendar/a_hotel.svg", rating: "4.6", reviews: "2,800", price: "80,000", category: "중식" },
+            { id: 17, title: "이태원 퓨전 요리", image: "../img/calendar/a_hotel.svg", rating: "4.5", reviews: "1,200", price: "65,000", category: "양식" },
+            { id: 18, title: "홍대 브런치 카페", image: "../img/calendar/a_hotel.svg", rating: "4.4", reviews: "950", price: "25,000", category: "디저트" },
+            { id: 19, title: "광주 전통 시장 맛집", image: "../img/calendar/a_hotel.svg", rating: "4.8", reviews: "1,500", price: "18,000", category: "디저트" },
+            { id: 20, title: "대구 치킨 전문점", image: "../img/calendar/a_hotel.svg", rating: "4.6", reviews: "3,200", price: "28,000", category: "한식" },
+            { id: 21, title: "인사동 전통차 카페", image: "../img/calendar/a_hotel.svg", rating: "4.5", reviews: "890", price: "15,000", category: "중식" },
+            { id: 22, title: "용산 스테이크 하우스", image: "../img/calendar/a_hotel.svg", rating: "4.7", reviews: "1,640", price: "120,000", category: "일식" },
+            { id: 23, title: "여의도 일식당", image: "../img/calendar/a_hotel.svg", rating: "4.6", reviews: "2,100", price: "90,000", category: "양식" },
+            { id: 24, title: "압구정 이탈리안", image: "../img/calendar/a_hotel.svg", rating: "4.8", reviews: "1,750", price: "85,000", category: "디저트" }
         ],
         attractions: [
-            { id: 25, title: "경복궁 야간 관람", image: "../img/calendar/a_hotel.svg", rating: "4.9", reviews: "5,200", price: "20,000원", category: "문화재" },
-            { id: 26, title: "롯데월드 자유이용권", image: "../img/calendar/a_hotel.svg", rating: "4.7", reviews: "8,900", price: "62,000원", category: "테마파크" },
-            { id: 27, title: "제주 성산일출봉", image: "../img/calendar/a_hotel.svg", rating: "4.8", reviews: "4,100", price: "5,000원", category: "자연명소" },
-            { id: 28, title: "부산 감천문화마을", image: "../img/calendar/a_hotel.svg", rating: "4.6", reviews: "3,800", price: "무료", category: "문화마을" },
-            { id: 29, title: "여수 밤바다 유람선", image: "../img/calendar/a_hotel.svg", rating: "4.8", reviews: "2,400", price: "35,000원", category: "액티비티" },
-            { id: 30, title: "속초 설악산 케이블카", image: "../img/calendar/a_hotel.svg", rating: "4.5", reviews: "1,900", price: "15,000원", category: "자연명소" },
-            { id: 31, title: "전주 한옥마을 투어", image: "../img/calendar/a_hotel.svg", rating: "4.7", reviews: "2,600", price: "12,000원", category: "문화체험" },
-            { id: 32, title: "안동 하회마을", image: "../img/calendar/a_hotel.svg", rating: "4.6", reviews: "1,500", price: "8,000원", category: "문화재" },
-            { id: 33, title: "경주 불국사", image: "../img/calendar/a_hotel.svg", rating: "4.8", reviews: "3,300", price: "6,000원", category: "문화재" },
-            { id: 34, title: "지리산 둘레길", image: "../img/calendar/a_hotel.svg", rating: "4.7", reviews: "1,200", price: "무료", category: "트레킹" },
-            { id: 35, title: "통영 케이블카", image: "../img/calendar/a_hotel.svg", rating: "4.5", reviews: "980", price: "18,000원", category: "액티비티" },
-            { id: 36, title: "담양 죽녹원", image: "../img/calendar/a_hotel.svg", rating: "4.6", reviews: "1,850", price: "3,000원", category: "자연명소" }
+            { id: 25, title: "경복궁 야간 관람", image: "../img/calendar/a_hotel.svg", rating: "4.9", reviews: "5,200", price: "20,000", category: "자연관광" },
+            { id: 26, title: "롯데월드 자유이용권", image: "../img/calendar/a_hotel.svg", rating: "4.7", reviews: "8,900", price: "62,000", category: "사진" },
+            { id: 27, title: "제주 성산일출봉", image: "../img/calendar/a_hotel.svg", rating: "4.8", reviews: "4,100", price: "5,000", category: "유원지" },
+            { id: 28, title: "부산 감천문화마을", image: "../img/calendar/a_hotel.svg", rating: "4.6", reviews: "3,800", price: "3,000", category: "문화마을" },
+            { id: 29, title: "여수 밤바다 유람선", image: "../img/calendar/a_hotel.svg", rating: "4.8", reviews: "2,400", price: "35,000", category: "액티비티" },
+            { id: 30, title: "속초 설악산 케이블카", image: "../img/calendar/a_hotel.svg", rating: "4.5", reviews: "1,900", price: "15,000", category: "자연명소" },
+            { id: 31, title: "전주 한옥마을 투어", image: "../img/calendar/a_hotel.svg", rating: "4.7", reviews: "2,600", price: "12,000", category: "문화체험" },
+            { id: 32, title: "안동 하회마을", image: "../img/calendar/a_hotel.svg", rating: "4.6", reviews: "1,500", price: "8,000", category: "문화재" },
+            { id: 33, title: "경주 불국사", image: "../img/calendar/a_hotel.svg", rating: "4.8", reviews: "3,300", price: "6,000", category: "문화재" },
+            { id: 34, title: "지리산 둘레길", image: "../img/calendar/a_hotel.svg", rating: "4.7", reviews: "1,200", price: "8,000", category: "트레킹" },
+            { id: 35, title: "통영 케이블카", image: "../img/calendar/a_hotel.svg", rating: "4.5", reviews: "980", price: "18,000", category: "액티비티" },
+            { id: 36, title: "담양 죽녹원", image: "../img/calendar/a_hotel.svg", rating: "4.6", reviews: "1,850", price: "3,000", category: "자연명소" }
         ]
     },
 
@@ -234,7 +234,7 @@ const TrendingSlider = {
                             <span class="rating">★ ${item.rating}</span>
                             <span class="reviews">(${item.reviews})</span>
                         </div>
-                        <div class="price">${item.price}</div>
+                        <div class="price">₩${item.price}</div>
                     </div>
                 </div>
             </div>
