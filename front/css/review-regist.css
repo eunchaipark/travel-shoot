@@ -1,0 +1,350 @@
+
+.review-regist-container .container-regist {
+    padding-left: 4rem;
+    padding-right: 4rem;
+    padding-bottom: 3rem;
+    background-color: white;
+}
+
+.review-regist-container .star-rating {
+    display: inline-flex;
+    gap: 2px;
+}
+
+.review-regist-container .star {
+    font-size: 24px;
+    color: #e0e0e0;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.review-regist-container .star.active {
+    color: #ff8888;
+}
+
+.review-regist-container .star:hover {
+    color: #ffa4a4;
+}
+
+.review-regist-container .property-image-large {
+    width: 300px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    flex-shrink: 0;
+}
+
+.review-regist-container .recommend-btn {
+    background-color: #e9ecef;
+    border: 1px solid #dee2e6;
+    color: #6c757d;
+    border-radius: 25px;
+    padding: 10px 30px;
+    transition: all 0.3s;
+    font-weight: bold;
+}
+
+.review-regist-container .recommend-btn.active {
+    background-color: #02B8EB;
+    border-color: #02B8EB;
+    color: white;
+}
+
+.review-regist-container .recommend-btn.active i {
+    color: #ff8888;
+}
+
+.review-regist-container .btn.btn-outline-secondary {
+    background-color: #d9d9d99c;
+    border-color: #d9d9d97c;
+    color: #000000a1;
+    padding: 10px;
+}
+
+.review-regist-container .btn.btn-outline-secondary:hover {
+    background-color: #D9D9D9;
+    border-color: #D9D9D9;
+    color: #000000;
+}
+
+.review-regist-container .btn.submit-btn {
+    background-color: #D9D9D9;
+    border-color: #D9D9D9;
+    color: #000000;
+    padding: 10px;
+}
+
+.review-regist-container .btn.submit-btn.active {
+    background-color: #ff8888;
+    border-color: #ff8888;
+    color: white;
+}
+
+/* 사진 업로드 영역 스타일 개선 */
+.review-regist-container .upload-area {
+    background-color: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    border-radius: 12px;
+    padding: 40px 20px;
+    text-align: center;
+    color: #6c757d;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.review-regist-container .upload-area:hover {
+    background-color: #e9ecef;
+    border-color: #02B8EB;
+    color: #495057;
+}
+
+.review-regist-container .upload-area.drag-over {
+    background-color: #e3f2fd;
+    border-color: #02B8EB;
+    border-style: solid;
+    color: #02B8EB;
+}
+
+.review-regist-container .upload-area .upload-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.review-regist-container .upload-area:hover .upload-icon {
+    color: #02B8EB;
+    transform: scale(1.1);
+}
+
+.review-regist-container .upload-area.drag-over .upload-icon {
+    color: #02B8EB;
+    animation: bounce 0.6s ease-in-out;
+}
+
+@keyframes bounce {
+    0%, 20%, 60%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    80% {
+        transform: translateY(-5px);
+    }
+}
+
+.review-regist-container .upload-text {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.review-regist-container .upload-subtext {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 15px;
+}
+
+.review-regist-container .upload-hint {
+    font-size: 12px;
+    color: #adb5bd;
+}
+
+.review-regist-container .file-input {
+    display: none;
+}
+
+.review-regist-container .browse-btn {
+    background-color: transparent;
+    border: 1px solid #02B8EB;
+    color: #02B8EB;
+    border-radius: 20px;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.review-regist-container .browse-btn:hover {
+    background-color: #02B8EB;
+    color: white;
+}
+
+/* 업로드된 이미지 미리보기 */
+.review-regist-container .image-preview {
+    display: none;
+    position: relative;
+    max-width: 200px;
+    margin: 0 auto;
+}
+
+.review-regist-container .preview-image {
+    width: 100%;
+    max-height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.review-regist-container .remove-image {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.review-regist-container .remove-image:hover {
+    background-color: #c82333;
+}
+
+.review-regist-container .upload-success {
+    color: #28a745;
+}
+
+.review-regist-container .category-label {
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.review-regist-container .main-rating {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.review-regist-container .main-rating .star {
+    font-size: 32px;
+    margin: 0 4px;
+}
+
+.review-regist-container .form-control {
+    background-color: #EEEEEE;
+    font-size: 15px;
+    border-color: silver;
+    box-shadow: none;
+    outline: none;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    transition: all 0.3s;
+}
+
+.review-regist-container .form-control:focus {
+    outline: none;
+    border-color: silver;
+    box-shadow: none;
+}
+
+.review-regist-container .box-lightgray {
+    background-color: #F6F6F6;
+}
+
+.review-regist-container .detail-rating {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.review-regist-container .badge.bg-success {
+    background-color: #A6A6A6 !important;
+}
+
+/* 반응형 스타일 - Property Info */
+@media (max-width: 576px) {
+    .review-regist-container .container-regist {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    /* 모바일에서 세로 레이아웃 */
+    .review-regist-container .property-info-mobile {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .review-regist-container .property-image-large {
+        width: 100%;
+        max-width: 280px;
+        height: 180px;
+        margin-bottom: 20px;
+    }
+
+    .review-regist-container .property-content-mobile {
+        width: 100%;
+        padding-left: 0 !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .review-regist-container .property-title-mobile {
+        margin-bottom: 15px;
+    }
+
+    .review-regist-container .property-details-mobile {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .review-regist-container .property-details-mobile .row {
+        justify-content: center;
+    }
+
+    .review-regist-container .property-details-mobile .col-12 {
+        text-align: center;
+        margin-bottom: 8px;
+    }
+
+    /* 모바일에서 별점 크기 조정 */
+    .review-regist-container .main-rating .star {
+        font-size: 28px;
+        margin: 0 2px;
+    }
+
+    .review-regist-container .star {
+        font-size: 20px;
+    }
+}
+
+/* 태블릿 크기에서도 이미지 크기 조정 */
+@media (max-width: 768px) and (min-width: 577px) {
+    .review-regist-container .property-image-large {
+        width: 250px;
+        height: 125px;
+    }
+}
+
+/* 큰 화면에서 기본 레이아웃 */
+@media (min-width: 577px) {
+    .review-regist-container .property-info-desktop {
+        display: flex;
+        align-items: start;
+    }
+
+    .review-regist-container .property-content-desktop {
+        flex-grow: 1;
+        padding-left: 1rem;
+    }
+}

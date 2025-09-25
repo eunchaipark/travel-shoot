@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>후기 작성</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/common.css" rel="stylesheet" />
+    <link href="../css/review-regist.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="review-regist-container">
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="bg-white border-bottom sticky-top">
+            <div class="col-12 d-flex align-items-center justify-content-between p-3">
+                <button class="btn btn-link text-dark p-0">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <h5 class="mb-0 fw-bold">후기 작성</h5>
+                <button class="btn btn-link text-dark p-0">
+                    <i class="fas fa-question-circle"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="container-regist">
+        <!-- Property Info - 반응형 수정 -->
+        <div class="box-lightgray p-4 mb-3">
+            <!-- 데스크톱 레이아웃 (577px 이상) -->
+            <div class="d-none d-sm-flex property-info-desktop">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-eKn0KpdqxlQXj5x87ZXFhutS8pwJEc.png" alt="Property" class="property-image-large me-3">
+                <div class="property-content-desktop">
+                    <div class="d-flex align-items-center mb-2 mt-2">
+                        <h6 class="mb-0 fw-bold me-2">부산 더스카이</h6>
+                        <span class="badge bg-success small">이용완료</span>
+                    </div>
+                    <div class="small text-muted mb-2">예약번호: #000000000000000000000</div>
+                    
+                    <div class="row g-0 mt-4 pt-3 small">
+                        <div class="col-12 col-sm-6 mb-1">
+                            <i class="fas fa-calendar-alt me-1 text-primary"></i>
+                            <span class="fw-medium">2025.04.21 ~ 04.22 (1박)</span>
+                        </div>
+                        <div class="col-12 col-sm-6 mb-1">
+                            <i class="fas fa-users me-1 text-primary"></i>
+                            <span>성인 2명 · 객실 1개</span>
+                        </div>
+                        <div class="col-12 col-sm-6 mb-1">
+                            <i class="fas fa-clock me-1 text-success"></i>
+                            <span>체크인 15:00</span>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <i class="fas fa-clock me-1 text-danger"></i>
+                            <span>체크아웃 11:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 모바일 레이아웃 (576px 이하) -->
+            <div class="d-sm-none property-info-mobile">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-eKn0KpdqxlQXj5x87ZXFhutS8pwJEc.png" alt="Property" class="property-image-large">
+                
+                <div class="property-content-mobile">
+                    <div class="property-title-mobile">
+                        <div class="d-flex align-items-center justify-content-center mb-2">
+                            <h6 class="mb-0 fw-bold me-2">부산 더스카이</h6>
+                            <span class="badge bg-success small">이용완료</span>
+                        </div>
+                        <div class="small text-muted">예약번호: #000000000000000000000</div>
+                    </div>
+                    
+                    <div class="property-details-mobile small">
+                        <div class="row g-0">
+                            <div class="col-12 mb-2">
+                                <i class="fas fa-calendar-alt me-1 text-primary"></i>
+                                <span class="fw-medium">2025.04.21 ~ 04.22 (1박)</span>
+                            </div>
+                            <div class="col-12 mb-2">
+                                <i class="fas fa-users me-1 text-primary"></i>
+                                <span>성인 2명 · 객실 1개</span>
+                            </div>
+                            <div class="col-12 mb-2">
+                                <i class="fas fa-clock me-1 text-success"></i>
+                                <span>체크인 15:00</span>
+                            </div>
+                            <div class="col-12">
+                                <i class="fas fa-clock me-1 text-danger"></i>
+                                <span>체크아웃 11:00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Rating -->
+        <div class="bg-white p-4 mb-3 border-bottom">
+            <div class="main-rating">
+                <div class="mb-3 fw-bold">{{부산 더스카이}} 이용에 만족하셨나요 ?</div>
+                <div class="star-rating justify-content-center" data-category="main">
+                    <i class="fas fa-star star" data-rating="1"></i>
+                    <i class="fas fa-star star" data-rating="2"></i>
+                    <i class="fas fa-star star" data-rating="3"></i>
+                    <i class="fas fa-star star" data-rating="4"></i>
+                    <i class="fas fa-star star" data-rating="5"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Ratings -->
+        <div class="bg-white mb-3 text-center">
+            <div class="detail-rating">
+            <!-- 청결도 -->
+            <div class="row mb-3">
+                <div class="col-4">
+                    <div class="category-label">청결도</div>
+                </div>
+                <div class="col-8">
+                    <div class="star-rating" data-category="cleanliness">
+                        <i class="fas fa-star star" data-rating="1"></i>
+                        <i class="fas fa-star star" data-rating="2"></i>
+                        <i class="fas fa-star star" data-rating="3"></i>
+                        <i class="fas fa-star star" data-rating="4"></i>
+                        <i class="fas fa-star star" data-rating="5"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 편의성 -->
+            <div class="row mb-3">
+                <div class="col-4">
+                    <div class="category-label">편의성</div>
+                </div>
+                <div class="col-8">
+                    <div class="star-rating" data-category="convenience">
+                        <i class="fas fa-star star" data-rating="1"></i>
+                        <i class="fas fa-star star" data-rating="2"></i>
+                        <i class="fas fa-star star" data-rating="3"></i>
+                        <i class="fas fa-star star" data-rating="4"></i>
+                        <i class="fas fa-star star" data-rating="5"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 체크인 -->
+            <div class="row mb-3">
+                <div class="col-4">
+                    <div class="category-label">체크인</div>
+                </div>
+                <div class="col-8">
+                    <div class="star-rating" data-category="checkin">
+                        <i class="fas fa-star star" data-rating="1"></i>
+                        <i class="fas fa-star star" data-rating="2"></i>
+                        <i class="fas fa-star star" data-rating="3"></i>
+                        <i class="fas fa-star star" data-rating="4"></i>
+                        <i class="fas fa-star star" data-rating="5"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 의사소통 -->
+            <div class="row mb-3">
+                <div class="col-4">
+                    <div class="category-label">의사소통</div>
+                </div>
+                <div class="col-8">
+                    <div class="star-rating" data-category="communication">
+                        <i class="fas fa-star star" data-rating="1"></i>
+                        <i class="fas fa-star star" data-rating="2"></i>
+                        <i class="fas fa-star star" data-rating="3"></i>
+                        <i class="fas fa-star star" data-rating="4"></i>
+                        <i class="fas fa-star star" data-rating="5"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 위치 -->
+            <div class="row mb-3">
+                <div class="col-4">
+                    <div class="category-label">위치</div>
+                </div>
+                <div class="col-8">
+                    <div class="star-rating" data-category="location">
+                        <i class="fas fa-star star" data-rating="1"></i>
+                        <i class="fas fa-star star" data-rating="2"></i>
+                        <i class="fas fa-star star" data-rating="3"></i>
+                        <i class="fas fa-star star" data-rating="4"></i>
+                        <i class="fas fa-star star" data-rating="5"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 가성비 -->
+            <div class="row">
+                <div class="col-4">
+                    <div class="category-label">가성비</div>
+                </div>
+                <div class="col-8">
+                    <div class="star-rating" data-category="value">
+                        <i class="fas fa-star star" data-rating="1"></i>
+                        <i class="fas fa-star star" data-rating="2"></i>
+                        <i class="fas fa-star star" data-rating="3"></i>
+                        <i class="fas fa-star star" data-rating="4"></i>
+                        <i class="fas fa-star star" data-rating="5"></i>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+
+        </div>
+
+        <!-- Review Text -->
+        <div class="bg-white p-4 mb-3">
+            <div class="fw-bold mb-3">텍스트 후기 작성 (선택)</div>
+            <textarea class="form-control" rows="4" placeholder="이용한 경험을 자세히 알려주세요."></textarea>
+        </div>
+
+        <!-- Photo Upload - 개선된 드래그 앤 드롭 -->
+        <div class="bg-white p-4 mb-3">
+            <div class="fw-bold mb-3">사진 업로드 (선택)</div>
+            <div class="upload-container">
+                <input type="file" id="fileInput" class="file-input" accept="image/*">
+                
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-content">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <div class="upload-text">사진을 여기에 드래그하거나</div>
+                        <div class="upload-subtext">JPG, PNG 파일 (최대 10MB)</div>
+                        <button type="button" class="browse-btn" id="browseBtn">
+                            <i class="fas fa-folder-open me-1"></i>파일 선택
+                        </button>
+                        <div class="upload-hint mt-2">또는 클릭하여 파일을 선택하세요</div>
+                    </div>
+                </div>
+
+                <!-- 이미지 미리보기 영역 -->
+                <div class="image-preview" id="imagePreview">
+                    <img class="preview-image" id="previewImg" alt="미리보기">
+                    <button type="button" class="remove-image" id="removeImage">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="mt-2 text-center">
+                        <small class="text-success upload-success">
+                            <i class="fas fa-check-circle me-1"></i>사진이 업로드되었습니다
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendation -->
+        <div class="bg-white p-4 mb-3 text-center">
+            <div class="fw-bold mb-3">이 숙소를 다른 사람에게 추천하시겠습니까 ?</div>
+            <button class="btn recommend-btn" id="recommendBtn">
+                <i class="fas fa-heart me-2"></i>네, 추천합니다.
+            </button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="bg-white p-3">
+            <div class="row g-2">
+                <div class="col-6 ps-1 pe-3">
+                    <button class="btn btn-outline-secondary w-100">취소</button>
+                </div>
+                <div class="col-6 ps-3 pe-1">
+                    <button class="btn submit-btn w-100" id="submitBtn">등록</button>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Rating system
+        const ratings = {};
+        let recommendationSelected = false;
+        let uploadedFile = null;
+
+        // Handle star ratings
+        document.querySelectorAll('.star-rating').forEach(ratingGroup => {
+            const category = ratingGroup.dataset.category;
+            const stars = ratingGroup.querySelectorAll('.star');
+            
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    ratings[category] = rating;
+                    
+                    // Update visual state
+                    stars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                    
+                    updateSubmitButton();
+                });
+                
+                star.addEventListener('mouseenter', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    stars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.style.color = '#ff8888';
+                        } else {
+                            s.style.color = '#e0e0e0';
+                        }
+                    });
+                });
+                
+                star.addEventListener('mouseleave', function() {
+                    stars.forEach((s, index) => {
+                        const currentRating = ratings[category] || 0;
+                        if (index < currentRating) {
+                            s.style.color = '#ff8888';
+                        } else {
+                            s.style.color = '#e0e0e0';
+                        }
+                    });
+                });
+            });
+        });
+
+        // Handle recommendation button
+        document.getElementById('recommendBtn').addEventListener('click', function() {
+            recommendationSelected = !recommendationSelected;
+            this.classList.toggle('active');
+            updateSubmitButton();
+        });
+
+        // 파일 업로드 기능
+        const fileInput = document.getElementById('fileInput');
+        const uploadArea = document.getElementById('uploadArea');
+        const browseBtn = document.getElementById('browseBtn');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        const removeImage = document.getElementById('removeImage');
+
+        // 파일 선택 버튼 클릭
+        browseBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // 업로드 영역 클릭
+        uploadArea.addEventListener('click', () => {
+            if (!uploadedFile) {
+                fileInput.click();
+            }
+        });
+
+        // 파일 선택 시
+        fileInput.addEventListener('change', handleFileSelect);
+
+        // 드래그 앤 드롭 이벤트
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('drag-over');
+        });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.startsWith('image/')) {
+                    handleFile(file);
+                } else {
+                    alert('이미지 파일만 업로드 가능합니다.');
+                }
+            }
+        });
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        }
+
+        function handleFile(file) {
+            // 파일 크기 체크 (10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('파일 크기는 10MB 이하만 가능합니다.');
+                return;
+            }
+
+            uploadedFile = file;
+            
+            // 이미지 미리보기
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                uploadArea.style.display = 'none';
+                imagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // 이미지 제거
+        removeImage.addEventListener('click', () => {
+            uploadedFile = null;
+            fileInput.value = '';
+            previewImg.src = '';
+            uploadArea.style.display = 'flex';
+            imagePreview.style.display = 'none';
+        });
+
+        // Update submit button state
+        function updateSubmitButton() {
+            const submitBtn = document.getElementById('submitBtn');
+            const requiredCategories = ['main', 'cleanliness', 'convenience', 'checkin', 'communication', 'location', 'value'];
+            const allRated = requiredCategories.every(category => ratings[category] > 0);
+            
+            if (allRated) {
+                submitBtn.classList.add('active');
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.classList.remove('active');
+                submitBtn.disabled = true;
+            }
+        }
+
+        // Initialize submit button as disabled
+        updateSubmitButton();
+    </script>
+</body>
+</html>
