@@ -363,7 +363,8 @@
 /* 오른쪽 결제하기 섹션 */
 
 .final-payment-detail.final-payment-date-detail{
-    font-weight: 300;
+    font-weight: 600;
+    font-size: 15px;
 }
 
 .payment-page .section-card .payment-line-img{
@@ -610,6 +611,15 @@
         border-radius: 0;
         position: sticky;
         bottom: 0;
+    }
+
+    /* 모바일 버전에서 col1 , col11 간격 맞추기 위해 추가함 */
+    .payment-page .section-card .final-payment-info .col-1 {
+        margin-right: -10px;
+    }
+    
+    .payment-page .section-card .final-payment-info .col-11 {
+        padding-left: 5px;
     }
 }
 
