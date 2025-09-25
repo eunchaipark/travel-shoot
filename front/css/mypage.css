@@ -1,0 +1,531 @@
+/* Navigation */
+.mypage .main-nav {
+  background: white;
+  padding: 15px 0;
+  box-shadow: 0 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+.mypage .nav-item {
+  text-align: center;
+  color: #666;
+  text-decoration: none;
+  padding: 10px 20px;
+  position: relative;
+  font-weight: 500;
+}
+
+.mypage .nav-item.active {
+  color: #02b8eb;
+  font-weight: 700;
+}
+
+.mypage .nav-item.active::after {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: #ff8888;
+  border-radius: 2px;
+}
+
+/* Main Content */
+.mypage .main-content {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.mypage .content-wrapper {
+  display: flex;
+  gap: 40px;
+}
+
+/* Sidebar */
+.mypage .sidebar {
+  width: 300px;
+  background: white;
+  border-radius: 15px;
+  padding: 40px 30px;
+  height: fit-content;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.mypage .profile-section {
+  text-align: center;
+}
+.mypage .profile-section > div {
+  cursor: pointer;
+}
+
+.mypage .profile-title.active {
+  color: #ff6b6b;
+}
+
+.mypage .profile-title {
+  color: #6e6e6e;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.mypage .profile-title:not(:last-child) {
+  margin-bottom: 15px;
+}
+/* Profile Form */
+.mypage .profile-form {
+  flex: 1;
+  background: white;
+  border-radius: 15px;
+  padding: 40px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.mypage .form-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.mypage .form-group {
+  margin-bottom: 25px;
+}
+
+.mypage .form-label {
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.mypage .form-control {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px 15px;
+  font-size: 0.95rem;
+  width: 100%;
+}
+
+.mypage .form-control:focus {
+  border-color: #1fb7ea;
+  box-shadow: 0 0 0 0.2rem rgba(31, 183, 234, 0.25);
+}
+
+.mypage .form-control::placeholder {
+  color: #acacac;
+}
+
+.mypage .verify-btn {
+  background: #ff8888;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 3px 11px;
+  font-size: 11px;
+  white-space: nowrap;
+  height: fit-content;
+  margin-top: 1px;
+}
+
+.mypage .form-readonly {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 12px 15px;
+  color: #666;
+  margin-top: 5px;
+}
+
+.mypage .form-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.mypage .form-actions .btn-logout {
+  background: #c8c8c8;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 30px;
+  font-weight: 500;
+}
+
+.mypage .form-actions .btn-withdraw {
+  background: white;
+  color: #666;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px 30px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+}
+
+.mypage .form-actions .btn-form-submit {
+  background: #ff8888;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 30px;
+  font-weight: 500;
+  width: 50%;
+}
+
+.mypage .email-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 8px;
+}
+
+.mypage .password-requirement-message {
+  padding: 8px 12px;
+  /* background: #f8f9fa; */
+  /* border: 1px solid #e9ecef; */
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.mypage .password-requirement-message.valid {
+  background: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+
+.mypage .password-requirement-message.invalid {
+  background: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
+}
+
+.mypage .password-match-message {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  min-height: 20px;
+  padding: 0 12px;
+}
+
+.mypage .password-match-message.error {
+  color: #dc3545;
+}
+
+.mypage .password-match-message.success {
+  color: #28a745;
+}
+
+/* 입력 필드 상태별 스타일 */
+.mypage .form-control.valid {
+  border-color: #28a745;
+}
+
+.mypage .form-control.invalid {
+  border-color: #dc3545;
+}
+
+.mypage .booking-list .booking-item {
+  background: white;
+  border-radius: 15px;
+  padding: 15px 25px;
+  margin-bottom: 20px;
+  border: 1px solid #d1d1d1;
+}
+
+.mypage .booking-list .booking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.mypage .booking-list .booking-date {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.mypage .booking-list .booking-details-link {
+  color: #666;
+  text-decoration: none;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.mypage .booking-list .booking-details-link::after {
+  content: "›";
+  font-size: 1.2rem;
+  top: -1px;
+  position: relative;
+}
+
+.mypage .booking-list .booking-number {
+  color: #999;
+  font-size: 0.85rem;
+  margin-bottom: 11px;
+}
+
+.mypage .booking-list .booking-status {
+  padding: 3px 12px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  z-index: 1;
+  height: fit-content;
+}
+
+.mypage .booking-list .booking-status.completed {
+  background: #98a2ab;
+  color: white;
+}
+
+.mypage .booking-list .booking-status.upcoming {
+  background: #19bcd5;
+  color: white;
+}
+
+.mypage .booking-list .booking-status.cancelled {
+  background: #956b6f;
+  color: white;
+}
+
+.mypage .booking-list .booking-status.confirmed {
+  background: #38b955;
+  color: white;
+}
+
+.mypage .booking-list .booking-content {
+  display: flex;
+  gap: 20px;
+}
+
+.mypage .booking-list .lodging-image {
+  width: 150px;
+  height: 100px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.mypage .booking-list .lodging-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  margin-top: 8px;
+}
+
+.mypage .booking-list .booking-dates {
+  color: #666;
+  font-size: 0.8rem;
+  margin-bottom: 5px;
+}
+
+.mypage .booking-list .booking-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 10px;
+  justify-content: flex-end;
+}
+
+.mypage .booking-list .btn-cancel {
+  background: #ff8888;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  height: fit-content;
+  cursor: pointer;
+  text-align: center;
+}
+
+.mypage .booking-list .btn-review {
+  background: white;
+  color: #666;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 7px 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  height: fit-content;
+  cursor: pointer;
+}
+
+.mypage .booking-list .write-date {
+  color: #666;
+  text-decoration: none;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+
+@media (max-width: 992px) {
+  .mypage .content-wrapper {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .mypage .sidebar {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .mypage .form-title {
+    font-size: 20px;
+  }
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .mypage .main-nav {
+    padding: 10px 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+  }
+
+  .mypage .nav-container {
+    display: flex;
+    gap: 10px;
+    min-width: max-content;
+    padding: 0 5px;
+  }
+
+  .mypage .nav-item {
+    padding: 3px 10px;
+    white-space: nowrap;
+    font-size: 0.8rem;
+  }
+
+  .mypage .main-content {
+    margin: 20px auto;
+    padding: 0 15px;
+  }
+
+  .mypage .profile-form {
+    padding: 25px 20px;
+  }
+
+  .mypage .form-title {
+    font-size: 1.3rem;
+    margin-bottom: 25px;
+  }
+
+  .mypage .verify-btn {
+    align-self: flex-start;
+    padding: 3px 11px;
+  }
+
+  .mypage .form-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mypage .form-actions .btn-logout,
+  .mypage .form-actions .btn-withdraw {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .mypage .form-actions .btn-form-submit {
+    width: 100%;
+  }
+
+  .mypage .booking-list .booking-item {
+    padding: 20px 15px;
+  }
+
+  .mypage .booking-list .booking-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mypage .booking-list .booking-content {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .mypage .booking-list .booking-actions {
+    justify-content: stretch;
+    flex-direction: column;
+  }
+
+  .mypage .booking-list .btn-cancel,
+  .mypage .booking-list .btn-review {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .mypage .booking-list .booking-status {
+    position: static;
+    align-self: flex-start;
+    display: inline-block;
+  }
+
+  .mypage .booking-list .booking-number {
+    font-size: 12px;
+    margin-bottom: 0px;
+    margin-top: 1px;
+  }
+
+  .mypage .booking-list .booking-status {
+    font-size: 11px;
+  }
+  .mypage .booking-list .lodging-image {
+    width: 100%;
+    margin-top: 3px;
+  }
+
+  .mypage .booking-list .booking-dates {
+    font-size: 12px;
+  }
+
+  .mypage .booking-list .lodging-name {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .mypage .profile-form {
+    padding: 20px 15px;
+  }
+
+  .mypage .form-group {
+    margin-bottom: 20px;
+  }
+
+  .mypage .profile-title {
+    font-size: 14px;
+  }
+
+  .mypage .profile-title:not(:last-child) {
+    margin-bottom: 11px;
+  }
+
+  .mypage .form-title {
+    font-size: 17px;
+  }
+
+  .mypage .form-label {
+    font-size: 15px;
+  }
+  .mypage .form-actions .btn-logout,
+  .mypage .form-actions .btn-withdraw {
+    padding: 11px;
+    font-size: 14px;
+  }
+
+}
