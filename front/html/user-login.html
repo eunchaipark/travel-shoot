@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Shoot</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/user-login.css" rel="stylesheet">
+    <link href="../css/common.css" rel="stylesheet">
+</head>
+<body>
+   <!-- 상단 헤더 -->
+    <div class="header">
+        <div class="container">
+            <button class="user-icon-btn" onclick="openLoginModal()">
+                <i class="fas fa-user"></i>
+            </button>
+        </div>
+    </div>
+<!-- 모달 배경 -->
+<div class="login-page" id="loginModal">
+  <!-- 모달 박스 -->
+  <div class="login-box" id="loginBox">
+    <button class="close-btn" onclick="closeLoginModal()">X</button>
+    <button class="back-btn" id="backBtn" onclick="goBackStep()">&lt;</button>
+
+    <!-- 1단계 -->
+    <div class="modal-step active" id="step1">
+      <div class="login-title">
+        <div class="login-title1">끊김 없는 여행,</div>
+        <div class="login-title2">Travel Shoot</div>
+      </div>
+      <div class="login-buttons">
+        <button class="login-btn btn-email" onclick="showEmailForm()">이메일로 시작하기</button>
+        <button class="login-btn btn-naver">네이버로 시작하기</button>
+        <button class="login-btn btn-kakao">카카오로 시작하기</button>
+      </div>
+    </div>
+
+    <!-- 2단계 -->
+    <div class="modal-step" id="step2">
+      <div class="email-form-title">로그인</div>
+      <form onsubmit="handleEmailSubmit(event)">
+        <div class="form-group">
+          <label for="email">이메일</label>
+          <input type="email" id="email" name="email" placeholder="이메일을 입력하세요" required>
+        </div>
+        <div class="form-group">
+          <label for="password">비밀번호</label>
+          <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+        </div>
+        <button type="submit" class="submit-btn">로그인</button>
+        <button type="submit" class="submit-btn">이메일 회원가입</button>
+      </form>
+      <div class="forgot-password">
+        <a href="#">아이디찾기</a>
+        <span>|</span>
+        <a href="#">비밀번호 재설정</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+    <script>
+
+    let currentStep = 1;
+
+
+    function openLoginModal() {
+        console.log('로그인 모달 열기');
+        const modal = document.getElementById('loginModal');
+        const box = document.getElementById('loginBox');
+        
+        modal.classList.remove('closing');
+        box.classList.remove('closing');
+        modal.classList.add('show');
+        
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLoginModal() {
+        const modal = document.getElementById('loginModal');
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+        
+        // 모달 닫을 때 1단계로 리셋
+        setTimeout(() => {
+            resetToStep1();
+        }, 300);
+    }
+
+    function showEmailForm() {
+        switchStep(1, 2);
+    }
+
+    // 단계 전환 함수
+    function switchStep(fromStep, toStep) {
+        const fromElement = document.getElementById(`step${fromStep}`);
+        const toElement = document.getElementById(`step${toStep}`);
+        const backBtn = document.getElementById('backBtn');
+        
+        // 나가는 애니메이션
+        fromElement.classList.add('slide-out');
+        
+        setTimeout(() => {
+            fromElement.classList.remove('active', 'slide-out');
+            toElement.classList.add('active');
+            currentStep = toStep;
+            
+            // 뒤로가기 버튼 표시/숨김
+            if (toStep > 1) {
+                backBtn.classList.add('show');
+            } else {
+                backBtn.classList.remove('show');
+            }
+        }, 300);
+    }
+
+    // 뒤로가기
+    function goBackStep() {
+        if (currentStep > 1) {
+            switchStep(currentStep, currentStep - 1);
+        }
+    }
+
+    // 1단계로 리셋
+    function resetToStep1() {
+        document.querySelectorAll('.modal-step').forEach(step => {
+            step.classList.remove('active');
+        });
+        document.getElementById('step1').classList.add('active');
+        document.getElementById('backBtn').classList.remove('show');
+        currentStep = 1;
+    }
+
+    document.getElementById('loginModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeLoginModal();
+        }
+    });
+    </script>
+</body>
+</html>
