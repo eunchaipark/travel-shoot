@@ -100,7 +100,7 @@
 }
 
 .review-regist-container .upload-area:hover {
-    background-color: #e9ecef;
+    background-color: #eff0f1;
     border-color: #02B8EB;
     color: #495057;
 }
@@ -141,15 +141,15 @@
 }
 
 .review-regist-container .upload-text {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
-    margin-bottom: 8px;
+    /* margin-bottom: 8px; */
 }
 
 .review-regist-container .upload-subtext {
-    font-size: 14px;
+    font-size: 12px;
     color: #6c757d;
-    margin-bottom: 15px;
+    /* margin-bottom: 5px; */
 }
 
 .review-regist-container .upload-hint {
@@ -183,13 +183,23 @@
 .review-regist-container .image-preview {
     display: none;
     position: relative;
-    max-width: 200px;
+    /* max-width: 200px; */
     margin: 0 auto;
+    background-color: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    border-radius: 12px;
+    padding: 40px 20px;
+    text-align: center;
+    color: #6c757d;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    min-height: 200px;
 }
 
 .review-regist-container .preview-image {
-    width: 100%;
-    max-height: 150px;
+    /* width: 100%; */
+    max-height: 200px;
     object-fit: cover;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -218,7 +228,7 @@
 }
 
 .review-regist-container .upload-success {
-    color: #28a745;
+    color: #02B8EB;
 }
 
 .review-regist-container .category-label {
@@ -237,9 +247,9 @@
 }
 
 .review-regist-container .form-control {
-    background-color: #EEEEEE;
+    background-color: #f8f9fa;
     font-size: 15px;
-    border-color: silver;
+    border-color: rgb(220, 220, 220);
     box-shadow: none;
     outline: none;
     padding-top: 15px;
@@ -249,11 +259,6 @@
     transition: all 0.3s;
 }
 
-.review-regist-container .form-control:focus {
-    outline: none;
-    border-color: silver;
-    box-shadow: none;
-}
 
 .review-regist-container .box-lightgray {
     background-color: #F6F6F6;
@@ -348,3 +353,13 @@
         padding-left: 1rem;
     }
 }
+
+.review-regist-container .fas.fa-users, .fas.fa-clock {
+    color: #ff8888;
+
+}
+
+.review-regist-container .fas.fa-calendar-alt{
+    color: #02B8EB;
+}
+
