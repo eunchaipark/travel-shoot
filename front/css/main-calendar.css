@@ -21,6 +21,23 @@ body {
     overflow-x: hidden;
 }
 
+/* 비로그인시 달력 표시 메시지 */
+
+.calendar-guest-message{
+    position: absolute;
+    top: 143px;
+    right: 43px;
+    font-weight: 500;
+    z-index: 9999;
+}
+.calendar-signup-message{
+    position: absolute;
+    bottom: 205px;
+    left: 80px;
+    font-weight: 500;
+    z-index: 9999;
+}
+
 /* ==========================================================================
    헤더 (전역)
    ========================================================================== */
@@ -1030,6 +1047,8 @@ body {
     .calendar-guest-message {
         top: 116px;
         padding: 0.4rem;
+        font-size: 12px;
+        font-weight: 700;
     }
     
     .calendar-guest-message h4 {
@@ -1044,5 +1063,12 @@ body {
     .calendar-card.guest-mode .fc-daygrid-day::after {
         font-size: 6px;
         padding: 0.5px 1px;
+    }
+
+    .calendar-signup-message{
+        bottom: 140px;
+        font-size: 12px;
+        left: 42px;
+        font-weight: 700;
     }
 }
