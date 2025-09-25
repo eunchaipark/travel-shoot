@@ -1,7 +1,7 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
 
 body {
-  font-family: "Pretendard", sans-serif !important;
+  font-family: "Pretendard", sans-serif;
 }
 
 .app-header .logo {
@@ -14,7 +14,7 @@ body {
 }
 
 .app-header {
-  background: linear-gradient(135deg, #02b8eb 0%, #3ea3f0 100%);
+  background: linear-gradient(90deg, #02b8eb 0%, #3ea3f0 100%);
   padding: 7px 0;
 }
 
@@ -665,8 +665,7 @@ body {
   }
 
   .app-header #dateDisplay,
-  .app-header #guestDisplay,
-  .app-header .search-input {
+  .app-header #guestDisplay {
     font-size: 14px;
   }
 
