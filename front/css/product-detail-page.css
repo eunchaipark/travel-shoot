@@ -1,5 +1,12 @@
+.product-detail-container{
+    
+    margin-bottom: 4rem;
+}
+
+
 .product-detail-container small {
     font-size: 0.73rem;
+
 }
 
 .product-detail-container .gray {
@@ -7,10 +14,23 @@
 }
 
 .product-detail-container .hotel-location {
-    color: #666;
-    font-size: 14px;
-    margin-bottom: 0;
+    /* font-size: 14px; */
+    display: flex;
+    align-items: center;
+    color: #585858;
+    font-size: 0.85em;
 }
+
+.product-detail-container .hotel-location .location-icon{
+    width: 20px;
+    height: 20px;
+    background-image: url(../img/gray-location-icon.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-right: 8px;
+}
+
 
 .product-detail-container .price-section {
     text-align: right;
@@ -61,7 +81,7 @@
 .product-detail-container .price-text {
     color: #F56770 !important;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
     min-width: 100px;
 }
 
@@ -70,6 +90,8 @@
     border-color: #FF8888 !important;
     color: #FFFFFF !important;
     min-width: 90px;
+    height: 2rem;
+    margin-top: 11px;
 }
 
 .product-detail-container .btn-custom:hover {
@@ -117,12 +139,37 @@
     font-size: 15px;
 }
 
+.product-detail-container .card-title{
+    font-size: 1.25rem;
+}
+
 /* 원하는 비율로 커스텀 */
 @media (min-width: 768px) {
     .product-detail-container .room-card .col-md-4 { flex: 0 0 33%; max-width: 33%; }
     .product-detail-container .room-card .col-md-3 { flex: 0 0 25%; max-width: 25%; }
     .product-detail-container .room-card .col-md-5 { flex: 0 0 42%; max-width: 42%; }
 }
+
+
+/* 전체 화면이 아닐 때 */
+@media(max-width: 1200px){
+    .product-detail-container .price-text {
+        color: #F56770 !important;
+        font-weight: bold;
+        font-size: 17px;
+        min-width: 100px;
+    }
+}
+
+/* 오른쪽 카드 2개가 일렬로 정렬될 때 */
+@media(max-width:978px){
+
+    .product-detail-container .map-card{
+        top: 20px;
+        margin-bottom: 1rem;
+    }
+}
+
 
 @media (max-width: 768px) {
     .product-detail-container .room-details {
@@ -188,5 +235,6 @@
 .product-detail-container .view-more-btn:hover {
     color: #e55555;
     text-decoration: none;
+
 }
 

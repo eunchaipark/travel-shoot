@@ -6,6 +6,11 @@
     background-color: white;
 }
 
+.review-regist-container .hotel-title{
+    font-size: 1.25rem;
+}
+
+
 .review-regist-container .star-rating {
     display: inline-flex;
     gap: 2px;

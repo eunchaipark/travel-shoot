@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SL 호텔 강릉</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        .facility-icon {
+            color: #6c757d;
+        }
+        .room-content {
+            line-height: 1.6;
+        }
+        .heart-btn, .share-btn {
+            background: none;
+            border: 1px solid #dee2e6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-right: 8px;
+        }
+        .price-label {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        .price-amount {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+        .room-image {
+            height: 120px;
+            object-fit: cover;
+        }
+        .btn-custom {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+            padding: 0.5rem 1rem;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+            color: white;
+        }
+        .price-text {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+        }
+        .font-12 {
+            font-size: 0.75rem;
+        }
+        .font-15 {
+            font-size: 0.95rem;
+        }
+        .gray {
+            color: #8d9296;
+        }
+        .dark-gray {
+            color: #495057;
+        }
+        .rating-score {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .star-icon {
+            color: #ffc107;
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+        }
+        .score-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+        .ai-review-title {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        .ai-review-text {
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+        .view-more-btn {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .view-more-btn:hover {
+            text-decoration: underline;
+        }
+        .location-icon::before {
+            content: "📍";
+            margin-right: 0.5rem;
+        }
+        .hotel-location {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        .map-marker {
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        .room-card {
+            transition: box-shadow 0.3s ease;
+        }
+        .room-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                
+               <!-- Main hotel info section -->
+                <div class="card mb-3 order-1">
+                    <div class="card-body">
+                    <div class="row">
+                        <div class="col-8">
+                            <h5 class="card-title mt-2 mb-2 fw-bold">SL 호텔 강릉 (SL Hotel Gangneung)</h5>
+                            <div class="hotel-location">
+                                <div class="location-icon"></div>
+                                강원특별자치도 속초시 설악산로 1085
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="action-buttons mb-2 mt-1">
+                                <button class="heart-btn">
+                                    <i class="bi bi-heart"></i>
+                                </button>
+                                <button class="share-btn">
+                                    <i class="bi bi-share"></i>
+                                </button>
+                            </div>
+                            <div class="price-section">
+                                <div class="price-label">1박 평균</div>
+                                <div class="price-amount">₩ 31,000</div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Facilities Section -->
+                <div class="card mb-3 order-2">
+                    <div class="card-body">
+                        <h5 class="card-title mt-2 mb-4 fw-bold">편의 시설/서비스</h5>
+                        <div class="row ms-1">
+                            <div class="col-lg-3 col-md-4 col-6 mb-2 ">
+                                <i class="bi bi-clock facility-icon me-2"></i>
+                                <small>얼리 체크인</small>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-6 mb-2">
+                                <i class="bi bi-car-front facility-icon me-2"></i>
+                                <small>주차장</small>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-6 mb-2">
+                                <i class="bi bi-cup-hot facility-icon me-2"></i>
+                                <small>조식 포함</small>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-6 mb-2">
+                                <i class="bi bi-ban facility-icon me-2"></i>
+                                <small class="mp-0">금연</small>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-6 mb-2">
+                                <i class="bi bi-tv facility-icon me-2"></i>
+                                <small>OTT 가능</small>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-6 mb-2">
+                                <i class="bi bi-heart facility-icon me-2"></i>
+                                <small>반려동물 동반</small>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-6 mb-2">
+                                <i class="bi bi-universal-access facility-icon me-2"></i>
+                                <small>장애인용 편의시설</small>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-6 mb-2">
+                                <i class="bi bi-airplane facility-icon me-2"></i>
+                                <small>공항 이동 교통편</small>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-6 mb-2">
+                                <i class="bi bi-water facility-icon me-2"></i>
+                                <small>수영장</small>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-6 mb-2">
+                                <i class="bi bi-heart-pulse facility-icon me-2"></i>
+                                <small>피트니스 센터</small>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-6 mb-2">
+                                <i class="bi bi-thermometer-sun facility-icon me-2"></i>
+                                <small>사우나</small>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-6 mb-2">
+                                <i class="bi bi-tree facility-icon me-2"></i>
+                                <small>야외 공간</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Description Section -->
+                <div class="card mb-4 order-3">
+                    <div class="card-body px-4 py-4">
+                        <h5 class="card-title mt-2 mb-4 fw-bold">숙소 소개</h5>
+                        <p class="small text-muted room-content">
+                            강릉 해변가에 위치한 SL 호텔 강릉은 아름다운 바다 전망과 함께 편안한 휴식을 제공합니다. 모든 객실에서 
+                            동해의 탁 트인 바다를 감상할 수 있으며, 강릉의 주요 관광지와 가까운 거리에 있어 관광과 휴식을 동시에 
+                            즐기실 수 있습니다. 친절한 서비스와 깔끔한 시설로 편안한 여행을 약속드립니다.
+                            <br><br>
+                            호텔은 경포해수욕장에서 도보 5분 거리에 위치하여 해변 접근성이 뛰어나며, 강릉역에서 차로 10분 거리에 있어 
+                            교통이 편리합니다. 모든 객실은 바다 전망을 제공하며, 발코니에서 일출을 감상하실 수 있습니다.
+                            <br><br>
+                            호텔 내 레스토랑에서는 신선한 해산물 요리와 한식, 양식을 제공하며, 루프탑 바에서는 강릉 시내와 바다를 
+                            한눈에 내려다볼 수 있습니다. 24시간 프런트 데스크 서비스와 컨시어지 서비스를 통해 고객님의 편의를 
+                            도와드립니다.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Hotel Policies -->
+                <div class="card mt-4 mb-4 order-6">
+                    <div class="card-body px-4 py-4">
+                        <h5 class="card-title mt-2 mb-4 fw-bold">예약 공지</h5>
+                        <div class="small text-muted room-content">
+                            <p>체크인은 만 18세 이상만 가능합니다. 체크인 시 사진이 포함된 신분증을 지참해 주세요.
+                            숙박 요금은 숙박세를 포함한 금액입니다.</p>
+                            <p>현장 결제 시 카드 결제만 가능하며, 현금 결제는 불가합니다
+                            체크인 시간은 오후 4시, 체크아웃 시간은 오전 11시입니다.
+                            조기 체크인 및 늦은 체크아웃은 프런트에 문의해 주세요. (추가 요금 발생 가능)</p>
+                            <p>객실 내 금연이며, 흡연 시 청소비가 부과됩니다.
+                            반려동물 동반은 불가합니다.</p>
+                            <p>미성년자는 보호자 동반 시에만 투숙 가능합니다.
+                            취소 및 환불 규정은 예약 조건에 따라 다르며, 예약 시 확인해 주세요.
+                            호텔 시설 이용 시간 및 운영 정책은 현장 상황에 따라 변경될 수 있습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar - Reviews and Map (이 부분을 각각 분리) -->
+            <div class="col-lg-4">
+                <!-- Review Section -->
+                <div class="card mb-3 order-4 order-lg-1">
+                    <div class="card-body p-4">
+                    <div class="rating-score">
+                        <i class="bi bi-star-fill star-icon"></i>
+                        <span class="score-number">4.7</span>
+                    </div>
+                    <div class="ai-review-title">AI 요약 리뷰</div>
+                    <div class="ai-review-text room-content">
+                        바다가 보이는 멋진 풍경과 좋은 위치입니다.<br>
+                        그리고 친절한 직원 응답입니다.
+                    </div>
+                    <a href="#" class="view-more-btn">
+                        전체 1,689건 리뷰 
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                    </div>
+                </div>
+
+                <!-- Map Section -->
+                <div class="card position-sticky order-5 order-lg-2" style="top: 20px;">
+                    <div class="card-body">
+                        <div class="position-relative">
+                            <div style="width: 100%; height: 250px; background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 8px; position: relative; overflow: hidden;">
+                                <!-- 간단한 지도 배경 -->
+                                <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
+                                    <defs>
+                                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#90caf9" stroke-width="0.5" opacity="0.3"/>
+                                        </pattern>
+                                    </defs>
+                                    <rect width="100%" height="100%" fill="url(#grid)" />
+                                    <!-- 도로 표시 -->
+                                    <path d="M0,80 Q100,70 200,85 T400,90" stroke="#1976d2" stroke-width="3" fill="none" opacity="0.6"/>
+                                    <path d="M50,0 Q60,100 80,180 T120,250" stroke="#1976d2" stroke-width="2" fill="none" opacity="0.6"/>
+                                    <!-- 건물들 -->
+                                    <rect x="80" y="60" width="15" height="20" fill="#42a5f5" opacity="0.4"/>
+                                    <rect x="120" y="45" width="18" height="25" fill="#42a5f5" opacity="0.4"/>
+                                    <rect x="160" y="55" width="12" height="15" fill="#42a5f5" opacity="0.4"/>
+                                </svg>
+                                
+                                <!-- 호텔 위치 마커 -->
+                                <div class="position-absolute top-50 start-50 translate-middle">
+                                    <div class="map-marker">
+                                        <i class="bi bi-geo-alt-fill"></i>
+                                    </div>
+                                </div>
+                                
+                                <!-- 지역명 표시 -->
+                                <div class="position-absolute" style="top: 20px; left: 20px; background: rgba(255,255,255,0.9); padding: 5px 10px; border-radius: 15px; font-size: 0.8rem; color: #1976d2; font-weight: bold;">
+                                    속초/설악산
+                                </div>
+                            </div>
+
+                            <div class=" mt-3 mb-2">
+                            <div class="hotel-location">
+                                <div class="location-icon"></div>
+                                강원특별자치도 속초시 설악산로 1085
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Room Selection Section - 별도 행으로 분리 -->
+            <div class="col-lg-8 col-sm-12 order-7">
+                <div class="card">
+                    <div class="card-body px-4 py-4">
+                        <h5 class="card-title ms-2 mt-1 mb-4 fw-bold">객실 선택</h5>
+
+                        <!-- Room Option 1 -->
+                        <div class="border rounded p-4 mb-3 room-card">
+                        <div class="row align-items-stretch">
+                            <!-- 객실 이미지 -->
+                            <div class="col-lg-4 col-md-4 mb-3 mb-md-0">
+                            <div style="width: 100%; height: 120px; background: linear-gradient(45deg, #f5f5f5 0%, #e0e0e0 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #666;">
+                                <i class="bi bi-image" style="font-size: 2rem;"></i>
+                            </div>
+                            </div>
+
+                            <!-- 객실 정보 -->
+                            <div class="col-lg-4 col-md-3 mb-lg-0">
+                            <h6 class="mb-2 fw-bold font-15">슈페리어 더블룸</h6>
+                            <div class="room-details text-muted">
+                                <div class="mb-1">
+                                <i class="bi bi-people me-1"></i> 최대 2인
+                                </div>
+                                <div class="mb-1">
+                                <i class="bi bi-house-door me-1"></i> 싱글 2개
+                                </div>
+                                <div class="mb-1">
+                                <i class="bi bi-door-open me-1"></i> 침실 1개
+                                </div>
+                                <div class="mb-1">
+                                <i class="bi bi-droplet me-1"></i> 욕실 1개
+                                </div>
+                            </div>
+                            </div>
+
+                            <!-- 가격 및 예약 버튼 -->
+                            <div class="col-lg-4 col-md-5 text-md-end text-sm-end mt-md-5">
+                                <div class="room-details text-muted font-12 fw-bold mb-2 dark-gray d-flex justify-content-end">
+                                    체크인 16:00 ~ 체크아웃 11:00
+                                </div>
+                                <div class="text-muted small d-flex justify-content-end">
+                                    <div class="me-2">
+                                        <div class="font-12 mb-0 gray">1박 평균 31,000원</div>
+                                        <div class="price-text">
+                                            ₩ 62,000 <small>/2박</small>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-custom mt-2 fw-bold" style="--bs-btn-font-size: .85rem;">
+                                    예약하기
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+
+                        <!-- Room Option 2 -->
+                        <div class="border rounded p-4 room-card">
+                        <div class="row align-items-stretch">
+                            <!-- 객실 이미지 -->
+                            <div class="col-lg-4 col-md-4 mb-3 mb-md-0">
+                            <div style="width: 100%; height: 120px; background: linear-gradient(45deg, #f5f5f5 0%, #e0e0e0 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #666;">
+                                <i class="bi bi-image" style="font-size: 2rem;"></i>
+                            </div>
+                            </div>
+
+                            <!-- 객실 정보 -->
+                            <div class="col-lg-4 col-md-3 mb-lg-0">
+                            <h6 class="mb-2 fw-bold font-15">슈페리어 더블룸</h6>
+                            <div class="room-details text-muted">
+                                <div class="mb-1">
+                                <i class="bi bi-people me-1"></i> 최대 2인
+                                </div>
+                                <div class="mb-1">
+                                <i class="bi bi-house-door me-1"></i> 싱글 2개
+                                </div>
+                                <div class="mb-1">
+                                <i class="bi bi-door-open me-1"></i> 침실 1개
+                                </div>
+                                <div class="mb-1">
+                                <i class="bi bi-droplet me-1"></i> 욕실 1개
+                                </div>
+                            </div>
+                            </div>
+
+                            <!-- 가격 및 예약 버튼 -->
+                            <div class="col-lg-4 col-md-5 text-md-end text-sm-end mt-md-5">
+                                <div class="room-details text-muted font-12 fw-bold mb-2 dark-gray d-flex justify-content-end">
+                                    체크인 16:00 ~ 체크아웃 11:00
+                                </div>
+                                <div class="text-muted small d-flex justify-content-end">
+                                    <div class="me-2">
+                                        <div class="font-12 mb-0 gray">1박 평균 31,000원</div>
+                                        <div class="price-text">
+                                            ₩ 62,000 <small>/2박</small>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-custom mt-2 fw-bold" style="--bs-btn-font-size: .85rem;">
+                                    예약하기
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
