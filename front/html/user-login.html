@@ -10,7 +10,7 @@
     <link href="../css/common.css" rel="stylesheet">
 </head>
 <body>
-   <!-- 상단 헤더 -->
+   <!-- 상단 헤더 - 임시로 넣었음 -->
     <div class="header">
         <div class="container">
             <button class="user-icon-btn" onclick="openLoginModal()">
@@ -18,129 +18,332 @@
             </button>
         </div>
     </div>
-<!-- 모달 배경 -->
-<div class="login-page" id="loginModal">
-  <!-- 모달 박스 -->
-  <div class="login-box" id="loginBox">
-    <button class="close-btn" onclick="closeLoginModal()">X</button>
-    <button class="back-btn" id="backBtn" onclick="goBackStep()">&lt;</button>
+        
+    <!-- 모달 배경 -->
+    <div class="login-page" id="loginModal">
+    <!-- 모달 박스 -->
+    <div class="login-box" id="loginBox">
+        <button class="close-btn" onclick="closeLoginModal()"><img class="login-icons" src="../img/login-close-icon.svg"></button>
+        <button class="back-btn" id="backBtn" onclick="goBackStep()">
+            <img class="login-icons" src="../img/login-back-icon.svg">
+        </button>
 
-    <!-- 1단계 -->
-    <div class="modal-step active" id="step1">
-      <div class="login-title">
-        <div class="login-title1">끊김 없는 여행,</div>
-        <div class="login-title2">Travel Shoot</div>
-      </div>
-      <div class="login-buttons">
-        <button class="login-btn btn-email" onclick="showEmailForm()">이메일로 시작하기</button>
-        <button class="login-btn btn-naver">네이버로 시작하기</button>
-        <button class="login-btn btn-kakao">카카오로 시작하기</button>
-      </div>
-    </div>
-
-    <!-- 2단계 -->
-    <div class="modal-step" id="step2">
-      <div class="email-form-title">로그인</div>
-      <form onsubmit="handleEmailSubmit(event)">
-        <div class="form-group">
-          <label for="email">이메일</label>
-          <input type="email" id="email" name="email" placeholder="이메일을 입력하세요" required>
+        <!-- 1 -->
+        <div class="modal-step active" id="step1">
+        <div class="login-title">
+            <div class="login-title1">끊김 없는 여행,</div>
+            <div class="login-title2">Travel Shoot</div>
         </div>
-        <div class="form-group">
-          <label for="password">비밀번호</label>
-          <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+        <div class="login-buttons">
+            <button class="login-btn btn-email" onclick="showEmailForm()">이메일로 시작하기</button>
+            <button class="login-btn btn-naver">네이버로 시작하기</button>
+            <button class="login-btn btn-kakao">카카오로 시작하기</button>
         </div>
-        <button type="submit" class="submit-btn">로그인</button>
-        <button type="submit" class="submit-btn">이메일 회원가입</button>
-      </form>
-      <div class="forgot-password">
-        <a href="#">아이디찾기</a>
-        <span>|</span>
-        <a href="#">비밀번호 재설정</a>
-      </div>
-    </div>
-  </div>
-</div>
+        </div>
 
+        <!-- 2 -->
+        <div class="modal-step" id="step2">
+        <div class="email-form-title">로그인</div>
+        <form onsubmit="handleEmailSubmit(event)">
+            <div class="form-group">
+            <input type="email" id="email" name="email" placeholder="이메일을 입력하세요" required>
+            </div>
+            <div class="form-group">
+            <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+            </div>
+            <button type="submit" class="submit-btn">로그인</button>
+            <button type="button" class="submit-btn signup-btn secondary" onclick="showSignupForm()">회원가입</button>
+        </form>
+            <div class="forgot-password">
+                <a href="#" onclick="showPasswordResetForm()">비밀번호를 잊어버렸나요 ?</a>
+            </div>
+        </div>
+       
+        <!-- 3 -->
+        <div class="modal-step" id="step3">
+        <div class="email-form-title">회원가입</div>
+        <form onsubmit="handleSignupSubmit(event)" class="signup-form">
+            <div class="form-group">
+                <div class="email-verification">
+                    <input type="email" id="signup-email" name="email" placeholder="이메일을 입력하세요" required>
+                    <button type="button" onclick="sendEmailVerification('signup')">이메일 인증</button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="email-verification">
+                    <input type="text" id="signup-verification-code" name="verification" placeholder="인증번호를 입력하세요" required>
+                    <button type="button" class="verify-btn" onclick="verifyEmailCode('signup')" disabled>확인</button>
+                </div>
+                <div class="timer-display" id="signupTimerDisplay">05:00</div>
+            </div>
+
+            <div class="form-group">
+            <input type="password" id="signup-password" name="password" placeholder="비밀번호를 입력하세요" required>
+            </div>
+
+            <div class="form-group">
+            <input type="password" id="confirm-password" name="confirmPassword" placeholder="비밀번호 확인" required>
+            </div>
+
+            <div class="form-group">
+            <input type="text" id="name" name="name" placeholder="이름을 입력하세요" required>
+            </div>
+
+            <button type="submit" class="submit-btn">확인</button>
+        </form>
+        </div>
+
+        <!-- 4 -->
+        <div class="modal-step" id="step4">
+            <div class="email-form-title">비밀번호 재설정</div>
+            <form onsubmit="handlePasswordResetSubmit(event)" class="signup-form">
+                <div class="form-group">
+                    <div class="email-verification">
+                        <input type="email" id="reset-email" name="email" placeholder="이메일을 입력하세요" required>
+                        <button type="button" onclick="sendEmailVerification('reset')">이메일 인증</button>
+                    </div>
+                </div>
+                
+        <div class="form-group">
+            <div class="email-verification">
+                <input type="text" id="reset-verification-code" name="verification" placeholder="인증번호를 입력하세요" required>
+                <button type="button" class="verify-btn" onclick="verifyEmailCode('reset')" disabled>확인</button>
+            </div>
+            <div class="timer-display" id="resetTimerDisplay">05:00</div>
+        </div>
+
+                <div class="form-group">
+                    <input type="password" id="new-password" name="password" placeholder="새로운 비밀번호를 입력하세요" required>
+                </div>
+
+                <div class="form-group">
+                    <input type="password" id="confirm-new-password" name="confirmPassword" placeholder="비밀번호 확인" required>
+                </div>
+
+                <button type="submit" class="submit-btn">확인</button>
+            </form>
+        </div>
+    </div>
+    </div>
 
 
     <script>
+let currentStep = 1;
+let stepHistory = [1]; // 단계 히스토리를 추적
 
-    let currentStep = 1;
+function openLoginModal() {
+    console.log('로그인 모달 열기');
+    const modal = document.getElementById('loginModal');
+    const box = document.getElementById('loginBox');
+    
+    modal.classList.remove('closing');
+    box.classList.remove('closing');
+    modal.classList.add('show');
+    
+    document.body.style.overflow = 'hidden';
+}
 
+function closeLoginModal() {
+    const modal = document.getElementById('loginModal');
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+    
+    // 모달 닫을 때 1단계로 리셋
+    setTimeout(() => {
+        resetToStep1();
+    }, 300);
+}
 
-    function openLoginModal() {
-        console.log('로그인 모달 열기');
-        const modal = document.getElementById('loginModal');
-        const box = document.getElementById('loginBox');
+function showEmailForm() {
+    navigateToStep(2);
+}
+
+function showSignupForm() {
+    navigateToStep(3);
+}
+
+function showPasswordResetForm() {
+    navigateToStep(4);
+}
+
+// 새로운 네비게이션 함수
+function navigateToStep(toStep) {
+    const fromStep = currentStep;
+    const fromElement = document.getElementById(`step${fromStep}`);
+    const toElement = document.getElementById(`step${toStep}`);
+    const backBtn = document.getElementById('backBtn');
+    
+    // 히스토리에 새 단계 추가
+    stepHistory.push(toStep);
+    
+    // 나가는 애니메이션
+    fromElement.classList.add('slide-out');
+    
+    setTimeout(() => {
+        fromElement.classList.remove('active', 'slide-out');
+        toElement.classList.add('active');
+        currentStep = toStep;
         
-        modal.classList.remove('closing');
-        box.classList.remove('closing');
-        modal.classList.add('show');
+        // 뒤로가기 버튼 표시/숨김 (첫 단계가 아닐 때만 표시)
+        if (stepHistory.length > 1) {
+            backBtn.classList.add('show');
+        } else {
+            backBtn.classList.remove('show');
+        }
+    }, 300);
+}
+
+// 뒤로가기 - 히스토리 기반
+function goBackStep() {
+    if (stepHistory.length > 1) {
+        // 현재 단계를 히스토리에서 제거
+        stepHistory.pop();
         
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeLoginModal() {
-        const modal = document.getElementById('loginModal');
-        modal.classList.remove('show');
-        document.body.style.overflow = '';
+        // 이전 단계로 이동
+        const previousStep = stepHistory[stepHistory.length - 1];
+        const fromStep = currentStep;
         
-        // 모달 닫을 때 1단계로 리셋
-        setTimeout(() => {
-            resetToStep1();
-        }, 300);
-    }
-
-    function showEmailForm() {
-        switchStep(1, 2);
-    }
-
-    // 단계 전환 함수
-    function switchStep(fromStep, toStep) {
         const fromElement = document.getElementById(`step${fromStep}`);
-        const toElement = document.getElementById(`step${toStep}`);
+        const toElement = document.getElementById(`step${previousStep}`);
         const backBtn = document.getElementById('backBtn');
         
-        // 나가는 애니메이션
+        // 애니메이션
         fromElement.classList.add('slide-out');
         
         setTimeout(() => {
             fromElement.classList.remove('active', 'slide-out');
             toElement.classList.add('active');
-            currentStep = toStep;
+            currentStep = previousStep;
             
             // 뒤로가기 버튼 표시/숨김
-            if (toStep > 1) {
+            if (stepHistory.length > 1) {
                 backBtn.classList.add('show');
             } else {
                 backBtn.classList.remove('show');
             }
         }, 300);
     }
+}
 
-    // 뒤로가기
-    function goBackStep() {
-        if (currentStep > 1) {
-            switchStep(currentStep, currentStep - 1);
-        }
-    }
-
-    // 1단계로 리셋
-    function resetToStep1() {
-        document.querySelectorAll('.modal-step').forEach(step => {
-            step.classList.remove('active');
-        });
-        document.getElementById('step1').classList.add('active');
-        document.getElementById('backBtn').classList.remove('show');
-        currentStep = 1;
-    }
-
-    document.getElementById('loginModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeLoginModal();
-        }
+// 1단계로 리셋
+function resetToStep1() {
+    document.querySelectorAll('.modal-step').forEach(step => {
+        step.classList.remove('active');
     });
+    document.getElementById('step1').classList.add('active');
+    document.getElementById('backBtn').classList.remove('show');
+    currentStep = 1;
+    stepHistory = [1]; // 히스토리도 리셋
+    
+    Object.values(timers).forEach(timer => clearInterval(timer));
+    timers = {};
+}
+
+
+
+function handleSignupSubmit(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const signupData = Object.fromEntries(formData);
+    
+    if (signupData.password !== signupData.confirmPassword) {
+        alert('비밀번호가 일치하지 않습니다.');
+        return;
+    }
+    
+    console.log('회원가입 데이터:', signupData);
+    alert('회원가입이 완료되었습니다.');
+    closeLoginModal();
+}
+
+function handleEmailSubmit(event) {
+    event.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    console.log('로그인 시도:', { email, password });
+    alert('로그인 처리됩니다.');
+}
+
+// 비밀번호 재설정 관련 함수들
+let timers = {};
+
+function handlePasswordResetSubmit(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const resetData = Object.fromEntries(formData);
+    
+    if (resetData.password !== resetData.confirmPassword) {
+        alert('비밀번호가 일치하지 않습니다.');
+        return;
+    }
+    
+    console.log('비밀번호 재설정 데이터:', resetData);
+    alert('비밀번호가 재설정되었습니다.');
+    closeLoginModal();
+}
+
+// 통합된 이메일 인증 함수들
+function sendEmailVerification(type) {
+    const emailInput = document.getElementById(`${type}-email`);
+    const email = emailInput.value;
+    
+    if (!email) {
+        alert('이메일을 입력해주세요.');
+        return;
+    }
+    
+    alert('인증번호가 발송되었습니다.');
+    
+    const verifyBtn = document.querySelector(`#${type}-verification-code + button`);
+    verifyBtn.disabled = false;
+    
+    startTimer(type);
+}
+
+function verifyEmailCode(type) {
+    const codeInput = document.getElementById(`${type}-verification-code`);
+    const code = codeInput.value;
+    
+    if (!code) {
+        alert('인증번호를 입력해주세요.');
+        return;
+    }
+    
+    alert('인증번호가 확인되었습니다.');
+    
+    if (timers[type]) {
+        clearInterval(timers[type]);
+        delete timers[type];
+    }
+    
+    const timerDisplay = document.getElementById(`${type}TimerDisplay`);
+    timerDisplay.style.display = 'none';
+}
+
+function startTimer(type) {
+    let timeLeft = 300;
+    const timerDisplay = document.getElementById(`${type}TimerDisplay`);
+    const verifyBtn = document.querySelector(`#${type}-verification-code + button`);
+    
+    timerDisplay.style.display = 'block';
+    
+    timers[type] = setInterval(() => {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLeft <= 0) {
+            clearInterval(timers[type]);
+            delete timers[type];
+            timerDisplay.textContent = '시간이 만료되었습니다';
+            verifyBtn.disabled = true;
+        }
+        
+        timeLeft--;
+    }, 1000);
+}
     </script>
 </body>
 </html>
