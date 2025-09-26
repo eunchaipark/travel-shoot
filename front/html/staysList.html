@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="filter-section">
-                    <h3 class="filter-section_title">1박당 요금</h3>
+                    <div class="filter-section_title">1박당 요금</div>
 
                     <div class="form-price-range">
                         <span class="won-icon">₩</span>
@@ -44,7 +44,7 @@
 
 
                 <div class="filter-section">
-                    <h3 class="filter-section_title">숙소 유형</h3>
+                    <div class="filter-section_title">숙소 유형</div>
                     <div class="filter-checkbox-group">
                         <label class="form-checkbox">
                             <input type="checkbox" class="form-checkbox_input">
@@ -62,10 +62,10 @@
                 </div>
 
                 <div class="filter-section">
-                    <h3 class="filter-section_title">숙소 특성</h3>
+                    <div class="filter-section_title">숙소 특성</div>
 
                 <div class="filter-subsection">
-                    <h4 class="filter-subsection_title">침실 수</h4>
+                    <div class="filter-subsection_title">침실 수</div>
                     <div class="filter-bed-btn" id="bedroom-buttons">
                         <button class="filter-cnt-btn" data-bedroom="1">1개</button>
                         <button class="filter-cnt-btn" data-bedroom="2">2개</button>
@@ -74,7 +74,7 @@
                 </div>
                 
                 <div class="filter-subsection">
-                    <h4 class="filter-subsection_title">욕실 수</h4>
+                    <div class="filter-subsection_title">욕실 수</div>
                     <div class="filter-bath-btn">
                         <button class="filter-cnt-btn" data-bathroom="1">1개</button>
                         <button class="filter-cnt-btn" data-bathroom="2+">2개 이상</button>
@@ -82,7 +82,7 @@
                 </div>
                     
                     <div class="filter-subsection">
-                        <h4 class="filter-subsection_title">수용 인원</h4>
+                        <div class="filter-subsection_title">수용 인원</div>
                         <div class="form-guest-range">
                             <img class="filter-person-icon" src="../img/filter-person-icon.svg">
                             <input type="number" class="form-input form-input-guest" placeholder="최소인원" min="1" max="20">
@@ -94,7 +94,7 @@
                 </div>
 
                 <div class="filter-section">
-                    <h3 class="filter-section_title">숙소 평점</h3>
+                    <div class="filter-section_title">숙소 평점</div>
                     <div class="filter-stars-group">
                         <label class="form-stars">
                             <input type="checkbox" class="form-stars_input">
@@ -140,7 +140,7 @@
                 </div>
 
                 <div class="filter-section">
-                    <h3 class="filter-section_title">이용가능한 서비스 / 옵션</h3>
+                    <div class="filter-section_title">이용가능한 서비스 / 옵션</div>
                     <div class="filter-checkbox-group">
                         <label class="form-checkbox">
                             <input type="checkbox" class="form-checkbox_input">
@@ -201,7 +201,7 @@
                     </div>
                     <div class="stay_content">
                         <div class="stay_info">
-                            <h3 class="stay_name">숙소명</h3>
+                            <div class="stay_name">숙소명</div>
                             <div class="stay-location-wrapper">
                                 <div class="stay-score-wrapper">
                                      <span class="score-star">
@@ -246,7 +246,7 @@
                     </div>
                     <div class="stay_content">
                         <div class="stay_info">
-                            <h3 class="stay_name">숙소명</h3>
+                            <div class="stay_name">숙소명</div>
                             <div class="stay-location-wrapper">
                                 <div class="stay-score-wrapper">
                                      <span class="score-star">
@@ -291,7 +291,7 @@
                     </div>
                     <div class="stay_content">
                         <div class="stay_info">
-                            <h3 class="stay_name">숙소명</h3>
+                            <div class="stay_name">숙소명</div>
                             <div class="stay-location-wrapper">
                                 <div class="stay-score-wrapper">
                                      <span class="score-star">
@@ -336,7 +336,7 @@
                     </div>
                     <div class="stay_content">
                         <div class="stay_info">
-                            <h3 class="stay_name">숙소명</h3>
+                            <div class="stay_name">숙소명</div>
                             <div class="stay-location-wrapper">
                                 <div class="stay-score-wrapper">
                                      <span class="score-star">
@@ -393,13 +393,13 @@
     <div class="mobile-filter-modal" id="mobileFilterModal">
         <div class="mobile-filter-header">
             <button class="mobile-filter-close" onclick="closeMobileFilter()"><img src="../img/stayfilter-modal-close.svg"></button>
-            <h3 class="mobile-filter-title">조건검색</h3>
+            <div class="mobile-filter-title">조건검색</div>
             <button class="mobile-filter-home"><img src="../img/payment_home_icon.svg"></button>
         </div>
         
         <div class="mobile-filter-content">
             <div class="filter-section">
-                <h3 class="mfilter-section_title">1박당 요금</h3>
+                <div class="mfilter-section_title">1박당 요금</div>
                 
                 <div class="mform-price-range">
                     <div>
@@ -407,7 +407,7 @@
                         <input type="number" class="mform-input mform-input--price" placeholder="최소금액" min="0">
                     </div>
 
-                        <span class="form-guest-range_separator"><img src="../img/staylist-line.svg"></span>
+                        <span class="mform-guest-range_separator"><img src="../img/staylist-line.svg"></span>
 
                     <div>
                         <span class="won-icon">₩</span>
@@ -417,7 +417,7 @@
             </div>
 
             <div class="filter-section">
-                <h3 class="mfilter-section_title">숙소 유형</h3>
+                <div class="mfilter-section_title">숙소 유형</div>
                 <div class="mobile-stays-group"> 
                     <button class="mfilter-stays-btn" data-type="hotel">
                         <img class="stays_image-m" src="../img/hotel_icon.svg">호텔
@@ -432,11 +432,11 @@
             </div>
 
             <div class="filter-section">
-                <h3 class="mfilter-section_title">숙소 특성</h3>
+                <div class="mfilter-section_title">숙소 특성</div>
 
 
                 <div class="mobile-feature-section">
-                    <h4 class="mfilter-subsection_title">침실 수</h4>
+                    <div class="mfilter-subsection_title">침실 수</div>
                     <div class="mfilter-bed-btn" id="bedroom-buttons">
                         <button class="filter-cnt-btn" data-bedroom="1">1개</button>
                         <button class="filter-cnt-btn" data-bedroom="2">2개</button>
@@ -445,7 +445,7 @@
                 </div>
                 
                 <div class="filter-subsection">
-                    <h4 class="mfilter-subsection_title">욕실 수</h4>
+                    <div class="mfilter-subsection_title">욕실 수</div>
                     <div class="mfilter-bath-btn">
                         <button class="filter-cnt-btn" data-bathroom="1">1개</button>
                         <button class="filter-cnt-btn" data-bathroom="2+">2개 이상</button>
@@ -453,13 +453,13 @@
                 </div>
                 
                 <div class="filter-subsection">
-                    <h4 class="mfilter-subsection_title">수용 인원</h4>
+                    <div class="mfilter-subsection_title">수용 인원</div>
                     <div class="mform-guest-range">
                         <div>
                             <img class="mfilter-person-icon" src="../img/filter-person-icon.svg">
                             <input type="number" class="mform-input mform-input--guest" placeholder="최소인원" min="1" max="20">
                         </div>
-                        <span class="form-guest-range__separator"><img src="../img/staylist-line.svg"></span>
+                        <span class="mform-guest-range_separator"><img src="../img/staylist-line.svg"></span>
                         <div>
                             <img class="mfilter-person-icon" src="../img/filter-person-icon.svg">
                             <input type="number" class="mform-input mform-input--guest" placeholder="최대인원" min="1" max="30">
@@ -470,7 +470,7 @@
 
              <!-- 숙소 평점 -->
             <div class="filter-section">
-                <h3 class="mfilter-section_title">숙소 평점</h3>
+                <div class="mfilter-section_title">숙소 평점</div>
                 <div class="mobile-rating-buttons">
                     <button class="filter-star-btn" data-rating="1">
                         <span class="star-content"><img class="star-icons-img" src="../img/stayfilter-star.svg">1</span>
@@ -493,7 +493,7 @@
             
 
             <div class="filter-section">
-                <h3 class="mfilter-section_title">이용가능한 서비스 / 옵션</h3>
+                <div class="mfilter-section_title">이용가능한 서비스 / 옵션</div>
                 <div class="filter-checkbox-group">
                     <label class="form-checkbox">
                         <input type="checkbox" class="form-checkbox_input">

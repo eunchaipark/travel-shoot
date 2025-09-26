@@ -136,11 +136,6 @@
     height: 20px;
 }
 
-.form-guest-range_separator img{
-    width: 30px;
-    padding: 0 2px;
-}
-
 .filter-section__labels {
     display: flex;
     justify-content: space-between;
@@ -226,12 +221,12 @@
 
 .form-guest-range_separator {
     color: #666;
-    padding-top: 5px; 
+    padding-top: 5px;
 }
 
-.form-guest-range__separator {
-    color: #666;
-    padding-top: 5px; 
+.form-guest-range_separator > img{
+    width: 30px;
+
 }
 
 .form-checkbox_input {
@@ -1229,4 +1224,15 @@
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(34, 172, 237, 0.3);
     }
+
+    .mform-guest-range_separator {
+        color: #666;
+        padding-top: 5px; 
+    }
+
+    .mform-guest-range_separator {
+        color: #666;
+        padding-top: 5px; 
+    }
+
 }
