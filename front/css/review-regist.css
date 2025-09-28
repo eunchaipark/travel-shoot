@@ -1,93 +1,590 @@
+/* ========================================
+   반응형 디자인 - 큰 모바일 (576px ~ 767px)
+======================================== */
+@media (min-width: 576px) and (max-width: 767px) {
+    .review-write-page .main-content {
+        padding: 16px;
+    }
+    
+    .review-write-page .page-header .header-container {
+        padding: 12px 16px;
+    }
+    
+    .review-write-page .page-header .page-title {
+        font-size: 18px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 16px;
+        
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-image-wrapper .accommodation-image {
+        width: 100%;
+        max-width: 280px;
+        height: 140px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details {
+        width: 100%;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .accommodation-header {
+        justify-content: center;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details {
+        align-items: center;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details .booking-item {
+        justify-content: center;
+    }
+    
+    .review-write-page .main-content .rating-section .overall-rating .rating-question {
+        font-size: 16px;
+    }
+    
+    .review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button i {
+        font-size: 26px;
+    }
+    
+    .review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .star-rating-container .star-button i {
+        font-size: 16px;
+    }
+}
 
-.review-regist-container .container-regist {
-    padding-left: 4rem;
-    padding-right: 4rem;
-    padding-bottom: 3rem;
+/* ========================================
+   반응형 디자인 - 작은 모바일 (480px ~ 575px)
+======================================== */
+@media (min-width: 480px) and (max-width: 575px) {
+    .review-write-page .main-content {
+        padding: 12px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section,
+    .review-write-page .main-content .rating-section,
+    .review-write-page .main-content .text-review-section,
+    .review-write-page .main-content .photo-upload-section,
+    .review-write-page .main-content .recommendation-section,
+    .review-write-page .main-content .action-buttons-section {
+        padding: 20px 16px;
+        margin-bottom: 16px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 16px;
+        
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-image-wrapper .accommodation-image {
+        max-width: 240px;
+        height: 120px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details {
+        width: 100%;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .accommodation-header {
+        justify-content: center;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details {
+        align-items: center;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details .booking-item {
+        justify-content: center;
+    }
+    
+    .review-write-page .main-content .rating-section .overall-rating .star-rating-container {
+        gap: 4px;
+    }
+    
+    .review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button i {
+        font-size: 24px;
+    }
+    
+    .review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .category-label {
+        min-width: auto;
+        text-align: center;
+        margin-bottom: 4px;
+    }
+}
+
+/* ========================================
+   반응형 디자인 - 매우 작은 모바일 (479px 이하)
+======================================== */
+@media (max-width: 479px) {
+    .review-write-page .main-content {
+        padding: 8px;
+    }
+    
+    .review-write-page .page-header .header-container {
+        padding: 12px;
+    }
+    
+    .review-write-page .page-header .page-title {
+        font-size: 16px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section,
+    .review-write-page .main-content .rating-section,
+    .review-write-page .main-content .text-review-section,
+    .review-write-page .main-content .photo-upload-section,
+    .review-write-page .main-content .recommendation-section,
+    .review-write-page .main-content .action-buttons-section {
+        padding: 16px 12px;
+        margin-bottom: 12px;
+        border-radius: 12px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 16px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-image-wrapper .accommodation-image {
+        max-width: 200px;
+        height: 100px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details {
+        width: 100%;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .accommodation-header {
+        justify-content: center;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .accommodation-header .accommodation-name {
+        font-size: 14px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details {
+        align-items: center;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details .booking-item {
+        justify-content: center;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details .booking-item .booking-text {
+        font-size: 12px;
+    }
+    
+    .review-write-page .main-content .rating-section .overall-rating .rating-question {
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+    
+    .review-write-page .main-content .rating-section .overall-rating .star-rating-container {
+        gap: 2px;
+    }
+    
+    .review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button i {
+        font-size: 20px;
+    }
+    
+    .review-write-page .main-content .rating-section .detailed-rating .rating-categories {
+        gap: 16px;
+    }
+    
+    .review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .category-label {
+        font-size: 14px;
+        min-width: auto;
+        text-align: center;
+    }
+    
+    .review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .star-rating-container .star-button i {
+        font-size: 14px;
+    }
+    
+    .review-write-page .main-content .action-buttons-section .button-group {
+        gap: 8px;
+    }
+    
+    .review-write-page .main-content .action-buttons-section .button-group .cancel-button,
+    .review-write-page .main-content .action-buttons-section .button-group .submit-button {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+}
+
+
+/* ========================================
+   페이지 전체 레이아웃
+======================================== */
+.review-write-page {
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+/* ========================================
+   헤더 영역
+======================================== */
+.review-write-page .page-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
     background-color: white;
+    border-bottom: 1px solid #e9ecef;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.review-regist-container .hotel-title{
-    font-size: 1.25rem;
+.review-write-page .page-header .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-
-.review-regist-container .star-rating {
-    display: inline-flex;
-    gap: 2px;
-}
-
-.review-regist-container .star {
+.review-write-page .page-header .back-button,
+.review-write-page .page-header .home-button {
+    background: none;
+    border: none;
     font-size: 24px;
-    color: #e0e0e0;
+    color: #666;
     cursor: pointer;
-    transition: color 0.2s;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
 }
 
-.review-regist-container .star.active {
-    color: #ff8888;
+.review-write-page .page-header .back-button:hover,
+.review-write-page .page-header .home-button:hover {
+    background-color: #f8f9fa;
+    color: #333;
 }
 
-.review-regist-container .star:hover {
-    color: #ffa4a4;
+.review-write-page .page-header .page-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
 }
 
-.review-regist-container .property-image-large {
-    width: 300px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+/* ========================================
+   메인 콘텐츠
+======================================== */
+.review-write-page .main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    /* padding: 24px; */
+}
+
+/* ========================================
+   숙소 정보 섹션
+======================================== */
+.review-write-page .main-content .accommodation-info-section {
+    background-color: #f6f6f6;
+    border-radius: 16px;
+    /* padding: 24px; */
+    /* margin-bottom: 24px; */
+}
+
+.review-write-page .main-content .accommodation-info-section .reservation-number {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 12px 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.review-write-page .main-content .accommodation-info-section .reservation-number .reservation-label {
+    color: #666;
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+.review-write-page .main-content .accommodation-info-section .reservation-number .reservation-value {
+    display: flex;
+    color: #333;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.review-write-page .main-content .accommodation-info-section .accommodation-card {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-image-wrapper {
     flex-shrink: 0;
 }
 
-.review-regist-container .recommend-btn {
-    background-color: #e9ecef;
-    border: 1px solid #dee2e6;
-    color: #6c757d;
-    border-radius: 25px;
-    padding: 10px 30px;
-    transition: all 0.3s;
-    font-weight: bold;
+.review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-image-wrapper .accommodation-image {
+    width: 280px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.review-regist-container .recommend-btn.active {
-    background-color: #02B8EB;
-    border-color: #02B8EB;
+.review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details {
+    flex: 1;
+    min-width: 0;
+    margin-left: 25px;
+}
+
+.review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .accommodation-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .accommodation-header .accommodation-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .accommodation-header .status-badge {
+    background-color: #a6a6a6;
     color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
 }
 
-.review-regist-container .recommend-btn.active i {
+.review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details .booking-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details .booking-item .booking-icon {
+    width: 16px;
+    font-size: 14px;
+}
+
+.review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details .booking-item .calendar-icon {
+    color: #02B8EB;
+}
+
+.review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details .booking-item .users-icon,
+.review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details .booking-item .clock-icon {
     color: #ff8888;
 }
 
-.review-regist-container .btn.btn-outline-secondary {
-    background-color: #d9d9d99c;
-    border-color: #d9d9d97c;
-    color: #000000a1;
-    padding: 10px;
+.review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details .booking-item .booking-text {
+    font-size: 14px;
+    color: #666;
 }
 
-.review-regist-container .btn.btn-outline-secondary:hover {
-    background-color: #D9D9D9;
-    border-color: #D9D9D9;
-    color: #000000;
+/* ========================================
+   평점 섹션 (전체 + 세부 통합)
+======================================== */
+.review-write-page .main-content .rating-section {
+    background-color: white;
+    border-radius: 16px;
+    padding: 32px 24px;
+    margin-bottom: 24px;
+    border: 1px solid #e9ecef;
 }
 
-.review-regist-container .btn.submit-btn {
-    background-color: #D9D9D9;
-    border-color: #D9D9D9;
-    color: #000000;
-    padding: 10px;
+/* 전체 만족도 */
+.review-write-page .main-content .rating-section .overall-rating {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #f0f0f0;
 }
 
-.review-regist-container .btn.submit-btn.active {
-    background-color: #ff8888;
-    border-color: #ff8888;
-    color: white;
+.review-write-page .main-content .rating-section .overall-rating .rating-question {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 24px;
 }
 
-/* 사진 업로드 영역 스타일 개선 */
-.review-regist-container .upload-area {
+.review-write-page .main-content .rating-section .overall-rating .star-rating-container {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    transition: transform 0.2s ease;
+}
+
+.review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button:hover {
+    transform: scale(1.1);
+}
+
+.review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button i {
+    font-size: 32px;
+    color: #e0e0e0;
+    transition: color 0.2s ease;
+}
+
+.review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button.active i,
+.review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button:hover i {
+    color: #ff8888;
+}
+
+/* 세부 평점 */
+.review-write-page .main-content .rating-section .detailed-rating {
+    margin-top: 30px;
+}
+
+.review-write-page .main-content .rating-section .detailed-rating .rating-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+.fa-heart:before{
+    margin-right: 6px;
+}
+.fa-folder-open:before{
+    margin-right: 6px;
+}
+.review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-inline: 76px;
+}
+
+.review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .category-label {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    min-width: 80px;
+}
+
+.review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .star-rating-container {
+    display: flex;
+    gap: 4px;
+}
+
+.review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .star-rating-container .star-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    transition: transform 0.2s ease;
+}
+
+.review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .star-rating-container .star-button:hover {
+    transform: scale(1.1);
+}
+
+.review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .star-rating-container .star-button i {
+    font-size: 20px;
+    color: #e0e0e0;
+    transition: color 0.2s ease;
+}
+
+.review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .star-rating-container .star-button.active i,
+.review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .star-rating-container .star-button:hover i {
+    color: #ff8888;
+}
+
+/* ========================================
+   텍스트 후기 섹션
+======================================== */
+.review-write-page .main-content .text-review-section {
+    background-color: white;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 1px solid #e9ecef;
+}
+
+.review-write-page .main-content .text-review-section .section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 16px;
+}
+
+.review-write-page .main-content .text-review-section .review-textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 16px 20px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
+    background-color: #f8f9fa;
+    transition: border-color 0.3s ease;
+}
+
+.review-write-page .main-content .text-review-section .review-textarea:focus {
+    outline: none;
+    border-color: #02B8EB;
+    background-color: white;
+}
+
+.review-write-page .main-content .text-review-section .review-textarea::placeholder {
+    color: #999;
+}
+
+/* ========================================
+   사진 업로드 섹션
+======================================== */
+.review-write-page .main-content .photo-upload-section {
+    background-color: white;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 1px solid #e9ecef;
+}
+
+.review-write-page .main-content .photo-upload-section .section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 16px;
+}
+
+.review-write-page .main-content .photo-upload-section .photo-input {
+    display: none;
+}
+
+.review-write-page .main-content .photo-upload-section .upload-area {
     background-color: #f8f9fa;
     border: 2px dashed #dee2e6;
     border-radius: 12px;
@@ -96,121 +593,109 @@
     color: #6c757d;
     cursor: pointer;
     transition: all 0.3s ease;
-    position: relative;
-    min-height: 150px;
+    min-height: 160px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.review-regist-container .upload-area:hover {
+.review-write-page .main-content .photo-upload-section .upload-area:hover {
     background-color: #eff0f1;
     border-color: #02B8EB;
     color: #495057;
 }
 
-.review-regist-container .upload-area.drag-over {
+.review-write-page .main-content .photo-upload-section .upload-area.drag-over {
     background-color: #e3f2fd;
     border-color: #02B8EB;
     border-style: solid;
     color: #02B8EB;
+    transform: scale(1.02);
+    box-shadow: 0 8px 25px rgba(2, 184, 235, 0.15);
 }
 
-.review-regist-container .upload-area .upload-icon {
+.review-write-page .main-content .photo-upload-section .upload-area .upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.review-write-page .main-content .photo-upload-section .upload-area .upload-content .upload-icon {
     font-size: 48px;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     transition: all 0.3s ease;
 }
 
-.review-regist-container .upload-area:hover .upload-icon {
+.review-write-page .main-content .photo-upload-section .upload-area:hover .upload-content .upload-icon {
     color: #02B8EB;
     transform: scale(1.1);
 }
 
-.review-regist-container .upload-area.drag-over .upload-icon {
-    color: #02B8EB;
+.review-write-page .main-content .photo-upload-section .upload-area.drag-over .upload-content .upload-icon {
     animation: bounce 0.6s ease-in-out;
 }
 
-@keyframes bounce {
-    0%, 20%, 60%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-10px);
-    }
-    80% {
-        transform: translateY(-5px);
-    }
-}
-
-.review-regist-container .upload-text {
+.review-write-page .main-content .photo-upload-section .upload-area .upload-content .upload-text {
     font-size: 14px;
     font-weight: 500;
-    /* margin-bottom: 8px; */
+    color: #666;
 }
 
-.review-regist-container .upload-subtext {
+.review-write-page .main-content .photo-upload-section .upload-area .upload-content .upload-subtext {
     font-size: 12px;
-    color: #6c757d;
-    /* margin-bottom: 5px; */
+    color: #999;
 }
 
-.review-regist-container .upload-hint {
-    font-size: 12px;
-    color: #adb5bd;
-}
-
-.review-regist-container .file-input {
-    display: none;
-}
-
-.review-regist-container .browse-btn {
+.review-write-page .main-content .photo-upload-section .upload-area .upload-content .upload-browse-button {
     background-color: transparent;
-    border: 1px solid #02B8EB;
+    border: 2px solid #02B8EB;
     color: #02B8EB;
     border-radius: 20px;
     padding: 8px 20px;
     font-size: 14px;
     font-weight: 500;
-    transition: all 0.3s ease;
     cursor: pointer;
-    margin-top: 10px;
+    transition: all 0.3s ease;
+    margin-top: 8px;
 }
 
-.review-regist-container .browse-btn:hover {
+.review-write-page .main-content .photo-upload-section .upload-area .upload-content .upload-browse-button:hover {
     background-color: #02B8EB;
     color: white;
 }
 
-/* 업로드된 이미지 미리보기 */
-.review-regist-container .image-preview {
+.review-write-page .main-content .photo-upload-section .upload-area .upload-content .upload-hint {
+    font-size: 12px;
+    color: #adb5bd;
+    margin-top: 4px;
+}
+
+.review-write-page .main-content .photo-upload-section .photo-preview {
     display: none;
     position: relative;
-    /* max-width: 200px; */
-    margin: 0 auto;
     background-color: #f8f9fa;
     border: 2px dashed #dee2e6;
     border-radius: 12px;
-    padding: 40px 20px;
+    padding: 20px;
     text-align: center;
-    color: #6c757d;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    min-height: 200px;
+    min-height: 160px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
-.review-regist-container .preview-image {
-    /* width: 100%; */
+.review-write-page .main-content .photo-upload-section .photo-preview .preview-image {
     max-height: 200px;
-    object-fit: cover;
+    max-width: 100%;
+    object-fit: contain;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 12px;
 }
 
-.review-regist-container .remove-image {
+.review-write-page .main-content .photo-upload-section .photo-preview .remove-photo-button {
     position: absolute;
     top: -8px;
     right: -8px;
@@ -225,146 +710,416 @@
     justify-content: center;
     font-size: 12px;
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s ease;
 }
 
-.review-regist-container .remove-image:hover {
+.review-write-page .main-content .photo-upload-section .photo-preview .remove-photo-button:hover {
     background-color: #c82333;
 }
 
-.review-regist-container .upload-success {
+.review-write-page .main-content .photo-upload-section .photo-preview .upload-success-message {
     color: #02B8EB;
-}
-
-.review-regist-container .category-label {
+    font-size: 14px;
     font-weight: 500;
-    margin-bottom: 8px;
 }
 
-.review-regist-container .main-rating {
+.review-write-page .main-content .photo-upload-section .photo-preview .upload-success-message i {
+    margin-right: 4px;
+}
+
+/* ========================================
+   추천 여부 섹션
+======================================== */
+.review-write-page .main-content .recommendation-section {
+    background-color: white;
+    border-radius: 16px;
+    padding: 32px 24px;
+    margin-bottom: 24px;
     text-align: center;
-    margin: 30px 0;
+    border: 1px solid #e9ecef;
 }
 
-.review-regist-container .main-rating .star {
-    font-size: 32px;
-    margin: 0 4px;
+.review-write-page .main-content .recommendation-section .recommendation-question {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
 }
 
-.review-regist-container .form-control {
+.review-write-page .main-content .recommendation-section .recommendation-button {
+    background-color: #e9ecef;
+    border: 2px solid #dee2e6;
+    color: #6c757d;
+    border-radius: 25px;
+    padding: 12px 32px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.review-write-page .main-content .recommendation-section .recommendation-button:hover {
+    background-color: #dee2e6;
+}
+
+.review-write-page .main-content .recommendation-section .recommendation-button.active {
+    background-color: #02B8EB;
+    border-color: #02B8EB;
+    color: white;
+}
+
+.review-write-page .main-content .recommendation-section .recommendation-button.active i {
+    color: #ff8888;
+}
+
+/* ========================================
+   액션 버튼 섹션
+======================================== */
+.review-write-page .main-content .action-buttons-section {
+    background-color: white;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+}
+
+.review-write-page .main-content .action-buttons-section .button-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.review-write-page .main-content .action-buttons-section .button-group .cancel-button {
     background-color: #f8f9fa;
-    font-size: 15px;
-    border-color: rgb(220, 220, 220);
-    box-shadow: none;
-    outline: none;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    padding-left: 20px;
-    padding-right: 20px;
-    transition: all 0.3s;
+    border: 2px solid #dee2e6;
+    color: #666;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-
-.review-regist-container .box-lightgray {
-    background-color: #F6F6F6;
+.review-write-page .main-content .action-buttons-section .button-group .cancel-button:hover {
+    background-color: #e9ecef;
+    border-color: #ced4da;
 }
 
-.review-regist-container .detail-rating {
-    display: flex;
-    flex-direction: column;
-    max-width: 400px;
-    margin: 0 auto;
+.review-write-page .main-content .action-buttons-section .button-group .submit-button {
+    background-color: #d9d9d9;
+    border: 2px solid #d9d9d9;
+    color: #999;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: not-allowed;
+    transition: all 0.2s ease;
 }
 
-.review-regist-container .badge.bg-success {
-    background-color: #A6A6A6 !important;
+.review-write-page .main-content .action-buttons-section .button-group .submit-button.active {
+    background-color: #ff8888;
+    border-color: #ff8888;
+    color: white;
+    cursor: pointer;
 }
 
-/* 반응형 스타일 - Property Info */
-@media (max-width: 576px) {
-    .review-regist-container .container-regist {
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
+.review-write-page .main-content .action-buttons-section .button-group .submit-button.active:hover {
+    background-color: #ff6b6b;
+    border-color: #ff6b6b;
+}
 
-    /* 모바일에서 세로 레이아웃 */
-    .review-regist-container .property-info-mobile {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
+/* ========================================
+   애니메이션
+======================================== */
+@keyframes bounce {
+    0%, 20%, 60%, 100% {
+        transform: translateY(0);
     }
-
-    .review-regist-container .property-image-large {
-        width: 100%;
-        max-width: 280px;
-        height: 180px;
-        margin-bottom: 20px;
+    40% {
+        transform: translateY(-8px);
     }
-
-    .review-regist-container .property-content-mobile {
-        width: 100%;
-        padding-left: 0 !important;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    80% {
+        transform: translateY(-4px);
     }
+}
 
-    .review-regist-container .property-title-mobile {
+/* ========================================
+   반응형 디자인 - 아주 큰 화면 (1400px 이상)
+======================================== */
+@media (min-width: 1400px) {
+    .review-write-page .main-content {
+        max-width: 1200px;
+        padding: 32px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-image-wrapper .accommodation-image {
+        width: 320px;
+        height: 160px;
+    }
+    
+    .review-write-page .main-content .overall-rating-section .star-rating-container .star-button i {
+        font-size: 36px;
+    }
+}
+
+/* ========================================
+   반응형 디자인 - 큰 화면 (1200px ~ 1399px)
+======================================== */
+@media (min-width: 1200px) and (max-width: 1399px) {
+    .review-write-page .main-content {
+        max-width: 1200px;
+        padding: 28px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-image-wrapper .accommodation-image {
+        width: 300px;
+        height: 150px;
+    }
+}
+
+/* ========================================
+   반응형 디자인 - 중간 화면 (992px ~ 1199px)
+======================================== */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .review-write-page .main-content {
+        max-width: 700px;
+        padding: 24px;
+    }
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .accommodation-header{
         margin-bottom: 15px;
     }
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-image-wrapper .accommodation-image {
+        width: 260px;
+        height: 130px;
+    }
+    
+    .review-write-page .page-header .header-container {
+        padding: 16px 20px;
+    }
+}
 
-    .review-regist-container .property-details-mobile {
-        width: 100%;
-        max-width: 300px;
+/* ========================================
+   반응형 디자인 - 작은 태블릿 (768px ~ 991px)
+======================================== */
+@media (min-width: 768px) and (max-width: 991px) {
+    .review-write-page .main-content {
+        max-width: 600px;
+        padding: 20px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-image-wrapper .accommodation-image {
+        width: 220px;
+        height: 110px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .accommodation-header{
+        margin-bottom: 4px;
     }
 
-    .review-regist-container .property-details-mobile .row {
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .accommodation-header .accommodation-name {
+        font-size: 16px;
+    }
+    
+    .review-write-page .main-content .overall-rating-section .star-rating-container .star-button i {
+        font-size: 28px;
+    }
+    
+    .review-write-page .main-content .detailed-rating-section .rating-categories .rating-category .star-rating-container .star-button i {
+        font-size: 18px;
+    }
+}
+
+/* ========================================
+   반응형 디자인 - 큰 모바일 (576px ~ 767px)
+======================================== */
+@media (min-width: 576px) and (max-width: 767px) {
+    .review-write-page .main-content {
+        padding: 16px;
+    }
+    
+    .review-write-page .page-header .header-container {
+        padding: 12px 16px;
+    }
+    
+    .review-write-page .page-header .page-title {
+        font-size: 18px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 16px;
+    }
+    .review-write-page .main-content .accommodation-info-section .reservation-number .reservation-value{
         justify-content: center;
     }
-
-    .review-regist-container .property-details-mobile .col-12 {
-        text-align: center;
-        margin-bottom: 8px;
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-image-wrapper .accommodation-image {
+        width: 220px;
+        max-width: 280px;
+        height: 140px;
     }
-
-    /* 모바일에서 별점 크기 조정 */
-    .review-regist-container .main-rating .star {
-        font-size: 28px;
-        margin: 0 2px;
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details {
+        width: 100%;
     }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .accommodation-header {
+        justify-content: center;
+        margin-bottom: 5px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details {
+        align-items: center;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details .booking-item {
+        justify-content: center;
+    }
+    
+    .review-write-page .main-content .overall-rating-section .rating-question {
+        font-size: 16px;
+    }
+    
+    .review-write-page .main-content .overall-rating-section .star-rating-container .star-button i {
+        font-size: 26px;
+    }
+    
+    .review-write-page .main-content .detailed-rating-section .rating-categories .rating-category .star-rating-container .star-button i {
+        font-size: 16px;
+    }
+}
 
-    .review-regist-container .star {
+/* ========================================
+   반응형 디자인 - 작은 모바일 (480px ~ 575px)
+======================================== */
+@media (min-width: 480px) and (max-width: 575px) {
+    .review-write-page .main-content {
+        padding: 12px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section,
+    .review-write-page .main-content .overall-rating-section,
+    .review-write-page .main-content .detailed-rating-section,
+    .review-write-page .main-content .text-review-section,
+    .review-write-page .main-content .photo-upload-section,
+    .review-write-page .main-content .recommendation-section,
+    .review-write-page .main-content .action-buttons-section {
+        padding: 20px 16px;
+        margin-bottom: 12px;
+        border-radius: 12px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .reservation-number{
+        margin-bottom: 0px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card{
+        gap: 0px;
+        align-items: center;
+    }
+    .main-content .accommodation-info-section .reservation-number .reservation-value{
+        justify-content: center;
+    }
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-image-wrapper .accommodation-image {
+        max-width: 200px;
+        height: 100px;
+    }
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .accommodation-header{
+        margin-bottom: 5px;
+        margin-top: 10px;
+    }
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .accommodation-header .accommodation-name {
+        font-size: 17px;
+    }
+    
+    .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details .booking-item .booking-text {
+        font-size: 12px;
+    }
+    
+    .review-write-page .main-content .overall-rating-section .rating-question {
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+    
+    .review-write-page .main-content .overall-rating-section .star-rating-container {
+        gap: 2px;
+    }
+    
+    .review-write-page .main-content .overall-rating-section .star-rating-container .star-button i {
         font-size: 20px;
     }
-}
+    
+    .review-write-page .main-content .detailed-rating-section .rating-categories {
+        gap: 16px;
+    }
+    
+    .review-write-page .main-content .detailed-rating-section .rating-categories .rating-category .category-label {
+        font-size: 14px;
+    }
+    
+    .review-write-page .main-content .detailed-rating-section .rating-categories .rating-category .star-rating-container .star-button i {
+        font-size: 14px;
+    }
+    
+    .review-write-page .main-content .action-buttons-section .button-group {
+        gap: 8px;
+    }
+    
+    .review-write-page .main-content .action-buttons-section .button-group .cancel-button,
+    .review-write-page .main-content .action-buttons-section .button-group .submit-button {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
 
-/* 태블릿 크기에서도 이미지 크기 조정 */
-@media (max-width: 768px) and (min-width: 577px) {
-    .review-regist-container .property-image-large {
-        width: 250px;
-        height: 125px;
+    .review-write-page .main-content .accommodation-info-section, .review-write-page .main-content .overall-rating-section, .review-write-page .main-content .detailed-rating-section, .review-write-page .main-content .text-review-section, .review-write-page .main-content .photo-upload-section, .review-write-page .main-content .recommendation-section, .review-write-page .main-content .action-buttons-section{
+        padding: 20px 0px;
+        margin-bottom: -11px;
     }
 }
 
-/* 큰 화면에서 기본 레이아웃 */
-@media (min-width: 577px) {
-    .review-regist-container .property-info-desktop {
-        display: flex;
-        align-items: start;
+
+
+/* ========================================
+   반응형 디자인 - 매우 작은 모바일 (479px 이하)
+======================================== */
+@media (max-width: 479px) {
+    .review-write-page .main-content {
+        padding: 8px;
+    }
+    
+    .review-write-page .page-header .header-container {
+        padding: 12px;
+    }
+    
+    .review-write-page .page-header .page-title {
+        font-size: 16px;
+    }
+    .review-write-page .main-content .accommodation-info-section .reservation-number .reservation-value{
+        justify-content: center;
+    }
+    .review-write-page .main-content .accommodation-info-section .accommodation-card{
+        align-items: center;
     }
 
-    .review-regist-container .property-content-desktop {
-        flex-grow: 1;
-        padding-left: 1rem;
+    .review-write-page .main-content .accommodation-info-section .reservation-number{
+        margin-bottom: -14px;
+    }
+    .review-write-page .main-content .rating-section .overall-rating{
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+    }
+
+    .review-write-page .main-content .accommodation-info-section,
+    .review-write-page .main-content .overall-rating-section,
+    .review-write-page .main-content .detailed-rating-section,
+    .review-write-page .main-content .text-review-section,
+    .review-write-page .main-content .photo-upload-section,
+    .review-write-page .main-content .recommendation-section,
+    .review-write-page .main-content .action-buttons-section {
+        padding: 16px 12px;
+        
     }
 }
-
-.review-regist-container .fas.fa-users, .fas.fa-clock {
-    color: #ff8888;
-
-}
-
-.review-regist-container .fas.fa-calendar-alt{
-    color: #02B8EB;
-}
-

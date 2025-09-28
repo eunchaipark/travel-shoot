@@ -1,3 +1,92 @@
+/* ========================================
+   헤더 영역 - 기본 스타일 (리뷰 목록)
+======================================== */
+.review-list-container .page-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: white;
+    border-bottom: 1px solid #e9ecef;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.review-list-container .page-header .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.review-list-container .page-header .back-button,
+.review-list-container .page-header .home-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.review-list-container .page-header .back-button:hover,
+.review-list-container .page-header .home-button:hover {
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.review-list-container .page-header .page-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* ========================================
+   반응형 디자인 - 중간 화면 (992px ~ 1199px)
+======================================== */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .review-list-container .page-header .header-container {
+        padding: 16px 20px;
+    }
+}
+
+/* ========================================
+   반응형 디자인 - 작은 태블릿 (768px ~ 991px)
+======================================== */
+@media (min-width: 768px) and (max-width: 991px) {
+    .review-list-container .page-header .header-container {
+        padding: 16px 20px;
+    }
+}
+
+/* ========================================
+   반응형 디자인 - 큰 모바일 (576px ~ 767px)
+======================================== */
+@media (min-width: 576px) and (max-width: 767px) {
+    .review-list-container .page-header .header-container {
+        padding: 12px 16px;
+    }
+    
+    .review-list-container .page-header .page-title {
+        font-size: 18px;
+    }
+}
+
+/* ========================================
+   반응형 디자인 - 매우 작은 모바일 (479px 이하)
+======================================== */
+@media (max-width: 479px) {
+    .review-list-container .page-header .header-container {
+        padding: 12px;
+    }
+    
+    .review-list-container .page-header .page-title {
+        font-size: 16px;
+    }
+}
+
 .review-list-container .dropdown .dropdown-menu li {
     font-size: 14px;
 }
@@ -6,7 +95,6 @@
     padding: 3rem 1rem;
     padding-bottom: 5rem;
 }
-
 
 .review-list-container .overall-rating {
     font-size: 2.5rem;
@@ -93,19 +181,55 @@
     margin-right: 0.5rem;
 }
 
+/* 사진 썸네일 컨테이너 - 가로 스크롤 */
+.review-list-container .photo-thumbnails-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #c1c1c1 #f1f1f1;
+    width: 100%;
+    max-width: 100%;
+}
+
+.review-list-container .photo-thumbnails-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding-bottom: 8px;
+    min-width: max-content;
+}
+
 .review-list-container .photo-thumbnail {
     width: 60px;
     height: 60px;
     background-color: #e9ecef;
     border-radius: 8px;
-    margin-right: 8px;
-    margin-bottom: 8px;
     cursor: pointer;
     transition: transform 0.2s;
+    flex-shrink: 0;
 }
 
 .review-list-container .photo-thumbnail:hover {
     transform: scale(1.05);
+}
+
+/* 스크롤바 스타일링 */
+.review-list-container .photo-thumbnails-container::-webkit-scrollbar {
+    height: 6px;
+}
+
+.review-list-container .photo-thumbnails-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.review-list-container .photo-thumbnails-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.review-list-container .photo-thumbnails-container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
 }
 
 /* 개선된 리뷰 카드 스타일 */
@@ -137,7 +261,7 @@
     margin-right: 10px;
     border: 2px solid transparent;
     transition: border-color 0.2s;
-    flex-shrink: 0; /* 썸네일이 줄어들지 않도록 */
+    flex-shrink: 0;
 }
 
 .review-list-container .modal-gallery-thumb:hover,
@@ -152,40 +276,39 @@
     border-radius: 12px;
 }
 
-      /* 썸네일 컨테이너 스타일 */
-        .thumbnail-container {
-            overflow-x: auto;
-            overflow-y: hidden;
-            white-space: nowrap;
-            padding: 0 20px; /* 메인 이미지와 동일한 패딩 */
-        }
+/* 썸네일 컨테이너 스타일 */
+.thumbnail-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding: 0 20px;
+}
 
-        .thumbnail-wrapper {
-            display: inline-flex;
-            align-items: center;
-            gap: 13.5px;
-            padding-bottom: 10px; /* 스크롤바 공간 확보 */
-        }
+.thumbnail-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 13.5px;
+    padding-bottom: 10px;
+}
 
-        /* 스크롤바 스타일링 */
-        .thumbnail-wrapper::-webkit-scrollbar {
-            height: 6px;
-        }
+/* 스크롤바 스타일링 */
+.thumbnail-wrapper::-webkit-scrollbar {
+    height: 6px;
+}
 
-        .thumbnail-wrapper::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 3px;
-        }
+.thumbnail-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
 
-        .thumbnail-wrapper::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 3px;
-        }
+.thumbnail-wrapper::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
 
-        .thumbnail-wrapper::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8;
-        }
-
+.thumbnail-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
 
 .review-list-container .header-back-btn {
     background: none;
@@ -248,8 +371,6 @@
     .review-list-container .photo-thumbnail {
         width: 50px;
         height: 50px;
-        margin-right: 6px;
-        margin-bottom: 6px;
     }
 
     .review-list-container .modal-main-image {
@@ -263,7 +384,7 @@
     }
 
     .thumbnail-container {
-        padding: 0 15px; /* 모바일에서 패딩 조정 */
+        padding: 0 15px;
     }
 
     .thumbnail-wrapper {
@@ -281,7 +402,6 @@
 
     .review-list-container .col-md-2,
     .review-list-container .col-md-10 {
-        /* flex: 0 0 auto; */
         width: 100%;
         margin-bottom: 1rem;
     }
@@ -300,15 +420,16 @@
     }
 
     .review-list-container .photo-img-container {
-        width: 70px;
-        min-width: 70px;
-        margin-right: 15px;
+
+        height: 230px;
+
     }
 
-    .review-list-container .review-image,
     .review-list-container .photo-img {
         width: 70px;
         height: 70px;
+        display: block;
+        border-radius: 8px;
     }
 
     .review-list-container .review-content {
@@ -385,8 +506,6 @@
     .review-list-container .photo-thumbnail {
         width: 45px;
         height: 45px;
-        margin-right: 5px;
-        margin-bottom: 5px;
     }
 
     .review-list-container .dropdown-toggle {
@@ -424,17 +543,18 @@
     }
 
     .review-list-container .photo-img-container {
-        width: 60px;
-        min-width: 60px;
+        width: 100%;
+        min-width: unset;
         margin-right: 0;
         margin-bottom: 12px;
-        align-self: flex-start;
+        align-self: stretch;
+        height: 150px;
     }
 
-    .review-list-container .review-image,
     .review-list-container .photo-img {
-        width: 60px;
-        height: 60px;
+        width: 100%;
+        height: 150px;
+        border-radius: 8px;
     }
 
     .review-list-container .review-content {
@@ -476,8 +596,6 @@
 }
 
 @media (max-width: 480px) {
-
-
     .review-list-container .review-img-modal .modal-gallery-thumb {
         width: 50px;
         height: 50px;
@@ -501,14 +619,16 @@
     }
 
     .review-list-container .photo-img-container {
-        width: 50px;
-        min-width: 50px;
+        width: 100%;
+        min-width: unset;
+        margin-bottom: 12px;
+        height: 120px;
     }
 
-    .review-list-container .review-image,
     .review-list-container .photo-img {
-        width: 50px;
-        height: 50px;
+        width: 100%;
+        height: 120px;
+        border-radius: 8px;
     }
 
     .review-list-container .review-card {
@@ -552,9 +672,11 @@
     width: 100%;
     height: 100%;
     background-image: url("https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-a1WFmEoMhiDZS9ne7Bn747Fu6iMNWH.png");
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    border-radius: 8px;
+    display: block;
 }
 
 .review-list-container small {
@@ -562,18 +684,18 @@
 }
 
 /* 메인 이미지 컨테이너 패딩 조정 */
-        .main-image-container {
-            padding: 0 20px;
-        }
+.main-image-container {
+    padding: 0 20px;
+}
 
-        @media (max-width: 768px) {
-            .main-image-container {
-                padding: 0 15px;
-            }
-        }
+@media (max-width: 768px) {
+    .main-image-container {
+        padding: 0 15px;
+    }
+}
 
-        @media (max-width: 480px) {
-            .main-image-container {
-                padding: 0 10px;
-            }
-        }
+@media (max-width: 480px) {
+    .main-image-container {
+        padding: 0 10px;
+    }
+}
