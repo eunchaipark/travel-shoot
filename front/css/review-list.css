@@ -1,7 +1,7 @@
 /* ========================================
    헤더 영역 - 기본 스타일 (리뷰 목록)
 ======================================== */
-.review-list-container .page-header {
+.review-list-container .navigation-header {
     position: sticky;
     top: 0;
     z-index: 100;
@@ -10,7 +10,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.review-list-container .page-header .header-container {
+.review-list-container .navigation-header .header-content-wrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -19,8 +19,8 @@
     margin: 0 auto;
 }
 
-.review-list-container .page-header .back-button,
-.review-list-container .page-header .home-button {
+.review-list-container .navigation-header .header-content-wrapper .navigation-back-button,
+.review-list-container .navigation-header .header-content-wrapper .navigation-home-button {
     background: none;
     border: none;
     font-size: 24px;
@@ -31,13 +31,13 @@
     transition: all 0.2s ease;
 }
 
-.review-list-container .page-header .back-button:hover,
-.review-list-container .page-header .home-button:hover {
+.review-list-container .navigation-header .header-content-wrapper .navigation-back-button:hover,
+.review-list-container .navigation-header .header-content-wrapper .navigation-home-button:hover {
     background-color: #f8f9fa;
     color: #333;
 }
 
-.review-list-container .page-header .page-title {
+.review-list-container .navigation-header .header-content-wrapper .page-title-text {
     font-size: 20px;
     font-weight: 600;
     color: #333;
@@ -47,7 +47,7 @@
    반응형 디자인 - 중간 화면 (992px ~ 1199px)
 ======================================== */
 @media (min-width: 992px) and (max-width: 1199px) {
-    .review-list-container .page-header .header-container {
+    .review-list-container .navigation-header .header-content-wrapper {
         padding: 16px 20px;
     }
 }
@@ -56,7 +56,7 @@
    반응형 디자인 - 작은 태블릿 (768px ~ 991px)
 ======================================== */
 @media (min-width: 768px) and (max-width: 991px) {
-    .review-list-container .page-header .header-container {
+    .review-list-container .navigation-header .header-content-wrapper {
         padding: 16px 20px;
     }
 }
@@ -65,11 +65,11 @@
    반응형 디자인 - 큰 모바일 (576px ~ 767px)
 ======================================== */
 @media (min-width: 576px) and (max-width: 767px) {
-    .review-list-container .page-header .header-container {
+    .review-list-container .navigation-header .header-content-wrapper {
         padding: 12px 16px;
     }
     
-    .review-list-container .page-header .page-title {
+    .review-list-container .navigation-header .header-content-wrapper .page-title-text {
         font-size: 18px;
     }
 }
@@ -78,48 +78,48 @@
    반응형 디자인 - 매우 작은 모바일 (479px 이하)
 ======================================== */
 @media (max-width: 479px) {
-    .review-list-container .page-header .header-container {
+    .review-list-container .navigation-header .header-content-wrapper {
         padding: 12px;
     }
     
-    .review-list-container .page-header .page-title {
+    .review-list-container .navigation-header .header-content-wrapper .page-title-text {
         font-size: 16px;
     }
 }
 
-.review-list-container .dropdown .dropdown-menu li {
+.review-list-container .rating-filters-section .dropdown .dropdown-menu li {
     font-size: 14px;
 }
 
-.review-list-container .rating-container {
+.review-list-container .overall-rating-section {
     padding: 3rem 1rem;
     padding-bottom: 5rem;
 }
 
-.review-list-container .overall-rating {
+.review-list-container .overall-rating-section .overall-rating-number {
     font-size: 2.5rem;
     font-weight: bold;
     color: #333;
 }
 
-.review-list-container .overall-star {
+.review-list-container .overall-rating-section .overall-rating-star-icon {
     color: #ff8888;
     font-size: 2rem;
     margin-right: 0.5rem;
 }
 
-.review-list-container .rating-item {
+.review-list-container .overall-rating-section .rating-category-item {
     margin-bottom: 0.8rem;
 }
 
-.review-list-container .rating-label {
+.review-list-container .overall-rating-section .rating-category-item .category-label-text {
     font-size: 0.85rem;
     font-weight: 500;
     color: #555;
     margin-bottom: 0.3rem;
 }
 
-.review-list-container .score-box {
+.review-list-container .overall-rating-section .rating-category-item .rating-score-bar {
     width: 50px;
     height: 25px;
     background-color: #D8D8D8;
@@ -129,7 +129,7 @@
     margin: 0 auto;
 }
 
-.review-list-container .score-fill {
+.review-list-container .overall-rating-section .rating-category-item .rating-score-bar .score-fill-indicator {
     height: 100%;
     background-color: #fca5a5;
     border-radius: 4px;
@@ -139,7 +139,7 @@
     top: 0;
 }
 
-.review-list-container .score-text {
+.review-list-container .overall-rating-section .rating-category-item .rating-score-bar .score-number-text {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -150,29 +150,29 @@
     z-index: 2;
 }
 
-.review-list-container .stars {
+.review-list-container .overall-rating-section .star-rating-display {
     font-size: 0.9rem;
 }
 
-.review-list-container .star-filled {
+.review-list-container .overall-rating-section .star-rating-display .star-filled-icon {
     color: #ffc107;
 }
 
-.review-list-container .star-half {
+.review-list-container .overall-rating-section .star-rating-display .star-half-icon {
     color: #ffc107;
     opacity: 0.6;
 }
 
-.review-list-container .star-empty {
+.review-list-container .overall-rating-section .star-rating-display .star-empty-icon {
     color: #dee2e6;
 }
 
-.review-list-container .legend {
+.review-list-container .overall-rating-section .rating-legend-info {
     font-size: 0.8rem;
     color: #6c757d;
 }
 
-.review-list-container .legend-box {
+.review-list-container .overall-rating-section .rating-legend-info .legend-color-box {
     width: 12px;
     height: 12px;
     background-color: #fca5a5;
@@ -182,7 +182,7 @@
 }
 
 /* 사진 썸네일 컨테이너 - 가로 스크롤 */
-.review-list-container .photo-thumbnails-container {
+.review-list-container .photo-gallery-section .photo-thumbnails-scroll-container {
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: thin;
@@ -191,7 +191,7 @@
     max-width: 100%;
 }
 
-.review-list-container .photo-thumbnails-wrapper {
+.review-list-container .photo-gallery-section .photo-thumbnails-scroll-container .photo-thumbnails-flex-wrapper {
     display: flex;
     flex-wrap: nowrap;
     gap: 8px;
@@ -199,7 +199,7 @@
     min-width: max-content;
 }
 
-.review-list-container .photo-thumbnail {
+.review-list-container .photo-gallery-section .photo-thumbnails-scroll-container .photo-thumbnails-flex-wrapper .photo-thumbnail-item {
     width: 60px;
     height: 60px;
     background-color: #e9ecef;
@@ -209,31 +209,31 @@
     flex-shrink: 0;
 }
 
-.review-list-container .photo-thumbnail:hover {
+.review-list-container .photo-gallery-section .photo-thumbnails-scroll-container .photo-thumbnails-flex-wrapper .photo-thumbnail-item:hover {
     transform: scale(1.05);
 }
 
 /* 스크롤바 스타일링 */
-.review-list-container .photo-thumbnails-container::-webkit-scrollbar {
+.review-list-container .photo-gallery-section .photo-thumbnails-scroll-container::-webkit-scrollbar {
     height: 6px;
 }
 
-.review-list-container .photo-thumbnails-container::-webkit-scrollbar-track {
+.review-list-container .photo-gallery-section .photo-thumbnails-scroll-container::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 3px;
 }
 
-.review-list-container .photo-thumbnails-container::-webkit-scrollbar-thumb {
+.review-list-container .photo-gallery-section .photo-thumbnails-scroll-container::-webkit-scrollbar-thumb {
     background: #c1c1c1;
     border-radius: 3px;
 }
 
-.review-list-container .photo-thumbnails-container::-webkit-scrollbar-thumb:hover {
+.review-list-container .photo-gallery-section .photo-thumbnails-scroll-container::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
 }
 
 /* 개선된 리뷰 카드 스타일 */
-.review-list-container .review-card {
+.review-list-container .reviews-list-section .review-item-card {
     border: 1px solid #e9ecef;
     border-radius: 12px;
     padding: 20px;
@@ -241,18 +241,18 @@
     background-color: white;
 }
 
-.review-list-container .review-image {
+.review-list-container .reviews-list-section .review-item-card .review-photo-container .review-photo-image {
     width: 80px;
     height: 80px;
     border-radius: 8px;
     object-fit: cover;
 }
 
-.review-list-container .review-stars {
+.review-list-container .reviews-list-section .review-item-card .review-content-area .star-rating-icons {
     color: #ff8888;
 }
 
-.review-list-container .review-img-modal .modal-gallery-thumb {
+.review-list-container .photo-modal .modal-gallery-thumbnail-image {
     width: 80px;
     height: 80px;
     object-fit: cover;
@@ -264,12 +264,12 @@
     flex-shrink: 0;
 }
 
-.review-list-container .modal-gallery-thumb:hover,
-.review-list-container .modal-gallery-thumb.active {
+.review-list-container .photo-modal .modal-gallery-thumbnail-image:hover,
+.review-list-container .photo-modal .modal-gallery-thumbnail-image.active {
     border-color: #007bff;
 }
 
-.review-list-container .modal-main-image {
+.review-list-container .photo-modal .modal-main-display-image {
     width: 100%;
     height: 400px;
     object-fit: cover;
@@ -277,14 +277,14 @@
 }
 
 /* 썸네일 컨테이너 스타일 */
-.thumbnail-container {
+.review-list-container .photo-modal .modal-thumbnails-scroll-container {
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
     padding: 0 20px;
 }
 
-.thumbnail-wrapper {
+.review-list-container .photo-modal .modal-thumbnails-scroll-container .modal-thumbnails-flex-wrapper {
     display: inline-flex;
     align-items: center;
     gap: 13.5px;
@@ -292,32 +292,32 @@
 }
 
 /* 스크롤바 스타일링 */
-.thumbnail-wrapper::-webkit-scrollbar {
+.review-list-container .photo-modal .modal-thumbnails-flex-wrapper::-webkit-scrollbar {
     height: 6px;
 }
 
-.thumbnail-wrapper::-webkit-scrollbar-track {
+.review-list-container .photo-modal .modal-thumbnails-flex-wrapper::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 3px;
 }
 
-.thumbnail-wrapper::-webkit-scrollbar-thumb {
+.review-list-container .photo-modal .modal-thumbnails-flex-wrapper::-webkit-scrollbar-thumb {
     background: #c1c1c1;
     border-radius: 3px;
 }
 
-.thumbnail-wrapper::-webkit-scrollbar-thumb:hover {
+.review-list-container .photo-modal .modal-thumbnails-flex-wrapper::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
 }
 
-.review-list-container .header-back-btn {
+.review-list-container .navigation-header .navigation-back-button {
     background: none;
     border: none;
     font-size: 1.2rem;
     color: #333;
 }
 
-.review-list-container .photo-count-btn {
+.review-list-container .photo-gallery-section .photo-count-display-button {
     background: none;
     border: none;
     color: #ff8888;
@@ -325,190 +325,188 @@
     text-decoration: none;
 }
 
-.review-list-container .photo-count-btn:hover {
+.review-list-container .photo-gallery-section .photo-count-display-button:hover {
     color: #ff5252;
 }
 
 /* 반응형 스타일 추가 */
 @media (max-width: 768px) {
-    .review-list-container .rating-container {
+    .review-list-container .overall-rating-section {
         padding: 2rem 1rem;
         padding-bottom: 3rem;
     }
 
-    .review-list-container .col-auto.me-6 {
+    .review-list-container .overall-rating-section .col-auto.me-6 {
         margin-right: 1rem !important;
         margin-bottom: 1rem;
     }
 
-    .review-list-container .overall-rating {
+    .review-list-container .overall-rating-section .overall-rating-number {
         font-size: 2rem;
     }
 
-    .review-list-container .overall-star {
+    .review-list-container .overall-rating-section .overall-rating-star-icon {
         font-size: 1.5rem;
         margin-right: 0.3rem;
     }
 
-    .review-list-container .row.g-3 .col-4 {
+    .review-list-container .overall-rating-section .row.g-3 .col-4 {
         flex: 0 0 auto;
         width: 33.33333333%;
     }
 
-    .review-list-container .score-box {
+    .review-list-container .overall-rating-section .rating-category-item .rating-score-bar {
         width: 50px;
         height: 25px;
     }
 
-    .review-list-container .score-text {
+    .review-list-container .overall-rating-section .rating-category-item .rating-score-bar .score-number-text {
         font-size: 0.7rem;
     }
 
-    .review-list-container .rating-label {
+    .review-list-container .overall-rating-section .rating-category-item .category-label-text {
         font-size: 0.8rem;
     }
 
-    .review-list-container .photo-thumbnail {
+    .review-list-container .photo-gallery-section .photo-thumbnails-scroll-container .photo-thumbnails-flex-wrapper .photo-thumbnail-item {
         width: 50px;
         height: 50px;
     }
 
-    .review-list-container .modal-main-image {
+    .review-list-container .photo-modal .modal-main-display-image {
         height: 250px;
     }
 
-    .review-list-container .review-img-modal .modal-gallery-thumb {
+    .review-list-container .photo-modal .modal-gallery-thumbnail-image {
         width: 60px;
         height: 60px;
         margin-right: 8px;
     }
 
-    .thumbnail-container {
+    .review-list-container .photo-modal .modal-thumbnails-scroll-container {
         padding: 0 15px;
     }
 
-    .thumbnail-wrapper {
+    .review-list-container .photo-modal .modal-thumbnails-scroll-container .modal-thumbnails-flex-wrapper {
         gap: 8px;
     }
 
-    .review-list-container .dropdown .dropdown-menu li {
+    .review-list-container .rating-filters-section .dropdown .dropdown-menu li {
         font-size: 14px;
     }
 
-    .review-list-container .dropdown-toggle {
+    .review-list-container .rating-filters-section .dropdown-toggle {
         font-size: 0.85rem;
         padding: 0.4rem 0.8rem;
     }
 
-    .review-list-container .col-md-2,
-    .review-list-container .col-md-10 {
+    .review-list-container .rating-filters-section .col-md-2,
+    .review-list-container .rating-filters-section .col-md-10 {
         width: 100%;
         margin-bottom: 1rem;
     }
 
-    .review-list-container .me-3 {
+    .review-list-container .rating-filters-section .me-3 {
         margin-right: 0.5rem !important;
     }
 
-    .review-list-container .review-card {
+    .review-list-container .reviews-list-section .review-item-card {
         padding: 18px;
         margin-bottom: 18px;
     }
 
-    .review-list-container .review-card .row {
+    .review-list-container .reviews-list-section .review-item-card .row {
         align-items: flex-start;
     }
 
-    .review-list-container .photo-img-container {
-
+    .review-list-container .reviews-list-section .review-item-card .review-photo-container {
         height: 230px;
-
     }
 
-    .review-list-container .photo-img {
+    .review-list-container .reviews-list-section .review-item-card .review-photo-container .review-photo-background {
         width: 70px;
         height: 70px;
         display: block;
         border-radius: 8px;
     }
 
-    .review-list-container .review-content {
+    .review-list-container .reviews-list-section .review-item-card .review-content-area {
         flex: 1;
     }
 
-    .review-list-container .review-header {
+    .review-list-container .reviews-list-section .review-item-card .review-content-area .review-header-section {
         margin-bottom: 12px;
     }
 
-    .review-list-container .review-stars {
+    .review-list-container .reviews-list-section .review-item-card .review-content-area .star-rating-icons {
         font-size: 0.9rem;
         margin-bottom: 8px;
     }
 
-    .review-list-container .reviewer-info {
+    .review-list-container .reviews-list-section .review-item-card .review-content-area .reviewer-info-text {
         font-size: 0.9rem;
         margin-bottom: 8px;
     }
 
-    .review-list-container .review-date {
+    .review-list-container .reviews-list-section .review-item-card .review-content-area .review-date-text {
         font-size: 0.85rem;
         color: #6c757d;
         margin-bottom: 10px;
     }
 
-    .review-list-container .review-text {
+    .review-list-container .reviews-list-section .review-item-card .review-content-area .review-text-content {
         font-size: 0.85rem;
         line-height: 1.4;
     }
 }
 
 @media (min-width: 1000px) {
-    .review-list-container .review-container {
+    .review-list-container .main-review-container {
         margin-left: 10rem;
         margin-right: 10rem;
     }
 }
 
 @media (min-width: 576px) {
-    .review-list-container .photo-img-container {
+    .review-list-container .reviews-list-section .review-item-card .review-photo-container {
         width: 200px;
     }
 }
 
 @media (max-width: 576px) {
-    .review-list-container .photo-img-container {
+    .review-list-container .reviews-list-section .review-item-card .review-photo-container {
         width: 150px;
     }
 
-    .review-list-container .rating-container {
+    .review-list-container .overall-rating-section {
         padding: 1.5rem 0.75rem;
         padding-bottom: 2rem;
     }
 
-    .review-list-container .row.justify-content-center.align-items-center {
+    .review-list-container .overall-rating-section .row.justify-content-center.align-items-center {
         flex-direction: column;
         text-align: center;
     }
 
-    .review-list-container .col-auto.me-6 {
+    .review-list-container .overall-rating-section .col-auto.me-6 {
         margin-right: 0 !important;
         margin-bottom: 1.5rem;
     }
 
-    .review-list-container .overall-rating {
+    .review-list-container .overall-rating-section .overall-rating-number {
         font-size: 1.8rem;
     }
 
-    .review-list-container .overall-star {
+    .review-list-container .overall-rating-section .overall-rating-star-icon {
         font-size: 1.3rem;
     }
 
-    .review-list-container .photo-thumbnail {
+    .review-list-container .photo-gallery-section .photo-thumbnails-scroll-container .photo-thumbnails-flex-wrapper .photo-thumbnail-item {
         width: 45px;
         height: 45px;
     }
 
-    .review-list-container .dropdown-toggle {
+    .review-list-container .rating-filters-section .dropdown-toggle {
         width: 100%;
         text-align: left;
         justify-content: space-between;
@@ -532,17 +530,17 @@
         padding-right: 0.5rem;
     }
 
-    .review-list-container .review-card {
+    .review-list-container .reviews-list-section .review-item-card {
         padding: 15px;
         margin-bottom: 15px;
     }
 
-    .review-list-container .review-card .row {
+    .review-list-container .reviews-list-section .review-item-card .row {
         flex-direction: column;
         align-items: flex-start;
     }
 
-    .review-list-container .photo-img-container {
+    .review-list-container .reviews-list-section .review-item-card .review-photo-container {
         width: 100%;
         min-width: unset;
         margin-right: 0;
@@ -551,23 +549,23 @@
         height: 150px;
     }
 
-    .review-list-container .photo-img {
+    .review-list-container .reviews-list-section .review-item-card .review-photo-container .review-photo-background {
         width: 100%;
         height: 150px;
         border-radius: 8px;
     }
 
-    .review-list-container .review-content {
+    .review-list-container .reviews-list-section .review-item-card .review-content-area {
         width: 100%;
     }
 
-    .review-list-container .review-stars {
+    .review-list-container .reviews-list-section .review-item-card .review-content-area .star-rating-icons {
         font-size: 0.85rem;
         margin-bottom: 6px;
         display: block;
     }
 
-    .review-list-container .reviewer-info {
+    .review-list-container .reviews-list-section .review-item-card .review-content-area .reviewer-info-text {
         font-size: 0.85rem;
         font-weight: 600;
         color: #333;
@@ -575,67 +573,67 @@
         display: block;
     }
 
-    .review-list-container .review-date {
+    .review-list-container .reviews-list-section .review-item-card .review-content-area .review-date-text {
         font-size: 0.8rem;
         color: #6c757d;
         margin-bottom: 10px;
         display: block;
     }
 
-    .review-list-container .review-text {
+    .review-list-container .reviews-list-section .review-item-card .review-content-area .review-text-content {
         font-size: 0.8rem;
         line-height: 1.4;
         color: #666;
         margin-bottom: 0;
     }
 
-    .review-list-container .review-header .d-flex {
+    .review-list-container .reviews-list-section .review-item-card .review-content-area .review-header-section .d-flex {
         flex-direction: column !important;
         align-items: flex-start !important;
     }
 }
 
 @media (max-width: 480px) {
-    .review-list-container .review-img-modal .modal-gallery-thumb {
+    .review-list-container .photo-modal .modal-gallery-thumbnail-image {
         width: 50px;
         height: 50px;
         margin-right: 6px;
     }
 
-    .review-list-container .review-img-modal .modal-main-image {
+    .review-list-container .photo-modal .modal-main-display-image {
         height: 200px;
     }
 
-    .thumbnail-container {
+    .review-list-container .photo-modal .modal-thumbnails-scroll-container {
         padding: 0 10px;
     }
 
-    .thumbnail-wrapper {
+    .review-list-container .photo-modal .modal-thumbnails-scroll-container .modal-thumbnails-flex-wrapper {
         gap: 6px;
     }
 
-    .review-list-container .review-card .row {
+    .review-list-container .reviews-list-section .review-item-card .row {
         --bs-gutter-x: 0.5rem;
     }
 
-    .review-list-container .photo-img-container {
+    .review-list-container .reviews-list-section .review-item-card .review-photo-container {
         width: 100%;
         min-width: unset;
         margin-bottom: 12px;
         height: 120px;
     }
 
-    .review-list-container .photo-img {
+    .review-list-container .reviews-list-section .review-item-card .review-photo-container .review-photo-background {
         width: 100%;
         height: 120px;
         border-radius: 8px;
     }
 
-    .review-list-container .review-card {
+    .review-list-container .reviews-list-section .review-item-card {
         padding: 12px;
     }
 
-    .review-list-container .review-text {
+    .review-list-container .reviews-list-section .review-item-card .review-content-area .review-text-content {
         font-size: 0.75rem;
     }
 }
@@ -651,7 +649,7 @@
 }
 
 /* 긴 텍스트 처리 */
-.review-list-container .dropdown-item {
+.review-list-container .rating-filters-section .dropdown-item {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -659,16 +657,16 @@
 }
 
 @media (max-width: 576px) {
-    .review-list-container .dropdown-item {
+    .review-list-container .rating-filters-section .dropdown-item {
         max-width: 150px;
     }
 }
 
-.review-list-container .filter-container {
+.review-list-container .rating-filters-section .filter-dropdown-container {
     min-width: 150px;
 }
 
-.review-list-container .photo-img-container .photo-img {
+.review-list-container .reviews-list-section .review-item-card .review-photo-container .review-photo-background {
     width: 100%;
     height: 100%;
     background-image: url("https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-a1WFmEoMhiDZS9ne7Bn747Fu6iMNWH.png");
@@ -684,18 +682,18 @@
 }
 
 /* 메인 이미지 컨테이너 패딩 조정 */
-.main-image-container {
+.review-list-container .photo-modal .modal-main-image-container {
     padding: 0 20px;
 }
 
 @media (max-width: 768px) {
-    .main-image-container {
+    .review-list-container .photo-modal .modal-main-image-container {
         padding: 0 15px;
     }
 }
 
 @media (max-width: 480px) {
-    .main-image-container {
+    .review-list-container .photo-modal .modal-main-image-container {
         padding: 0 10px;
     }
 }
