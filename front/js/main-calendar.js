@@ -531,7 +531,7 @@ function updateDateInputPlaceholder() {
         dateInput.style.color = '#1da1f2';
     } else if (!selectedDates.checkin && !selectedDates.checkout) {
         dateInput.value = '날짜를 선택해주세요';
-        dateInput.style.color = '#9ca3af';
+        dateInput.style.color = '';
     }
 }
 
@@ -722,7 +722,7 @@ function updateDateDisplay() {
         
         if (dateInput) {
             dateInput.value = `${checkinText} - ${checkoutText}`;
-            dateInput.style.color = '#333';
+            dateInput.style.color = '';
         }
         
         console.log('날짜 입력창 업데이트:', `${checkinText} - ${checkoutText}`);
@@ -736,19 +736,19 @@ function updateDateDisplay() {
         
         if (dateInput) {
             dateInput.value = `${checkinText} - 체크아웃`;
-            dateInput.style.color = '#1da1f2';
+            dateInput.style.color = '';
         }
         
         console.log('체크인만 선택됨:', checkinText);
     } else if (dateSelectionMode) {
         if (dateInput) {
             dateInput.value = '달력에서 날짜를 선택해주세요';
-            dateInput.style.color = '#1da1f2';
+            dateInput.style.color = '';
         }
     } else {
         if (dateInput) {
             dateInput.value = '날짜를 선택해주세요';
-            dateInput.style.color = '#9ca3af';
+            dateInput.style.color = '';
         }
     }
 }
