@@ -1,14 +1,3 @@
-/* 헤더 - 지울 예정 */
-.header {
-    background-color: #22ACED;
-    height: 100px;
-}
-
-.header-title {
-    color: white;
-}
-
-/* 결제완료 페이지 css 시작 */
 .singup-complete {
     min-height: calc(100vh - 100px);
     display: flex;
@@ -73,7 +62,7 @@
 
 /* 모바일 반응형 */
 @media screen and (max-width: 768px) {
-    .psingup-complete .complete-card {
+    .singup-complete .complete-card {
         padding: 40px 24px;
         margin: 20px;
         border-radius: 16px;
