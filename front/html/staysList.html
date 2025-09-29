@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Shoot</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/staysList.css" rel="stylesheet">
+    <link href="../css/common.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container staylist-page">
+        <div class="staylist-layout">
+            <div class="filter-sidebar">
+
+                <div class="filter-section">
+                     <div class="map-finder" onclick="">
+                        <img class="map-finder_image" src="../img/stays_map_modal.svg">
+                        <div class="map-finder_overlay">
+                            <img class="map-icon" src="../img/stayslist_map_icon.svg">
+                            <span class="map-finder_text">지도에서 숙소보기</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <div class="filter-section_title">1박당 요금</div>
+
+                    <div class="form-price-range">
+                        <span class="won-icon">₩</span>
+                        <input type="number" class="form-input form-input-price" placeholder="최소금액" min="0">
+                         <span class="form-guest-range_separator"><img src="../img/staylist-line.svg"></span>
+                        <span class="won-icon">₩</span>
+                        <input type="number" class="form-input form-input-price" placeholder="최대금액" min="0">
+                    </div>
+                </div>
+
+
+                <div class="filter-section">
+                    <div class="filter-section_title">숙소 유형</div>
+                    <div class="filter-checkbox-group">
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="form-checkbox_input">
+                            <span class="form-checkbox__text"><img class="stays_image" src="../img/hotel_icon.svg">호텔</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="form-checkbox_input">
+                            <span class="form-checkbox__text"><img class="stays_image" src="../img/motel_icon.svg">모텔</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="form-checkbox_input">
+                            <span class="form-checkbox__text"><img class="stays_image" src="../img/pension_icon.svg">펜션</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <div class="filter-section_title">숙소 특성</div>
+
+                <div class="filter-subsection">
+                    <div class="filter-subsection_title">침실 수</div>
+                    <div class="filter-bed-btn" id="bedroom-buttons">
+                        <button class="filter-cnt-btn" data-bedroom="1">1개</button>
+                        <button class="filter-cnt-btn" data-bedroom="2">2개</button>
+                        <button class="filter-cnt-btn" data-bedroom="3+">3개 이상</button>
+                    </div>
+                </div>
+                
+                <div class="filter-subsection">
+                    <div class="filter-subsection_title">욕실 수</div>
+                    <div class="filter-bath-btn">
+                        <button class="filter-cnt-btn" data-bathroom="1">1개</button>
+                        <button class="filter-cnt-btn" data-bathroom="2+">2개 이상</button>
+                    </div>
+                </div>
+                    
+                    <div class="filter-subsection">
+                        <div class="filter-subsection_title">수용 인원</div>
+                        <div class="form-guest-range">
+                            <img class="filter-person-icon" src="../img/filter-person-icon.svg">
+                            <input type="number" class="form-input form-input-guest" placeholder="최소인원" min="1" max="20">
+                           <span class="form-guest-range_separator"><img src="../img/staylist-line.svg"></span>
+                            <img class="filter-person-icon" src="../img/filter-person-icon.svg">
+                            <input type="number" class="form-input form-input-guest" placeholder="최대인원" min="1" max="30">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <div class="filter-section_title">숙소 평점</div>
+                    <div class="filter-stars-group">
+                        <label class="form-stars">
+                            <input type="checkbox" class="form-stars_input">
+                            <div class="star-display">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                            </div>
+                        </label>
+                        <label class="form-stars">
+                            <input type="checkbox" class="form-stars_input">
+                            <div class="star-display">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                            </div>
+                        </label>
+                        <label class="form-stars">
+                            <input type="checkbox" class="form-stars_input">
+                            <div class="star-display">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                            </div>
+                        </label>
+                        <label class="form-stars">
+                            <input type="checkbox" class="form-stars_input">
+                            <div class="star-display">
+                                <img src="../img/stayfilter-star.svg">
+                                <img src="../img/stayfilter-star.svg">
+                            </div>
+                        </label>
+                        <label class="form-stars">
+                            <input type="checkbox" class="form-stars_input">
+                            <div class="star-display">
+                                <img src="../img/stayfilter-star.svg">
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <div class="filter-section_title">이용가능한 서비스 / 옵션</div>
+                    <div class="filter-checkbox-group">
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="form-checkbox_input">
+                            <span class="form-checkbox__text">조식 포함</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="form-checkbox_input">
+                            <span class="form-checkbox__text">무료 취소일</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="form-checkbox_input">
+                            <span class="form-checkbox__text">수영장</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="form-checkbox_input">
+                            <span class="form-checkbox__text">OTT 이용가능</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="form-checkbox_input">
+                            <span class="form-checkbox__text">주차장</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="form-checkbox_input">
+                            <span class="form-checkbox__text">금연</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="form-checkbox_input">
+                            <span class="form-checkbox__text">피트니스 센터</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="form-checkbox_input">
+                            <span class="form-checkbox__text">반려동물 동반 가능</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="form-checkbox_input">
+                            <span class="form-checkbox__text">장애인용 편의시설</span>
+                        </label>
+                        <label class="form-checkbox">
+                            <input type="checkbox" class="form-checkbox_input">
+                            <span class="form-checkbox__text">공항 이동 교통편 서비스</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- 검색 결과 리스트 목록들 section -->
+            <div class="search-results-section">
+                <div class="hotel-card">
+                    <div class="hotel-stay_image">
+                        <img src="../img/payment_hotel_imgae.jpg">
+                            <button class="btn-favorite">
+                                <svg class="heart-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                </svg>
+                            </button>
+                    </div>
+                    <div class="stay_content">
+                        <div class="stay_info">
+                            <div class="stay_name">숙소명</div>
+                            <div class="stay-location-wrapper">
+                                <div class="stay-score-wrapper">
+                                     <span class="score-star">
+                                        <span class="active">★</span>
+                                        <span class="active">★</span>
+                                        <span class="active">★</span>
+                                        <span class="inactive">★</span>
+                                        <span class="inactive">★</span>
+                                    </span>
+                                    <span class="stay-score">(3.5 / 5)</span>
+                                </div>
+                                <div class="stay_location">
+                                    <img class="location_icon" src="../img/payment_location_icon.svg">해운대구, 부산
+                                </div>
+                            </div>
+                            <div class="card_options">이용가능한 서비스 / 옵션</div>
+                            <div class="card_tags">
+                                <span class="tag">조식</span>
+                                <span class="tag">수영장</span>
+                            </div>
+                        </div>
+                        <div class="card_bottom">
+                            <div class="check-in-time">체크인 16:00 ~</div>
+                            <div class="stay_price">
+                                <div class="price-amount">₩ 31,000</div>
+                                <div class="price-period">(1박당 요금)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                                <div class="hotel-card">
+                    <div class="hotel-stay_image">
+                        <img src="../img/payment_hotel_imgae.jpg">
+                            <button class="btn-favorite">
+                                <svg class="heart-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                </svg>
+                            </button>
+                    </div>
+                    <div class="stay_content">
+                        <div class="stay_info">
+                            <div class="stay_name">숙소명</div>
+                            <div class="stay-location-wrapper">
+                                <div class="stay-score-wrapper">
+                                     <span class="score-star">
+                                        <span class="active">★</span>
+                                        <span class="active">★</span>
+                                        <span class="active">★</span>
+                                        <span class="inactive">★</span>
+                                        <span class="inactive">★</span>
+                                    </span>
+                                    <span class="stay-score">(3.5 / 5)</span>
+                                </div>
+                                <div class="stay_location">
+                                    <img class="location_icon" src="../img/payment_location_icon.svg">해운대구, 부산
+                                </div>
+                            </div>
+                            <div class="card_options">이용가능한 서비스 / 옵션</div>
+                            <div class="card_tags">
+                                <span class="tag">조식</span>
+                                <span class="tag">수영장</span>
+                            </div>
+                        </div>
+                        <div class="card_bottom">
+                            <div class="check-in-time">체크인 16:00 ~</div>
+                            <div class="stay_price">
+                                <div class="price-amount">₩ 31,000</div>
+                                <div class="price-period">(1박당 요금)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="hotel-card">
+                    <div class="hotel-stay_image">
+                        <img src="../img/payment_hotel_imgae.jpg">
+                            <button class="btn-favorite">
+                                <svg class="heart-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                </svg>
+                            </button>
+                    </div>
+                    <div class="stay_content">
+                        <div class="stay_info">
+                            <div class="stay_name">숙소명</div>
+                            <div class="stay-location-wrapper">
+                                <div class="stay-score-wrapper">
+                                     <span class="score-star">
+                                        <span class="active">★</span>
+                                        <span class="active">★</span>
+                                        <span class="active">★</span>
+                                        <span class="inactive">★</span>
+                                        <span class="inactive">★</span>
+                                    </span>
+                                    <span class="stay-score">(3.5 / 5)</span>
+                                </div>
+                                <div class="stay_location">
+                                    <img class="location_icon" src="../img/payment_location_icon.svg">해운대구, 부산
+                                </div>
+                            </div>
+                            <div class="card_options">이용가능한 서비스 / 옵션</div>
+                            <div class="card_tags">
+                                <span class="tag">조식</span>
+                                <span class="tag">수영장</span>
+                            </div>
+                        </div>
+                        <div class="card_bottom">
+                            <div class="check-in-time">체크인 16:00 ~</div>
+                            <div class="stay_price">
+                                <div class="price-amount">₩ 31,000</div>
+                                <div class="price-period">(1박당 요금)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="hotel-card">
+                    <div class="hotel-stay_image">
+                        <img src="../img/payment_hotel_imgae.jpg">
+                            <button class="btn-favorite">
+                                <svg class="heart-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                </svg>
+                            </button>
+                    </div>
+                    <div class="stay_content">
+                        <div class="stay_info">
+                            <div class="stay_name">숙소명</div>
+                            <div class="stay-location-wrapper">
+                                <div class="stay-score-wrapper">
+                                     <span class="score-star">
+                                        <span class="active">★</span>
+                                        <span class="active">★</span>
+                                        <span class="active">★</span>
+                                        <span class="inactive">★</span>
+                                        <span class="inactive">★</span>
+                                    </span>
+                                    <span class="stay-score">(3.5 / 5)</span>
+                                </div>
+                                <div class="stay_location">
+                                    <img class="location_icon" src="../img/payment_location_icon.svg">해운대구, 부산
+                                </div>
+                            </div>
+                            <div class="card_options">이용가능한 서비스 / 옵션</div>
+                            <div class="card_tags">
+                                <span class="tag">조식</span>
+                                <span class="tag">수영장</span>
+                            </div>
+                        </div>
+                        <div class="card_bottom">
+                            <div class="check-in-time">체크인 16:00 ~</div>
+                            <div class="stay_price">
+                                <div class="price-amount">₩ 31,000</div>
+                                <div class="price-period">(1박당 요금)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- 모바일 플로팅 버튼 -->
+    <div class="mobile-floating-buttons">
+        <button class="floating-btn" onclick="toggleFloatingMenu()">
+            <span onclick="">
+                <img class="mfloating-icon" src="../img/map_modal_icon.svg"> 지도
+            </span>
+            <div class="floating-btn-divider"></div>
+            <span onclick="openMobileFilter(event)">
+                <img class="mfloating-icon" src="../img/filter_icon.svg"> 조건검색
+            </span>
+        </button>
+    </div>
+
+
+    <!-- 모바일 필터 모달  -->
+    <div class="mobile-filter-modal" id="mobileFilterModal">
+        <div class="mobile-filter-header">
+            <button class="mobile-filter-close" onclick="closeMobileFilter()"><img src="../img/stayfilter-modal-close.svg"></button>
+            <div class="mobile-filter-title">조건검색</div>
+            <button class="mobile-filter-home"><img src="../img/payment_home_icon.svg"></button>
+        </div>
+        
+        <div class="mobile-filter-content">
+            <div class="filter-section">
+                <div class="mfilter-section_title">1박당 요금</div>
+                
+                <div class="mform-price-range">
+                    <div>
+                        <span class="won-icon">₩</span>
+                        <input type="number" class="mform-input mform-input--price" placeholder="최소금액" min="0">
+                    </div>
+
+                        <span class="mform-guest-range_separator"><img src="../img/staylist-line.svg"></span>
+
+                    <div>
+                        <span class="won-icon">₩</span>
+                        <input type="number" class="mform-input mform-input--price" placeholder="최대금액" min="0">
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="mfilter-section_title">숙소 유형</div>
+                <div class="mobile-stays-group"> 
+                    <button class="mfilter-stays-btn" data-type="hotel">
+                        <img class="stays_image-m" src="../img/hotel_icon.svg">호텔
+                    </button>                    
+                    <button class="mfilter-stays-btn" data-type="motel">
+                        <img class="stays_image-m" src="../img/motel_icon.svg">모텔
+                    </button>                    
+                    <button class="mfilter-stays-btn" data-type="pension">
+                        <img class="stays_image-m" src="../img/pension_icon.svg">펜션
+                    </button>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="mfilter-section_title">숙소 특성</div>
+
+
+                <div class="mobile-feature-section">
+                    <div class="mfilter-subsection_title">침실 수</div>
+                    <div class="mfilter-bed-btn" id="bedroom-buttons">
+                        <button class="filter-cnt-btn" data-bedroom="1">1개</button>
+                        <button class="filter-cnt-btn" data-bedroom="2">2개</button>
+                        <button class="filter-cnt-btn" data-bedroom="3+">3개 이상</button>
+                    </div>
+                </div>
+                
+                <div class="filter-subsection">
+                    <div class="mfilter-subsection_title">욕실 수</div>
+                    <div class="mfilter-bath-btn">
+                        <button class="filter-cnt-btn" data-bathroom="1">1개</button>
+                        <button class="filter-cnt-btn" data-bathroom="2+">2개 이상</button>
+                    </div>
+                </div>
+                
+                <div class="filter-subsection">
+                    <div class="mfilter-subsection_title">수용 인원</div>
+                    <div class="mform-guest-range">
+                        <div>
+                            <img class="mfilter-person-icon" src="../img/filter-person-icon.svg">
+                            <input type="number" class="mform-input mform-input--guest" placeholder="최소인원" min="1" max="20">
+                        </div>
+                        <span class="mform-guest-range_separator"><img src="../img/staylist-line.svg"></span>
+                        <div>
+                            <img class="mfilter-person-icon" src="../img/filter-person-icon.svg">
+                            <input type="number" class="mform-input mform-input--guest" placeholder="최대인원" min="1" max="30">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <!-- 숙소 평점 -->
+            <div class="filter-section">
+                <div class="mfilter-section_title">숙소 평점</div>
+                <div class="mobile-rating-buttons">
+                    <button class="filter-star-btn" data-rating="1">
+                        <span class="star-content"><img class="star-icons-img" src="../img/stayfilter-star.svg">1</span>
+                    </button>
+                    <button class="filter-star-btn" data-rating="2">
+                        <span class="star-content"> <img class="star-icons-img" src="../img/stayfilter-star.svg">2</span>
+                    </button>
+                    <button class="filter-star-btn" data-rating="3">
+                        <span class="star-content"> <img class="star-icons-img" src="../img/stayfilter-star.svg">3</span>
+                    </button>
+                    <button class="filter-star-btn" data-rating="4">
+                        <span class="star-content"> <img class="star-icons-img" src="../img/stayfilter-star.svg">4</span>
+                    </button>
+                    <button class="filter-star-btn" data-rating="5">
+                        <span class="star-content"> <img class="star-icons-img" src="../img/stayfilter-star.svg">5</span>
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="filter-section">
+                <div class="mfilter-section_title">이용가능한 서비스 / 옵션</div>
+                <div class="filter-checkbox-group">
+                    <label class="form-checkbox">
+                        <input type="checkbox" class="form-checkbox_input">
+                        <span class="form-checkbox__text">조식 포함</span>
+                    </label>
+                    <label class="form-checkbox">
+                        <input type="checkbox" class="form-checkbox_input">
+                        <span class="form-checkbox__text">무료 취소일</span>
+                    </label>
+                    <label class="form-checkbox">
+                        <input type="checkbox" class="form-checkbox_input">
+                        <span class="form-checkbox__text">수영장</span>
+                    </label>
+                    <label class="form-checkbox">
+                        <input type="checkbox" class="form-checkbox_input">
+                        <span class="form-checkbox__text">OTT 이용가능</span>
+                    </label>
+                    <label class="form-checkbox">
+                        <input type="checkbox" class="form-checkbox_input">
+                        <span class="form-checkbox__text">주차장</span>
+                    </label>
+                    <label class="form-checkbox">
+                        <input type="checkbox" class="form-checkbox_input">
+                        <span class="form-checkbox__text">금연</span>
+                    </label>
+                    <label class="form-checkbox">
+                        <input type="checkbox" class="form-checkbox_input">
+                        <span class="form-checkbox__text">피트니스 센터</span>
+                    </label>
+                    <label class="form-checkbox">
+                        <input type="checkbox" class="form-checkbox_input">
+                        <span class="form-checkbox__text">반려동물 동반 가능</span>
+                    </label>
+                    <label class="form-checkbox">
+                        <input type="checkbox" class="form-checkbox_input">
+                        <span class="form-checkbox__text">장애인용 편의시설</span>
+                    </label>
+                    <label class="form-checkbox">
+                        <input type="checkbox" class="form-checkbox_input">
+                        <span class="form-checkbox__text">공항 이동 교통편 서비스</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mobile-filter-bottom">
+            <button class="mobile-apply-btn" onclick="applyMobileFilter()">필터적용</button>
+        </div>
+    </div>
+
+
+<!-- 좋아요 - 하트  -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mo-js/0.288.2/mo.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof mojs === 'undefined' || typeof gsap === 'undefined') {
+            console.error('라이브러리가 로드되지 않았습니다.');
+            return;
+        }
+
+        document.querySelectorAll('.btn-favorite').forEach(function(likeBtn) {
+            let isLiked = likeBtn.classList.contains('btn-favorite-active');
+            
+            const burst = new mojs.Burst({
+                parent: likeBtn,
+                radius: { 20: 60 },
+                count: 15,
+                angle: { 0: 30 },
+                children: {
+                    delay: 250,
+                    duration: 700,
+                    radius: { 10: 0 },
+                    fill: ['#ff6b6b'],
+                    easing: mojs.easing.bezier(.08, .69, .39, .97)
+                }
+            });
+
+            likeBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                const heartIcon = this.querySelector('.heart-icon');
+                
+                if (!isLiked) {
+                    this.classList.add('btn-favorite-active');
+                    
+                    gsap.set(this, { scale: 0 });
+                    gsap.set(heartIcon, { scale: 0 });
+                    gsap.to(this, { 
+                        duration: 0.6,
+                        scale: 1, 
+                        // backgroundColor 제거
+                        ease: "expo.out" 
+                    });
+                    gsap.to(heartIcon, { 
+                        duration: 0.3,
+                        scale: 1, 
+                        ease: "elastic.out(1, 0.3)" 
+                    });
+                    
+                    burst.replay();
+                    isLiked = true;
+                    
+                } else {
+                    this.classList.remove('btn-favorite-active');
+                    
+                    gsap.to(this, { 
+                        duration: 0.14,
+                        ease: "power4.out" 
+                    });
+                    
+                    isLiked = false;
+                }
+            });
+        });
+    });
+
+        function toggleFloatingMenu() {
+    }
+
+
+    function applyMobileFilter() {
+        console.log('필터 적용');
+        closeMobileFilter();
+    }
+
+    function openMobileFilter(event) {
+        event.stopPropagation();
+        document.getElementById('mobileFilterModal').classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileFilter() {
+        document.getElementById('mobileFilterModal').classList.remove('show');
+        document.body.style.overflow = 'auto';
+    }
+</script>
+
+</body>
+</html>
