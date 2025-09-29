@@ -163,12 +163,13 @@
 }
 
 .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .search-card .search-input::placeholder {
-    color: #9ca3af;
-    font-size: 22px;
+    color: #333;
+    font-size: 19px;
 }
 
 .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .search-card .search-input.main-calendar-location-input {
-    color: #9ca3af !important;
+    color: #333 !important;
+    font-weight: 500;
 }
 
 .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .search-card .search-input.main-calendar-date-input,
