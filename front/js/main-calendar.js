@@ -10,7 +10,7 @@
 /* ==========================================================================
    전역 변수 및 설정
    ========================================================================== */
-let isLoggedIn = true; 
+let isLoggedIn = false; 
 let calendar = null;
 let dateSelectionMode = true;
 let selectedDates = {

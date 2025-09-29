@@ -988,6 +988,8 @@
     .calendar-guest-message {
         top: 116px;
         padding: 0.4rem;
+        font-size: 12px;
+        font-weight: 700;
     }
     
     .calendar-guest-message h4 {
@@ -1002,5 +1004,12 @@
     .calendar-card.guest-mode .fc-daygrid-day::after {
         font-size: 6px;
         padding: 0.5px 1px;
+    }
+
+    .calendar-signup-message{
+        bottom: 140px;
+        font-size: 12px;
+        left: 42px;
+        font-weight: 700;
     }
 }
