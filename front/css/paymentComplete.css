@@ -1,14 +1,3 @@
-/* 헤더 - 지울 예정 */
-.header {
-    background-color: #22ACED;
-    height: 100px;
-}
-
-.header-title {
-    color: white;
-}
-
-/* 결제완료 페이지 css 시작 */
 .payment-complete {
     min-height: calc(100vh - 100px);
     display: flex;
@@ -31,13 +20,13 @@
     margin-bottom: 40px;
 }
 
-.complete-card .payment-complete-btn {
+.payment-complete .complete-card .payment-complete-btn {
     display: flex;
     gap: 12px;
     margin-top: 20px;
 }
 
-.complete-card .payment-complete-btn .btn1 {
+.payment-complete .complete-card .payment-complete-btn .btn1 {
     background: #FF8888;
     border: none;
     border-radius: 10px;
@@ -50,11 +39,11 @@
     text-align: center;
 }
 
-.complete-card .payment-complete-btn .btn1:hover {
+.payment-complete .complete-card .payment-complete-btn .btn1:hover {
     background: #FF5252;
 }
 
-.complete-card .payment-complete-btn .btn2 {
+.payment-complete .complete-card .payment-complete-btn .btn2 {
     background: #888888;
     border: none;
     border-radius: 10px;
@@ -67,7 +56,7 @@
     text-align: center;
 }
 
-.complete-card .payment-complete-btn .btn2:hover {
+.payment-complete .complete-card .payment-complete-btn .btn2:hover {
     background: #5a6268;
 }
 
@@ -91,8 +80,8 @@
         flex-direction: column;
     }
 
-    .payment-complete-btn .btn1,
-    .payment-complete-btn .btn2 {
+    .payment-complete .payment-complete-btn .btn1,
+    .payment-complete .payment-complete-btn .btn2 {
         padding: 16px 24px;
         font-size: 16px;
     }

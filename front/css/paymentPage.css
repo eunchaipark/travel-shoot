@@ -14,28 +14,28 @@
 }
 
 /* 은비님 css 코드 발췌 */
-.section-card .content-section-inner .content-section-state-inner {
+.payment-page .section-card .content-section-inner .content-section-state-inner {
   padding: 75px;
 }
 
-.section-card .content-section-inner .content-section-title {
+.payment-page .section-card .content-section-inner .content-section-title {
   font-weight: 700;
   font-size: 23px;
   color: black;
 }
 
-.section-card .content-section-inner.content-section-title .reservation-number {
+.payment-page .section-card .content-section-inner.content-section-title .reservation-number {
   font-weight: 500;
   font-size: 16px;
   margin-left: 10px;
   color: #474e59;
 }
 
-.payment-page .reservation-detail-arrow-con {
+.payment-page .section-card .stay-info .checkin-checkout .reservation-detail-arrow-con {
   align-content: center;
 }
 
-.reservation-detail-arrow-con .reservation-detail-arrow {
+.payment-page .section-card .stay-info .checkin-checkout .reservation-detail-arrow-con .reservation-detail-arrow {
   width: 15px;
   height: 15px;
   background-image: url(../img/reservation-detail-arrow.svg);
@@ -45,7 +45,7 @@
 }
 
 /* 은비님 reservation.css 에서 가지고 온 코드 */
-.payment-page .price-highlight {
+.payment-page .section-card .stay-content .stay-info .price-highlight {
     color: #f56770;
     font-weight: 800;
     font-size: 1.4em;
@@ -54,13 +54,13 @@
     align-items: baseline;
 }
 
-.payment-page .small-text {
+.payment-page .section-card .stay-content .stay-info .payment-page .small-text {
   font-size: 0.85em;
   color: #666;
 }
 
 /* 숙박/1박당이랑 31000원 수평정렬하고 싶어서 추가함 */
-.payment-page .price-highlight .small-text {
+.payment-page .section-card .stay-content .stay-info .price-highlight .small-text {
     font-size: 0.9em;
     margin-bottom: 0 !important;
     align-self: baseline;
@@ -72,7 +72,7 @@
     align-items: center;
 }
 
-.stay-info .checkin-checkout{
+.payment-page .section-card .stay-content .stay-info .checkin-checkout{
     align-items:center;
 }
 
@@ -96,7 +96,7 @@
     object-fit: cover;
 }
 
-.section-card .stay-content.d-flex {
+.payment-page .section-card .stay-content.d-flex {
     display: flex !important;
     justify-content: space-between;
     gap: 25px;
@@ -200,16 +200,13 @@
     cursor: pointer;
 }
 
-/* 라디오버튼도 커스텀 코드 추가 */
-/* 기존 라디오 버튼 숨기기 */
-.transport-option input[type="radio"],
-.payment-option input[type="radio"] {
+.payment-page .transport-option input[type="radio"],
+.payment-page .payment-option input[type="radio"] {
     display: none;
 }
 
-/* 커스텀 라디오 버튼 기본 스타일 */
-.transport-option .radio-custom,
-.payment-option .radio-custom {
+.payment-page .transport-option .radio-custom,
+.payment-page .payment-option .radio-custom {
     width: 20px;
     height: 20px;
     border: 2px solid #DEDADA;
@@ -221,15 +218,13 @@
     transition: all 0.2s ease;
 }
 
-/* 선택된 라디오 버튼 스타일 */
-.transport-option input[type="radio"]:checked + .radio-custom,
+.payment-page .section-card .transport-option input[type="radio"]:checked + .radio-custom,
 .payment-option input[type="radio"]:checked + .radio-custom {
     border-color: #FF8888;
     background-color: white;
 }
 
-/* 선택된 라디오 버튼 내부 원 */
-.transport-option input[type="radio"]:checked + .radio-custom::after,
+.payment-page .section-card .transport-option input[type="radio"]:checked + .radio-custom::after,
 .payment-option input[type="radio"]:checked + .radio-custom::after {
     content: '';
     width: 10px;
@@ -242,14 +237,12 @@
     transform: translate(-50%, -50%);
 }
 
-/* 라디오 버튼 호버 효과 */
-.transport-option:hover .radio-custom,
+.payment-page .section-card .transport-option:hover .radio-custom,
 .payment-option:hover .radio-custom {
     border-color: #FF8888;
 }
 
-/* 라디오 버튼 옵션 레이아웃 조정 */
-.transport-option,
+.payment-page .section-card .transport-option,
 .payment-option {
     display: flex;
     align-items: center;
@@ -257,42 +250,42 @@
     padding: 8px 0;
 }
 
-.transport-options {
+.payment-page .section-card .transport-options {
     display: flex;
     gap: 32px;
 }
 
-.payment-options {
+.payment-page .section-card .payment-options {
     display: flex;
     flex-direction: column;
 }
 
-.section-card .payment-option {
+.payment-page .section-card .payment-option {
     padding: 10px;
     border-radius: 8px;
     transition: background-color 0.2s ease;
 }
 
-.section-card .payment-option:hover {
+.payment-page .section-card .payment-option:hover {
     background-color: #f8f9fa;
 }
 
-.section-card .payment-option.selected {
+.payment-page .section-card .payment-option.selected {
     background-color: #f8f9fa;
 }
 
-.section-card .payment-info {
+.payment-page .section-card .payment-info {
     display: flex;
     align-items: center;
 }
 
-.payment-info .payment_images {
+.payment-page .section-card .payment-info .payment_images {
     width: 24px;
     height: 24px;
     margin-right: 12px;
 }
 
-.payment-info .payment-text,
+.payment-page .section-card .payment-info .payment-text,
 .transport-text {
     font-size: 14px;
     color: #333;
@@ -350,7 +343,7 @@
 
 /* 오른쪽 결제하기 섹션 */
 
-.final-payment-detail.final-payment-date-detail{
+.payment-page .final-payment-detail.final-payment-date-detail{
     font-weight: 600;
     font-size: 15px;
 }
@@ -387,7 +380,7 @@
 }
 
 /* 모달 */
-.modal {
+.payment-modal{
     position: fixed;
     display: none;
     justify-content: center;
@@ -402,7 +395,7 @@
     box-sizing: border-box;
 }
 
-.modal .modal-content {
+.payment-modal .modal-content {
     position: relative;
     width: 100%;
     max-width: 700px;
@@ -416,7 +409,7 @@
     overflow: hidden;
 }
 
-.modal .modal-header {
+.payment-modal .modal-header {
     font-size: 18px;
     font-weight: 600;
     color: #333;
@@ -429,7 +422,7 @@
 }
 
 /* X 버튼 (오른쪽 상단) */
-.modal .modal-header::after {
+.payment-modal .modal-header::after {
     content: '✕';
     position: absolute;
     right: 20px;
@@ -444,31 +437,31 @@
     justify-content: center;
 }
 
-.modal .modal-body {
+.payment-modal .modal-body {
     padding: 0 24px 24px 24px;
     overflow-y: auto;
     flex: 1;
 }
 
-.modal .modal-body > div {
+.payment-modal .modal-body > div {
     font-size: 16px;
     font-weight: 600;
     color: #333;
     margin: 24px 0 12px 0;
 }
 
-.modal-body > div:first-child {
+.payment-modal .modal-body > div:first-child {
     margin-top: 0;
 }
 
-.modal-body p {
+.payment-modal .modal-body p {
     font-size: 14px;
     color: #666;
     line-height: 1.6;
     margin-bottom: 20px;
 }
 
-.modal-body ul {
+.payment-modal .modal-body ul {
     font-size: 14px;
     color: #666;
     line-height: 1.6;
@@ -476,11 +469,11 @@
     padding-left: 20px;
 }
 
-.modal-body li {
+.payment-modal .modal-body li {
     margin-bottom: 8px;
 }
 
-.modal-footer:hover {
+.payment-modal .modal-footer:hover {
     background-color: #FF8888;
 }
 
@@ -519,14 +512,14 @@
 }
 
 @media screen and (max-width: 768px) {
-    .modal {
+    .payment-modal {
         padding: 0;
         background-color: white;
         align-items: flex-start;
         justify-content: flex-start;
     }
     
-    .modal-content {
+    .payment-modal .modal-content {
         width: 100%;
         max-width: 100%;
         height: 100vh;
@@ -535,7 +528,7 @@
         box-shadow: none;
     }
     
-    .modal-header {
+    .payment-modal .modal-header {
         font-size:12px;
         font-weight: 600;
         color: #333;
@@ -551,14 +544,14 @@
         box-sizing: border-box;
     }
     
-    .modal-body {
+    .payment-modal .modal-body {
         padding: 20px 16px;
         flex: 1;
         overflow-y: auto;
         background-color: #f8f9fa;
     }
     
-    .modal-body > div {
+    .payment-modal .modal-body > div {
         font-size: 15px;
         font-weight: 600;
         color: #333;
@@ -570,29 +563,29 @@
         border-bottom: 1px solid #dee2e6;
     }
     
-    .modal-body > div:first-child {
+    .payment-modal .modal-body > div:first-child {
         margin-top: 0;
     }
     
-    .modal-body p {
+    .payment-modal .modal-body p {
         font-size: 13px;
         line-height: 1.5;
         margin-bottom: 16px;
         padding: 16px;
     }
     
-    .modal-body ul {
+    .payment-modal .modal-body ul {
         font-size: 13px;
         line-height: 1.5;
         margin-bottom: 16px;
         padding: 16px 16px 16px 32px;
     }
     
-    .modal-body li {
+    .payment-modal .modal-body li {
         margin-bottom: 8px;
     }
     
-    .modal-footer {
+    .payment-modal .modal-footer {
         padding: 20px 16px;
         font-size: 16px;
         font-weight: 600;
@@ -635,146 +628,142 @@
         margin-bottom: 6px;
     }
     
-    /* stay-content를 완전히 세로 배치 */
-    .section-card .stay-content.d-flex {
+    .payment-page .section-card .stay-content.d-flex {
         flex-direction: column !important;
         gap: 0 !important;
         align-items: stretch !important;
         justify-content: flex-start !important;
     }
     
-    /* 이미지를 맨 위에 배치 */
-    .section-card .stay-content .stay-image-wrapper {
+    .payment-page .section-card .stay-content .stay-image-wrapper {
         order: 1 !important;
         width: 100% !important;
         margin-right: 0 !important;
         margin-bottom: 16px !important;
     }
     
-    /* 이미지가 가로에 꽉 차도록 */
-    .section-card .stay-content .stay-img {
+    .payment-page .section-card .stay-content .stay-img {
         width: 100% !important;
         height: 180px !important;
         object-fit: cover !important;
         border-radius: 8px !important;
     }
     
-    /* 텍스트 정보를 이미지 아래에 배치 */
-    .section-card .stay-content .stay-info {
+    .payment-page .section-card .stay-content .stay-info {
         order: 2 !important;
         width: 100% !important;
         text-align: left !important;
     }
     
-    .section-card .stay-content .stay-name {
+    .payment-page .section-card .stay-content .stay-name {
         font-size: 16px !important;
         margin-bottom: 8px !important;
         font-weight: 700 !important;
     }
     
-    .section-card .stay-content .stay-location {
+    .payment-page .section-card .stay-content .stay-location {
         justify-content: flex-start !important;
         font-size: 11px !important;
         margin-bottom: 16px !important;
     }
     
-    .section-card .stay-content .stay-location .location_icon {
+    .payment-page .section-card .stay-content .stay-location .location_icon {
         width: 13px !important;
         height: 13px !important;
     }
     
-    .section-card .stay-content .checkin-checkout {
+    .payment-page .section-card .stay-content .checkin-checkout {
         margin-bottom: 16px !important;
     }
     
-    .section-card .stay-content .checkin-checkout .small-text {
+    .payment-page .section-card .stay-content .checkin-checkout .small-text {
         font-size: 0.75em;
     }
     
-    .section-card .stay-content .checkin-checkout .col-5 {
+    .payment-page .section-card .stay-content .checkin-checkout .col-5 {
         font-size: 11px;
         padding: 0 6px;
     }
     
-    .section-card .stay-content .checkin-checkout .fw-bold {
+    .payment-page .section-card .stay-content .checkin-checkout .fw-bold {
         font-size: 12px;
         line-height: 1.3;
     }
     
-    .section-card .stay-content .price-highlight {
+    .payment-page .section-card .stay-content .price-highlight {
         justify-content: flex-end !important;
         font-size: 1.1em !important;
         margin-top: 8px !important;
     }
     
-    .section-card .stay-content .price-highlight .small-text {
+    .payment-page .section-card .stay-content .price-highlight .small-text {
         font-size: 0.7em;
     }
     
     /* 사용자 정보 입력 */
-    .section-card .user-info {
+    .payment-page .section-card .user-info {
         font-size: 13px;
         margin-bottom: 6px;
     }
     
-    .section-card .user-inputbox {
+    .payment-page .section-card .user-inputbox {
         padding: 10px 14px;
         font-size: 13px;
     }
     
     /* 결제 방법 */
-    .section-card .payment-option {
+    .payment-page .section-card .payment-option {
         padding: 8px 12px;
         margin-bottom: 8px;
     }
     
-    .section-card .payment-info {
+    .payment-page .section-card .payment-info {
         font-size: 13px;
     }
     
-    .section-card .payment_images {
+    .payment-page .section-card .payment_images {
         width: 20px;
         height: 20px;
     }
     
     /* 방문 수단 */
-    .section-card .transport-options {
+    .payment-page .section-card .transport-options {
         gap: 20px;
     }
     
-    .section-card .transport-text {
+    .payment-page .section-card .transport-text {
         font-size: 13px;
     }
     
     /* 약관 동의 */
-    .section-card .agreement-text {
+    .payment-page .section-card .agreement-text {
         font-size: 12px;
         line-height: 1.3;
     }
     
-    .section-card .view-modal {
+    .payment-page .section-card .view-modal {
         font-size: 11px;
     }
     
     /* 우측 결제 섹션 */
-    .section-card .final-payment-detail {
+    .payment-page .section-card .final-payment-detail {
         font-size: 12px;
     }
     
-    .section-card .final-price-label {
+    .payment-page .section-card .final-price-label {
         font-size: 14px;
     }
     
-    .section-card .final-price-won {
+    .payment-page .section-card .final-price-won {
         font-size: 22px;
     }
     
-    .section-card .payment-btn {
+    .payment-page .section-card .payment-btn {
         padding: 12px 0;
         font-size: 14px;
     }
     
-    .section-card .payment-line-img {
+    .payment-page .section-card .payment-line-img {
         height: 45px;
     }
     
