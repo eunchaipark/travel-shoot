@@ -1,12 +1,3 @@
-/* 헤더 - 지울 예정 */
-.header {
-    background-color: #22ACED;
-    height: 100px;
-}
-.header-title {
-    color: white;
-}
-
 /* paymentPage css 시작  */
 .payment-page {
     padding-top: 24px;
@@ -266,9 +257,6 @@
     padding: 8px 0;
 }
 
-
-
-
 .transport-options {
     display: flex;
     gap: 32px;
@@ -279,32 +267,32 @@
     flex-direction: column;
 }
 
-.payment-option {
+.section-card .payment-option {
     padding: 10px;
     border-radius: 8px;
     transition: background-color 0.2s ease;
 }
 
-.payment-option:hover {
+.section-card .payment-option:hover {
     background-color: #f8f9fa;
 }
 
-.payment-option.selected {
+.section-card .payment-option.selected {
     background-color: #f8f9fa;
 }
 
-.payment-info {
+.section-card .payment-info {
     display: flex;
     align-items: center;
 }
 
-.payment_images {
+.payment-info .payment_images {
     width: 24px;
     height: 24px;
     margin-right: 12px;
 }
 
-.payment-text,
+.payment-info .payment-text,
 .transport-text {
     font-size: 14px;
     color: #333;
@@ -414,7 +402,7 @@
     box-sizing: border-box;
 }
 
-.modal-content {
+.modal .modal-content {
     position: relative;
     width: 100%;
     max-width: 700px;
@@ -428,7 +416,7 @@
     overflow: hidden;
 }
 
-.modal-header {
+.modal .modal-header {
     font-size: 18px;
     font-weight: 600;
     color: #333;
@@ -441,7 +429,7 @@
 }
 
 /* X 버튼 (오른쪽 상단) */
-.modal-header::after {
+.modal .modal-header::after {
     content: '✕';
     position: absolute;
     right: 20px;
@@ -456,13 +444,13 @@
     justify-content: center;
 }
 
-.modal-body {
+.modal .modal-body {
     padding: 0 24px 24px 24px;
     overflow-y: auto;
     flex: 1;
 }
 
-.modal-body > div {
+.modal .modal-body > div {
     font-size: 16px;
     font-weight: 600;
     color: #333;
@@ -502,30 +490,30 @@
         padding: 22px;
     }
     
-    .stay-content.d-flex {
+    .payment-page .section-card .stay-content.d-flex {
         gap: 20px !important;
         align-items: flex-start !important;
     }
     
-    .stay-img {
+    .payment-page .section-card .stay-img {
         width: 180px !important;
         height: 180px !important;
     }
     
-    .stay-name {
+    .payment-page .section-card .stay-name {
         font-size: 17px !important;
         margin-bottom: 8px !important;
     }
     
-    .stay-location {
+    .payment-page .section-card .stay-location {
         font-size: 12px !important;
     }
     
-    .checkin-checkout .fw-bold {
+    .payment-page .section-card .checkin-checkout .fw-bold {
         font-size: 13px !important;
     }
     
-    .price-highlight {
+    .payment-page .section-card .price-highlight {
         font-size: 1.1em !important;
     }
 }
@@ -625,11 +613,11 @@
 
 /* 576px 이하에서 이미지 위, 텍스트 아래로 배치 */
 @media screen and (max-width: 576px) {
-    .payment-page {
+    .payment-page .section-card .payment-page {
         padding: 14px 10px 28px 10px;
     }
     
-    .payment-page .section-card {
+    .payment-page .section-card .payment-page .section-card {
         padding: 16px;
         margin-bottom: 14px;
         margin-top: 0;
@@ -637,18 +625,18 @@
         width: 100%;
     }
     
-    .section-header {
+    .payment-page .section-card .section-header {
         font-size: 15px;
         margin-bottom: 14px;
     }
     
-    .stay-checkments {
+    .payment-page .section-card .stay-checkments {
         font-size: 12px;
         margin-bottom: 6px;
     }
     
     /* stay-content를 완전히 세로 배치 */
-    .stay-content.d-flex {
+    .section-card .stay-content.d-flex {
         flex-direction: column !important;
         gap: 0 !important;
         align-items: stretch !important;
@@ -656,7 +644,7 @@
     }
     
     /* 이미지를 맨 위에 배치 */
-    .stay-image-wrapper {
+    .section-card .stay-content .stay-image-wrapper {
         order: 1 !important;
         width: 100% !important;
         margin-right: 0 !important;
@@ -664,7 +652,7 @@
     }
     
     /* 이미지가 가로에 꽉 차도록 */
-    .stay-img {
+    .section-card .stay-content .stay-img {
         width: 100% !important;
         height: 180px !important;
         object-fit: cover !important;
@@ -672,121 +660,121 @@
     }
     
     /* 텍스트 정보를 이미지 아래에 배치 */
-    .stay-info {
+    .section-card .stay-content .stay-info {
         order: 2 !important;
         width: 100% !important;
         text-align: left !important;
     }
     
-    .stay-name {
+    .section-card .stay-content .stay-name {
         font-size: 16px !important;
         margin-bottom: 8px !important;
         font-weight: 700 !important;
     }
     
-    .stay-location {
+    .section-card .stay-content .stay-location {
         justify-content: flex-start !important;
         font-size: 11px !important;
         margin-bottom: 16px !important;
     }
     
-    .stay-location .location_icon {
+    .section-card .stay-content .stay-location .location_icon {
         width: 13px !important;
         height: 13px !important;
     }
     
-    .checkin-checkout {
+    .section-card .stay-content .checkin-checkout {
         margin-bottom: 16px !important;
     }
     
-    .checkin-checkout .small-text {
+    .section-card .stay-content .checkin-checkout .small-text {
         font-size: 0.75em;
     }
     
-    .checkin-checkout .col-5 {
+    .section-card .stay-content .checkin-checkout .col-5 {
         font-size: 11px;
         padding: 0 6px;
     }
     
-    .checkin-checkout .fw-bold {
+    .section-card .stay-content .checkin-checkout .fw-bold {
         font-size: 12px;
         line-height: 1.3;
     }
     
-    .price-highlight {
+    .section-card .stay-content .price-highlight {
         justify-content: flex-end !important;
         font-size: 1.1em !important;
         margin-top: 8px !important;
     }
     
-    .price-highlight .small-text {
+    .section-card .stay-content .price-highlight .small-text {
         font-size: 0.7em;
     }
     
     /* 사용자 정보 입력 */
-    .user-info {
+    .section-card .user-info {
         font-size: 13px;
         margin-bottom: 6px;
     }
     
-    .user-inputbox {
+    .section-card .user-inputbox {
         padding: 10px 14px;
         font-size: 13px;
     }
     
     /* 결제 방법 */
-    .payment-option {
+    .section-card .payment-option {
         padding: 8px 12px;
         margin-bottom: 8px;
     }
     
-    .payment-info {
+    .section-card .payment-info {
         font-size: 13px;
     }
     
-    .payment_images {
+    .section-card .payment_images {
         width: 20px;
         height: 20px;
     }
     
     /* 방문 수단 */
-    .transport-options {
+    .section-card .transport-options {
         gap: 20px;
     }
     
-    .transport-text {
+    .section-card .transport-text {
         font-size: 13px;
     }
     
     /* 약관 동의 */
-    .agreement-text {
+    .section-card .agreement-text {
         font-size: 12px;
         line-height: 1.3;
     }
     
-    .view-modal {
+    .section-card .view-modal {
         font-size: 11px;
     }
     
     /* 우측 결제 섹션 */
-    .final-payment-detail {
+    .section-card .final-payment-detail {
         font-size: 12px;
     }
     
-    .final-price-label {
+    .section-card .final-price-label {
         font-size: 14px;
     }
     
-    .final-price-won {
+    .section-card .final-price-won {
         font-size: 22px;
     }
     
-    .payment-btn {
+    .section-card .payment-btn {
         padding: 12px 0;
         font-size: 14px;
     }
     
-    .payment-line-img {
+    .section-card .payment-line-img {
         height: 45px;
     }
     
