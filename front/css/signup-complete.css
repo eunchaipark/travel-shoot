@@ -20,13 +20,13 @@
     margin-bottom: 40px;
 }
 
-.complete-card .singup-complete-btn {
+.singup-complete .complete-card .singup-complete-btn {
     display: flex;
     gap: 12px;
     margin-top: 20px;
 }
 
-.complete-card .singup-complete-btn .btn1 {
+.singup-complete .complete-card .singup-complete-btn .btn1 {
     background: #FF8888;
     border: none;
     border-radius: 10px;
@@ -39,11 +39,11 @@
     text-align: center;
 }
 
-.complete-card .singup-complete-btn .btn1:hover {
+.singup-complete .complete-card .singup-complete-btn .btn1:hover {
     background: #FF5252;
 }
 
-.complete-card .singup-complete-btn .btn2 {
+.singup-complete .complete-card .singup-complete-btn .btn2 {
     background: #02B8EB;
     border: none;
     border-radius: 10px;
@@ -56,7 +56,7 @@
     text-align: center;
 }
 
-.complete-card .singup-complete-btn .btn2:hover {
+.singup-complete .complete-card .singup-complete-btn .btn2:hover {
     background: #097CFF;
 }
 
@@ -80,7 +80,7 @@
         flex-direction: column;
     }
 
-    .singup-complete-btn .btn1,
+    .singup-complete .singup-complete-btn .btn1,
     .singup-complete-btn .btn2 {
         padding: 16px 24px;
         font-size: 16px;
