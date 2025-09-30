@@ -1,0 +1,8 @@
+.idea
+.vscode
+Readme.md
+tatus
+**/logs/
+*.log
+**/data/
+.env
