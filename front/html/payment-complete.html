@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Travel Shoot</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+    <link href="../css/common.css" rel="stylesheet"/>
+</head>
+<body>
+<header class="app-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 d-flex">
+                <div class="col-sm-1 col-lg-1 col-2">
+                    <div class="logo" role="img" aria-label="트래블샷 아이콘"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<main>
+    <div class="complete-page">
+        <div class="complete-card">
+            <div class="complete-text">
+                <div class="complete-title">숙소 예약이 완료되었습니다.</div>
+                <div class="complete-subtitle">
+                    Travel Shoot에서 끊김 없는 여행을 경험해보세요.
+                </div>
+            </div>
+
+            <div class="complete-page-btn">
+                <button class="btn1">예약 상세 조회</button>
+                <button class="btn2">홈으로</button>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+    // 버튼 클릭 이벤트
+    document
+        .querySelector(".btn-primary-custom")
+        .addEventListener("click", function (e) {
+            e.preventDefault();
+        });
+
+    document
+        .querySelector(".btn-secondary-custom")
+        .addEventListener("click", function (e) {
+            e.preventDefault();
+        });
+</script>
+</body>
+</html>

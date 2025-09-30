@@ -61,9 +61,10 @@
 
 /* 숙박/1박당이랑 31000원 수평정렬하고 싶어서 추가함 */
 .payment-page .section-card .stay-content .stay-info .price-highlight .small-text {
-    font-size: 0.9em;
+    font-size: 13px;
     margin-bottom: 0 !important;
     align-self: baseline;
+    font-weight: 600;
 }
 
 /* 은비님 css 코드 발췌 ====== end */
@@ -84,7 +85,7 @@
 }
 
 .payment-page .section-card .stay-checkments{
-    font-size: 13px;
+    font-size: 14px;
     color: #FF8888;
     margin-bottom: 8px;
 }
@@ -110,7 +111,7 @@
 }
 
 .payment-page .section-card .stay-name {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 700;
     color: #333;
 }
@@ -348,11 +349,11 @@
     font-size: 15px;
 }
 
-.payment-page .section-card .payment-line-img{
-    height: 50px;
-    margin-left: 5px;
-    margin-top: 2px;
-}
+/*.payment-page .section-card .payment-line-img{*/
+/*    height: 50px;*/
+/*    margin-left: 5px;*/
+/*    margin-top: 2px;*/
+/*}*/
 
 .payment-page .price-section .final-price-label {
     font-size: 15px;
@@ -360,7 +361,7 @@
 }
 
 .payment-page .price-section .final-price-won {
-    font-size: 25px;
+    font-size: 22.4px;
     color: #F56770;
 }
 
@@ -473,8 +474,21 @@
     margin-bottom: 8px;
 }
 
+.payment-modal .modal-footer {
+    padding: 0;
+    text-align: center;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .payment-modal .modal-footer:hover {
     background-color: #FF8888;
+    color: white;
 }
 
 @media screen and (max-width: 1200px) {
@@ -763,9 +777,9 @@
         font-size: 14px;
     }
     
-    .payment-page .section-card .payment-line-img {
-        height: 45px;
-    }
+    /*.payment-page .section-card .payment-line-img {*/
+    /*    height: 45px;*/
+    /*}*/
     
     /* 메인 레이아웃을 모바일에서 세로로 */
     .payment-page .row {

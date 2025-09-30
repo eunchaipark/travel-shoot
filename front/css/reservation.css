@@ -98,25 +98,10 @@
   font-weight: 700;
 }
 
-.reservation-detail-page .small-text {
-  font-size: 0.85em;
-  color: #666;
-}
-
 .reservation-detail-page .final-price {
   color: #f56770;
   font-weight: 800;
   font-size: 1.2em;
-}
-
-
-.reservation-detail-page .pay-line-con {
-  text-align: right;
-  padding-right: 8px;
-}
-
-.reservation-detail-page .pay-line-con .pay-line {
-  height: 60px;
 }
 
 .reservation-detail-page .day-tabs .nav-link {

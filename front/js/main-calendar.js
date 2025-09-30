@@ -1021,7 +1021,7 @@ function toggleGuestDropdown() {
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <div>
                     <div style="font-weight: 600; margin-bottom: 4px;">성인</div>
-                    <small style="color: #6c757d;">13세 이상</small>
+                    <small style="color: #6c757d;">18세 이상</small>
                 </div>
                 <div style="display: flex; align-items: center; gap: 15px;">
                     <button type="button" class="guest-btn guest-btn-minus" data-type="adult">
@@ -1037,7 +1037,7 @@ function toggleGuestDropdown() {
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <div style="font-weight: 600; margin-bottom: 4px;">어린이</div>
-                    <small style="color: #6c757d;">2-12세</small>
+                    <small style="color: #6c757d;">0-17세</small>
                 </div>
                 <div style="display: flex; align-items: center; gap: 15px;">
                     <button type="button" class="guest-btn guest-btn-minus" data-type="child">

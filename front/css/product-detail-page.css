@@ -15,7 +15,7 @@
 .product-detail-container .hotel-location {
     display: flex;
     align-items: center;
-    color: #585858;
+    color: #666;
     font-size: 0.85em;
 }
 
@@ -34,9 +34,9 @@
 }
 
 .product-detail-container .price-amount {
-    color: #ff8888;
-    font-size: 20px;
-    font-weight: 600;
+    color: #f56770;
+    font-size: 21px;
+    font-weight: 700;
     margin-bottom: 2px;
 }
 
