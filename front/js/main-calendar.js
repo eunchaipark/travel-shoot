@@ -1,7 +1,7 @@
 /* ==========================================================================
    전역 변수 및 설정
    ========================================================================== */
-let isLoggedIn = false; 
+let isLoggedIn = true; 
 let calendar = null;
 let dateSelectionMode = true;
 let selectedDates = {
@@ -827,7 +827,7 @@ function updateMiniCalendarDisplay() {
             }
         }
     });
-    
+    setCalendarMaxHeight();
     console.log('미니 달력 업데이트 완료:', {
         checkin: selectedDates.checkin,
         checkout: selectedDates.checkout
@@ -1000,22 +1000,6 @@ function toggleGuestDropdown() {
     
     const dropdownContainer = document.createElement('div');
     dropdownContainer.className = 'guest-dropdown-container';
-    dropdownContainer.style.cssText = `
-        max-height: 0;
-        overflow: hidden;
-        transition: all 0.3s ease;
-        opacity: 0;
-        background: white;
-        border-left: 1px solid #ddd;
-        border-right: 1px solid #ddd;
-        border-bottom: 1px solid #ddd;
-        border-bottom-left-radius: 16px;
-        border-bottom-right-radius: 16px;
-        margin-bottom: 1rem;
-        width: 100%;
-        box-sizing: border-box;
-    `;
-    
     dropdownContainer.innerHTML = `
         <div style="padding: 20px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -1023,13 +1007,13 @@ function toggleGuestDropdown() {
                     <div style="font-weight: 600; margin-bottom: 4px;">성인</div>
                     <small style="color: #6c757d;">18세 이상</small>
                 </div>
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <button type="button" class="guest-btn guest-btn-minus" data-type="adult">
-                        <i class="fas fa-minus"></i>
+                <div class="counter-controls" style="display: flex; align-items: center; gap: 15px;">
+                    <button type="button" class="counter-btn guest-btn guest-btn-minus" data-type="adult">
+                        -
                     </button>
                     <span class="guest-count" data-type="adult">${currentAdultCount}</span>
-                    <button type="button" class="guest-btn guest-btn-plus" data-type="adult">
-                        <i class="fas fa-plus"></i>
+                    <button type="button" class="counter-btn guest-btn guest-btn-plus" data-type="adult">
+                        +
                     </button>
                 </div>
             </div>
@@ -1039,13 +1023,13 @@ function toggleGuestDropdown() {
                     <div style="font-weight: 600; margin-bottom: 4px;">어린이</div>
                     <small style="color: #6c757d;">0-17세</small>
                 </div>
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <button type="button" class="guest-btn guest-btn-minus" data-type="child">
-                        <i class="fas fa-minus"></i>
+                <div class="counter-controls" style="display: flex; align-items: center; gap: 15px;">
+                    <button type="button" class="counter-btn guest-btn guest-btn-minus" data-type="child">
+                        -
                     </button>
                     <span class="guest-count" data-type="child">${currentChildCount}</span>
-                    <button type="button" class="guest-btn guest-btn-plus" data-type="child">
-                        <i class="fas fa-plus"></i>
+                    <button type="button" class="counter-btn guest-btn guest-btn-plus" data-type="child">
+                        +
                     </button>
                 </div>
             </div>
@@ -1092,22 +1076,6 @@ function toggleDateDropdown() {
     
     const dropdownContainer = document.createElement('div');
     dropdownContainer.className = 'date-dropdown-container';
-    dropdownContainer.style.cssText = `
-        max-height: 0;
-        overflow: hidden;
-        transition: all 0.3s ease;
-        opacity: 0;
-        background: white;
-        border-left: 1px solid #ddd;
-        border-right: 1px solid #ddd;
-        border-bottom: 1px solid #ddd;
-        border-bottom-left-radius: 16px;
-        border-bottom-right-radius: 16px;
-        margin-bottom: 1rem;
-        width: 100%;
-        box-sizing: border-box;
-    `;
-    
     dropdownContainer.innerHTML = `
         <div style="padding: 15px;">
             <div class="mini-calendar-container" style="justify-content: center; width: 100%;">
@@ -1126,7 +1094,7 @@ function toggleDateDropdown() {
     searchContainer.insertBefore(dropdownContainer, guestCard);
     
     setTimeout(() => {
-        dropdownContainer.style.maxHeight = '350px';
+        setCalendarMaxHeight();
         dropdownContainer.style.opacity = '1';
     }, 10);
     
@@ -1136,7 +1104,10 @@ function toggleDateDropdown() {
 /* ==========================================================================
    이벤트 핸들러
    ========================================================================== */
-
+function setCalendarMaxHeight(){
+    const dropdownContainer = document.querySelector('.date-dropdown-container');
+    dropdownContainer.style.maxHeight = dropdownContainer.querySelector('.mini-calendar-container').scrollHeight+30+ 'px';
+}
 /**
  * 인원 선택 버튼 이벤트 추가
  */

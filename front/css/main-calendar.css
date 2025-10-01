@@ -740,6 +740,21 @@
     z-index: 1;
 }
 
+.main-page .calendar-section-wrapper .calendar-search-container .search-section-container .guest-dropdown-container{
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    opacity: 0;
+    background: white;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    margin-bottom: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
 /* ==========================================================================
    반응형 디자인 - 체계적으로 정리
    ========================================================================== */
@@ -1006,7 +1021,7 @@
         margin-left: 0 !important;
         margin-right: 0 !important;
     }
-    
+
     /* ==========================================================================
        비로그인 상태 메시지 위치 조정
        ========================================================================== */

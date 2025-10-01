@@ -109,7 +109,7 @@ body {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-.app-header .dropdown-suggestions {
+.dropdown-suggestions {
     position: absolute;
     top: 100%;
     left: 0;
@@ -121,7 +121,7 @@ body {
     margin-top: 5px;
 }
 
-.app-header .dropdown-suggestions .suggestion-item {
+.dropdown-suggestions .suggestion-item {
     padding: 12px 20px;
     border: none;
     background: none;
@@ -131,13 +131,15 @@ body {
     align-items: center;
     color: #333;
     transition: background-color 0.3s;
+    border-radius: 15px;
 }
 
-.app-header .dropdown-suggestions .suggestion-item:hover {
+.dropdown-suggestions .suggestion-item:hover {
     background-color: #f8f9fa;
+    border-radius: 15px;
 }
 
-.app-header .dropdown-suggestions .suggestion-item i {
+.dropdown-suggestions .suggestion-item i {
     margin-right: 12px;
     color: #666;
 }
@@ -170,7 +172,7 @@ body {
     gap: 15px;
 }
 
-.app-header .counter-btn {
+.counter-controls .counter-btn {
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -182,13 +184,15 @@ body {
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s;
+    font-weight: 500;
+    font-size: 16px;
 }
 
-.app-header .counter-btn:hover {
-    background: #f8f9fa;
+.counter-controls .counter-btn:hover {
+    background: #ff6b6b;
 }
 
-.app-header .counter-btn.disabled {
+.counter-controls .counter-btn.disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
@@ -223,7 +227,7 @@ body {
 .app-header .guest-info h6 {
     margin: 0;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .app-header .guest-info small {
