@@ -110,12 +110,37 @@
                         <div class="slogan">끊임없는 여행</div>
                         
                         <!-- 지역 검색 -->
-                        <div class="search-card">
+                        <div class="search-card position-relative">
                             <div class="search-icon-box">
                                 <!-- 아이콘 -->
                                 <img src="../img/main-calendar-searchcard-location-icon.svg" alt="지역아이콘">
                             </div>
                             <input type="text" class="search-input main-calendar-location-input" placeholder="어디로 떠나시나요?">
+                            
+                            <!-- 드롭다운 suggestions -->
+                            <div class="dropdown-suggestions d-none ">
+                                <button class="suggestion-item">
+                                    <i class="fas fa-building"></i>
+                                    <div>
+                                        <div class="fw-bold">SL 호텔 강릉</div>
+                                        <small class="text-muted">강릉특별자치도 강릉시 OO----</small>
+                                    </div>
+                                </button>
+                                <button class="suggestion-item">
+                                    <i class="fas fa-home"></i>
+                                    <div>
+                                        <div class="fw-bold">유담리솜펜션</div>
+                                        <small class="text-muted">강릉특별자치도 강릉시 OO----</small>
+                                    </div>
+                                </button>
+                                <button class="suggestion-item">
+                                    <i class="fas fa-building"></i>
+                                    <div>
+                                        <div class="fw-bold">강릉씨고호텔</div>
+                                        <small class="text-muted">강릉특별자치도 강릉시 OO----</small>
+                                    </div>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- 날짜 선택 -->
