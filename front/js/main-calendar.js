@@ -1343,13 +1343,85 @@ document.addEventListener('DOMContentLoaded', function() {
  * 이벤트 리스너 설정
  */
 function setupEventListeners() {
-    // 날짜 입력 필드 클릭
+    // ============ 지역 검색 드롭다운 ============
+    const locationInput = document.querySelector('.main-calendar-location-input');
+    
+    if (locationInput) {
+        const locationCard = locationInput.closest('.search-card');
+        const locationDropdown = locationCard.querySelector('.dropdown-suggestions');
+        
+        if (locationDropdown) {
+            console.log('✅ 지역 드롭다운 초기화 성공');
+            
+            // 초기 상태 확인 및 강제 숨김
+            locationDropdown.classList.add('d-none');
+            
+            // 포커스 시 드롭다운 표시
+            locationInput.addEventListener('focus', function() {
+                // 다른 모든 드롭다운 닫기
+                closeAllLocationDropdowns();
+                
+                locationDropdown.classList.remove('d-none');
+                
+                // 다음 형제 요소에 margin 추가
+                setTimeout(() => {
+                    const nextCard = locationCard.nextElementSibling;
+                    if (nextCard && nextCard.classList.contains('search-card')) {
+                        const dropdownHeight = locationDropdown.offsetHeight;
+                        nextCard.style.marginTop = `${dropdownHeight + 16}px`;
+                        nextCard.style.transition = 'margin-top 0.3s ease';
+                    }
+                }, 10);
+                
+                console.log('지역 드롭다운 열림');
+            });
+            
+            // 입력 시 드롭다운 표시
+            locationInput.addEventListener('input', function() {
+                if (this.value.length > 0) {
+                    closeAllLocationDropdowns();
+                    
+                    locationDropdown.classList.remove('d-none');
+                    
+                    setTimeout(() => {
+                        const nextCard = locationCard.nextElementSibling;
+                        if (nextCard && nextCard.classList.contains('search-card')) {
+                            const dropdownHeight = locationDropdown.offsetHeight;
+                            nextCard.style.marginTop = `${dropdownHeight}px`;
+                            nextCard.style.transition = 'margin-top 0.3s ease';
+                        }
+                    }, 10);
+                }
+            });
+            
+            // 드롭다운 아이템 클릭
+            const suggestionItems = locationCard.querySelectorAll('.suggestion-item');
+            suggestionItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const locationName = this.querySelector('.fw-bold').textContent;
+                    locationInput.value = locationName;
+                    closeAllLocationDropdowns();
+                    console.log('선택된 지역:', locationName);
+                });
+            });
+        } else {
+            console.error('❌ 지역 드롭다운을 찾을 수 없음');
+        }
+    } else {
+        console.error('❌ 지역 입력창을 찾을 수 없음');
+    }
+
+    // ============ 날짜 입력 필드 ============
     const dateInput = document.querySelector('.main-calendar-date-input');
     if (dateInput) {
         dateInput.addEventListener('click', function(e) {
             console.log('날짜 입력 필드 클릭');
             e.preventDefault();
             e.stopPropagation();
+            
+            // 지역 드롭다운 닫기
+            closeAllLocationDropdowns();
             
             if (!dateSelectionMode) {
                 activateDateSelectionMode();
@@ -1359,17 +1431,21 @@ function setupEventListeners() {
         });
     }
 
-    // 인원 입력 필드 클릭
+    // ============ 인원 입력 필드 ============
     const guestInput = document.querySelector('.main-calendar-guest-input');
     if (guestInput) {
         guestInput.addEventListener('click', function(e) {
             console.log('인원 입력 필드 클릭');
             e.stopPropagation();
+            
+            // 지역 드롭다운 닫기
+            closeAllLocationDropdowns();
+            
             toggleGuestDropdown();
         });
     }
 
-    // 검색 버튼
+    // ============ 검색 버튼 ============
     const searchButton = document.querySelector('.main-calendar-search-button');
     if (searchButton) {
         searchButton.addEventListener('click', function() {
@@ -1377,30 +1453,60 @@ function setupEventListeners() {
         });
     }
 
-    // 외부 클릭시 드롭다운 닫기
+    // ============ 외부 클릭시 드롭다운 닫기 ============
     document.addEventListener('click', function(e) {
         const clickedElement = e.target;
+        
+        // 지역 드롭다운 체크
+        const clickedLocationCard = clickedElement.closest('.search-card:has(.main-calendar-location-input)');
+        const clickedLocationDropdown = clickedElement.closest('.dropdown-suggestions');
+        
+        // 날짜/인원 체크
         const dateCard = clickedElement.closest('.search-card:has(.main-calendar-date-input)');
         const guestCard = clickedElement.closest('.search-card:has(.main-calendar-guest-input)');
         const dateDropdown = clickedElement.closest('.date-dropdown-container');
         const guestDropdown = clickedElement.closest('.guest-dropdown-container');
         const calendarEl = clickedElement.closest('#calendar');
         
+        // 지역 드롭다운 닫기
+        if (!clickedLocationCard && !clickedLocationDropdown) {
+            closeAllLocationDropdowns();
+        }
+
+        // 날짜/인원 드롭다운 닫기
         if (!dateCard && !guestCard && !dateDropdown && !guestDropdown && !calendarEl) {
             hideAllDropdowns();
             deactivateDateSelectionMode();
         }
     });
 
-    // 키보드 이벤트 처리
+    // ============ 키보드 이벤트 ============
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
+            closeAllLocationDropdowns();
             hideAllDropdowns();
             deactivateDateSelectionMode();
         }
         
         if (e.key === 'Enter' && (selectedDates.checkin && selectedDates.checkout)) {
             handleSearch();
+        }
+    });
+}
+
+// ============ 헬퍼 함수: 모든 지역 드롭다운 닫기 ============
+function closeAllLocationDropdowns() {
+    const allLocationDropdowns = document.querySelectorAll('.search-card .dropdown-suggestions');
+    allLocationDropdowns.forEach(dropdown => {
+        dropdown.classList.add('d-none');
+        
+        // 부모 카드 찾아서 다음 요소 margin 제거
+        const parentCard = dropdown.closest('.search-card');
+        if (parentCard) {
+            const nextCard = parentCard.nextElementSibling;
+            if (nextCard && nextCard.classList.contains('search-card')) {
+                nextCard.style.marginTop = '';
+            }
         }
     });
 }
