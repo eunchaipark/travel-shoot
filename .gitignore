@@ -6,3 +6,4 @@ tatus
 *.log
 **/data/
 .env
+/frontend/.vite/

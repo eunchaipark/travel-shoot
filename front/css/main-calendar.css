@@ -62,8 +62,56 @@
     width: 100%;
     max-width: none; /* 기존 1200px 제한 제거 */
     margin: 0 auto;
-    padding: 0 20px
+    padding: 0 20px;
+    overflow: visible;
 }
+
+/* 드롭다운 z-index 최우선 */
+.main-page .search-section-container .dropdown-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd; /* 다른 드롭다운과 동일 */
+    border-top: none; /* 위쪽 경계 제거 (카드와 붙임) */
+    border-radius: 0 0 16px 16px; /* 아래쪽만 둥글게 */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    z-index: 99999 !important;
+    margin-top: 0; /* 간격 제거 */
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* 날짜 드롭다운보다 위에 */
+.main-page .search-section-container .search-card:has(.dropdown-suggestions:not(.d-none)) {
+    z-index: 10001 !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.main-page .search-section-container .dropdown-suggestions .suggestion-item {
+    padding: 12px 20px;
+    border: none;
+    background: none;
+    text-align: left;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    color: #333;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.main-page .search-section-container .date-dropdown-container {
+    z-index: 9999;
+}
+
+.main-page .search-section-container .guest-dropdown-container {
+    z-index: 9999;
+}
+
 
 /* ==========================================================================
    달력 카드 스타일
@@ -127,6 +175,7 @@
     overflow: hidden;
     margin-bottom: 1rem;
     position: relative;
+    overflow: visible;
 }
 
 .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .search-card:hover {
@@ -144,6 +193,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    border-radius: 16px;
 }
 
 .main-page .calendar-section-wrapper .calendar-search-container .search-section-container .search-card .search-icon-box .search-icon {
