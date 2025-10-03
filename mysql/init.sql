@@ -1,4 +1,16 @@
+DROP DATABASE IF EXISTS travel_shoot;
 
+CREATE DATABASE travel_shoot
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+USE travel_shoot;
+
+SET NAMES utf8mb4;
+SET CHARACTER_SET_CLIENT = utf8mb4;
+SET CHARACTER_SET_CONNECTION = utf8mb4;
+SET CHARACTER_SET_RESULTS = utf8mb4;
+SET collation_connection = utf8mb4_unicode_ci;
 -- 1. users (사용자)
 CREATE TABLE users (
     user_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '사용자 ID',
