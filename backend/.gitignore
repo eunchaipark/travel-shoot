@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### gmail - 계정정보
+application-email.properties
