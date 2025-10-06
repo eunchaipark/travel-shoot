@@ -8,10 +8,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="../css/common.css" rel="stylesheet"/>
     <link href="../css/review-list.css" rel="stylesheet"/>
+
 </head>
 <body>
 <div class="review-list-container">
-  <!-- Header -->
+    <!-- Header -->
     <header class="navigation-header">
         <div class="header-content-wrapper">
             <button class="navigation-back-button" type="button">
@@ -25,87 +26,81 @@
     </header>
 
     <div class="container-fluid py-5">
-         
-        <!-- 전체 후기 별점 -->
-       <div class="main-review-container">
-        <div class="container overall-rating-section">
-        <div class="row justify-content-center">
-            <div class="col-12 text-center">
-                <!-- 메인 레이아웃: 왼쪽 전체평점, 오른쪽 세부평점 -->
-                <div class="row justify-content-center align-items-center">
-                    <!-- 전체 평점 (왼쪽) -->
-                    <div class="total-score col-auto me-6">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-star overall-rating-star-icon"></i>
-                            <span class="overall-rating-number">4.9</span>
-                        </div>
-                    </div>
+        <!-- 전체 후기 별점 카드 -->
+        <div class="main-review-container">
+            <div class="container overall-rating-section">
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center">
+                        <div class="row justify-content-center align-items-center">
+                            <!-- 전체 평점 -->
+                            <div class="total-score col-auto me-6">
+                                <div class="d-flex align-items-center">
+                                    <span class="overall-rating-star-icon">★</span>
+                                    <span class="overall-rating-number">4.9</span>
+                                </div>
+                            </div>
 
-                    <!-- 평가 항목들 (오른쪽) -->
-                    <div class="col-auto">
-                        <div class="row g-3">
-                            <!-- 의사소통 -->
-                            <div class="col-4">
-                                <div class="rating-category-item text-center">
-                                    <div class="category-label-text">의사소통</div>
-                                    <div class="rating-score-bar">
-                                        <div class="score-fill-indicator" data-score="3.9"></div>
-                                        <div class="score-number-text">3.9</div>
+                            <!-- 평가 항목들 -->
+                            <div class="col-auto">
+                                <div class="row g-3">
+                                    <div class="col-4">
+                                        <div class="rating-category-item text-center">
+                                            <div class="category-label-text">의사소통</div>
+                                            <div class="rating-score-bar">
+                                                <div class="score-fill-indicator" data-score="3.9"></div>
+                                                <div class="score-number-text">3.9</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            
-                            <!-- 위치 -->
-                            <div class="col-4">
-                                <div class="rating-category-item text-center">
-                                    <div class="category-label-text">위치</div>
-                                    <div class="rating-score-bar">
-                                        <div class="score-fill-indicator" data-score="3.9"></div>
-                                        <div class="score-number-text">3.9</div>
+                                    
+                                    <div class="col-4">
+                                        <div class="rating-category-item text-center">
+                                            <div class="category-label-text">위치</div>
+                                            <div class="rating-score-bar">
+                                                <div class="score-fill-indicator" data-score="3.9"></div>
+                                                <div class="score-number-text">3.9</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            
-                            <!-- 가성비 -->
-                            <div class="col-4">
-                                <div class="rating-category-item text-center">
-                                    <div class="category-label-text">가성비</div>
-                                    <div class="rating-score-bar">
-                                        <div class="score-fill-indicator" data-score="3.9"></div>
-                                        <div class="score-number-text">3.9</div>
+                                    
+                                    <div class="col-4">
+                                        <div class="rating-category-item text-center">
+                                            <div class="category-label-text">가성비</div>
+                                            <div class="rating-score-bar">
+                                                <div class="score-fill-indicator" data-score="3.9"></div>
+                                                <div class="score-number-text">3.9</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            
-                            <!-- 청결도 -->
-                            <div class="col-4">
-                                <div class="rating-category-item text-center">
-                                    <div class="category-label-text">청결도</div>
-                                    <div class="rating-score-bar">
-                                        <div class="score-fill-indicator" data-score="3.9"></div>
-                                        <div class="score-number-text">3.9</div>
+                                    
+                                    <div class="col-4">
+                                        <div class="rating-category-item text-center">
+                                            <div class="category-label-text">청결도</div>
+                                            <div class="rating-score-bar">
+                                                <div class="score-fill-indicator" data-score="3.9"></div>
+                                                <div class="score-number-text">3.9</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            
-                            <!-- 체크인 -->
-                            <div class="col-4">
-                                <div class="rating-category-item text-center">
-                                    <div class="category-label-text">체크인</div>
-                                    <div class="rating-score-bar">
-                                        <div class="score-fill-indicator" data-score="4.8"></div>
-                                        <div class="score-number-text">4.8</div>
+                                    
+                                    <div class="col-4">
+                                        <div class="rating-category-item text-center">
+                                            <div class="category-label-text">체크인</div>
+                                            <div class="rating-score-bar">
+                                                <div class="score-fill-indicator" data-score="4.8"></div>
+                                                <div class="score-number-text">4.8</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            
-                            <!-- 편의성 -->
-                            <div class="col-4">
-                                <div class="rating-category-item text-center">
-                                    <div class="category-label-text">편의성</div>
-                                    <div class="rating-score-bar">
-                                        <div class="score-fill-indicator" data-score="3.9"></div>
-                                        <div class="score-number-text">3.9</div>
+                                    
+                                    <div class="col-4">
+                                        <div class="rating-category-item text-center">
+                                            <div class="category-label-text">편의성</div>
+                                            <div class="rating-score-bar">
+                                                <div class="score-fill-indicator" data-score="3.9"></div>
+                                                <div class="score-number-text">3.9</div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -114,59 +109,58 @@
                 </div>
             </div>
         </div>
-    </div>
 
-        <div class="photo-gallery-section bg-white p-4 border-top">
+        <!-- 사진 갤러리 카드 -->
+        <div class="photo-gallery-section">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h6 class="fw-bold mb-0">숙소 후기사진</h6>
-                <button class="photo-count-display-button" data-bs-toggle="modal" data-bs-target="#photoModal">
+                <button class="photo-count-display-button" data-bs-toggle="modal" data-bs-target="#galleryModal">
                     전체 1,689장 사진 <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
             
-            <!-- 가로 스크롤 적용된 사진 썸네일 컨테이너 -->
             <div class="photo-thumbnails-scroll-container">
                 <div class="photo-thumbnails-flex-wrapper">
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
-                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#photoModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
+                    <div class="photo-thumbnail-item" data-bs-toggle="modal" data-bs-target="#galleryModal"></div>
                 </div>
             </div>
         </div>
 
-        <div class="rating-filters-section bg-white ps-4 pe-4 mb-4">
+        <!-- 필터 카드 -->
+        <div class="rating-filters-section">
             <div class="row g-3">
                 <div class="col-md-2 filter-dropdown-container">
-                    <div class=" d-flex align-items-center">
-                        <span class="me-3 fw-bold small">평점:</span>
+                    <div class="d-flex align-items-center">
+                        <span class="me-3 fw-bold small">별점:   </span>
                         <div class="dropdown">
                             <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-star text-warning me-2"></i>
-                                4.7
+                                <span class="review-star-color me-2">★</span>4.7
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-lg"> 
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-star text-warning me-2"></i>전체</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-star text-warning me-2"></i>5점</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-star text-warning me-2"></i>4점</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-star text-warning me-2"></i>3점</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-star text-warning me-2"></i>2점</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-star text-warning me-2"></i>1점</a></li>
+                            <ul class="dropdown-menu dropdown-menu-lg">
+                                <li><a class="dropdown-item" href="#"><span class="review-star-color me-2">★</span>전체</a></li>
+                                <li><a class="dropdown-item" href="#"><span class="review-star-color me-2">★</span>5점</a></li>
+                                <li><a class="dropdown-item" href="#"><span class="review-star-color me-2">★</span>4점</a></li>
+                                <li><a class="dropdown-item" href="#"><span class="review-star-color me-2">★</span>3점</a></li>
+                                <li><a class="dropdown-item" href="#"><span class="review-star-color me-2">★</span>2점</a></li>
+                                <li><a class="dropdown-item" href="#"><span class="review-star-color me-2">★</span>1점</a></li>
                             </ul>
                         </div>
                     </div>
@@ -191,9 +185,9 @@
             </div>
         </div>
 
-        <div class="reviews-list-section ps-4 pe-4">
-
-            <!-- 개선된 리뷰 카드 -->
+        <!-- 리뷰 목록 카드 -->
+        <div class="reviews-list-section">
+            <!-- 첫 번째 리뷰 -->
             <div class="review-item-card">
                 <div class="row">
                     <div class="col-auto review-photo-container">
@@ -201,47 +195,44 @@
                     </div>
                     <div class="col review-content-area">
                         <div class="review-header-section">
-                            <!-- 데스크톱에서는 기존 레이아웃 유지 -->
                             <div class="d-flex justify-content-between align-items-start mb-2 d-none d-sm-flex">
                                 <div>
                                     <div class="star-rating-icons mb-1">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <span class="ms-2 text-muted">(4.2/5)</span>
+                                        <span class="review-star-color">★</span>
+                                        <span class="review-star-color">★</span>
+                                        <span class="review-star-color">★</span>
+                                        <span class="review-star-color">★</span>
+                                        <span class="review-star-color">★</span>
+                                        <span class="ms-1 text-muted">(4.2/5)</span>
                                     </div>
                                     <div class="fw-bold reviewer-info-text">홍길동 | 스탠다드 더블</div>
                                 </div>
                                 <small class="review-date-text">2023.03.16</small>
                             </div>
 
-                            <!-- 모바일에서는 세로 순서로 표시 -->
                             <div class="d-block d-sm-none">
                                 <div class="star-rating-icons">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <span class="ms-2 text-muted">(4.2/5)</span>
+                                    <span class="review-star-color">★</span>
+                                    <span class="review-star-color">★</span>
+                                    <span class="review-star-color">★</span>
+                                    <span class="review-star-color">★</span>
+                                    <span class="review-star-color">★</span>
+                                    <span class="ms-1 text-muted">(4.2/5)</span>
                                 </div>
-                                <div class="reviewer-info-text">홍길동 | 스탠다드 더블</div>
+                                <div class="fw-bold reviewer-info-text">홍길동 | 스탠다드 더블</div>
                                 <div class="review-date-text">2023.03.16</div>
                             </div>
                         </div>
                         
                         <p class="review-text-content mb-0 text-muted small">
                             정말 멋진 뷰를 볼 수 있어 바다를 보며 아침을 맞이할 수 있어서 좋았습니다. 침대는 커서, 신랑, 둘이 크게 잠들 수 있어서 좋았습니다. 
-                            위치 좋아요, 근처에 편의시설 많아서 좋구요. 바다 뷰 정말 좋네요. 건내 좋아요, 직원 좋은 서비스 좋아요. 여기서 
-                            바다가까지도 걸어서 갈수, 시설이 있는 시설도 가까운, 오션뷰는 가격대.
+                            위치 좋아요, 근처에 편의시설 많아서 좋구요. 바다 뷰 정말 좋네요. 건내 좋아요, 직원 좋은 서비스 좋아요.
                         </p>
                     </div>
                 </div>
             </div>
 
-            <!-- 두 번째 리뷰 카드 -->
+            <!-- 두 번째 리뷰 -->
             <div class="review-item-card">
                 <div class="row">
                     <div class="col-auto review-photo-container">
@@ -249,47 +240,44 @@
                     </div>
                     <div class="col review-content-area">
                         <div class="review-header-section">
-                            <!-- 데스크톱에서는 기존 레이아웃 유지 -->
                             <div class="d-flex justify-content-between align-items-start mb-2 d-none d-sm-flex">
                                 <div>
                                     <div class="star-rating-icons mb-1">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <span class="ms-2 text-muted">(4.8/5)</span>
+                                        <span class="review-star-color">★</span>
+                                        <span class="review-star-color">★</span>
+                                        <span class="review-star-color">★</span>
+                                        <span class="review-star-color">★</span>
+                                        <span class="review-star-color">★</span>
+                                        <span class="ms-1 text-muted">(4.8/5)</span>
                                     </div>
                                     <div class="fw-bold reviewer-info-text">김영희 | 디럭스 더블</div>
                                 </div>
                                 <small class="review-date-text">2023.03.15</small>
                             </div>
 
-                            <!-- 모바일에서는 세로 순서로 표시 -->
                             <div class="d-block d-sm-none">
                                 <div class="star-rating-icons">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <span class="ms-2 text-muted">(4.8/5)</span>
+                                    <span class="review-star-color">★</span>
+                                    <span class="review-star-color">★</span>
+                                    <span class="review-star-color">★</span>
+                                    <span class="review-star-color">★</span>
+                                    <span class="review-star-color">★</span>
+                                    <span class="ms-1 text-muted">(4.8/5)</span>
                                 </div>
-                                <div class="reviewer-info-text">김영희 | 디럭스 더블</div>
+                                <div class="fw-bold reviewer-info-text">김영희 | 디럭스 더블</div>
                                 <div class="review-date-text">2023.03.15</div>
                             </div>
                         </div>
                         
                         <p class="review-text-content mb-0 text-muted small">
                             직원분들이 정말 친절하시고 체크인 과정이 매우 원활했습니다. 룸 컨디션도 깨끗하고 좋았어요. 
-                            특히 조식이 맛있어서 만족스러웠습니다. 다음에도 재방문 의사가 있습니다. 
-                            전반적으로 만족스러운 숙박이었고 추천하고 싶은 호텔입니다.
+                            특히 조식이 맛있어서 만족스러웠습니다. 다음에도 재방문 의사가 있습니다.
                         </p>
                     </div>
                 </div>
             </div>
 
-            <!-- 세 번째 리뷰 카드 -->
+            <!-- 세 번째 리뷰 -->
             <div class="review-item-card">
                 <div class="row">
                     <div class="col-auto review-photo-container">
@@ -297,92 +285,93 @@
                     </div>
                     <div class="col review-content-area">
                         <div class="review-header-section">
-                            <!-- 데스크톱에서는 기존 레이아웃 유지 -->
                             <div class="d-flex justify-content-between align-items-start mb-2 d-none d-sm-flex">
                                 <div>
                                     <div class="star-rating-icons mb-1">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                        <span class="ms-2 text-muted">(4.0/5)</span>
+                                        <span class="review-star-color">★</span>
+                                        <span class="review-star-color">★</span>
+                                        <span class="review-star-color">★</span>
+                                        <span class="review-star-color">★</span>
+                                        <span class="review-star-color">★</span>
+                                        <span class="ms-1 text-muted">(4.0/5)</span>
                                     </div>
                                     <div class="fw-bold reviewer-info-text">박민수 | 패밀리룸</div>
                                 </div>
                                 <small class="review-date-text">2023.03.14</small>
                             </div>
 
-                            <!-- 모바일에서는 세로 순서로 표시 -->
                             <div class="d-block d-sm-none">
                                 <div class="star-rating-icons">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <span class="ms-2 text-muted">(4.0/5)</span>
+                                    <span class="review-star-color">★</span>
+                                    <span class="review-star-color">★</span>
+                                    <span class="review-star-color">★</span>
+                                    <span class="review-star-color">★</span>
+                                    <span class="review-star-color">★</span>
+                                    <span class="ms-1 text-muted">(4.0/5)</span>
                                 </div>
-                                <div class="reviewer-info-text">박민수 | 패밀리룸</div>
+                                <div class="fw-bold reviewer-info-text">박민수 | 패밀리룸</div>
                                 <div class="review-date-text">2023.03.14</div>
                             </div>
                         </div>
                         
                         <p class="review-text-content mb-0 text-muted small">
                             가족 여행으로 이용했는데 패밀리룸이 넉넉해서 좋았습니다. 아이들이 놀기에도 충분한 공간이었어요. 
-                            주변에 관광지들이 가까워서 이동하기 편리했습니다. 다만 주차공간이 조금 부족한 느낌이었네요. 
-                            그래도 전체적으로는 만족합니다.
+                            주변에 관광지들이 가까워서 이동하기 편리했습니다. 다만 주차공간이 조금 부족한 느낌이었네요.
                         </p>
                     </div>
                 </div>
             </div>
-
         </div>
-        </div> 
     </div>
 
-<div class="photo-modal modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header border-0">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <!-- 메인 이미지 -->
-                            <div class="col-12 mb-4 pt-2">
-                                <div class="modal-main-image-container">
-                                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=400&fit=crop" 
-                                         alt="메인 사진" class="modal-main-display-image" id="mainImage">
-                                </div>
+    <!-- Gallery Modal -->
+    <div class="photo-modal modal fade" id="galleryModal" tabindex="-1" aria-labelledby="galleryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- 메인 이미지 -->
+                        <div class="col-12 mb-4 pt-2">
+                            <div class="modal-main-image-container">
+                                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=400&fit=crop" 
+                                     alt="메인 사진" class="modal-main-display-image" id="mainImage">
                             </div>
-                            
-                            <!-- 썸네일 갤러리 -->
-                            <div class="col-12 pb-4">
-                                <div class="modal-thumbnails-scroll-container">
-                                    <div class="modal-thumbnails-flex-wrapper">
-                                        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=200&h=200&fit=crop" 
-                                             alt="썸네일 1" class="modal-gallery-thumbnail-image active" 
-                                             onclick="changeMainImage(this.src.replace('w=200&h=200', 'w=800&h=400'))">
-                                        <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=200&h=200&fit=crop" 
-                                             alt="썸네일 2" class="modal-gallery-thumbnail-image" 
-                                             onclick="changeMainImage(this.src.replace('w=200&h=200', 'w=800&h=400'))">
-                                        <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=200&h=200&fit=crop" 
-                                             alt="썸네일 3" class="modal-gallery-thumbnail-image" 
-                                             onclick="changeMainImage(this.src.replace('w=200&h=200', 'w=800&h=400'))">
-                                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=200&h=200&fit=crop" 
-                                             alt="썸네일 4" class="modal-gallery-thumbnail-image" 
-                                             onclick="changeMainImage(this.src.replace('w=200&h=200', 'w=800&h=400'))">
-                                        <img src="https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=200&h=200&fit=crop" 
-                                             alt="썸네일 5" class="modal-gallery-thumbnail-image" 
-                                             onclick="changeMainImage(this.src.replace('w=200&h=200', 'w=800&h=400'))">
-                                        <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=200&h=200&fit=crop" 
-                                             alt="썸네일 6" class="modal-gallery-thumbnail-image" 
-                                             onclick="changeMainImage(this.src.replace('w=200&h=200', 'w=800&h=400'))">
-                                        <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=200&h=200&fit=crop" 
-                                             alt="썸네일 7" class="modal-gallery-thumbnail-image" 
-                                             onclick="changeMainImage(this.src.replace('w=200&h=200', 'w=800&h=400'))">
-                                    </div>
+                        </div>
+                        
+                        <!-- 썸네일 갤러리 -->
+                        <div class="col-12 pb-4">
+                            <div class="modal-thumbnails-scroll-container">
+                                <div class="modal-thumbnails-flex-wrapper">
+                                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=200&h=200&fit=crop" 
+                                         alt="썸네일 1" class="modal-gallery-thumbnail-image active" 
+                                         onclick="changeMainImage(this.src.replace('w=200&h=200', 'w=800&h=400'), this)">
+                                    <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=200&h=200&fit=crop" 
+                                         alt="썸네일 2" class="modal-gallery-thumbnail-image" 
+                                         onclick="changeMainImage(this.src.replace('w=200&h=200', 'w=800&h=400'), this)">
+                                    <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=200&h=200&fit=crop" 
+                                         alt="썸네일 3" class="modal-gallery-thumbnail-image" 
+                                         onclick="changeMainImage(this.src.replace('w=200&h=200', 'w=800&h=400'), this)">
+                                    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=200&h=200&fit=crop" 
+                                         alt="썸네일 4" class="modal-gallery-thumbnail-image" 
+                                         onclick="changeMainImage(this.src.replace('w=200&h=200', 'w=800&h=400'), this)">
+                                    <img src="https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=200&h=200&fit=crop" 
+                                         alt="썸네일 5" class="modal-gallery-thumbnail-image" 
+                                         onclick="changeMainImage(this.src.replace('w=200&h=200', 'w=800&h=400'), this)">
+                                    <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=200&h=200&fit=crop" 
+                                         alt="썸네일 6" class="modal-gallery-thumbnail-image" 
+                                         onclick="changeMainImage(this.src.replace('w=200&h=200', 'w=800&h=400'), this)">
+                                    <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=200&h=200&fit=crop" 
+                                         alt="썸네일 7" class="modal-gallery-thumbnail-image" 
+                                         onclick="changeMainImage(this.src.replace('w=200&h=200', 'w=800&h=400'), this)">
+ <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=200&h=200&fit=crop" 
+                                         alt="썸네일 7" class="modal-gallery-thumbnail-image" 
+                                         onclick="changeMainImage(this.src.replace('w=200&h=200', 'w=800&h=400'), this)">     
+                                          <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=200&h=200&fit=crop" 
+                                         alt="썸네일 7" class="modal-gallery-thumbnail-image" 
+                                         onclick="changeMainImage(this.src.replace('w=200&h=200', 'w=800&h=400'), this)">                                      
                                 </div>
                             </div>
                         </div>
@@ -390,71 +379,66 @@
                 </div>
             </div>
         </div>
-
+    </div>
 </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-
-        // 점수에 따른 채우기 비율 계산 및 적용
-        function updateScoreFills() {
-            const scoreFills = document.querySelectorAll('.score-fill-indicator');
-            scoreFills.forEach(fill => {
-                const score = parseFloat(fill.dataset.score);
-                const percentage = (score / 5.0) * 100;
-                fill.style.width = percentage + '%';
-            });
-        }
-
-        // 페이지 로드 시 초기화
-        document.addEventListener('DOMContentLoaded', function() {
-            updateScoreFills();
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // 점수에 따른 채우기 비율 계산 및 적용
+    function updateScoreFills() {
+        const scoreFills = document.querySelectorAll('.score-fill-indicator');
+        scoreFills.forEach(fill => {
+            const score = parseFloat(fill.dataset.score);
+            const percentage = (score / 5.0) * 100;
+            fill.style.width = percentage + '%';
         });
+    }
 
+    // 페이지 로드 시 초기화
+    document.addEventListener('DOMContentLoaded', function() {
+        updateScoreFills();
+    });
 
-        function changeMainImage(src) {
-            document.getElementById('mainImage').src = src;
+    // 갤러리 모달 메인 이미지 변경 함수
+    function changeMainImage(src, clickedThumb) {
+        document.getElementById('mainImage').src = src;
+        
+        // Remove active class from all thumbnails
+        document.querySelectorAll('.modal-gallery-thumbnail-image').forEach(thumb => {
+            thumb.classList.remove('active');
+        });
+        
+        // Add active class to clicked thumbnail
+        clickedThumb.classList.add('active');
+    }
+
+    // Filter functionality
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const dropdown = this.closest('.dropdown');
+            const button = dropdown.querySelector('.dropdown-toggle');
             
-            // Remove active class from all thumbnails
-            document.querySelectorAll('.modal-gallery-thumbnail-image').forEach(thumb => {
-                thumb.classList.remove('active');
-            });
-            
-            // Add active class to clicked thumbnail
-            event.target.classList.add('active');
-        }
-
-        // Filter functionality
-        document.querySelectorAll('.dropdown-item').forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                const dropdown = this.closest('.dropdown');
-                const button = dropdown.querySelector('.dropdown-toggle');
-                
-                if (this.textContent.includes('점')) {
-                    // Rating filter
-                    const rating = this.textContent;
-                    button.innerHTML = this.innerHTML;
-                    filterReviews('rating', rating);
-                } else {
-                    // Room type filter
-                    const roomType = this.textContent;
-                    button.textContent = roomType;
-                    filterReviews('room', roomType);
-                }
-            });
+            if (this.textContent.includes('점')) {
+                const rating = this.textContent;
+                button.innerHTML = this.innerHTML;
+                filterReviews('rating', rating);
+            } else {
+                const roomType = this.textContent;
+                button.textContent = roomType;
+                filterReviews('room', roomType);
+            }
         });
+    });
 
-        function filterReviews(type, value) {
-            // This would typically filter the reviews based on the selected criteria
-            console.log(`Filtering by ${type}: ${value}`);
-            // Implementation would depend on your data structure and requirements
-        }
+    function filterReviews(type, value) {
+        console.log(`Filtering by ${type}: ${value}`);
+    }
 
-        // Back button functionality
-        document.querySelector('.navigation-back-button').addEventListener('click', function() {
-            window.history.back();
-        });
-    </script>
+    // Back button functionality
+    document.querySelector('.navigation-back-button').addEventListener('click', function() {
+        window.history.back();
+    });
+</script>
 </body>
 </html>

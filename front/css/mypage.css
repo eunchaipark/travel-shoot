@@ -50,7 +50,7 @@
   border-radius: 15px;
   padding: 40px 30px;
   height: fit-content;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: 1px solid #dedada;
 }
 
 .mypage .profile-section {
@@ -79,7 +79,7 @@
   background: white;
   border-radius: 15px;
   padding: 40px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border: 1px solid #dedada;
 }
 
 .mypage .form-title {

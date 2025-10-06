@@ -4,7 +4,6 @@ import com.quadrant.travelshoot.domains.user.dto.request.SurveySubmitRequest;
 import com.quadrant.travelshoot.domains.user.dto.response.SurveySubmitResponse;
 import com.quadrant.travelshoot.domains.user.service.SurveyService;
 import com.quadrant.travelshoot.shared.response.ApiResponse;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/survey")
 @RequiredArgsConstructor
-public class UserController {
+public class SurveyController {
     
     private final SurveyService surveyService;
     
@@ -27,16 +26,9 @@ public class UserController {
     @PostMapping("/submit")
     public ResponseEntity<ApiResponse<SurveySubmitResponse>> submitSurvey(
             @Valid @RequestBody SurveySubmitRequest request,
-            HttpSession session
+            @RequestParam(required = false, defaultValue = "1") Long userId
     ) {
-        log.info("설문조사 제출 API 호출");
-        
-        Long userId = (Long) session.getAttribute("userId");
-        
-        if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(ApiResponse.error("UNAUTHORIZED", "로그인이 필요합니다."));
-        }
+        log.info("설문조사 제출 API 호출 - userId: {}", userId);
         
         SurveySubmitResponse response = surveyService.submitSurvey(userId, request);
         
@@ -49,15 +41,10 @@ public class UserController {
      * GET /api/survey/status
      */
     @GetMapping("/status")
-    public ResponseEntity<ApiResponse<Boolean>> checkSurveyStatus(HttpSession session) {
-        log.info("설문조사 완료 여부 확인 API 호출");
-        
-        Long userId = (Long) session.getAttribute("userId");
-        
-        if (userId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(ApiResponse.error("UNAUTHORIZED", "로그인이 필요합니다."));
-        }
+    public ResponseEntity<ApiResponse<Boolean>> checkSurveyStatus(
+            @RequestParam(required = false, defaultValue = "1") Long userId
+    ) {
+        log.info("설문조사 완료 여부 확인 API 호출 - userId: {}", userId);
         
         boolean isCompleted = surveyService.isSurveyCompleted(userId);
         

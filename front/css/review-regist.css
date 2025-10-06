@@ -48,11 +48,11 @@
         font-size: 16px;
     }
     
-    .review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button i {
+    .review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button {
         font-size: 26px;
     }
     
-    .review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .star-rating-container .star-button i {
+    .review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .star-rating-container .star-button {
         font-size: 16px;
     }
 }
@@ -108,7 +108,7 @@
         gap: 4px;
     }
     
-    .review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button i {
+    .review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button {
         font-size: 24px;
     }
     
@@ -197,7 +197,7 @@
         gap: 2px;
     }
     
-    .review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button i {
+    .review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button {
         font-size: 20px;
     }
     
@@ -217,7 +217,7 @@
         text-align: center;
     }
     
-    .review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .star-rating-container .star-button i {
+    .review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .star-rating-container .star-button {
         font-size: 14px;
     }
     
@@ -310,8 +310,8 @@
     margin-bottom: 20px;
     padding: 12px 20px;
     background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
+    border-radius: 0.5rem;
+    border: 1px solid #dedada;
 }
 
 .review-write-page .main-content .accommodation-info-section .reservation-number .reservation-label {
@@ -364,6 +364,7 @@
     font-size: 18px;
     font-weight: 600;
     color: #333;
+    margin-bottom:0;
 }
 
 .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .accommodation-header .status-badge {
@@ -393,7 +394,7 @@
 }
 
 .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details .booking-item .calendar-icon {
-    color: #02B8EB;
+    color: #ff8888;
 }
 
 .review-write-page .main-content .accommodation-info-section .accommodation-card .accommodation-details .booking-details .booking-item .users-icon,
@@ -411,10 +412,10 @@
 ======================================== */
 .review-write-page .main-content .rating-section {
     background-color: white;
-    border-radius: 16px;
+    border-radius: 0.5rem;
     padding: 32px 24px;
     margin-bottom: 24px;
-    border: 1px solid #e9ecef;
+    border: 1px solid #dedada;
 }
 
 /* 전체 만족도 */
@@ -450,14 +451,14 @@
     transform: scale(1.1);
 }
 
-.review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button i {
+.review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button{
     font-size: 32px;
     color: #e0e0e0;
     transition: color 0.2s ease;
 }
 
-.review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button.active i,
-.review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button:hover i {
+.review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button.active,
+.review-write-page .main-content .rating-section .overall-rating .star-rating-container .star-button:hover{
     color: #ff8888;
 }
 
@@ -504,20 +505,17 @@
     cursor: pointer;
     padding: 2px;
     transition: transform 0.2s ease;
+    font-size: 21px;
+    color: #e0e0e0;
+    transition: color 0.2s ease;
 }
 
 .review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .star-rating-container .star-button:hover {
     transform: scale(1.1);
 }
 
-.review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .star-rating-container .star-button i {
-    font-size: 20px;
-    color: #e0e0e0;
-    transition: color 0.2s ease;
-}
-
-.review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .star-rating-container .star-button.active i,
-.review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .star-rating-container .star-button:hover i {
+.review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .star-rating-container .star-button.active,
+.review-write-page .main-content .rating-section .detailed-rating .rating-categories .rating-category .star-rating-container .star-button:hover {
     color: #ff8888;
 }
 
@@ -526,10 +524,10 @@
 ======================================== */
 .review-write-page .main-content .text-review-section {
     background-color: white;
-    border-radius: 16px;
+    border-radius: 0.5rem;
     padding: 24px;
     margin-bottom: 24px;
-    border: 1px solid #e9ecef;
+    border: 1px solid #dedada;
 }
 
 .review-write-page .main-content .text-review-section .section-title {
@@ -567,10 +565,10 @@
 ======================================== */
 .review-write-page .main-content .photo-upload-section {
     background-color: white;
-    border-radius: 16px;
+    border-radius: 0.5rem;
     padding: 24px;
     margin-bottom: 24px;
-    border: 1px solid #e9ecef;
+    border: 1px solid #dedada;
 }
 
 .review-write-page .main-content .photo-upload-section .section-title {
@@ -733,11 +731,11 @@
 ======================================== */
 .review-write-page .main-content .recommendation-section {
     background-color: white;
-    border-radius: 16px;
+    border-radius: 0.5rem;
     padding: 32px 24px;
     margin-bottom: 24px;
     text-align: center;
-    border: 1px solid #e9ecef;
+    border: 1px solid #dedada;
 }
 
 .review-write-page .main-content .recommendation-section .recommendation-question {
@@ -769,7 +767,7 @@
     color: white;
 }
 
-.review-write-page .main-content .recommendation-section .recommendation-button.active i {
+.review-write-page .main-content .recommendation-section .recommendation-button.active {
     color: #ff8888;
 }
 
@@ -778,9 +776,9 @@
 ======================================== */
 .review-write-page .main-content .action-buttons-section {
     background-color: white;
-    border-radius: 16px;
+    border-radius: 0.5rem;
     padding: 20px;
-    border: 1px solid #e9ecef;
+    border: 1px solid #dedada;
 }
 
 .review-write-page .main-content .action-buttons-section .button-group {
@@ -859,7 +857,7 @@
         height: 160px;
     }
     
-    .review-write-page .main-content .overall-rating-section .star-rating-container .star-button i {
+    .review-write-page .main-content .overall-rating-section .star-rating-container .star-button {
         font-size: 36px;
     }
 }
@@ -922,11 +920,11 @@
         font-size: 16px;
     }
     
-    .review-write-page .main-content .overall-rating-section .star-rating-container .star-button i {
+    .review-write-page .main-content .overall-rating-section .star-rating-container .star-button {
         font-size: 28px;
     }
     
-    .review-write-page .main-content .detailed-rating-section .rating-categories .rating-category .star-rating-container .star-button i {
+    .review-write-page .main-content .detailed-rating-section .rating-categories .rating-category .star-rating-container .star-button {
         font-size: 18px;
     }
 }
@@ -983,11 +981,11 @@
         font-size: 16px;
     }
     
-    .review-write-page .main-content .overall-rating-section .star-rating-container .star-button i {
+    .review-write-page .main-content .overall-rating-section .star-rating-container .star-button {
         font-size: 26px;
     }
     
-    .review-write-page .main-content .detailed-rating-section .rating-categories .rating-category .star-rating-container .star-button i {
+    .review-write-page .main-content .detailed-rating-section .rating-categories .rating-category .star-rating-container .star-button {
         font-size: 16px;
     }
 }
@@ -1048,7 +1046,7 @@
         gap: 2px;
     }
     
-    .review-write-page .main-content .overall-rating-section .star-rating-container .star-button i {
+    .review-write-page .main-content .overall-rating-section .star-rating-container .star-button {
         font-size: 20px;
     }
     
@@ -1060,7 +1058,7 @@
         font-size: 14px;
     }
     
-    .review-write-page .main-content .detailed-rating-section .rating-categories .rating-category .star-rating-container .star-button i {
+    .review-write-page .main-content .detailed-rating-section .rating-categories .rating-category .star-rating-container .star-button {
         font-size: 14px;
     }
     

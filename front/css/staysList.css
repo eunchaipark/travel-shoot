@@ -303,8 +303,8 @@
     max-width: 750px;
     display: flex;
     background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
+    border: 1px solid #dedada;
+    border-radius: 0.5rem;
     margin-bottom: 23px;
     overflow: hidden;
     padding: 13px; /* 패딩 주는게 더 예쁘길래 우선 피그마처럼 안하고 넣었음요 */
@@ -442,7 +442,7 @@
     white-space: nowrap;
 }
 
-.staylist-page .search-results-section .hotel-card .stay_content .stay_info .card_bottom .check-in-time {
+.staylist-page .search-results-section .hotel-card .stay_content .card_bottom .check-in-time {
     font-size: 14px;
     color: #999;
     order: 1;
@@ -480,7 +480,7 @@
 }
 
 .staylist-page .search-results-section .hotel-card .stay_content .stay-score-wrapper .stay-score {
-    color: #000000;
+    color: var(--bs-secondary-color);
     font-size: 12px;
     margin-left: 5px;
 }
