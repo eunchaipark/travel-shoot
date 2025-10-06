@@ -19,6 +19,7 @@ CREATE TABLE users (
     user_name VARCHAR(100) NOT NULL COMMENT '사용자명',
     email_verified BOOLEAN NOT NULL DEFAULT FALSE COMMENT '이메일 인증 여부',
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성일시',
+    updated_at TIMESTAMP NULL COMMENT '수정일시',
     deleted_at TIMESTAMP NULL COMMENT '탈퇴일시',
 
     KEY idx_users_created (created_at)

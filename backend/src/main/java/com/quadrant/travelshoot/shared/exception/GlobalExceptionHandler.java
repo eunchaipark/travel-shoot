@@ -60,6 +60,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(ApiResponse.error("SURVEY_NOT_FOUND", ex.getMessage()));
     }
+
+    // 500에러로 뜨는거 401으로 처리 - 로그인 실패 등 인증 오류 처리
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse<Void>> handleIllegalArgumentException(
+            IllegalArgumentException ex
+    ) {
+        log.warn("인증/검증 실패: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error("UNAUTHORIZED", ex.getMessage()));
+    }
     
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGlobalException(Exception ex) {
