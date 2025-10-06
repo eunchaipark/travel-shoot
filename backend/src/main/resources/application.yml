@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: backend
+  data:
+    redis:
+      host: redis
+      port: 6379
