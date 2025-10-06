@@ -21,11 +21,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
+            .formLogin(login -> login.disable())
+            .httpBasic(basic -> basic.disable())
             .authorizeHttpRequests(auth -> auth
                   //여기 아래에 추가하면 됩니다요
 //                .requestMatchers("/api/auth/**", "/api/survey/**").permitAll()
 //                .anyRequest().authenticated()
-
                 // 개발 단계니까 우선 모든 API 열어두기
                 .requestMatchers("/api/**").permitAll()
                 .anyRequest().permitAll()
