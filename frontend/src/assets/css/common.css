@@ -443,12 +443,12 @@ body {
 .modal-overlay .modal-close {
     background: none;
     border: none;
-    font-size: 37px;
+    font-size: 32px;
     color: #7f7f7f;
     cursor: pointer;
     padding: 0;
-    width: 37px;
-    height: 37px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: right;

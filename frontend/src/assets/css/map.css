@@ -38,7 +38,7 @@
 }
 
 .map-page .card-custom {
-  border-radius: 20px;
+  border-radius: 14px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   border: none;
   background-color: #f8f9fa;
@@ -119,6 +119,20 @@
   background-image: url(/images/common/header-location-icon.svg);
 }
 
+.map-page .map-card-overlay {
+  position: absolute;
+  bottom: 38px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  animation: slideUp 0.3s ease-out;
+}
+
+.map-page .map-tag {
+  position: relative;
+  display: inline-block;
+}
+
 .map-page .map-tag .tag-content {
   border-radius: 20px;
   padding: 2px 7px;
@@ -128,14 +142,13 @@
   font-size: 13px;
   font-weight: 600;
   width: fit-content;
-  position: relative;
+  top:-10px;
 }
 
-.map-page .map-tag .tag-content:after {
-  content: "";
-  position: absolute;
-  bottom: -17px;
+.map-page .map-tag .tag-arrow {
+  position: relative;
   left: 50%;
+  top:-1px;
   transform: translateX(-50%);
   width: 0;
   height: 0;
@@ -143,44 +156,44 @@
   border-top: 10px solid;
 }
 
-.map-page .map-tag .tag-content.lodging:after {
+.map-page .map-tag.lodging .tag-arrow {
   border-top-color: #1e3a8a; /* 배경색과 같게 */
 }
 
-.map-page .map-tag .tag-content.restaurant:after {
+.map-page .map-tag.restaurant .tag-arrow {
   border-top-color: #f05650; /* 배경색과 같게 */
 }
 
-.map-page .map-tag .tag-content.attraction:after {
+.map-page .map-tag.attraction .tag-arrow {
   border-top-color: #75b611; /* 배경색과 같게 */
 }
 
-.map-page .map-tag .tag-content.lodging {
+.map-page .map-tag.lodging .tag-content {
   background-color: #eff1f7;
   border-color: #1e3a8a;
 }
 
-.map-page .map-tag .tag-content.lodging.active {
+.map-page .map-tag.lodging .tag-content.active {
   background-color: #1e3a8a;
   color: white;
 }
 
-.map-page .map-tag .tag-content.restaurant {
+.map-page .map-tag.restaurant .tag-content {
   background-color: #fff4ec;
   border-color: #f05650;
 }
 
-.map-page .map-tag .tag-content.restaurant.active {
+.map-page .map-tag.restaurant .tag-content.active {
   background-color: #f05650;
   color: white;
 }
 
-.map-page .map-tag .tag-content.attraction {
+.map-page .map-tag.attraction .tag-content {
   background-color: #f7ffec;
   border-color: #75b611;
 }
 
-.map-page .map-tag .tag-content.attraction.active {
+.map-page .map-tag.attraction .tag-content.active {
   background-color: #75b611;
   color: white;
 }
@@ -194,26 +207,32 @@
   margin-right: 8px;
 }
 
-.map-page .map-tag .tag-content.lodging .icon {
+.map-page .map-tag.lodging .tag-content .icon {
   background-image: url(/images/map/lodging-black-icon.svg);
 }
 
-.map-page .map-tag .tag-content.lodging.active .icon {
+.map-page .map-tag.lodging .tag-content.active .icon {
   background-image: url(/images/map/lodging-white-icon.svg);
 }
 
-.map-page .map-tag .tag-content.restaurant .icon {
+.map-page .map-tag.restaurant .tag-content .icon {
   background-image: url(/images/map/restaurant-black-icon.svg);
 }
 
-.map-page .map-tag .tag-content.restaurant.active .icon {
+.map-page .map-tag.restaurant .tag-content.active .icon {
   background-image: url(/images/map/restaurant-white-icon.svg);
 }
 
-.map-page .map-tag .tag-content.attraction .icon {
+.map-page .map-tag.attraction .tag-content .icon {
   background-image: url(/images/map/attraction-black-icon.svg);
 }
 
-.map-page .map-tag .tag-content.attraction.active .icon {
+.map-page .map-tag.attraction .tag-content.active .icon {
   background-image: url(/images/map/attraction-white-icon.svg);
+}
+
+@media (max-width: 480px) {
+  .map-page .map-card-overlay {
+    bottom: 28px;
+  }
 }
