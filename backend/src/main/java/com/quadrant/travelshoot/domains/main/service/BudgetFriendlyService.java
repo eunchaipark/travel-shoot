@@ -64,15 +64,15 @@ public class BudgetFriendlyService {
      */
     private Map<String, BigDecimal> calculateRegionAveragePrices() {
         List<Object[]> regionPrices = stayRepository.findAveragePriceByRegion();
-        
+
         Map<String, BigDecimal> avgPrices = new HashMap<>();
         for (Object[] row : regionPrices) {
             String regionName = (String) row[0];
-            
+
             // Double을 BigDecimal로 변환
             Object priceObj = row[1];
             BigDecimal avgPrice;
-            
+
             if (priceObj instanceof Double) {
                 avgPrice = BigDecimal.valueOf((Double) priceObj);
             } else if (priceObj instanceof BigDecimal) {
@@ -81,10 +81,10 @@ public class BudgetFriendlyService {
                 log.warn("예상치 못한 타입: {}", priceObj.getClass());
                 continue;
             }
-            
+
             avgPrices.put(regionName, avgPrice);
         }
-        
+
         return avgPrices;
     }
 
@@ -92,43 +92,44 @@ public class BudgetFriendlyService {
      * 할인율 기준으로 가격착한 숙소 찾기
      */
     private List<BudgetStay> findBudgetStays(
-            Map<String, BigDecimal> regionAvgPrices, 
+            Map<String, BigDecimal> regionAvgPrices,
             int discountPercent) {
-        
+
         // 평점 3.5 이상, 활성화된 숙소만 조회
         List<Stay> allStays = stayRepository.findByAverageRatingGreaterThanEqualAndIsActiveTrue(MIN_RATING);
-        
+
         List<BudgetStay> budgetStays = new ArrayList<>();
-        
+
         for (Stay stay : allStays) {
             String regionName = stay.getRegion().getAreaName();
             BigDecimal regionAvg = regionAvgPrices.get(regionName);
-            
-            if (regionAvg == null) continue;
-            
+
+            if (regionAvg == null)
+                continue;
+
             // 해당 숙소의 최저 평일 가격
             BigDecimal stayPrice = stayRepository.findMinWeekdayPrice(stay.getId());
-            if (stayPrice == null) continue;
-            
+            if (stayPrice == null)
+                continue;
+
             // 지역 평균 대비 할인율 계산
             BigDecimal discountThreshold = regionAvg.multiply(
-                BigDecimal.valueOf(100 - discountPercent)
-            ).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
-            
+                    BigDecimal.valueOf(100 - discountPercent)).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+
             // 할인 기준 충족 여부
             if (stayPrice.compareTo(discountThreshold) <= 0) {
                 // 실제 할인율 계산
                 BigDecimal actualDiscount = regionAvg.subtract(stayPrice)
                         .divide(regionAvg, 4, RoundingMode.HALF_UP)
                         .multiply(BigDecimal.valueOf(100));
-                
+
                 budgetStays.add(new BudgetStay(stay, stayPrice, actualDiscount.intValue()));
             }
         }
-        
+
         // 할인율 높은 순으로 정렬
         budgetStays.sort(Comparator.comparingInt(BudgetStay::getDiscountPercent).reversed());
-        
+
         return budgetStays;
     }
 
@@ -139,34 +140,34 @@ public class BudgetFriendlyService {
         if (candidates.size() <= targetCount) {
             return candidates;
         }
-        
+
         List<BudgetStay> selected = new ArrayList<>();
         Set<String> selectedRegions = new HashSet<>();
-        
+
         // 1차: 지역별로 1개씩 선택
         for (BudgetStay stay : candidates) {
             String region = stay.getStay().getRegion().getAreaName();
             if (!selectedRegions.contains(region)) {
                 selected.add(stay);
                 selectedRegions.add(region);
-                
+
                 if (selected.size() >= targetCount) {
                     return selected;
                 }
             }
         }
-        
+
         // 2차: 남은 개수만큼 할인율 높은 순으로 추가
         for (BudgetStay stay : candidates) {
             if (!selected.contains(stay)) {
                 selected.add(stay);
-                
+
                 if (selected.size() >= targetCount) {
                     break;
                 }
             }
         }
-        
+
         return selected;
     }
 
@@ -175,7 +176,7 @@ public class BudgetFriendlyService {
      */
     private Map<String, Object> toResponseMap(BudgetStay budgetStay) {
         Stay stay = budgetStay.getStay();
-        
+
         Map<String, Object> response = new HashMap<>();
         response.put("id", stay.getId());
         response.put("stayCode", stay.getStayCode());
@@ -187,10 +188,10 @@ public class BudgetFriendlyService {
         response.put("discount", budgetStay.getDiscountPercent());
         response.put("checkinTime", stay.getCheckInTime().toString().substring(0, 5));
         response.put("reviews", formatReviews(stay.getReviewCount()));
-        
-        log.info("선정: {} - 가격: {}원, 할인: {}%", 
+
+        log.info("선정: {} - 가격: {}원, 할인: {}%",
                 stay.getStayName(), budgetStay.getPrice(), budgetStay.getDiscountPercent());
-        
+
         return response;
     }
 
@@ -227,8 +228,16 @@ public class BudgetFriendlyService {
             this.discountPercent = discountPercent;
         }
 
-        public Stay getStay() { return stay; }
-        public BigDecimal getPrice() { return price; }
-        public int getDiscountPercent() { return discountPercent; }
+        public Stay getStay() {
+            return stay;
+        }
+
+        public BigDecimal getPrice() {
+            return price;
+        }
+
+        public int getDiscountPercent() {
+            return discountPercent;
+        }
     }
 }
