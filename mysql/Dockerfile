@@ -5,6 +5,6 @@ ENV MYSQL_DATABASE=travel_shoot
 ENV MYSQL_USER=kcc
 ENV MYSQL_PASSWORD=kcc
 
-COPY init.sql /docker-entrypoint-initdb.d/
+COPY 001_init.sql /docker-entrypoint-initdb.d/
 
 EXPOSE 3306
