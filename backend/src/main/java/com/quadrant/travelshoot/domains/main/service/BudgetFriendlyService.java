@@ -188,7 +188,7 @@ public class BudgetFriendlyService {
         response.put("discount", budgetStay.getDiscountPercent());
         response.put("checkinTime", stay.getCheckInTime().toString().substring(0, 5));
         response.put("reviews", formatReviews(stay.getReviewCount()));
-
+        response.put("placeType", "stay");
         log.info("선정: {} - 가격: {}원, 할인: {}%",
                 stay.getStayName(), budgetStay.getPrice(), budgetStay.getDiscountPercent());
 

@@ -147,7 +147,7 @@ public class TrendingService {
         response.put("price", price);
         response.put("category", stay.getStayType().name());
         response.put("reviews", stay.getReviewCount());
-
+        response.put("placeType", "stay");
         log.info("트렌딩 숙소: {} - 점수: {}", stay.getStayName(),
                 String.format("%.2f", item.getScore()));
 
@@ -162,7 +162,7 @@ public class TrendingService {
         response.put("title", restaurant.getRestaurantName());
         response.put("image", null);
         response.put("rating", restaurant.getRating());
-
+        response.put("placeType", "restaurant");
         if (restaurant.getRegion() != null) {
             response.put("location", formatLocation(
                     restaurant.getRegion().getCityName(),
@@ -188,7 +188,7 @@ public class TrendingService {
         response.put("title", activity.getActivityName());
         response.put("image", null);
         response.put("rating", activity.getRating());
-
+        response.put("placeType", "activity");
         if (activity.getRegion() != null) {
             response.put("location", formatLocation(
                     activity.getRegion().getCityName(),

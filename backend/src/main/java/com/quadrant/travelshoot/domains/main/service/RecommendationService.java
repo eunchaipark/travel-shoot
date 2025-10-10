@@ -28,8 +28,8 @@ public class RecommendationService {
     private final OpenAIService openAIService;
 
     private static final BigDecimal PRICE_MARGIN = BigDecimal.valueOf(30000);
-    private static final int MIN_CANDIDATES = 50;  //최소 후보 개수
-    private static final int FINAL_RECOMMENDATIONS = 15;  // 최종 추천 개수
+    private static final int MIN_CANDIDATES = 50;
+    private static final int FINAL_RECOMMENDATIONS = 15;
 
  
     // 메인 추천 플로우
@@ -52,9 +52,8 @@ public class RecommendationService {
         List<String> regionsByRank = getRegionRankings(userId, userType, survey);
         List<Stay.StayType> typesByRank = getStayTypeRankings(userId, userType, survey);
         log.info("지역 순위: {}", regionsByRank);
-        log.info("타입 순위: {}", typesByRank);
 
-        // 5. 5단계 완화 필터링 (최소 50개 목표)
+        // 5. 5단계 완화 필터링 (최소 50개 목표, 타입 다양성 보장)
         List<Stay> candidates = searchWithLevels(regionsByRank, typesByRank, basePrice);
         log.info("5단계 완화 후 후보군: {}개", candidates.size());
 
@@ -65,7 +64,7 @@ public class RecommendationService {
             log.info("추가 확보 후 후보군: {}개", candidates.size());
         }
 
-        // 7. 스코어링 및 상위 15개 선택
+        // 7. 스코어링 및 상위 15개 선택 (타입별 최소 1개, 최대 2개)
         List<Map<String, Object>> finalRecommendations = 
         scoreAndSelectTop(candidates, survey, userType, userId);
 
@@ -92,12 +91,10 @@ public class RecommendationService {
         long reservationCount = reservationRepository.countByUserId(userId);
 
         if (reservationCount == 0) {
-            // 신규: 전체 평균
             BigDecimal avgPrice = reservationRepository.findOverallAvgPricePerNight();
             log.info("신규 사용자 - 전체 평균: {}", avgPrice);
             return avgPrice != null ? avgPrice : BigDecimal.valueOf(150000);
         } else {
-            // 기존: 본인 평균
             BigDecimal userAvg = reservationRepository.findAvgPricePerNightByUserId(userId);
             log.info("기존 사용자 - 본인 평균: {}", userAvg);
             return userAvg != null ? userAvg : BigDecimal.valueOf(150000);
@@ -110,13 +107,11 @@ public class RecommendationService {
     
     private List<String> getRegionRankings(Long userId, UserType userType, UserSurvey survey) {
         if (userType == UserType.NEW) {
-            // 신규: 설문조사만
             return survey.getRegions().stream()
                     .sorted(Comparator.comparingInt(UserSurveyRegion::getRankOrder))
                     .map(UserSurveyRegion::getRegionName)
                     .collect(Collectors.toList());
         } else {
-            // 라이트/헤비: 예약 패턴 우선
             List<Object[]> regionFrequency = reservationRepository.findRegionFrequencyByUserId(userId);
             
             if (regionFrequency.isEmpty()) {
@@ -136,114 +131,117 @@ public class RecommendationService {
     }
 
     // ========================================
-    // 4단계: 타입 순위 결정
+    // 4단계: 타입 순위 결정 (1순위만 우선)
     // ========================================
     
     private List<Stay.StayType> getStayTypeRankings(Long userId, UserType userType, UserSurvey survey) {
         if (userType == UserType.NEW) {
-            // 신규: 설문조사만
-            return getStayTypesByRank(survey.getStayType());
+            Stay.StayType primaryType = convertToStayType(survey.getStayType());
+            List<Stay.StayType> allTypes = new ArrayList<>();
+            allTypes.add(primaryType);
+            
+            List<Stay.StayType> otherTypes = new ArrayList<>();
+            for (Stay.StayType type : Stay.StayType.values()) {
+                if (!type.equals(primaryType)) {
+                    otherTypes.add(type);
+                }
+            }
+            Collections.shuffle(otherTypes);
+            allTypes.addAll(otherTypes);
+            
+            log.info("타입 우선순위: 1순위={}, 기타={} (동일 가중치)", primaryType, otherTypes);
+            return allTypes;
         } else {
-            // 라이트/헤비: 예약 패턴 우선
             List<Object[]> typeFrequency = reservationRepository.findStayTypeFrequencyByUserId(userId);
             
             if (typeFrequency.isEmpty()) {
-                return getStayTypesByRank(survey.getStayType());
+                Stay.StayType primaryType = convertToStayType(survey.getStayType());
+                List<Stay.StayType> allTypes = new ArrayList<>();
+                allTypes.add(primaryType);
+                
+                List<Stay.StayType> otherTypes = new ArrayList<>();
+                for (Stay.StayType type : Stay.StayType.values()) {
+                    if (!type.equals(primaryType)) {
+                        otherTypes.add(type);
+                    }
+                }
+                Collections.shuffle(otherTypes);
+                allTypes.addAll(otherTypes);
+                
+                log.info("타입 우선순위: 1순위={}, 기타={} (동일 가중치)", primaryType, otherTypes);
+                return allTypes;
             }
 
-            List<Stay.StayType> patternBased = typeFrequency.stream()
-                    .map(row -> (Stay.StayType) row[0])
-                    .collect(Collectors.toList());
-
-            // 설문에 있는 타입 중 예약 안한 타입 추가
-            List<Stay.StayType> surveyTypes = getStayTypesByRank(survey.getStayType());
-            for (Stay.StayType type : surveyTypes) {
-                if (!patternBased.contains(type)) {
-                    patternBased.add(type);
+            Stay.StayType primaryType = (Stay.StayType) typeFrequency.get(0)[0];
+            List<Stay.StayType> allTypes = new ArrayList<>();
+            allTypes.add(primaryType);
+            
+            List<Stay.StayType> otherTypes = new ArrayList<>();
+            for (Stay.StayType type : Stay.StayType.values()) {
+                if (!type.equals(primaryType)) {
+                    otherTypes.add(type);
                 }
             }
+            Collections.shuffle(otherTypes);
+            allTypes.addAll(otherTypes);
 
-            log.info("예약 패턴 기반 타입 순위: {}", patternBased);
-            return patternBased;
+            log.info("타입 우선순위 (예약 패턴): 1순위={}, 기타={} (동일 가중치)", primaryType, otherTypes);
+            return allTypes;
         }
     }
 
     // ========================================
-    // 5단계: 5단계 완화 필터링
+    // 5단계: 5단계 완화 필터링 (타입 다양성 보장)
     // ========================================
     
     private List<Stay> searchWithLevels(List<String> regions, List<Stay.StayType> types, BigDecimal basePrice) {
+        Stay.StayType primaryType = types.get(0);
+        List<Stay.StayType> otherTypes = types.subList(1, types.size());
         
-        // Level 1: 1순위 지역 + 1~2순위 타입 + 평점 4.5+
-        List<Stay> result = tryLevel(
+        List<Stay> result = tryLevelWithDiversity(
                 regions.subList(0, Math.min(1, regions.size())),
-                types.subList(0, Math.min(2, types.size())),
-                BigDecimal.valueOf(4.5),
-                basePrice,
-                PRICE_MARGIN,
-                1);
+                primaryType, otherTypes,
+                BigDecimal.valueOf(4.5), basePrice, PRICE_MARGIN, 1);
         if (result.size() >= MIN_CANDIDATES) return result;
 
-        // Level 2: 1~2순위 지역 + 가격범위 ×1.2
-        result = tryLevel(
+        result = tryLevelWithDiversity(
                 regions.subList(0, Math.min(2, regions.size())),
-                types.subList(0, Math.min(2, types.size())),
-                BigDecimal.valueOf(4.3),
-                basePrice,
-                PRICE_MARGIN.multiply(BigDecimal.valueOf(1.2)),
-                2);
+                primaryType, otherTypes,
+                BigDecimal.valueOf(4.3), basePrice,
+                PRICE_MARGIN.multiply(BigDecimal.valueOf(1.2)), 2);
         if (result.size() >= MIN_CANDIDATES) return result;
 
-        // Level 3: 1~3순위 지역 + 가격범위 ×1.4
-        result = tryLevel(
+        result = tryLevelWithDiversity(
                 regions.subList(0, Math.min(3, regions.size())),
-                types,
-                BigDecimal.valueOf(4.1),
-                basePrice,
-                PRICE_MARGIN.multiply(BigDecimal.valueOf(1.4)),
-                3);
+                primaryType, otherTypes,
+                BigDecimal.valueOf(4.1), basePrice,
+                PRICE_MARGIN.multiply(BigDecimal.valueOf(1.4)), 3);
         if (result.size() >= MIN_CANDIDATES) return result;
 
-        // Level 4: 1~3순위 지역 + 모든 타입 + 가격범위 ×1.6
-        result = tryLevel(
-                regions.subList(0, Math.min(3, regions.size())),
-                types,
-                BigDecimal.valueOf(3.9),
-                basePrice,
-                PRICE_MARGIN.multiply(BigDecimal.valueOf(1.6)),
-                4);
+        result = tryLevelWithDiversity(
+                regions, primaryType, otherTypes,
+                BigDecimal.valueOf(3.9), basePrice,
+                PRICE_MARGIN.multiply(BigDecimal.valueOf(1.6)), 4);
         if (result.size() >= MIN_CANDIDATES) return result;
 
-        // Level 5: 가격 제한 해제 (최후의 수단)
         log.info("Level 5: 가격 제한 해제, 평점순 최대 100개");
-        List<Stay> allCandidates = stayRepository.findWithFilters(
-                regions,
-                types,
-                BigDecimal.valueOf(0.0)
-        );
-        
-        result = allCandidates.stream()
-                .limit(100)
-                .collect(Collectors.toList());
-        
+        List<Stay> allCandidates = stayRepository.findWithFilters(regions, types, BigDecimal.valueOf(0.0));
+        result = allCandidates.stream().limit(100).collect(Collectors.toList());
         log.info("Level 5 결과: {}개", result.size());
         return result;
     }
 
-    private List<Stay> tryLevel(
-            List<String> regionNames,
-            List<Stay.StayType> stayTypes,
-            BigDecimal minRating,
-            BigDecimal basePrice,
-            BigDecimal priceMargin,
-            int level) {
+    private List<Stay> tryLevelWithDiversity(
+            List<String> regionNames, Stay.StayType primaryType, List<Stay.StayType> otherTypes,
+            BigDecimal minRating, BigDecimal basePrice, BigDecimal priceMargin, int level) {
         
-        List<Stay> candidates = stayRepository.findWithFilters(regionNames, stayTypes, minRating);
-
         BigDecimal minPrice = basePrice.subtract(priceMargin);
         BigDecimal maxPrice = basePrice.add(priceMargin);
-
-        List<Stay> filtered = candidates.stream()
+        
+        List<Stay> primaryCandidates = stayRepository.findWithFilters(
+                regionNames, Arrays.asList(primaryType), minRating);
+        
+        List<Stay> filteredPrimary = primaryCandidates.stream()
                 .filter(stay -> {
                     BigDecimal price = stayRepository.findMinWeekdayPrice(stay.getId());
                     return price != null && 
@@ -251,11 +249,33 @@ public class RecommendationService {
                            price.compareTo(maxPrice) <= 0;
                 })
                 .collect(Collectors.toList());
+        
+        List<Stay> otherCandidates = new ArrayList<>();
+        for (Stay.StayType otherType : otherTypes) {
+            List<Stay> typeCandidates = stayRepository.findWithFilters(
+                    regionNames, Arrays.asList(otherType), minRating);
+            
+            List<Stay> filteredType = typeCandidates.stream()
+                    .filter(stay -> {
+                        BigDecimal price = stayRepository.findMinWeekdayPrice(stay.getId());
+                        return price != null && 
+                               price.compareTo(minPrice) >= 0 && 
+                               price.compareTo(maxPrice) <= 0;
+                    })
+                    .limit(5)
+                    .collect(Collectors.toList());
+            
+            otherCandidates.addAll(filteredType);
+        }
+        
+        List<Stay> result = new ArrayList<>(filteredPrimary);
+        result.addAll(otherCandidates);
+        
+        log.info("Level {}: 평점 {}+, 가격 {}-{} → 1순위:{}/기타:{}개 (총:{}개)", 
+                level, minRating, minPrice, maxPrice, 
+                filteredPrimary.size(), otherCandidates.size(), result.size());
 
-        log.info("Level {}: 평점 {}+, 가격 {}-{} → {}개", 
-                level, minRating, minPrice, maxPrice, filtered.size());
-
-        return filtered;
+        return result;
     }
 
     // ========================================
@@ -266,7 +286,6 @@ public class RecommendationService {
         int needed = MIN_CANDIDATES - candidates.size();
         List<Stay> additionalStays = stayRepository.findTopByOrderByAverageRatingDesc(needed);
         
-        // 중복 제거
         Set<Long> existingIds = candidates.stream()
                 .map(Stay::getId)
                 .collect(Collectors.toSet());
@@ -277,35 +296,28 @@ public class RecommendationService {
     }
 
     // ========================================
-    // 7단계: 스코어링 및 상위 선택
+    // 7단계: 스코어링 및 상위 선택 (타입 분산 배치)
     // ========================================
 
     private List<Map<String, Object>> scoreAndSelectTop(
-            List<Stay> candidates, 
-            UserSurvey survey, 
-            UserType userType, 
-            Long userId) {
+            List<Stay> candidates, UserSurvey survey, UserType userType, Long userId) {
         
         ScoreWeight weight = ScoreWeight.forUserType(userType);
         
-        // 1단계: 스코어링 후 상위 15개 선정
-        List<Stay> top15 = candidates.stream()
+        List<ScoredStay> scoredStays = candidates.stream()
                 .map(stay -> {
                     double score = calculateScore(stay, survey, weight, userId, userType);
                     stay.setRecommendationScore(score);
                     return new ScoredStay(stay, score);
                 })
                 .sorted(Comparator.comparingDouble(ScoredStay::getScore).reversed())
-                .limit(FINAL_RECOMMENDATIONS)
-                .map(ScoredStay::getStay)
                 .collect(Collectors.toList());
+        
+        List<Stay> top15 = selectDiverseTop15(scoredStays);
+        log.info("1차 스코어링 완료 - 타입 다양성 보장된 상위 15개 선정");
 
-        log.info("1차 스코어링 완료 - 상위 15개 선정");
-
-        // 2단계: OpenAI로 10개 정제
         OpenAIResponse refinement = openAIService.refineRecommendations(top15, survey);
         
-        // 3단계: 메모리에서 선택된 ID로 필터링
         List<Stay> finalTop10 = refinement.getSelectedIds().stream()
                 .map(id -> top15.stream()
                         .filter(stay -> stay.getId().equals(id))
@@ -317,23 +329,31 @@ public class RecommendationService {
         log.info("OpenAI 정제 완료 - 설명: {}, 최종: {}개", 
                 refinement.getDescription(), finalTop10.size());
 
-        // 4단계: 간소화된 응답 생성 (Map)
-        List<Map<String, Object>> responses = finalTop10.stream()
+        List<Stay> diverselySorted = sortWithTypeDiversity(finalTop10);
+        
+        List<Map<String, Object>> responses = diverselySorted.stream()
                 .map(stay -> {
                     BigDecimal price = stayRepository.findMinWeekdayPrice(stay.getId());
                     
-                    log.info("최종 추천: {} ({}점)", stay.getStayName(), 
+                    log.info("최종 추천: {} - {} (AI점수:{}점, 기존:{}점)", 
+                            stay.getStayType(), stay.getStayName(),
+                            String.format("%.2f", stay.getRecommendationScore()),
                             String.format("%.2f", stay.getRecommendationScore()));
                     
                     Map<String, Object> response = new HashMap<>();
                     response.put("id", stay.getId());
                     response.put("stayCode", stay.getStayCode());
                     response.put("title", stay.getStayName());
-                    response.put("image", null); // TODO: 나중에 추가
+                    response.put("stayType", stay.getStayType().name());
+                    response.put("image", null);
                     response.put("rating", stay.getAverageRating());
                     response.put("location", formatLocation(stay));
                     response.put("price", price);
                     response.put("checkinTime", stay.getCheckInTime().toString().substring(0, 5));
+                    response.put("latitude", stay.getLatitude());
+                    response.put("longitude", stay.getLongitude());
+                    response.put("placeType", "stay");
+                    response.put("aiScore", stay.getRecommendationScore()); // OpenAI 점수
                     
                     return response;
                 })
@@ -342,9 +362,96 @@ public class RecommendationService {
         return responses;
     }
 
-    /**
-     * 위치 포맷팅
-     */
+    private List<Stay> selectDiverseTop15(List<ScoredStay> scoredStays) {
+        Map<Stay.StayType, List<ScoredStay>> byType = scoredStays.stream()
+                .collect(Collectors.groupingBy(ss -> ss.getStay().getStayType(), Collectors.toList()));
+        
+        List<Stay> selected = new ArrayList<>();
+        Map<Stay.StayType, Integer> typeCount = new HashMap<>();
+        
+        for (Stay.StayType type : Stay.StayType.values()) {
+            List<ScoredStay> typeStays = byType.get(type);
+            if (typeStays != null && !typeStays.isEmpty()) {
+                selected.add(typeStays.get(0).getStay());
+                typeCount.put(type, 1);
+            } else {
+                typeCount.put(type, 0);
+            }
+        }
+        
+        Set<Long> selectedIds = selected.stream().map(Stay::getId).collect(Collectors.toSet());
+        
+        for (ScoredStay ss : scoredStays) {
+            if (selected.size() >= FINAL_RECOMMENDATIONS) break;
+            
+            Stay stay = ss.getStay();
+            Stay.StayType type = stay.getStayType();
+            
+            if (selectedIds.contains(stay.getId()) || typeCount.get(type) >= 2) {
+                continue;
+            }
+            
+            selected.add(stay);
+            selectedIds.add(stay.getId());
+            typeCount.put(type, typeCount.get(type) + 1);
+        }
+        
+        if (selected.size() < FINAL_RECOMMENDATIONS) {
+            Stay.StayType primaryType = scoredStays.get(0).getStay().getStayType();
+            
+            for (ScoredStay ss : scoredStays) {
+                if (selected.size() >= FINAL_RECOMMENDATIONS) break;
+                
+                Stay stay = ss.getStay();
+                if (!selectedIds.contains(stay.getId()) && stay.getStayType() == primaryType) {
+                    selected.add(stay);
+                    selectedIds.add(stay.getId());
+                }
+            }
+        }
+        
+        log.info("타입별 선정 개수: {}", typeCount);
+        return selected;
+    }
+
+    private List<Stay> sortWithTypeDiversity(List<Stay> stays) {
+        Map<Stay.StayType, Long> typeCount = stays.stream()
+                .collect(Collectors.groupingBy(Stay::getStayType, Collectors.counting()));
+        
+        Stay.StayType primaryType = typeCount.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse(stays.get(0).getStayType());
+        
+        List<Stay> primaryStays = stays.stream()
+                .filter(stay -> stay.getStayType() == primaryType)
+                .sorted(Comparator.comparingDouble(Stay::getRecommendationScore).reversed())
+                .collect(Collectors.toList());
+        
+        List<Stay> otherStays = stays.stream()
+                .filter(stay -> stay.getStayType() != primaryType)
+                .sorted(Comparator.comparingDouble(Stay::getRecommendationScore).reversed())
+                .collect(Collectors.toList());
+        
+        List<Stay> result = new ArrayList<>();
+        int primaryIndex = 0;
+        int otherIndex = 0;
+        
+        while (primaryIndex < primaryStays.size() || otherIndex < otherStays.size()) {
+            for (int i = 0; i < 3 && primaryIndex < primaryStays.size(); i++) {
+                result.add(primaryStays.get(primaryIndex++));
+            }
+            
+            if (otherIndex < otherStays.size()) {
+                result.add(otherStays.get(otherIndex++));
+            }
+        }
+        
+        log.info("타입 분산 정렬 완료 - 1순위({}):{}개, 기타:{}개 (각각 점수순)", 
+                primaryType, primaryStays.size(), otherStays.size());
+        return result;
+    }
+
     private String formatLocation(Stay stay) {
         String city = stay.getRegion().getCityName();
         String area = stay.getRegion().getAreaName();
@@ -355,15 +462,8 @@ public class RecommendationService {
     // 스코어링 세부 로직
     // ========================================
     
-    
-    // 총점 계산 (사용자별 가중치 적용)
-     
     private double calculateScore(
-            Stay stay, 
-            UserSurvey survey, 
-            ScoreWeight weight, 
-            Long userId, 
-            UserType userType) {
+            Stay stay, UserSurvey survey, ScoreWeight weight, Long userId, UserType userType) {
         
         double surveyScore = calculateSurveyScore(stay, survey);
         double patternScore = calculatePatternScore(stay, userId, userType);
@@ -376,11 +476,9 @@ public class RecommendationService {
         return totalScore;
     }
 
-    // 설문 매칭 
     private double calculateSurveyScore(Stay stay, UserSurvey survey) {
         double score = 0.0;
 
-        // 지역 매칭
         BigDecimal regionWeight = survey.getRegions().stream()
                 .filter(r -> r.getRegionName().equals(stay.getRegion().getAreaName()))
                 .findFirst()
@@ -388,7 +486,6 @@ public class RecommendationService {
                 .orElse(BigDecimal.ZERO);
         score += regionWeight.doubleValue();
 
-        // 타입 매칭
         Stay.StayType preferredType = convertToStayType(survey.getStayType());
         if (stay.getStayType().equals(preferredType)) {
             score += 5;
@@ -397,9 +494,6 @@ public class RecommendationService {
         return score * 10;
     }
 
-
-    // 예약 패턴 점수 (최대 100점)
-
     private double calculatePatternScore(Stay stay, Long userId, UserType userType) {
         if (userType == UserType.NEW) {
             return 0.0;
@@ -407,7 +501,6 @@ public class RecommendationService {
 
         double score = 0.0;
 
-        // 1. 지역 패턴 점수 (최대 35점)
         List<Object[]> regionFreq = reservationRepository.findRegionFrequencyByUserId(userId);
         for (int i = 0; i < Math.min(3, regionFreq.size()); i++) {
             Object[] row = regionFreq.get(i);
@@ -415,14 +508,13 @@ public class RecommendationService {
             Long count = (Long) row[1];
             
             if (stay.getRegion().getAreaName().equals(regionName)) {
-                double baseScore = 30 - (i * 10);  // 1순위 30점, 2순위 20점, 3순위 10점
-                double frequencyBonus = Math.min(5, count * 1);  // 빈도 보너스 최대 5점
+                double baseScore = 30 - (i * 10);
+                double frequencyBonus = Math.min(5, count * 1);
                 score += baseScore + frequencyBonus;
                 break;
             }
         }
 
-        // 2. 타입 패턴 점수 (최대 35점)
         List<Object[]> typeFreq = reservationRepository.findStayTypeFrequencyByUserId(userId);
         for (int i = 0; i < Math.min(3, typeFreq.size()); i++) {
             Object[] row = typeFreq.get(i);
@@ -430,26 +522,20 @@ public class RecommendationService {
             Long count = (Long) row[1];
             
             if (stay.getStayType().equals(stayType)) {
-                double baseScore = 30 - (i * 10);  // 1순위 30점, 2순위 20점, 3순위 10점
-                double frequencyBonus = Math.min(5, count * 1);  // 빈도 보너스 최대 5점
+                double baseScore = 30 - (i * 10);
+                double frequencyBonus = Math.min(5, count * 1);
                 score += baseScore + frequencyBonus;
                 break;
             }
         }
 
-        // 3. 가격 근접도 점수 (최대 40점)
         BigDecimal userAvgPrice = reservationRepository.findAvgPricePerNightByUserId(userId);
         if (userAvgPrice != null) {
             BigDecimal stayPrice = stayRepository.findMinWeekdayPrice(stay.getId());
             if (stayPrice != null) {
                 double avgPrice = userAvgPrice.doubleValue();
                 double currentPrice = stayPrice.doubleValue();
-                
-                // 가격 차이율 계산 (%)
                 double priceDiffPercent = Math.abs(currentPrice - avgPrice) / avgPrice * 100;
-                
-                // 차이율에 따른 감점
-                // 0%: 40점, 10%: 36점, 20%: 32점, 50%: 20점, 100%+: 0점
                 double priceScore = Math.max(0, 40 - (priceDiffPercent / 2.5));
                 score += priceScore;
             }
@@ -458,22 +544,22 @@ public class RecommendationService {
         return Math.min(100, score);
     }
 
-    // 인기도 점수
     private double calculatePopularityScore(Stay stay) {
         double score = 0.0;
         
-        // 1. 평점 점수 (최대 70점)
         double ratingScore = (stay.getAverageRating().doubleValue() / 5.0) * 70;
         score += ratingScore;
         
-        // 2. 리뷰 개수 점수 (최대 30점)
         double reviewScore = Math.min(30, Math.log(stay.getReviewCount() + 1) * 5);
         score += reviewScore;
         
         return Math.min(100, score);
     }
 
-    // 유틸리티 메서드    
+    // ========================================
+    // 유틸리티 메서드
+    // ========================================
+    
     private Stay.StayType convertToStayType(UserSurvey.StayType surveyType) {
         switch (surveyType) {
             case PENSION: return Stay.StayType.펜션;
@@ -481,28 +567,6 @@ public class RecommendationService {
             case MOTEL: return Stay.StayType.모텔;
             default: throw new RuntimeException("알 수 없는 타입");
         }
-    }
-
-    private List<Stay.StayType> getStayTypesByRank(UserSurvey.StayType preferredType) {
-        List<Stay.StayType> types = new ArrayList<>();
-        switch (preferredType) {
-            case PENSION:
-                types.add(Stay.StayType.펜션);
-                types.add(Stay.StayType.호텔);
-                types.add(Stay.StayType.모텔);
-                break;
-            case HOTEL:
-                types.add(Stay.StayType.호텔);
-                types.add(Stay.StayType.펜션);
-                types.add(Stay.StayType.모텔);
-                break;
-            case MOTEL:
-                types.add(Stay.StayType.모텔);
-                types.add(Stay.StayType.호텔);
-                types.add(Stay.StayType.펜션);
-                break;
-        }
-        return types;
     }
 
     private static class ScoredStay {
