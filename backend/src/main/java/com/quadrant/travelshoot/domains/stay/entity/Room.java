@@ -1,20 +1,7 @@
 package com.quadrant.travelshoot.domains.stay.entity;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import jakarta.persistence.*;
+import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -22,7 +9,6 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "rooms")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -31,13 +17,7 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_id")
-    private Long roomId;
-
-    @Column(name = "room_code", nullable = false, length = 50)
-    private String roomCode;
-
-    @Column(name = "room_name", nullable = false, length = 200)
-    private String roomName;
+    private Long id;
 
     @Column(name = "stay_id", nullable = false)
     private Long stayId;
@@ -45,13 +25,20 @@ public class Room {
     @Column(name = "stay_code", nullable = false, length = 50)
     private String stayCode;
 
+    @Column(name = "room_code", nullable = false, length = 50)
+    private String roomCode;
+
+    @Column(name = "room_name", nullable = false, length = 100)
+    private String roomName;
+
+    @Column(name = "room_count", nullable = false)
+    private Integer roomCount;
+
     @Column(name = "standard_capacity", nullable = false)
-    @Builder.Default
-    private Integer standardCapacity = 2;
+    private Integer standardCapacity;
 
     @Column(name = "maximum_capacity", nullable = false)
-    @Builder.Default
-    private Integer maximumCapacity = 4;
+    private Integer maximumCapacity;
 
     @Column(name = "check_in_time")
     private LocalTime checkInTime;
@@ -60,28 +47,22 @@ public class Room {
     private LocalTime checkOutTime;
 
     @Column(name = "bedroom_count", nullable = false)
-    @Builder.Default
-    private Integer bedroomCount = 1;
+    private Integer bedroomCount;
 
     @Column(name = "bathroom_count", nullable = false)
-    @Builder.Default
-    private Integer bathroomCount = 1;
+    private Integer bathroomCount;
 
     @Column(name = "single_bed_count", nullable = false)
-    @Builder.Default
-    private Integer singleBedCount = 0;
+    private Integer singleBedCount;
 
     @Column(name = "double_bed_count", nullable = false)
-    @Builder.Default
-    private Integer doubleBedCount = 0;
+    private Integer doubleBedCount;
 
     @Column(name = "queen_bed_count", nullable = false)
-    @Builder.Default
-    private Integer queenBedCount = 0;
+    private Integer queenBedCount;
 
     @Column(name = "king_bed_count", nullable = false)
-    @Builder.Default
-    private Integer kingBedCount = 0;
+    private Integer kingBedCount;
 
     @Column(name = "weekday_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal weekdayPrice;
@@ -90,12 +71,10 @@ public class Room {
     private BigDecimal weekendPrice;
 
     @Column(name = "minimum_nights", nullable = false)
-    @Builder.Default
-    private Integer minimumNights = 1;
+    private Integer minimumNights;
 
     @Column(name = "maximum_nights", nullable = false)
-    @Builder.Default
-    private Integer maximumNights = 30;
+    private Integer maximumNights;
 
     @Column(name = "room_description", columnDefinition = "TEXT")
     private String roomDescription;
@@ -104,26 +83,20 @@ public class Room {
     private String reservationNotice;
 
     @Column(name = "is_available", nullable = false)
-    @Builder.Default
-    private Boolean isAvailable = true;
+    private Boolean isAvailable;
 
     @Column(name = "view_count", nullable = false)
-    @Builder.Default
-    private Long viewCount = 0L;
+    private Long viewCount;
 
     @Column(name = "reservation_count", nullable = false)
-    @Builder.Default
-    private Integer reservationCount = 0;
+    private Integer reservationCount;
 
     @Column(name = "is_active", nullable = false)
-    @Builder.Default
-    private Boolean isActive = true;
+    private Boolean isActive;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 }
