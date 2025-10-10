@@ -17,7 +17,8 @@ services:
     command: --lower_case_table_names=1 --default-time-zone='+09:00'
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./mysql/001_init.sql:/docker-entrypoint-initdb.d/001_init.sql
+      - ./mysql/migrations/2025101010_01_add_search_history_table.sql:/docker-entrypoint-initdb.d/2025101010_01_add_search_history_table.sql
     networks:
       - backendnet
     healthcheck:
@@ -77,8 +78,8 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true  # Force file change detection
       - WATCHPACK_POLLING=true
-#    depends_on:
-#      - backend
+    depends_on:
+      - backend
     ports:
       - "3000:3000"
     networks:
