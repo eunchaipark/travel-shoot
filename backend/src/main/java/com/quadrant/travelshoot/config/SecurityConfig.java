@@ -25,7 +25,7 @@ public class SecurityConfig {
             .httpBasic(basic -> basic.disable())
             .authorizeHttpRequests(auth -> auth
                   //여기 아래에 추가하면 됩니다요
-//                .requestMatchers("/api/auth/**", "/api/survey/**").permitAll()
+//                .requestMatchers("/api/auth/**", "/api/survey/**" ,"/api/search/**" ).permitAll()
 //                .anyRequest().authenticated()
                 // 개발 단계니까 우선 모든 API 열어두기
                 .requestMatchers("/api/**").permitAll()

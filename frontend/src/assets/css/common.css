@@ -7,7 +7,7 @@ body {
 .app-header .logo {
     width: 70px;
     height: 70px;
-    background-image: url(/images/main-logo.svg);
+    background-image: url(/images/common/main-logo.svg);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -21,7 +21,7 @@ body {
 .app-header .location-icon {
     width: 28px;
     height: 28px;
-    background-image: url(/images/header-location-icon.svg);
+    background-image: url(/images/common/header-location-icon.svg);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -30,7 +30,7 @@ body {
 .app-header .calendar-icon {
     width: 28px;
     height: 28px;
-    background-image: url(/images/header-calendar-icon.svg);
+    background-image: url(/images/common/header-calendar-icon.svg);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -39,7 +39,7 @@ body {
 .app-header .user-icon {
     width: 28px;
     height: 28px;
-    background-image: url(/images/header-user-icon.svg);
+    background-image: url(/images/common/header-user-icon.svg);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -69,7 +69,7 @@ body {
 .app-header .search-icon {
     width: 38px;
     height: 38px;
-    background-image: url(/images/header-search-icon.svg);
+    background-image: url(/images/common/header-search-icon.svg);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -78,7 +78,7 @@ body {
 .app-header .user-white-icon {
     width: 38px;
     height: 38px;
-    background-image: url(/images/header-user-white-icon.svg);
+    background-image: url(/images/common/header-user-white-icon.svg);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -87,7 +87,7 @@ body {
 .app-header .heart-icon {
     width: 38px;
     height: 38px;
-    background-image: url(/images/header-heart-icon.svg);
+    background-image: url(/images/common/header-heart-icon.svg);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -109,7 +109,7 @@ body {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-.app-header .dropdown-suggestions {
+.dropdown-suggestions {
     position: absolute;
     top: 100%;
     left: 0;
@@ -121,7 +121,7 @@ body {
     margin-top: 5px;
 }
 
-.app-header .dropdown-suggestions .suggestion-item {
+.dropdown-suggestions .suggestion-item {
     padding: 12px 20px;
     border: none;
     background: none;
@@ -131,13 +131,15 @@ body {
     align-items: center;
     color: #333;
     transition: background-color 0.3s;
+    border-radius: 15px;
 }
 
-.app-header .dropdown-suggestions .suggestion-item:hover {
+.dropdown-suggestions .suggestion-item:hover {
     background-color: #f8f9fa;
+    border-radius: 15px;
 }
 
-.app-header .dropdown-suggestions .suggestion-item i {
+.dropdown-suggestions .suggestion-item i {
     margin-right: 12px;
     color: #666;
 }
@@ -170,7 +172,7 @@ body {
     gap: 15px;
 }
 
-.app-header .counter-btn {
+.counter-controls .counter-btn {
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -182,13 +184,15 @@ body {
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s;
+    font-weight: 500;
+    font-size: 16px;
 }
 
-.app-header .counter-btn:hover {
-    background: #f8f9fa;
+.counter-controls .counter-btn:hover {
+    background: #ff6b6b;
 }
 
-.app-header .counter-btn.disabled {
+.counter-controls .counter-btn.disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
@@ -223,7 +227,7 @@ body {
 .app-header .guest-info h6 {
     margin: 0;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .app-header .guest-info small {
@@ -274,7 +278,7 @@ body {
 .app-footer .company-info .logo {
     width: 50px;
     height: 50px;
-    background-image: url(/images/main-logo.svg);
+    background-image: url(/images/common/main-logo.svg);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -290,7 +294,7 @@ body {
 .app-footer .contact-info .call {
     width: 40px;
     height: 40px;
-    background-image: url(/images/footer-call-icon.svg);
+    background-image: url(/images/common/footer-call-icon.svg);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -439,19 +443,19 @@ body {
 .modal-overlay .modal-close {
     background: none;
     border: none;
-    font-size: 2rem;
-    color: #000;
+    font-size: 32px;
+    color: #7f7f7f;
     cursor: pointer;
     padding: 0;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: right;
     position: absolute;
     align-items: flex-end;
     right: 0;
-    font-weight: 100;
+    font-weight: 200;
 }
 
 .modal-overlay .modal-question {
@@ -592,7 +596,7 @@ body {
     font-weight: 500;
     cursor: pointer;
     text-align: center;
-    width: 50%
+    width: 50%;
 }
 
 .modal-overlay .btn-cancel:hover {
@@ -609,7 +613,7 @@ body {
     font-size: 0.9rem;
     font-weight: 500;
     cursor: pointer;
-    width: 50%
+    width: 50%;
 }
 
 .modal-overlay .btn-withdraw:hover {
@@ -618,6 +622,105 @@ body {
 
 .modal-checkbox {
     display: none;
+}
+
+.lodging-info .small-text {
+    font-size: 0.85em;
+    color: #666;
+}
+
+main .pay-line-con {
+    padding-left: 10px;
+}
+
+main .pay-line-con .pay-line {
+    height: 55px;
+}
+
+.card-section-border {
+    border: 1px solid #dedada;
+}
+
+.card-section-border > .card-body {
+    padding: 24px;
+}
+
+.photo-modal .modal-content {
+    border-radius: 15px;
+}
+
+.photo-modal .btn-close {
+    margin: calc(-.1 * var(--bs-modal-header-padding-y)) calc(.7 * var(--bs-modal-header-padding-x)) calc(-.5 * var(--bs-modal-header-padding-y)) auto;
+}
+
+.photo-modal .modal-header {
+    padding: 25px 25px 5px 25px;
+}
+
+.review-star-color{
+    color:#ff8888;
+}
+
+.complete-page {
+    min-height: calc(100vh - 100px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.complete-page .complete-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center
+}
+
+.complete-page .success-subtitle {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+.complete-page .complete-card .complete-page-btn {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.complete-page .complete-card .complete-page-btn .btn1 {
+    background: #FF8888;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+    flex: 1;
+    text-align: center;
+}
+
+.complete-page .complete-card .complete-page-btn .btn1:hover {
+    background: #FF5252;
+}
+
+.complete-page .complete-card .complete-page-btn .btn2 {
+    background: #888888;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+    flex: 1;
+    text-align: center;
+}
+
+.complete-page .complete-card .complete-page-btn .btn2:hover {
+    background: #5a6268;
 }
 
 @media (max-width: 1400px) {
@@ -718,6 +821,30 @@ body {
         width: 30px;
         height: 30px;
     }
+
+    .complete-page .complete-card {
+        padding: 40px 24px;
+        margin: 20px;
+        border-radius: 16px;
+    }
+
+    .complete-page .complete-card .complete-title {
+        font-size: 20px;
+    }
+
+    .complete-page .complete-card .complete-subtitle {
+        font-size: 14px;
+    }
+
+    .complete-page .complete-card .complete-page-btn {
+        flex-direction: column;
+    }
+
+    .complete-page .complete-page-btn .btn1,
+    .complete-page .complete-page-btn .btn2 {
+        padding: 16px 24px;
+        font-size: 16px;
+    }
 }
 
 @media (max-width: 576px) {
@@ -761,5 +888,13 @@ body {
 
     .modal-overlay .warning-box .warning-item {
         font-size: 13px;
+    }
+
+    .complete-page {
+        padding: 20px 10px;
+    }
+
+    .complete-page .complete-card {
+        padding: 32px 20px;
     }
 }
