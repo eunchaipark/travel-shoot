@@ -18,6 +18,7 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
       - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./mysql/migrations/2025101010_01_add_search_history_table.sql:/docker-entrypoint-initdb.d/2025101010_01_add_search_history_table.sql
     networks:
       - backendnet
     healthcheck:
