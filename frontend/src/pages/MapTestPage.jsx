@@ -13,8 +13,8 @@ function MapTestPage() {
             longitude: 126.5623172,
             name: "신세계호텔",
             lowestPrice: 376000,
-            stayType: "hotel",
-            placeType: "lodging",
+            stayType: "호텔",
+            placeType: "stay",
             image: ""
         },
         {
@@ -34,7 +34,7 @@ function MapTestPage() {
             name: "사라봉(모충사)",
             lowestPrice: null,
             stayType: null,
-            placeType: "attraction",
+            placeType: "activity",
             image: ""
         }
     ];
