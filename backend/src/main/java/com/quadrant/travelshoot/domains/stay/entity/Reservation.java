@@ -1,4 +1,4 @@
-package com.quadrant.travelshoot.domain.stay.entity;
+package com.quadrant.travelshoot.domains.stay.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -53,7 +53,7 @@ public class Reservation {
     private BigDecimal totalPrice;
 
     @Column(name = "reservation_status", nullable = false, length = 20)
-    private String reservationStatus;  // '예약확정', '이용완료', '예약취소'
+    private String reservationStatus; // '예약확정', '이용완료', '예약취소'
 
     @Column(name = "cancel_reason", length = 100)
     private String cancelReason;

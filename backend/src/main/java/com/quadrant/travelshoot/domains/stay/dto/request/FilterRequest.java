@@ -1,4 +1,4 @@
-package com.quadrant.travelshoot.domain.stay.dto.request;
+package com.quadrant.travelshoot.domains.stay.dto.request;
 
 import lombok.*;
 import java.math.BigDecimal;
@@ -38,15 +38,24 @@ public class FilterRequest {
 
     public int getActiveFilterCount() {
         int count = 0;
-        if (minPrice != null || maxPrice != null) count++;
-        if (stayTypes != null && !stayTypes.isEmpty()) count++;
-        if (amenities != null && !amenities.isEmpty()) count++;
-        if (minGuests != null || maxGuests != null) count++;
-        if (bedroomCount != null) count++;
-        if (bathroomCount != null) count++;
-        if (ratings != null && !ratings.isEmpty()) count++;
-        if (Boolean.TRUE.equals(instantBooking)) count++;
-        if (Boolean.TRUE.equals(freeCancellation)) count++;
+        if (minPrice != null || maxPrice != null)
+            count++;
+        if (stayTypes != null && !stayTypes.isEmpty())
+            count++;
+        if (amenities != null && !amenities.isEmpty())
+            count++;
+        if (minGuests != null || maxGuests != null)
+            count++;
+        if (bedroomCount != null)
+            count++;
+        if (bathroomCount != null)
+            count++;
+        if (ratings != null && !ratings.isEmpty())
+            count++;
+        if (Boolean.TRUE.equals(instantBooking))
+            count++;
+        if (Boolean.TRUE.equals(freeCancellation))
+            count++;
         return count;
     }
 }

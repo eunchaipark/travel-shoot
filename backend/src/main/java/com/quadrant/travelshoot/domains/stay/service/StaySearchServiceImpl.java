@@ -1,14 +1,14 @@
-package com.quadrant.travelshoot.domain.stay.service;
+package com.quadrant.travelshoot.domains.stay.service;
 
-import com.quadrant.travelshoot.domain.stay.dto.request.SearchRequest;
-import com.quadrant.travelshoot.domain.stay.dto.request.FilterRequest;
-import com.quadrant.travelshoot.domain.stay.dto.response.SearchResponse;
-import com.quadrant.travelshoot.domain.stay.dto.response.AutocompleteResponse;
-import com.quadrant.travelshoot.domain.stay.dto.response.StayListItem;
-import com.quadrant.travelshoot.domain.stay.entity.Stay;
-import com.quadrant.travelshoot.domain.stay.entity.SearchHistory;
-import com.quadrant.travelshoot.domain.stay.repository.StayRepository;
-import com.quadrant.travelshoot.domain.stay.repository.SearchHistoryRepository;
+import com.quadrant.travelshoot.domains.stay.dto.request.SearchRequest;
+import com.quadrant.travelshoot.domains.stay.dto.request.FilterRequest;
+import com.quadrant.travelshoot.domains.stay.dto.response.SearchResponse;
+import com.quadrant.travelshoot.domains.stay.dto.response.AutocompleteResponse;
+import com.quadrant.travelshoot.domains.stay.dto.response.StayListItem;
+import com.quadrant.travelshoot.domains.stay.entity.Stay;
+import com.quadrant.travelshoot.domains.stay.entity.SearchHistory;
+import com.quadrant.travelshoot.domains.stay.repository.StayRepository;
+import com.quadrant.travelshoot.domains.stay.repository.SearchHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -60,8 +60,7 @@ public class StaySearchServiceImpl implements StaySearchService {
                 request.getCheckIn(),
                 request.getCheckOut(),
                 request.getTotalGuests(),
-                pageable
-        );
+                pageable);
 
         return buildSearchResponse(stays);
     }
@@ -104,17 +103,16 @@ public class StaySearchServiceImpl implements StaySearchService {
                 request.getMaxPrice(),
                 stayTypes,
                 stayTypesSize,
-                actualGuests,        // 🆕 추가: 실제 이용 인원
-                filterMinGuests,     // 🔄 변경: 필터 최소 수용 인원
-                filterMaxGuests,     // 🔄 변경: 필터 최대 수용 인원
+                actualGuests, // 🆕 추가: 실제 이용 인원
+                filterMinGuests, // 🔄 변경: 필터 최소 수용 인원
+                filterMaxGuests, // 🔄 변경: 필터 최대 수용 인원
                 request.getBedroomCount(),
                 request.getBathroomCount(),
                 ratings,
                 ratingsSize,
                 amenities,
                 amenityCount,
-                pageable
-        );
+                pageable);
 
         return buildSearchResponse(stays);
     }
@@ -123,8 +121,7 @@ public class StaySearchServiceImpl implements StaySearchService {
     public SearchResponse infiniteSearch(
             SearchRequest searchRequest,
             FilterRequest filterRequest,
-            Pageable pageable
-    ) {
+            Pageable pageable) {
         if (filterRequest != null && filterRequest.getActiveFilterCount() > 0) {
             return filterSearch(filterRequest, pageable);
         } else {
@@ -138,8 +135,7 @@ public class StaySearchServiceImpl implements StaySearchService {
         boolean isDuplicate = searchHistoryRepository.existsByUserIdAndRegionAndCreatedAtAfter(
                 userId,
                 request.getRegion(),
-                LocalDateTime.now().minusMinutes(1)
-        );
+                LocalDateTime.now().minusMinutes(1));
 
         if (isDuplicate) {
             log.info(" 중복 검색 - 기록 저장 스킵");
@@ -291,11 +287,10 @@ public class StaySearchServiceImpl implements StaySearchService {
 
     private List<String> getAmenities(Long stayId) {
         try {
-            String sql =
-                    "SELECT a.amenity_name " +
-                            "FROM stays_amenities sa " +
-                            "INNER JOIN amenities a ON sa.amenity_id = a.amenity_id " +
-                            "WHERE sa.stay_id = ?";
+            String sql = "SELECT a.amenity_name " +
+                    "FROM stays_amenities sa " +
+                    "INNER JOIN amenities a ON sa.amenity_id = a.amenity_id " +
+                    "WHERE sa.stay_id = ?";
             return jdbcTemplate.queryForList(sql, String.class, stayId);
         } catch (Exception e) {
             log.warn("편의시설 조회 실패 - stayId: {}", stayId);
