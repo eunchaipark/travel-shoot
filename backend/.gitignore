@@ -39,6 +39,9 @@ out/
 ### gmail - 계정정보
 application-email.properties
 
+### open-ai
+application-openai.properties
+
 ### Docker 관련 파일들
 .bash_profile
 .bashrc

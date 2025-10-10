@@ -1,4 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Header = () => {
     const [searchValue, setSearchValue] = useState('SL 호텔 강릉');
@@ -70,11 +71,6 @@ const Header = () => {
 
     return (
         <>
-            {/* Bootstrap CSS */}
-            <link
-                href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-                rel="stylesheet"
-            />
             {/* Font Awesome CSS */}
             <link
                 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -239,11 +235,6 @@ const Header = () => {
                     </div>
                 </div>
             </header>
-
-            {/* 메인 컨텐츠 영역 (데모용) */}
-            <main className="content-area">
-                <h1>영역</h1>
-            </main>
         </>
     );
 };

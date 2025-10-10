@@ -20,6 +20,9 @@ import java.time.LocalTime;
 @Builder
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Stay {
+    
+    @Transient
+    private Double recommendationScore;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
