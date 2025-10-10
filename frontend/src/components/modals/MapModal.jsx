@@ -1,11 +1,13 @@
 import React, {useState, useEffect, useRef} from 'react';
 import '@/assets/css/map.css';
+import { getStayType } from '@/utils/formatters';
 
 const MapModal = ({isOpen, onClose, locationData = [], filterParams = {}}) => {
     const [kakaoLoaded, setKakaoLoaded] = useState(false);
     const mapRef = useRef(null);
     const [selectedLocation, setSelectedLocation] = useState(null);
     const kakaoMapRef = useRef(null);
+    const [activeIndex, setActiveIndex] = useState(null);
     const KAKAO_JS_KEY = '3868e95750c9e60a60b89ae4b9455d38';
 
     // Kakao Maps SDK 동적 로드
@@ -66,7 +68,7 @@ const MapModal = ({isOpen, onClose, locationData = [], filterParams = {}}) => {
         // 각 위치에 인포윈도우 생성 및 표시
         locationData.forEach((location, index) => {
             const overlayContent = document.createElement('div');
-            overlayContent.innerHTML = setContent(location);
+            overlayContent.innerHTML = setContent(location, index);
             overlayContent.style.cursor = 'pointer';
             overlayContent.dataset.locationIndex = index;
 
@@ -87,8 +89,6 @@ const MapModal = ({isOpen, onClose, locationData = [], filterParams = {}}) => {
             const index = parseInt(overlay.dataset.locationIndex);
             const location = locationData[index];
 
-            setSelectedLocation(location);
-
             // 모든 active 제거
             document.querySelectorAll('.tag-content').forEach(el =>
                 el.classList.remove('active')
@@ -97,19 +97,22 @@ const MapModal = ({isOpen, onClose, locationData = [], filterParams = {}}) => {
             // 클릭된 요소에만 active 추가
             tagContent.classList.add('active');
 
+            setActiveIndex(index);
+            setSelectedLocation(location);
+
             const moveLatLon = new window.kakao.maps.LatLng(location.latitude, location.longitude);
             kakaoMapRef.current.panTo(moveLatLon);
         });
     };
 
-    const setContent = (location) => {
+    const setContent = (location, index) => {
         return (
             `<div class="map-tag ${location.placeType}">
-                <div class="tag-content d-flex align-items-stretch">
+                <div class="tag-content d-flex align-items-stretch" data-index="${index}">
                   <div class="icon-con d-flex align-items-center">
                     <div class="icon"></div>
                   </div>
-                  <div class="d-flex align-items-center">${location.placeType === 'lodging' ? location.lowestPrice.toLocaleString() : location.name}</div>
+                  <div class="d-flex align-items-center">${location.placeType === 'stay' ? location.lowestPrice.toLocaleString() : location.name}</div>
                 </div>
                  <div class="tag-arrow"></div>
               </div>`
@@ -138,19 +141,19 @@ const MapModal = ({isOpen, onClose, locationData = [], filterParams = {}}) => {
                             <div className="map-card-overlay">
                                 <div className={`${selectedLocation.placeType}-card card card-custom`}>
                                     <div className="d-flex align-items-center h-100">
-                                        {selectedLocation.placeType === "lodging" ? (
+                                        {selectedLocation.placeType === "stay" ? (
                                                 <>
                                                     <div className="col-4 h-100">
                                                         <img
                                                             src={selectedLocation.image || "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=400&h=300&fit=crop"}
                                                             alt={selectedLocation.name}
-                                                            className="lodging-image"
+                                                            className="stay-image"
                                                         />
                                                     </div>
                                                     <div className="col-8 ps-3">
                                                         <div className="d-flex align-items-center">
                                                             <div
-                                                                className={`title-icon ${selectedLocation.stayType}-icon`}></div>
+                                                                className={`title-icon ${getStayType(selectedLocation.stayType)}-icon`}></div>
                                                             <span className="mb-0 title-text">{selectedLocation.name}</span>
                                                         </div>
                                                         <div className="d-flex align-items-center mb-4">
@@ -170,9 +173,9 @@ const MapModal = ({isOpen, onClose, locationData = [], filterParams = {}}) => {
                                                 <>
                                                     <div className="col-12">
                                                         <div
-                                                            className={`d-flex align-items-center ${selectedLocation.placeType === 'attraction' ? 'mb-2' : 'mb-1'}`}>
+                                                            className={`d-flex align-items-center ${selectedLocation.placeType === 'activity' ? 'mb-2' : 'mb-1'}`}>
                                                             <div
-                                                                className={`title-icon ${selectedLocation.placeType}-icon ${selectedLocation.placeType === 'lodging' ? 'mb-1' : ''}`}></div>
+                                                                className={`title-icon ${selectedLocation.placeType}-icon ${selectedLocation.placeType === 'stay' ? 'mb-1' : ''}`}></div>
                                                             <h4 className="mb-0 title-text">{selectedLocation.name}</h4>
                                                         </div>
 
