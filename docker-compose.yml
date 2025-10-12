@@ -78,8 +78,8 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true  # Force file change detection
       - WATCHPACK_POLLING=true
-#    depends_on:
-#      - backend
+    depends_on:
+      - backend
     ports:
       - "3000:3000"
     networks:
