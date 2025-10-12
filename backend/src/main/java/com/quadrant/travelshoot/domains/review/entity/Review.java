@@ -1,5 +1,6 @@
 package com.quadrant.travelshoot.domains.review.entity;
 
+import com.quadrant.travelshoot.domains.stay.entity.Reservation;
 import com.quadrant.travelshoot.domains.user.entity.User;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -30,11 +31,9 @@ public class Review {
     @Column(name = "review_id")
     private Long reviewId;
 
-    @JoinColumn(name = "reservation_id", nullable = false, unique = true)
-    private Long reservationId;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "reservation_id")
-//    private Reservation reservation;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservation_id")
+    private Reservation reservation;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

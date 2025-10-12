@@ -3,10 +3,12 @@ package com.quadrant.travelshoot.domains.review.service;
 import com.quadrant.travelshoot.domains.review.dto.request.ReviewRegistRequest;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewDetailResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewListResponse;
+import com.quadrant.travelshoot.domains.review.dto.response.ReviewPageResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewRegistResponse;
 import com.quadrant.travelshoot.domains.review.entity.Review;
 import com.quadrant.travelshoot.domains.review.mapper.ReviewMapper;
 import com.quadrant.travelshoot.domains.review.repository.ReviewRepository;
+import com.quadrant.travelshoot.domains.stay.repository.ReservationRepository;
 import com.quadrant.travelshoot.domains.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -19,6 +21,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -26,12 +30,13 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
+    private final ReservationRepository reservationRepository;
     private final ReviewMapper reviewMapper;
 
 
     /* 이미지 업로드 */
 
-    /* 예약 검증 메서드 */
+    /* 예약 검증 메서드 - 리뷰 등록, 수정, 삭제 전 검증 */
     // 예약이 존재하는지
     // 예약 상태가 '이용완료'인지
     // 예약자와 사용자가 일치하는지
@@ -56,7 +61,7 @@ public class ReviewService {
 
         // 저장
         Review review = Review.builder()
-                .reservationId(request.getReservationId())
+                .reservation(reservationRepository.getReferenceById(request.getReservationId()))
                 .user(userRepository.getReferenceById(userId))
                 .stayId(request.getStayId())
                 .cleanRating(request.getCleanRating())
@@ -72,10 +77,8 @@ public class ReviewService {
                 .build();
 
         Review newReview = reviewRepository.save(review);
-
         log.info("리뷰 등록 완료 - reviewId: {}", newReview.getReviewId());
-
-        return ReviewRegistResponse.from(newReview);
+        return reviewMapper.toReviewRegistResponse(newReview);
     }
 
 
@@ -107,13 +110,47 @@ public class ReviewService {
 
 
     /**
+     * 리뷰 수정
+     *
+     * @param userId 현재 로그인한 사용자 ID
+     * @param reviewId 수정할 리뷰 ID
+     * @param reviewUpdateRequest 수정 요청 데이터
+     * @return 수정된 리뷰 정보
+     */
+    @Transactional
+    public ReviewRegistResponse updateReview(Long userId, Long reviewId, @Valid ReviewRegistRequest reviewUpdateRequest) {
+
+        // 리뷰가 존재하는지
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다. ID: " + reviewId));
+        // 사용자 확인
+        if(!review.getUser().getId().equals(userId)){
+            throw new IllegalStateException("본인이 작성한 리뷰만 수정할 수 있습니다.");
+        }
+        // review 데이터 수정
+        review.setCleanRating(reviewUpdateRequest.getCleanRating());
+        review.setConvenienceRating(reviewUpdateRequest.getConvenienceRating());
+        review.setCheckinRating(reviewUpdateRequest.getCheckinRating());
+        review.setCommunicationRating(reviewUpdateRequest.getCommunicationRating());
+        review.setLocationRating(reviewUpdateRequest.getLocationRating());
+        review.setValueRating(reviewUpdateRequest.getValueRating());
+        review.setTotalRating(reviewUpdateRequest.getTotalRating());
+        review.setReviewContent(reviewUpdateRequest.getReviewContent());
+        review.setIsRecommended(reviewUpdateRequest.getIsRecommended());
+
+        // 이미지 수정
+
+        Review updatedReview = reviewRepository.save(review);
+        return reviewMapper.toReviewRegistResponse(updatedReview);
+    }
+
+
+    /**
      * 리뷰 상세 조회
      *
-     * @param userId
      * @param reviewId
      * @return
      */
-    public ReviewDetailResponse getReviewDetail(Long userId, Long reviewId) {
+    public ReviewDetailResponse getReviewDetail(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new EntityNotFoundException("리뷰를 찾을 수 없습니다. ID: " + reviewId));
 
@@ -131,28 +168,27 @@ public class ReviewService {
      * @param sortBy 정렬 기준 (latest: 최신순, rating: 평점순)
      * @return 페이징된 리뷰 목록
      */
-    public Page<?> getReviewsWithPaging(Long stayId, int page, int size, String sortBy) {
-        log.info("숙박시설 리뷰 페이징 조회 - stayId: {}, page: {}, size: {}, sortBy: {}",
-                stayId, page, size, sortBy);
+    public ReviewPageResponse<ReviewListResponse> getReviewsWithPaging(Long stayId, Long roomId, int page, int size, String sortBy) {
+        log.info("숙박시설 리뷰 페이징 조회 - stayId: {}, roomId : {}, page: {}, size: {}, sortBy: {}",
+                stayId, roomId, page, size, sortBy);
 
-        // Pageable 생성
+        // 숙소에 6개 평점 추가 안하면 ? - 리뷰의 평점 불러온 다음 그걸로 계산해서 dto에 세팅해서 보여주어야 함
+        // 숙소에 6개 평점 추가 하면 ? - 추가 하면 계산한 다음 저장할 수 있긴 한데, 어차피 다음 번에 리뷰 갱신 전 이력을 안 불러와도 됨
+
+        // pageable
         Pageable pageable = createPageable(page, size, sortBy);
 
-        // 페이징 조회
-        Page<Review> reviewPage = reviewRepository.findByStayId(stayId, pageable);
-//        if ("rating".equalsIgnoreCase(sortBy)) {
-//            // 평점순
-//            reviewPage = reviewRepository.findByStayIdOrderByTotalRating(stayId, pageable);
-//        } else {
-//            // 기본: 최신순
-//            reviewPage = reviewRepository.findByStayId(stayId, pageable);
-//        }
+        // roomId 필터링 & 페이징
+        Page<Review> reviewPage;
+        if(roomId != null){
+            reviewPage =  reviewRepository.findByStayIdAndRoomId(stayId, roomId, pageable);
+        }else{
+            reviewPage = reviewRepository.findByStayId(stayId, pageable);
+        }
 
         // Review -> ReviewResponse 변환
-//        Page<ReviewListResponse> responsePage = reviewPage.map(ReviewListResponse::from);
-//
-//        return responsePage;
-        return null;
+        Page<ReviewListResponse> responsePage = reviewPage.map(reviewMapper::toReviewListResponse);
+        return ReviewPageResponse.of(responsePage);
     }
 
 
@@ -161,24 +197,33 @@ public class ReviewService {
      */
     private Pageable createPageable(int page, int size, String sortBy) {
         // 페이지 크기 제한 (최대 50개)
-        if (size > 50) {
-            size = 50;
-        }
-        if (size <= 0) {
-            size = 10;
-        }
+        size = Math.max(1, Math.min(size, 50));
 
         // 정렬 기준에 따라 Pageable 생성
-        if ("rating".equalsIgnoreCase(sortBy)) {
-            // 평점 높은 순, 같은 평점이면 최신순
-            return PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "totalRating"));
+        Sort sort;
+        switch (sortBy.toLowerCase()) {
+            case "rating_desc":
+                // 평점 높은 순, 같은 평점이면 최신순
+                sort = Sort.by(
+                        Sort.Order.desc("totalRating"),
+                        Sort.Order.desc("createdAt")
+                );
+                break;
+            case "rating_asc":
+                // 평점 낮은 순, 같은 평점이면 최신순
+                sort = Sort.by(
+                        Sort.Order.asc("totalRating"),
+                        Sort.Order.desc("createdAt")
+                );
+                break;
+            case "latest":
+            default:
+                // 기본: 최신순
+                sort = Sort.by(Sort.Direction.DESC, "createdAt");
+                break;
         }
-        // 평점 순, 객실에 따라서도 해야함
 
-        else {
-            // 기본: 최신순
-            return PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        }
+        return PageRequest.of(page, size, sort);
     }
 
 

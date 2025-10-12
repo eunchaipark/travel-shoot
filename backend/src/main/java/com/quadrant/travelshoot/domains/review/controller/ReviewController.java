@@ -3,6 +3,7 @@ package com.quadrant.travelshoot.domains.review.controller;
 import com.quadrant.travelshoot.domains.review.dto.request.ReviewRegistRequest;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewDetailResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewListResponse;
+import com.quadrant.travelshoot.domains.review.dto.response.ReviewPageResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewRegistResponse;
 import com.quadrant.travelshoot.domains.review.service.ReviewService;
 import com.quadrant.travelshoot.shared.response.ApiResponse;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -58,6 +60,30 @@ public class ReviewController {
 
 
     /**
+     * 리뷰 수정
+     *
+     * @param userId 현재 로그인한 사용자 ID
+     * @param reviewId 수정할 리뷰 ID
+     * @param request 리뷰 수정 데이터
+     * @return 수정된 리뷰 정보
+     */
+    @PutMapping(value = "/{reviewId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<ReviewRegistResponse>> updateReview(
+            //  @AuthenticationPrincipal UserDetails user,
+            @PathVariable Long reviewId,
+            @Valid @ModelAttribute ReviewRegistRequest reviewUpdateRequest) {
+
+        Long userId = 1L;
+        log.info("리뷰 수정 요청 - userId: {}, reviewId: {}", userId, reviewId);
+        ReviewRegistResponse response = reviewService.updateReview(userId, reviewId, reviewUpdateRequest);
+
+        return ResponseEntity.ok(ApiResponse.success("리뷰 수정 성공", response));
+    }
+
+
+
+
+    /**
      * 리뷰 삭제
      * @param userId 현재 로그인한 사용자 ID
      * @param reviewId 삭제할 리뷰 ID
@@ -84,15 +110,13 @@ public class ReviewController {
     public ResponseEntity<ApiResponse<ReviewDetailResponse>> getReviewDetail(
             @PathVariable Long reviewId){
 
-        Long userId = 1L;
-        ReviewDetailResponse reviewDetailResponse = reviewService.getReviewDetail(userId, reviewId);
+        ReviewDetailResponse reviewDetailResponse = reviewService.getReviewDetail(reviewId);
         return ResponseEntity.ok().body(ApiResponse.success("리뷰 상세 조회 성공", reviewDetailResponse));
     }
 
 
-
     /**
-     * 특정 숙박시설의 리뷰 목록 조회 (페이징 - 무한 스크롤링용)
+     * 특정 숙박시설의 리뷰 목록 조회 (페이징 - 무한 스크롤링)
      *
      * @param stayId 숙박시설 ID
      * @param page 페이지 번호 (0부터 시작, 기본값: 0)
@@ -101,8 +125,9 @@ public class ReviewController {
      * @return 페이징된 리뷰 목록
      */
     @GetMapping("/stay/{stayId}/paging")
-    public ResponseEntity<ReviewListResponse> getReviewsWithPaging(
+    public ResponseEntity<ReviewPageResponse<?>> getReviewsWithPaging(
             @PathVariable Long stayId,
+            @RequestParam(required = false) Long roomId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "latest") String sortBy) {
@@ -110,10 +135,8 @@ public class ReviewController {
         log.info("숙박시설 리뷰 페이징 조회 - stayId: {}, page: {}, size: {}, sortBy: {}",
                 stayId, page, size, sortBy);
 
-//        ReviewListResponse response = reviewService.getReviewsWithPaging(stayId, page, size, sortBy);
-//
-//        return ResponseEntity.ok(response);
-        return null;
+        ReviewPageResponse<ReviewListResponse> reviewsPage = reviewService.getReviewsWithPaging(stayId, roomId ,page, size, sortBy);
+        return ResponseEntity.ok().body(reviewsPage);
     }
 
 

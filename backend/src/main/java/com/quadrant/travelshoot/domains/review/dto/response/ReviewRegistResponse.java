@@ -34,25 +34,4 @@ public class ReviewRegistResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // Entity -> DTO 변환
-    public static ReviewRegistResponse from(Review review) {
-        return ReviewRegistResponse.builder()
-                .reviewId(review.getReviewId())
-                .reservationId(review.getReservationId())
-                .userId(review.getUser().getId())
-                .stayId(review.getStayId())
-                .totalRating(review.getTotalRating())
-                .cleanRating(review.getCleanRating())
-                .convenienceRating(review.getConvenienceRating())
-                .checkinRating(review.getCheckinRating())
-                .communicationRating(review.getCommunicationRating())
-                .locationRating(review.getLocationRating())
-                .valueRating(review.getValueRating())
-                .reviewContent(review.getReviewContent())
-//                .reviewImageUrl(review.getReviewImageUrl())
-                .isRecommended(review.getIsRecommended())
-                .createdAt(review.getCreatedAt())
-                .updatedAt(review.getUpdatedAt())
-                .build();
-    }
 }
