@@ -1,6 +1,6 @@
-package com.quadrant.travelshoot.domain.stay.repository;
+package com.quadrant.travelshoot.domains.stay.repository;
 
-import com.quadrant.travelshoot.domain.stay.entity.Stay;
+import com.quadrant.travelshoot.domains.stay.entity.Stay;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

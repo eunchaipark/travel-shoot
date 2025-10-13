@@ -1,6 +1,6 @@
-package com.quadrant.travelshoot.domain.stay.repository;
+package com.quadrant.travelshoot.domains.stay.repository;
 
-import com.quadrant.travelshoot.domain.stay.entity.SearchHistory;
+import com.quadrant.travelshoot.domains.stay.entity.SearchHistory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

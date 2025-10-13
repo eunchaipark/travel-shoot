@@ -119,9 +119,10 @@ public class ReviewController {
      * 특정 숙박시설의 리뷰 목록 조회 (페이징 - 무한 스크롤링)
      *
      * @param stayId 숙박시설 ID
+     * @param roomId 객실 ID
      * @param page 페이지 번호 (0부터 시작, 기본값: 0)
      * @param size 페이지 크기 (기본값: 10, 최대: 50)
-     * @param sortBy 정렬 기준 (latest: 최신순, rating: 평점순, 기본값: latest)
+     * @param sortBy 정렬 기준 (latest: 최신순, rating_desc: 별점높은순, rating_asc: 별점낮은순, 기본값: latest)
      * @return 페이징된 리뷰 목록
      */
     @GetMapping("/stay/{stayId}/paging")

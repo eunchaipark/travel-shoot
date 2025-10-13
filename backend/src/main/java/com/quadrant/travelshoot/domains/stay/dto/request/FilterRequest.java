@@ -1,4 +1,4 @@
-package com.quadrant.travelshoot.domain.stay.dto.request;
+package com.quadrant.travelshoot.domains.stay.dto.request;
 
 import lombok.*;
 import java.math.BigDecimal;
