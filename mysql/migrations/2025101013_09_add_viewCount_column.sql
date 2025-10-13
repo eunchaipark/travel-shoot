@@ -1,0 +1,7 @@
+ALTER TABLE restaurants 
+ADD COLUMN view_count BIGINT NOT NULL DEFAULT 0;
+
+ALTER TABLE activities 
+ADD COLUMN view_count BIGINT NOT NULL DEFAULT 0;
+
+commit;

@@ -20,6 +20,7 @@ services:
       - ./mysql/001_init.sql:/docker-entrypoint-initdb.d/001_init.sql
       - ./mysql/migrations/2025101010_01_add_search_history_table.sql:/docker-entrypoint-initdb.d/2025101010_01_add_search_history_table.sql
       - ./mysql/migrations/2025101013_07_add_view_history_table.sql:/docker-entrypoint-initdb.d/2025101013_07_add_view_history_table.sql
+      - ./mysql/migrations/2025101013_09_add_viewCount_column.sql:/docker-entrypoint-initdb.d/2025101013_09_add_viewCount_column.sql
     networks:
       - backendnet
     healthcheck:
