@@ -28,15 +28,6 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-
-    @GetMapping("/test")
-    public ResponseEntity<?> getTest(){
-        log.info("테스트 ");
-        System.out.println("테스투투");
-        return ResponseEntity.ok().body("테ㅐ스트 테스트");
-    }
-
-
     /**
      * 리뷰 등록
      * @param userId 현재 로그인한 사용자 ID (인증에서 추출)
@@ -145,7 +136,6 @@ public class ReviewController {
      * ai 리뷰 요약
      * 최근 10개 이상 리뷰 요약 or 최대 50개 이내 리뷰 요약
      */
-
 
 
 }
