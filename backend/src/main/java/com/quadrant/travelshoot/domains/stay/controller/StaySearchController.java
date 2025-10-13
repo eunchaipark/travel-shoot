@@ -1,10 +1,10 @@
-package com.quadrant.travelshoot.domain.stay.controller;
+package com.quadrant.travelshoot.domains.stay.controller;
 
-import com.quadrant.travelshoot.domain.stay.dto.request.SearchRequest;
-import com.quadrant.travelshoot.domain.stay.dto.request.FilterRequest;
-import com.quadrant.travelshoot.domain.stay.dto.response.SearchResponse;
-import com.quadrant.travelshoot.domain.stay.dto.response.AutocompleteResponse;
-import com.quadrant.travelshoot.domain.stay.service.StaySearchService;
+import com.quadrant.travelshoot.domains.stay.dto.request.SearchRequest;
+import com.quadrant.travelshoot.domains.stay.dto.request.FilterRequest;
+import com.quadrant.travelshoot.domains.stay.dto.response.SearchResponse;
+import com.quadrant.travelshoot.domains.stay.dto.response.AutocompleteResponse;
+import com.quadrant.travelshoot.domains.stay.service.StaySearchService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

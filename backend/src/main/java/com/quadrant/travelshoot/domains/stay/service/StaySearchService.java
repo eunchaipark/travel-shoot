@@ -1,9 +1,9 @@
-package com.quadrant.travelshoot.domain.stay.service;
+package com.quadrant.travelshoot.domains.stay.service;
 
-import com.quadrant.travelshoot.domain.stay.dto.request.SearchRequest;
-import com.quadrant.travelshoot.domain.stay.dto.request.FilterRequest;
-import com.quadrant.travelshoot.domain.stay.dto.response.SearchResponse;
-import com.quadrant.travelshoot.domain.stay.dto.response.AutocompleteResponse;
+import com.quadrant.travelshoot.domains.stay.dto.request.SearchRequest;
+import com.quadrant.travelshoot.domains.stay.dto.request.FilterRequest;
+import com.quadrant.travelshoot.domains.stay.dto.response.SearchResponse;
+import com.quadrant.travelshoot.domains.stay.dto.response.AutocompleteResponse;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

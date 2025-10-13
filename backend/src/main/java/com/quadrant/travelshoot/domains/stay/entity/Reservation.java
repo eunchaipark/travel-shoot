@@ -1,4 +1,4 @@
-package com.quadrant.travelshoot.domain.stay.entity;
+package com.quadrant.travelshoot.domains.stay.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,8 +22,9 @@ public class Reservation {
     @Column(name = "reservation_code", unique = true, nullable = false, length = 100)
     private String reservationCode;
 
-    @Column(name = "room_id", nullable = false)
-    private Long roomId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id", nullable = false)
+    private Room room;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;

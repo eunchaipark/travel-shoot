@@ -1,4 +1,4 @@
-package com.quadrant.travelshoot.domain.stay.entity;
+package com.quadrant.travelshoot.domains.stay.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

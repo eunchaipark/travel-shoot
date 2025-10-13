@@ -1,4 +1,4 @@
-package com.quadrant.travelshoot.domain.stay.dto.response;
+package com.quadrant.travelshoot.domains.stay.dto.response;
 
 import com.quadrant.travelshoot.common.enums.PlaceType;
 import lombok.*;

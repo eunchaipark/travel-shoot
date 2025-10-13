@@ -1,0 +1,46 @@
+package com.quadrant.travelshoot.domains.review.dto.response;
+
+import com.quadrant.travelshoot.domains.review.entity.Review;
+import lombok.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
+/**
+ * 리뷰 상세 조회 응답 DTO
+ * 사용 페이지: 리뷰 수정 시 조회, (사용자 리뷰 상세 조회)
+ */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class ReviewDetailResponse {
+
+    private Long reviewId;
+    private Long userId;
+    private String userName;
+
+    // 예약 정보
+//    private ReviewReservationDetailDto reservationDetailDto;
+
+    // 평점 정보 (BigDecimal로 변경)
+    private BigDecimal totalRating;
+    private BigDecimal cleanRating;
+    private BigDecimal convenienceRating;
+    private BigDecimal checkinRating;
+    private BigDecimal communicationRating;
+    private BigDecimal locationRating;
+    private BigDecimal valueRating;
+
+    private String reviewContent;
+    private Boolean isRecommended;  // 0
+    //리뷰 이미지 상세 정보 필요할 수 있음
+    private String reviewImageUrl;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+}
