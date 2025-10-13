@@ -1,28 +1,27 @@
 /**
- * Travel Now 유틸리티 함수
+ * Travel Now 유틸리티 함수 (업데이트)
  * 경로: C:\ITStudy\dev\travel-shoot\frontend\src\utils\main\travelNowUtils.js
  */
 
-// 숙소 개수 포맷팅 (원본과 동일)
+// 숙소 개수 포맷팅
 export const formatCount = (count) => {
   return count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-// 반응형 설정 계산 (원본과 동일)
+// 반응형 설정 계산
 export const calculateResponsiveConfig = (width) => {
-  // 원본 주석: 모바일 3개라고 되어있지만 실제 코드는 4
   if (width <= 768) {
-    return { cardsPerSlide: 4 }; // 모바일: 4개씩
+    return { cardsPerSlide: 4 };
   } else if (width <= 1024) {
-    return { cardsPerSlide: 3 }; // 태블릿: 3개씩
+    return { cardsPerSlide: 3 };
   } else if (width <= 1200) {
-    return { cardsPerSlide: 3 }; // 대형 태블릿: 3개씩
+    return { cardsPerSlide: 3 };
   } else {
-    return { cardsPerSlide: 4 }; // 데스크톱: 4개씩
+    return { cardsPerSlide: 4 };
   }
 };
 
-// 총 슬라이드 수 계산 (원본: 12개 기준)
+// 총 슬라이드 수 계산
 export const calculateTotalSlides = (cardsPerSlide) => {
   return Math.ceil(12 / cardsPerSlide);
 };
@@ -39,14 +38,30 @@ export const handleTouchGesture = (touchStart, touchEnd, threshold = 50) => {
   const diffX = touchStart.x - touchEnd.x;
   const diffY = Math.abs(touchStart.y - touchEnd.y);
   
-  // 가로 스와이프가 세로 스와이프보다 큰 경우에만
   if (Math.abs(diffX) > threshold && Math.abs(diffX) > diffY) {
     return diffX > 0 ? 'next' : 'prev';
   }
   return null;
 };
 
-// 여행지 데이터 (원본과 완전히 동일 - 12개)
+// ===== API에서 데이터 가져오기 =====
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+
+export const fetchTravelNowData = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/travel-now/destinations`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch destinations');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('API 데이터 조회 실패:', error);
+    // 폴백: util 데이터 사용
+    return TRAVEL_NOW_DATA;
+  }
+};
+
+// ===== 기본 데이터 (폴백용) =====
 export const TRAVEL_NOW_DATA = [
   { 
     id: 1, 
