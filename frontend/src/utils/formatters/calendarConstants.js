@@ -1,3 +1,7 @@
+// ========================================
+// 달력 관련 상수
+// ========================================
+
 /**
  * 예약별 색상 풀 (5가지 색상으로 순차 할당)
  */
@@ -44,9 +48,9 @@ export const CALENDAR_CONFIG = {
   moreLinkClick: 'popover',
   displayEventTime: false,
   headerToolbar: {
-    left: 'prev',
+    left: 'prev,next',
     center: 'title',
-    right: 'next today'
+    right: 'today'
   },
   buttonText: {
     today: '오늘'
