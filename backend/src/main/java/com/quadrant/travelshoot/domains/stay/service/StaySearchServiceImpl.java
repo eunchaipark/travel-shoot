@@ -81,8 +81,7 @@ public class StaySearchServiceImpl implements StaySearchService {
                 request.getCheckIn(),
                 request.getCheckOut(),
                 request.getTotalGuests(),
-                pageable
-        );
+                pageable);
 
         return buildSearchResponse(stays,pageable.getPageNumber());
     }
@@ -134,8 +133,7 @@ public class StaySearchServiceImpl implements StaySearchService {
                 ratingsSize,
                 amenities,
                 amenityCount,
-                pageable
-        );
+                pageable);
 
         return buildSearchResponse(stays,pageable.getPageNumber());
     }
@@ -261,8 +259,7 @@ public class StaySearchServiceImpl implements StaySearchService {
         boolean isDuplicate = searchHistoryRepository.existsByUserIdAndRegionAndCreatedAtAfter(
                 userId,
                 request.getRegion(),
-                LocalDateTime.now().minusMinutes(1)
-        );
+                LocalDateTime.now().minusMinutes(1));
 
         if (isDuplicate) {
             log.info(" 중복 검색 - 기록 저장 스킵");
@@ -414,11 +411,10 @@ public class StaySearchServiceImpl implements StaySearchService {
 
     private List<String> getAmenities(Long stayId) {
         try {
-            String sql =
-                    "SELECT a.amenity_name " +
-                            "FROM stays_amenities sa " +
-                            "INNER JOIN amenities a ON sa.amenity_id = a.amenity_id " +
-                            "WHERE sa.stay_id = ?";
+            String sql = "SELECT a.amenity_name " +
+                    "FROM stays_amenities sa " +
+                    "INNER JOIN amenities a ON sa.amenity_id = a.amenity_id " +
+                    "WHERE sa.stay_id = ?";
             return jdbcTemplate.queryForList(sql, String.class, stayId);
         } catch (Exception e) {
             log.warn("편의시설 조회 실패 - stayId: {}", stayId);

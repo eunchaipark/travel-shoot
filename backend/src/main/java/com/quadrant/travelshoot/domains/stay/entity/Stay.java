@@ -29,7 +29,7 @@ public class Stay {
     private String name;
 
     @Column(name = "stay_type", nullable = false, length = 20)
-    private String stayType;  // '호텔', '모텔', '펜션'
+    private String stayType; // '호텔', '모텔', '펜션'
 
     @Column(name = "address", nullable = false, length = 500)
     private String address;
@@ -108,12 +108,18 @@ public class Stay {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
-        if (averageRating == null) averageRating = BigDecimal.ZERO;
-        if (reviewCount == null) reviewCount = 0;
-        if (viewCount == null) viewCount = 0L;
-        if (isActive == null) isActive = true;
-        if (checkInTime == null) checkInTime = LocalTime.of(15, 0);
-        if (checkOutTime == null) checkOutTime = LocalTime.of(11, 0);
+        if (averageRating == null)
+            averageRating = BigDecimal.ZERO;
+        if (reviewCount == null)
+            reviewCount = 0;
+        if (viewCount == null)
+            viewCount = 0L;
+        if (isActive == null)
+            isActive = true;
+        if (checkInTime == null)
+            checkInTime = LocalTime.of(15, 0);
+        if (checkOutTime == null)
+            checkOutTime = LocalTime.of(11, 0);
     }
 
     @PreUpdate
@@ -131,34 +137,34 @@ public class Stay {
     public String getRegion() {
         // 이 메서드는 Repository에서 JOIN으로 처리하거나
         // 별도의 Region 조회 로직 필요
-        return "지역_" + regionId;  // 임시
+        return "지역_" + regionId; // 임시
     }
 
     // 숙소 대표 이미지
     public String getThumbnailImage() {
         // 실제로는 Room 또는 별도 이미지 테이블에서 가져와야 함
-        return null;  // 일단 null
+        return null; // 일단 null
     }
 
     // 숙소 기본 이용 가격
     public BigDecimal getBasePrice() {
         // 실제로는 Room 테이블에서 최저가 조회 필요
-        return BigDecimal.valueOf(100000);  // 임시
+        return BigDecimal.valueOf(100000); // 임시
     }
 
-    //최대 수용 가능 인원수
+    // 최대 수용 가능 인원수
     public Integer getMaxGuests() {
         // 실제로는 Room 테이블에서 최대값 조회 필요
-        return 4;  // 임시
+        return 4; // 임시
     }
 
-    //예약 가능 여부
+    // 예약 가능 여부
     public Boolean getInstantBooking() {
-        return isActive;  // 활성화된 숙소는 즉시 예약 가능으로 간주
+        return isActive; // 활성화된 숙소는 즉시 예약 가능으로 간주
     }
 
-    //무료 취소 가능 여부
+    // 무료 취소 가능 여부
     public Boolean getFreeCancellation() {
-        return true;  // 기본값
+        return true; // 기본값
     }
 }

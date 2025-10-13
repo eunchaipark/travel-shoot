@@ -10,14 +10,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "bootstrap": "^5.3.7",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-router-dom": "^7.7.0",
-    "react-apexcharts": "^1.4.1",
+    "@fortawesome/fontawesome-free": "^7.1.0",
+    "@fullcalendar/core": "^6.1.19",
+    "@fullcalendar/daygrid": "^6.1.19",
+    "@fullcalendar/interaction": "^6.1.19",
+    "@fullcalendar/react": "^6.1.19",
     "apexcharts": "^4.0.0",
+    "bootstrap": "^5.3.7",
     "html2pdf.js": "^0.10.2",
-    "qrcode": "^1.5.3"
+    "qrcode": "^1.5.3",
+    "react": "^19.1.0",
+    "react-apexcharts": "^1.4.1",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.7.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.30.1",

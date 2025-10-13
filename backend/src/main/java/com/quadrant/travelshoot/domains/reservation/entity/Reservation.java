@@ -1,7 +1,11 @@
-package com.quadrant.travelshoot.domains.stay.entity;
+package com.quadrant.travelshoot.domains.reservation.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.quadrant.travelshoot.domains.stay.entity.Room;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -9,6 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "reservations")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -18,9 +23,6 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reservation_id")
     private Long id;
-
-    @Column(name = "reservation_code", unique = true, nullable = false, length = 100)
-    private String reservationCode;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id", nullable = false)
@@ -32,7 +34,7 @@ public class Reservation {
     @Column(name = "guest_name", nullable = false, length = 100)
     private String guestName;
 
-    @Column(name = "guest_phone", nullable = false, length = 100)
+    @Column(name = "guest_phone", nullable = false, length = 20)
     private String guestPhone;
 
     @Column(name = "guest_email", nullable = false, length = 255)
@@ -53,23 +55,24 @@ public class Reservation {
     @Column(name = "total_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalPrice;
 
-    @Column(name = "reservation_status", nullable = false, length = 20)
-    private String reservationStatus;  // '예약확정', '이용완료', '예약취소'
+    @Enumerated(EnumType.STRING)
+    @Column(name = "reservation_status", nullable = false)
+    private ReservationStatus reservationStatus;
 
-    @Column(name = "cancel_reason", length = 100)
-    private String cancelReason;
+    @Column(name = "cancellation_reason", length = 100)
+    private String cancellationReason;
 
-    @Column(name = "cancel_detail", columnDefinition = "TEXT")
-    private String cancelDetail;
+    @Column(name = "cancellation_detail", columnDefinition = "TEXT")
+    private String cancellationDetail;
 
     @Column(name = "cancelled_at")
     private LocalDateTime cancelledAt;
 
-    @Column(name = "created_at", nullable = false)
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
+    public enum ReservationStatus {
+        예약확정, 이용완료, 예약취소
     }
 }

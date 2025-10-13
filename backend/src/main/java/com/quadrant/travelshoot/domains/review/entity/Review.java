@@ -1,6 +1,6 @@
 package com.quadrant.travelshoot.domains.review.entity;
 
-import com.quadrant.travelshoot.domains.stay.entity.Reservation;
+import com.quadrant.travelshoot.domains.reservation.entity.Reservation;
 import com.quadrant.travelshoot.domains.user.entity.User;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
