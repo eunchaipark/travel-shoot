@@ -3,6 +3,9 @@ package com.quadrant.travelshoot.domains.reservation.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.quadrant.travelshoot.domains.stay.entity.Room;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,10 +22,11 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reservation_id")
-    private Long reservationId;
+    private Long id;
 
-    @Column(name = "room_id", nullable = false)
-    private Long roomId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id", nullable = false)
+    private Room room;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;

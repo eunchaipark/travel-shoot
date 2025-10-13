@@ -51,4 +51,5 @@ public class User {
 //
 //    @Column(name = "last_login_at")
 //    private LocalDateTime lastLoginAt;
+
 }

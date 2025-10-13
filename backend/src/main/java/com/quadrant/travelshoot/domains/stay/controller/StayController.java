@@ -33,4 +33,17 @@ public class StayController {
         log.info("가격착한 숙소 조회 완료 - 결과: {} 개", stays.size());
         return ResponseEntity.ok(stays);
     }
+
+    /**
+     * 숙소 상세 조회
+     */
+    @GetMapping("/{stayId}")
+    public ResponseEntity<?> getStayDetail(@PathVariable Long stayId){
+
+
+        return null;
+    }
+
+
 }
+
