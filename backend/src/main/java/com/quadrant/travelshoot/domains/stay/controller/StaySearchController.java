@@ -17,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/search")
+@RequestMapping("/api/stays")
 @RequiredArgsConstructor
 public class StaySearchController {
 
@@ -36,7 +36,7 @@ public class StaySearchController {
     }
 
     //기본 검색창 검색
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<SearchResponse> search(
             @ModelAttribute SearchRequest request,
             @PageableDefault(size = 20) Pageable pageable,
