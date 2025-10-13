@@ -883,6 +883,7 @@ CREATE TABLE restaurants (
     longitude DECIMAL(11, 8) NOT NULL COMMENT '경도',
     rating DECIMAL(3, 2) NOT NULL DEFAULT 0.00 COMMENT '평점 (0.00~5.00)',
     signature_menu VARCHAR(500) NULL COMMENT '대표 메뉴',
+    view_count BIGINT NOT NULL DEFAULT 0 COMMENT '조회수',
     closed_days VARCHAR(100) NULL COMMENT '휴무 요일',
     is_active BOOLEAN NOT NULL DEFAULT TRUE COMMENT '활성 여부',
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성일시',
@@ -960,6 +961,7 @@ CREATE TABLE activities (
     latitude DECIMAL(10, 8) NOT NULL COMMENT '위도',
     longitude DECIMAL(11, 8) NOT NULL COMMENT '경도',
     rating DECIMAL(3, 2) NOT NULL DEFAULT 0.00 COMMENT '평점 (0.00~5.00)',
+    view_count BIGINT NOT NULL DEFAULT 0 COMMENT '조회수',
     is_active BOOLEAN NOT NULL DEFAULT TRUE COMMENT '활성 여부',
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '생성일시',
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일시',
@@ -1757,5 +1759,3 @@ INSERT INTO rooms (room_code, room_name, stay_id, stay_code, weekday_price, week
 ('R0116', '리조트 스위트', 115, 'S0016', 280000, 350000, TRUE, TRUE);
 
 commit;
-
-
