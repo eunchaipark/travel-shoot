@@ -42,7 +42,7 @@ public class EmailAuthServiceImpl implements EmailAuthService {
         // 이메일 발송
         sendEmail(email, code, purpose);
 
-        log.info("✅ 인증 코드 발송: {} -> {}", email, code);
+        log.info("인증 코드 발송: {} -> {}", email, code);
     }
 
     // gmail 발송하기
@@ -53,7 +53,7 @@ public class EmailAuthServiceImpl implements EmailAuthService {
             message.setTo(to);
 
             if ("signup".equals(purpose)) {
-                message.setSubject("✈ [Travel Shoot] 회원가입 인증");
+                message.setSubject("∞ [Travel Shoot] 회원가입 인증");
                 message.setText(
                         "안녕하세요, Travel Shoot입니다.\n\n" +
                                 "회원가입 인증 코드: " + code + "\n\n" +
@@ -73,8 +73,8 @@ public class EmailAuthServiceImpl implements EmailAuthService {
                                 "Travel Shoot - 팀 사분면"
                 );
             } else {
-                message.setSubject("📧 [Travel Shoot] 이메일 인증");
-                message.setText("인증 코드: " + code + "\n\n⏰ 5분간 유효합니다.");
+                message.setSubject("[Travel Shoot] 이메일 인증");
+                message.setText("인증 코드: " + code + "\n\n 5분간 유효합니다.");
             }
 
             mailSender.send(message);
