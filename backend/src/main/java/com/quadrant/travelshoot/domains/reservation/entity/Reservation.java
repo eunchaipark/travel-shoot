@@ -1,5 +1,6 @@
 package com.quadrant.travelshoot.domains.reservation.entity;
 
+import com.quadrant.travelshoot.domains.stay.entity.Room;
 import com.quadrant.travelshoot.domains.reservation.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,7 +26,7 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reservation_id")
-    private Long reservationId;
+    private Long id;
 
     @Column(name = "reservation_code", unique = true, nullable = false, length = 100)
     private String reservationCode;
@@ -67,13 +68,12 @@ public class Reservation {
     @Builder.Default
     private ReservationStatus reservationStatus = ReservationStatus.예약확정;
 
+    @Column(name = "cancel_reason", length = 100)
+    private String cancelReason;
     // 1013 추가
     @Enumerated(EnumType.STRING)
     @Column(name = "transportation_method", length = 20)
     private TransportationMethod transportationMethod;
-
-    @Column(name = "cancel_reason", length = 100)
-    private String cancelReason;
 
     @Column(name = "cancel_detail", columnDefinition = "TEXT")
     private String cancelDetail;
