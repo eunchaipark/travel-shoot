@@ -1,7 +1,7 @@
 package com.quadrant.travelshoot.domains.activity.service.impl;
 
 import com.quadrant.travelshoot.domains.activity.dto.response.ActivityTrendingResponse;
-import com.quadrant.travelshoot.domains.activity.repository.ActivityTrendingRepository;
+import com.quadrant.travelshoot.domains.activity.repository.ActivityRepository;
 import com.quadrant.travelshoot.domains.activity.service.ActivityTrendingService;
 
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class ActivityTrendingServiceImpl implements ActivityTrendingService {
 
-    private final ActivityTrendingRepository activityTrendingRepository;
+    private final ActivityRepository activityTrendingRepository;
 
     @Override
     public List<ActivityTrendingResponse> getTrendingActivities() {

@@ -1,42 +1,39 @@
-package com.quadrant.travelshoot.domains.activity.repository;
+package com.quadrant.travelshoot.domains.restaurant.repository;
 
-import com.quadrant.travelshoot.domains.activity.dto.response.ActivityTrendingResponse;
-import com.quadrant.travelshoot.domains.activity.entity.Activity;
+import com.quadrant.travelshoot.domains.restaurant.dto.response.RestaurantTrendingResponse;
+import com.quadrant.travelshoot.domains.restaurant.entity.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ActivityTrendingRepository extends JpaRepository<Activity, Long> {
+public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
     @SuppressWarnings({"SqlDialectInspection", "SqlNoDataSourceInspection", "SqlResolve"})
     @Query(value = """
         SELECT 
-            a.activity_id as activityId,
-            a.activity_name as activityName,
-            a.activity_type as activityType,
-            a.address as address,
-            a.rating as rating,
+            r.restaurant_id as restaurantId,
+            r.restaurant_name as restaurantName,
+            r.food_type as foodType,
+            r.address as address,
+            r.rating as rating,
             
-            -- 이미지
             (SELECT f.s3_url 
              FROM files f 
-             WHERE f.reference_type = 'ACTIVITY' 
-             AND f.reference_id = a.activity_id 
+             WHERE f.reference_type = 'RESTAURANT' 
+             AND f.reference_id = r.restaurant_id 
              AND f.is_representative = true 
              AND f.is_deleted = false
              LIMIT 1) as thumbnailImage,
             
-            a.latitude as latitude,
-            a.longitude as longitude,
+            r.latitude as latitude,
+            r.longitude as longitude,
             
-            -- 최근 7일 조회수
             COUNT(DISTINCT CASE 
                 WHEN vh.viewed_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) 
                 THEN vh.id 
             END) as recent7DaysViews,
             
-            -- 이전 3주 평균 조회수
             ROUND(
                 COUNT(DISTINCT CASE 
                     WHEN vh.viewed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
@@ -45,7 +42,6 @@ public interface ActivityTrendingRepository extends JpaRepository<Activity, Long
                 END) / 3.0, 2
             ) as previous3WeeksAvgViews,
             
-            -- 조회수 증가율
             CASE 
                 WHEN COUNT(DISTINCT CASE 
                     WHEN vh.viewed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
@@ -78,7 +74,6 @@ public interface ActivityTrendingRepository extends JpaRepository<Activity, Long
                     )
             END as viewGrowthRate,
             
-            -- Trending Score (조회수 증가율 × 평점 가중치)
             CASE 
                 WHEN COUNT(DISTINCT CASE 
                     WHEN vh.viewed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
@@ -89,7 +84,7 @@ public interface ActivityTrendingRepository extends JpaRepository<Activity, Long
                         WHEN COUNT(DISTINCT CASE 
                             WHEN vh.viewed_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) 
                             THEN vh.id 
-                        END) > 0 THEN 100.0 * (a.rating / 5.0)
+                        END) > 0 THEN 100.0 * (r.rating / 5.0)
                         ELSE 0.0
                     END
                 ELSE 
@@ -107,24 +102,24 @@ public interface ActivityTrendingRepository extends JpaRepository<Activity, Long
                             WHEN vh.viewed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
                             AND vh.viewed_at < DATE_SUB(NOW(), INTERVAL 7 DAY)
                             THEN vh.id 
-                        END) / 3.0) * (a.rating / 5.0), 2
+                        END) / 3.0) * (r.rating / 5.0), 2
                     )
             END as trendingScore
             
-        FROM activities a
+        FROM restaurants r
         LEFT JOIN view_history vh 
-            ON vh.view_type = 'ACTIVITY' 
-            AND vh.target_id = a.activity_id 
+            ON vh.view_type = 'RESTAURANT' 
+            AND vh.target_id = r.restaurant_id 
             AND vh.viewed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
-        WHERE a.is_active = 1
-        AND a.rating >= 4.0
-        GROUP BY a.activity_id, a.activity_name, a.activity_type, a.address, 
-                 a.rating, a.latitude, a.longitude
+        WHERE r.is_active = 1
+        AND r.rating >= 4.0
+        GROUP BY r.restaurant_id, r.restaurant_name, r.food_type, r.address, 
+                 r.rating, r.latitude, r.longitude
         ORDER BY 
             trendingScore DESC,
             viewGrowthRate DESC,
             rating DESC
         LIMIT 12
         """, nativeQuery = true)
-    List<ActivityTrendingResponse> findTrendingActivities();
+    List<RestaurantTrendingResponse> findTrendingRestaurants();
 }
