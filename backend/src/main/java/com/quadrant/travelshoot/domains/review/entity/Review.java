@@ -81,6 +81,7 @@ public class Review {
     private String reviewContent;
 
     @Column(name = "is_recommended", nullable = false)
+    @Builder.Default
     private Boolean isRecommended = false;
 
     @CreationTimestamp
@@ -96,28 +97,4 @@ public class Review {
 //    private ReviewImage reviewImage;
 
 
-    // 6개 항목의 평균으로 종합 평점 계산 - 이거는 서버 왔다갔다 보다는 프론트에서 바로바로 반영되는게 나을거 같음.
-//    public void getTotalRating() {
-//        BigDecimal sum = cleanRating
-//                .add(convenienceRating)
-//                .add(checkinRating)
-//                .add(communicationRating)
-//                .add(locationRating)
-//                .add(valueRating);
-//
-//        this.totalRating = sum.divide(BigDecimal.valueOf(6), 2, RoundingMode.HALF_UP);
-//    }
-
-    // 연관관계 매핑
-    /*
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservation_id", insertable = false, updatable = false)
-    private Reservation reservation;
-
-
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stay_id", insertable = false, updatable = false)
-    private Stay stay;
-    */
 }

@@ -19,8 +19,9 @@ public class Room {
     @Column(name = "room_id")
     private Long id;
 
-    @Column(name = "stay_id", nullable = false)
-    private Long stayId;
+    @ManyToOne
+    @JoinColumn(name = "stay_id", nullable = false)
+    private Stay stay;
 
     @Column(name = "stay_code", nullable = false, length = 50)
     private String stayCode;

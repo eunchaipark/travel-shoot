@@ -1,14 +1,17 @@
 package com.quadrant.travelshoot.domains.stay.entity;
 
+import com.quadrant.travelshoot.domains.common.entity.FileUpload;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "stays")
-@Getter
+@Getter @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,7 +40,7 @@ public class Stay {
     @Column(name = "address_detail", length = 500)
     private String addressDetail;
 
-    @Column(name = "region_id", nullable = false)
+    @Column(name = "region_id", nullable = false, insertable = false, updatable = false)
     private Long regionId;
 
     @Column(name = "latitude", nullable = false, precision = 10, scale = 8)
@@ -75,6 +78,19 @@ public class Stay {
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "stay", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Room> rooms = new ArrayList<>();
+
+    @OneToMany(mappedBy = "stay", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<StayAmenity> stayAmenities = new ArrayList<>();
+
+    @Transient
+    @Builder.Default
+    private List<FileUpload> stayImages = new ArrayList<>();
+    /// ////////////////////
 
     @Transient
     private String regionName;
