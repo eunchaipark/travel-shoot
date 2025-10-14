@@ -40,7 +40,7 @@ public class Stay {
     @Column(name = "address_detail", length = 500)
     private String addressDetail;
 
-    @Column(name = "region_id", nullable = false, insertable = false, updatable = false)
+    @Column(name = "region_id", nullable = false)
     private Long regionId;
 
     @Column(name = "latitude", nullable = false, precision = 10, scale = 8)

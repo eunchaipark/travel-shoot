@@ -61,7 +61,7 @@ public class Reservation {
     private ReservationStatus reservationStatus;
 
     @Column(name = "cancel_reason", length = 100)
-    private String cancellationReason;
+    private String cancelReason;
 
     @Column(name = "cancel_detail", columnDefinition = "TEXT")
     private String cancelDetail;
