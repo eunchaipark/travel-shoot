@@ -1,5 +1,6 @@
-package com.quadrant.travelshoot.domains.stay.entity;
+package com.quadrant.travelshoot.domains.reservation.entity;
 
+import com.quadrant.travelshoot.domains.stay.entity.Room;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;

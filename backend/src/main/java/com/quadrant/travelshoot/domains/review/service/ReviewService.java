@@ -8,7 +8,7 @@ import com.quadrant.travelshoot.domains.review.dto.response.ReviewRegistResponse
 import com.quadrant.travelshoot.domains.review.entity.Review;
 import com.quadrant.travelshoot.domains.review.mapper.ReviewMapper;
 import com.quadrant.travelshoot.domains.review.repository.ReviewRepository;
-import com.quadrant.travelshoot.domains.stay.repository.ReservationRepository;
+import com.quadrant.travelshoot.domains.reservation.repository.ReservationRepository;
 import com.quadrant.travelshoot.domains.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -20,8 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Slf4j
 @Service
