@@ -1,5 +1,6 @@
 package com.quadrant.travelshoot.domains.reservation.entity;
 
+import com.quadrant.travelshoot.domains.stay.entity.Room;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -59,11 +60,11 @@ public class Reservation {
     @Column(name = "reservation_status", nullable = false)
     private ReservationStatus reservationStatus;
 
-    @Column(name = "cancellation_reason", length = 100)
-    private String cancellationReason;
+    @Column(name = "cancel_reason", length = 100)
+    private String cancelReason;
 
-    @Column(name = "cancellation_detail", columnDefinition = "TEXT")
-    private String cancellationDetail;
+    @Column(name = "cancel_detail", columnDefinition = "TEXT")
+    private String cancelDetail;
 
     @Column(name = "cancelled_at")
     private LocalDateTime cancelledAt;

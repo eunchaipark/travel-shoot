@@ -14,12 +14,14 @@ public class StayAmenity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "stays_amenity_id")
+    @Column(name = "stay_amenity_id")
     private Long stayAmenityId;
 
-    @Column(name = "stay_id", nullable = false)
-    private Long stayId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "stay_id")
+    private Stay stay;
 
-    @Column(name = "amenity_id", nullable = false)
-    private Integer amenityId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amenity_id")
+    private Amenity amenity;
 }
