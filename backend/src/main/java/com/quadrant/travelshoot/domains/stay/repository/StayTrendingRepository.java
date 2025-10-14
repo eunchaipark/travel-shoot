@@ -20,7 +20,6 @@ public interface StayTrendingRepository extends JpaRepository<Stay, Long> {
             s.address as address,
             s.average_rating as averageRating,
             
-            -- 이미지 (수정!)
             (SELECT f.s3_url 
             FROM files f 
             WHERE f.reference_type = 'STAY' 
