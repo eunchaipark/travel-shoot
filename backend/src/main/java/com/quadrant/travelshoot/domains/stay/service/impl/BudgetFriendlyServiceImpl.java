@@ -2,7 +2,7 @@ package com.quadrant.travelshoot.domains.stay.service.impl;
 
 import com.quadrant.travelshoot.domains.stay.dto.response.BudgetFriendlyResponse;
 import com.quadrant.travelshoot.domains.stay.entity.Stay;
-import com.quadrant.travelshoot.domains.stay.repository.BudgetFriendlyRepository;
+import com.quadrant.travelshoot.domains.stay.repository.StayRepository;
 import com.quadrant.travelshoot.domains.stay.service.BudgetFriendlyService;
 
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class BudgetFriendlyServiceImpl implements BudgetFriendlyService {
 
-    private final BudgetFriendlyRepository budgetFriendlyRepository;
+    private final StayRepository stayRepository;
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -33,7 +33,7 @@ public class BudgetFriendlyServiceImpl implements BudgetFriendlyService {
         log.info("가격착한 숙소 조회 시작");
 
         // 1. 기본 필터링된 후보 조회
-        List<Stay> candidates = budgetFriendlyRepository.findBudgetFriendlyCandidates();
+        List<Stay> candidates = stayRepository.findBudgetFriendlyCandidates();
         log.info("후보 숙소 개수: {}", candidates.size());
 
         if (candidates.isEmpty()) {
@@ -175,7 +175,7 @@ public class BudgetFriendlyServiceImpl implements BudgetFriendlyService {
      * 평균 최저가 계산 (평일 + 주말) / 2
      */
     private BigDecimal calculateAveragePrice(Long stayId) {
-        List<Object[]> result = budgetFriendlyRepository.findMinPricesByStayId(stayId);
+        List<Object[]> result = stayRepository.findMinPricesByStayId(stayId);
 
         if (result.isEmpty() || result.get(0)[0] == null) {
             throw new RuntimeException("객실 가격 정보 없음");
@@ -196,7 +196,7 @@ public class BudgetFriendlyServiceImpl implements BudgetFriendlyService {
             // city_name만 추출 (예: "강원도 춘천시" -> "춘천시")
             String city = extractCityName(cityName);
 
-            BigDecimal cityAverage = budgetFriendlyRepository.findAveragePriceByCityName(city);
+            BigDecimal cityAverage = stayRepository.findAveragePriceByCityName(city);
 
             if (cityAverage == null || cityAverage.compareTo(BigDecimal.ZERO) == 0) {
                 log.warn("지역 평균가 조회 실패 - cityName: {}", city);

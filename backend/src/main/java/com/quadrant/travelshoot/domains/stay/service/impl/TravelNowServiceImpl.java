@@ -1,7 +1,7 @@
 package com.quadrant.travelshoot.domains.stay.service.impl;
 
 import com.quadrant.travelshoot.domains.stay.dto.response.TravelNowResponse;
-import com.quadrant.travelshoot.domains.stay.repository.TravelNowRepository;
+import com.quadrant.travelshoot.domains.stay.repository.StayRepository;
 import com.quadrant.travelshoot.domains.stay.service.TravelNowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,14 +18,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TravelNowServiceImpl implements TravelNowService {
 
-    private final TravelNowRepository travelNowRepository;
+    private final StayRepository stayRepository;
 
     /**
      * 데이터베이스의 지역별 숙소 수 조회
      */
     private Map<String, Long> getAccommodationCountByRegion() {
         try {
-            List<Object[]> results = travelNowRepository.findAccommodationCountByRegion();
+            List<Object[]> results = stayRepository.findAccommodationCountByRegion();
             return results.stream()
                 .collect(Collectors.toMap(
                     row -> (String) row[0], // 지역명
