@@ -17,17 +17,16 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/search")
+@RequestMapping("/api/stays")
 @RequiredArgsConstructor
 public class StaySearchController {
 
     private final StaySearchService staySearchService;
 
-    //지역 검색 자동완성 ?
+    // 지역 검색 자동완성 ?
     @GetMapping("/autocomplete")
     public ResponseEntity<List<AutocompleteResponse>> autocomplete(
-            @RequestParam String keyword
-    ) {
+            @RequestParam String keyword) {
         log.info("지역 자동완성 요청 - keyword: {}", keyword);
         List<AutocompleteResponse> suggestions = staySearchService.autocomplete(keyword);
 
@@ -36,12 +35,11 @@ public class StaySearchController {
     }
 
     //기본 검색창 검색
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<SearchResponse> search(
             @ModelAttribute SearchRequest request,
             @PageableDefault(size = 20) Pageable pageable,
-            HttpSession session
-    ) {
+            HttpSession session) {
         log.info("검색창 검색 요청 - region: {}, checkIn: {}, checkOut: {}, adults: {}, children: {}",
                 request.getRegion(), request.getCheckIn(), request.getCheckOut(),
                 request.getAdults(), request.getChildren());
@@ -63,8 +61,7 @@ public class StaySearchController {
     @PostMapping("/filter")
     public ResponseEntity<SearchResponse> filterSearch(
             @RequestBody FilterRequest request,
-            @PageableDefault(size = 20) Pageable pageable
-    ) {
+            @PageableDefault(size = 20) Pageable pageable) {
         log.info("필터 검색 요청 - 적용된 필터: {} 개", request.getActiveFilterCount());
         log.info("   - 가격 범위: {} ~ {}", request.getMinPrice(), request.getMaxPrice());
         log.info("   - 숙소 타입: {}", request.getStayTypes());
@@ -76,13 +73,12 @@ public class StaySearchController {
         return ResponseEntity.ok(response);
     }
 
-    //무한스크롤 처리
+    // 무한스크롤 처리
     @GetMapping("/infinite")
     public ResponseEntity<SearchResponse> infiniteScroll(
             @ModelAttribute SearchRequest searchRequest,
             @ModelAttribute FilterRequest filterRequest,
-            @PageableDefault(size = 20) Pageable pageable
-    ) {
+            @PageableDefault(size = 20) Pageable pageable) {
         log.info("무한 스크롤 - page: {}, size: {}", pageable.getPageNumber(), pageable.getPageSize());
 
         SearchResponse response = staySearchService.infiniteSearch(
@@ -91,7 +87,7 @@ public class StaySearchController {
         return ResponseEntity.ok(response);
     }
 
-    //최근 5개 검색 목록
+    // 최근 5개 검색 목록
     @GetMapping("/history")
     public ResponseEntity<List<SearchRequest>> getHistory(HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
@@ -103,12 +99,11 @@ public class StaySearchController {
         return ResponseEntity.ok(history);
     }
 
-    //검색 목록 삭제하기
+    // 검색 목록 삭제하기
     @DeleteMapping("/history/{historyId}")
     public ResponseEntity<Void> deleteHistory(
             @PathVariable Long historyId,
-            HttpSession session
-    ) {
+            HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
         if (userId == null) {
             return ResponseEntity.status(401).build();

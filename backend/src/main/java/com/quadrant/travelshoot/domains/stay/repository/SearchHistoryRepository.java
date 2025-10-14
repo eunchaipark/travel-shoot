@@ -11,13 +11,13 @@ import java.util.List;
 @Repository
 public interface SearchHistoryRepository extends JpaRepository<SearchHistory, Long> {
 
-    //최근 5개 검색 기록
+    // 최근 5개 검색 기록
     List<SearchHistory> findTop5ByUserIdOrderByCreatedAtDesc(Long userId);
 
-    //전체 검색 기록
+    // 전체 검색 기록
     List<SearchHistory> findByUserIdOrderByCreatedAtDesc(Long userId);
 
-    //중복 검색 확인하기
+    // 중복 검색 확인하기
     boolean existsByUserIdAndRegionAndCreatedAtAfter(
             Long userId, String region, LocalDateTime after);
 }
