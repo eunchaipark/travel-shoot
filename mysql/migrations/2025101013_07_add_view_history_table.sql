@@ -15,20 +15,33 @@ CREATE TABLE IF NOT EXISTS view_history (
 
 DROP TRIGGER IF EXISTS after_view_history_insert;
 
+DELIMITER $$
+
 CREATE TRIGGER after_view_history_insert
 AFTER INSERT ON view_history
 FOR EACH ROW
 BEGIN
     IF NEW.view_type = 'STAY' THEN
-        UPDATE stays SET view_count = view_count + 1 WHERE stay_id = NEW.target_id;
+        UPDATE stays 
+        SET view_count = view_count + 1 
+        WHERE stay_id = NEW.target_id;
     END IF;
+
     IF NEW.view_type = 'RESTAURANT' THEN
-        UPDATE restaurants SET view_count = view_count + 1 WHERE restaurant_id = NEW.target_id;
+        UPDATE restaurants 
+        SET view_count = view_count + 1 
+        WHERE restaurant_id = NEW.target_id;
     END IF;
+
     IF NEW.view_type = 'ACTIVITY' THEN
-        UPDATE activities SET view_count = view_count + 1 WHERE activity_id = NEW.target_id;
+        UPDATE activities 
+        SET view_count = view_count + 1 
+        WHERE activity_id = NEW.target_id;
     END IF;
-END;
+END$$
+
+DELIMITER ;
+
 
 
 commit;
