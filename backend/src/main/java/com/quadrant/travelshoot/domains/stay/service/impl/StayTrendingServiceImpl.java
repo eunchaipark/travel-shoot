@@ -1,7 +1,9 @@
-package com.quadrant.travelshoot.domains.stay.service;
+package com.quadrant.travelshoot.domains.stay.service.impl;
 
 import com.quadrant.travelshoot.domains.stay.dto.response.StayTrendingResponse;
 import com.quadrant.travelshoot.domains.stay.repository.StayTrendingRepository;
+import com.quadrant.travelshoot.domains.stay.service.StayTrendingService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,8 +1,10 @@
-package com.quadrant.travelshoot.domains.stay.service;
+package com.quadrant.travelshoot.domains.stay.service.impl;
 
 import com.quadrant.travelshoot.domains.stay.dto.response.BudgetFriendlyResponse;
 import com.quadrant.travelshoot.domains.stay.entity.Stay;
 import com.quadrant.travelshoot.domains.stay.repository.BudgetFriendlyRepository;
+import com.quadrant.travelshoot.domains.stay.service.BudgetFriendlyService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
