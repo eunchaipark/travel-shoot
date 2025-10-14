@@ -6,10 +6,11 @@ import com.quadrant.travelshoot.domains.reservation.entity.Reservation;
 import com.quadrant.travelshoot.domains.reservation.enums.ReservationStatus;
 import com.quadrant.travelshoot.domains.reservation.enums.TransportationMethod;
 import com.quadrant.travelshoot.domains.reservation.repository.ReservationRepository;
-import com.quadrant.travelshoot.domains.stay.service.RoomService;
+import com.quadrant.travelshoot.domains.stay.entity.Room;
+import com.quadrant.travelshoot.domains.stay.repository.RoomRepository;
 import com.quadrant.travelshoot.domains.stay.service.StayService;
-import com.quadrant.travelshoot.domains.stay.dto.response.RoomDetailResponse;
 import com.quadrant.travelshoot.domains.stay.dto.response.StayDetailResponse;
+import com.quadrant.travelshoot.domains.stay.dto.response.RoomDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,51 +33,65 @@ import java.util.stream.Collectors;
 public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository reservationRepository;
-    private final RoomService roomService;
+    private final RoomRepository roomRepository;
     private final StayService stayService;
 
     private static final BigDecimal TAX_RATE = new BigDecimal("0.10");
     private static final BigDecimal SERVICE_FEE_RATE = new BigDecimal("0.05");
+
+    private StayDetailResponse getStayByRoomId(Long roomId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("객실을 찾을 수 없습니다"));
+
+        return stayService.getStayDetail(room.getStay().getId());
+    }
+
+    private RoomDto getRoomDto(StayDetailResponse stay, Long roomId) {
+        return stay.getRooms().stream()
+                .filter(r -> r.getRoomId().equals(roomId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("해당 객실을 찾을 수 없습니다"));
+    }
 
     @Override
     public ReservationInitResponse getReservationInitData(
             Long roomId, LocalDate checkInDate, LocalDate checkOutDate, Integer guestCount) {
         log.info("예약 초기 데이터 조회 - roomId: {}", roomId);
 
-        RoomDetailResponse room = roomService.getRoomDetail(roomId);
-        StayDetailResponse stay = stayService.getStayDetail(room.getStayId());
+        StayDetailResponse stay = getStayByRoomId(roomId);
+        RoomDto room = getRoomDto(stay, roomId);
         List<TransportOptionResponse> transportOptions = getTransportOptions();
 
         ReservationInitResponse.PriceInfo priceInfo = ReservationInitResponse.PriceInfo.builder()
                 .weekdayPrice(room.getWeekdayPrice())
                 .weekendPrice(room.getWeekendPrice())
-                .minStayDays(room.getMinStayDays())
-                .maxStayDays(room.getMaxStayDays())
+                .minStayDays(room.getMinimumNights())
+                .maxStayDays(room.getMaximumNights())
                 .build();
 
         ReservationInitResponse.PolicyInfo policyInfo = ReservationInitResponse.PolicyInfo.builder()
                 .reservationNotice(stay.getReservationNotice())
-                .cancellationPolicy(stay.getCancellationPolicy())
+                .cancellationPolicy("체크인 2시간 전까지 취소 가능")
                 .build();
 
         List<ReservationInitResponse.AmenityInfo> amenities = stay.getAmenities().stream()
                 .map(a -> ReservationInitResponse.AmenityInfo.builder()
-                        .amenityId(a.getAmenityId())
-                        .name(a.getName())
-                        .iconUrl(a.getIconUrl())
+                        .amenityId(a.getAmenityId().longValue())
+                        .name(a.getAmenityName())
+                        .iconUrl(null)
                         .build())
                 .collect(Collectors.toList());
 
         return ReservationInitResponse.builder()
                 .stayId(stay.getStayId())
-                .stayName(stay.getName())
-                .address(stay.getAddress())
-                .mainImageUrl(stay.getMainImageUrl())
-                .latitude(stay.getLatitude())
-                .longitude(stay.getLongitude())
+                .stayName(stay.getStayName())
+                .address(stay.getAddress() + " " + (stay.getAddressDetail() != null ? stay.getAddressDetail() : ""))
+                .mainImageUrl(stay.getStayImages().isEmpty() ? null : stay.getStayImages().get(0).getS3Url())
+                .latitude(stay.getLatitude().doubleValue())
+                .longitude(stay.getLongitude().doubleValue())
                 .roomId(room.getRoomId())
-                .roomName(room.getName())
-                .maxOccupancy(room.getMaxOccupancy())
+                .roomName(room.getRoomName())
+                .maxOccupancy(room.getMaximumCapacity())
                 .checkInTime(stay.getCheckInTime())
                 .checkOutTime(stay.getCheckOutTime())
                 .priceInfo(priceInfo)
@@ -92,7 +107,6 @@ public class ReservationServiceImpl implements ReservationService {
             CreateReservationRequest request, Long userId, String guestEmail) {
         log.info("예약 생성 - userId: {}, email: {}, roomId: {}", userId, guestEmail, request.getRoomId());
 
-        // 필수 약관 동의 검증
         if (!Boolean.TRUE.equals(request.getAgeAgreed())) {
             throw new IllegalStateException("만 14세 이상만 이용 가능합니다");
         }
@@ -103,7 +117,6 @@ public class ReservationServiceImpl implements ReservationService {
             throw new IllegalStateException("취소 및 환불 규칙에 동의해주세요");
         }
 
-        // 예약 가능성 검증
         ValidateAvailabilityRequest validateRequest = ValidateAvailabilityRequest.builder()
                 .roomId(request.getRoomId())
                 .checkInDate(request.getCheckInDate())
@@ -116,7 +129,6 @@ public class ReservationServiceImpl implements ReservationService {
             throw new IllegalStateException(availability.getMessage());
         }
 
-        // 가격 재검증
         CalculatePriceRequest priceRequest = CalculatePriceRequest.builder()
                 .roomId(request.getRoomId())
                 .checkInDate(request.getCheckInDate())
@@ -133,10 +145,12 @@ public class ReservationServiceImpl implements ReservationService {
             );
         }
 
-        // 예약 엔티티 생성
+        Room room = roomRepository.findById(request.getRoomId())
+                .orElseThrow(() -> new IllegalArgumentException("객실을 찾을 수 없습니다"));
+
         Reservation reservation = Reservation.builder()
                 .userId(userId)
-                .roomId(request.getRoomId())
+                .room(room)
                 .guestName(request.getGuestName())
                 .guestPhone(request.getGuestPhone())
                 .guestEmail(guestEmail)
@@ -161,7 +175,8 @@ public class ReservationServiceImpl implements ReservationService {
     public AvailabilityResponse validateAvailability(ValidateAvailabilityRequest request) {
         log.info("예약 가능성 검증 - roomId: {}", request.getRoomId());
 
-        RoomDetailResponse room = roomService.getRoomDetail(request.getRoomId());
+        StayDetailResponse stay = getStayByRoomId(request.getRoomId());
+        RoomDto room = getRoomDto(stay, request.getRoomId());
 
         if (!room.getIsActive()) {
             return AvailabilityResponse.builder()
@@ -179,24 +194,24 @@ public class ReservationServiceImpl implements ReservationService {
 
         int nights = (int) ChronoUnit.DAYS.between(request.getCheckInDate(), request.getCheckOutDate());
 
-        if (room.getMinStayDays() != null && nights < room.getMinStayDays()) {
+        if (room.getMinimumNights() != null && nights < room.getMinimumNights()) {
             return AvailabilityResponse.builder()
                     .available(false)
-                    .message(String.format("최소 %d박 이상 예약해야 합니다", room.getMinStayDays()))
+                    .message(String.format("최소 %d박 이상 예약해야 합니다", room.getMinimumNights()))
                     .build();
         }
 
-        if (room.getMaxStayDays() != null && nights > room.getMaxStayDays()) {
+        if (room.getMaximumNights() != null && nights > room.getMaximumNights()) {
             return AvailabilityResponse.builder()
                     .available(false)
-                    .message(String.format("최대 %d박까지 예약 가능합니다", room.getMaxStayDays()))
+                    .message(String.format("최대 %d박까지 예약 가능합니다", room.getMaximumNights()))
                     .build();
         }
 
-        if (request.getGuestCount() > room.getMaxOccupancy()) {
+        if (request.getGuestCount() > room.getMaximumCapacity()) {
             return AvailabilityResponse.builder()
                     .available(false)
-                    .message(String.format("최대 수용 인원은 %d명입니다", room.getMaxOccupancy()))
+                    .message(String.format("최대 수용 인원은 %d명입니다", room.getMaximumCapacity()))
                     .build();
         }
 
@@ -223,7 +238,8 @@ public class ReservationServiceImpl implements ReservationService {
     public PriceCalculationResponse calculatePrice(CalculatePriceRequest request) {
         log.info("가격 계산 - roomId: {}", request.getRoomId());
 
-        RoomDetailResponse room = roomService.getRoomDetail(request.getRoomId());
+        StayDetailResponse stay = getStayByRoomId(request.getRoomId());
+        RoomDto room = getRoomDto(stay, request.getRoomId());
 
         BigDecimal weekdayPrice = room.getWeekdayPrice();
         BigDecimal weekendPrice = room.getWeekendPrice();
@@ -269,7 +285,7 @@ public class ReservationServiceImpl implements ReservationService {
     public ReservationResponse confirmReservation(Long reservationId, Long userId) {
         log.info("예약 확정 - reservationId: {}, userId: {}", reservationId, userId);
 
-        Reservation reservation = reservationRepository.findByReservationIdAndUserId(reservationId, userId)
+        Reservation reservation = reservationRepository.findByIdAndUserId(reservationId, userId)
                 .orElseThrow(() -> new IllegalArgumentException("예약을 찾을 수 없습니다"));
 
         try {
@@ -286,7 +302,7 @@ public class ReservationServiceImpl implements ReservationService {
     public void cancelReservation(Long reservationId, Long userId, String reason, String detail) {
         log.info("예약 취소 - reservationId: {}, userId: {}", reservationId, userId);
 
-        Reservation reservation = reservationRepository.findByReservationIdAndUserId(reservationId, userId)
+        Reservation reservation = reservationRepository.findByIdAndUserId(reservationId, userId)
                 .orElseThrow(() -> new IllegalArgumentException("예약을 찾을 수 없습니다"));
 
         if (!reservation.canCancel()) {
@@ -301,7 +317,7 @@ public class ReservationServiceImpl implements ReservationService {
     public ReservationResponse getReservationDetail(Long reservationId, Long userId) {
         log.info("예약 상세 조회 - reservationId: {}, userId: {}", reservationId, userId);
 
-        Reservation reservation = reservationRepository.findByReservationIdAndUserId(reservationId, userId)
+        Reservation reservation = reservationRepository.findByIdAndUserId(reservationId, userId)
                 .orElseThrow(() -> new IllegalArgumentException("예약을 찾을 수 없습니다"));
 
         return toDetailResponse(reservation);
@@ -357,17 +373,17 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     private ReservationResponse toDetailResponse(Reservation reservation) {
-        RoomDetailResponse room = roomService.getRoomDetail(reservation.getRoomId());
-        StayDetailResponse stay = stayService.getStayDetail(room.getStayId());
+        StayDetailResponse stay = getStayByRoomId(reservation.getRoom().getId());
+        RoomDto room = getRoomDto(stay, reservation.getRoom().getId());
 
         return ReservationResponse.builder()
-                .reservationId(reservation.getReservationId())
+                .reservationId(reservation.getId())
                 .reservationCode(reservation.getReservationCode())
                 .userId(reservation.getUserId())
-                .roomId(reservation.getRoomId())
-                .roomName(room.getName())
+                .roomId(reservation.getRoom().getId())
+                .roomName(room.getRoomName())
                 .stayId(stay.getStayId())
-                .stayName(stay.getName())
+                .stayName(stay.getStayName())
                 .address(stay.getAddress())
                 .guestName(reservation.getGuestName())
                 .guestPhone(reservation.getGuestPhone())
