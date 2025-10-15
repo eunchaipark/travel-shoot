@@ -30,7 +30,6 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
 
-
     /* 이미지 업로드 */
 
     /* 예약 검증 메서드 - 리뷰 등록, 수정, 삭제 전 검증 */
@@ -54,7 +53,6 @@ public class ReviewServiceImpl implements ReviewService {
         if (reviewRepository.existsByReservationId(request.getReservationId())) {
             throw new IllegalStateException("이미 해당 예약에 대한 리뷰가 존재합니다.");
         }
-
 
         // 저장
         Review review = Review.builder()

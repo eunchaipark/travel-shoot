@@ -16,7 +16,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     public User getUserById(Long userId) {
-        return userRepository.getReferenceById(userId)
+        return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다"));
     }
 }
