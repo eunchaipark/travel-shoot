@@ -12,7 +12,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.UUID;
+//import java.util.UUID;  //TODO : 1015 랜덤 아이디 규칙 적용해서 주석처리
+import java.util.Random;  //TODO : 1015 랜덤 아이디 규칙 적용
 
 @Entity
 @Table(name = "reservations")
@@ -70,10 +71,10 @@ public class Reservation {
 
     @Column(name = "cancel_reason", length = 100)
     private String cancelReason;
+
     // 1013 추가
-    @Enumerated(EnumType.STRING)
     @Column(name = "transportation_method", length = 20)
-    private TransportationMethod transportationMethod;
+    private String transportationMethod;
 
     @Column(name = "cancel_detail", columnDefinition = "TEXT")
     private String cancelDetail;
@@ -103,9 +104,18 @@ public class Reservation {
     }
 
     private String generateReservationCode() {
-        String timestamp = String.valueOf(System.currentTimeMillis());
-        String uuid = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
-        return "RES" + timestamp + uuid;
+
+        //TODO : RES + 이용시작일 + 랜덤숫자 7자리 이렇게 예약번호 생성되게 규칙성
+        String datePart = String.format("%02d%02d", checkInDate.getMonthValue(), checkInDate.getDayOfMonth());
+        int randomNum = new Random().nextInt(9_000_000) + 1_000_000;
+        String randomPart = String.valueOf(randomNum);
+
+        return "RES" + datePart + randomPart;
+
+        // TODO : 1015 예약번호 너무 랜덤이라는 의견을 수렴해서 위의 코드로 조금 규칙성을 줌...
+//        String timestamp = String.valueOf(System.currentTimeMillis());
+//        String uuid = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+//        return "RES" + timestamp + uuid;
     }
 
     public void cancel(String reason, String detail) {
