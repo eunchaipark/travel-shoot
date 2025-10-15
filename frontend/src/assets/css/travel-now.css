@@ -346,8 +346,7 @@
         gap: 8px; /* 간격 줄임 */
     }
     .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .slider-wrapper .travel-now-grid{
-        
-        gap: 2px;
+        gap: 5px;
     }
     
     .main-page .additional-content-section .travel-now-section .travel-now-container .section-title {
