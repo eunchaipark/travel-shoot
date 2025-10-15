@@ -62,7 +62,7 @@ export const fetchTravelNowData = async () => {
   }
 };
 
-// ===== 기본 데이터 (폴백용) =====
+// Falling Back으로 사용한다
 export const TRAVEL_NOW_DATA = [
   {
     id: 1,
