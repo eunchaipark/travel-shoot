@@ -118,6 +118,7 @@ public class ReservationController {
         return ResponseEntity.ok(response);
     }
 
+    //TODO : 마이페이지 활용 가능
     @GetMapping("/my")
     public ResponseEntity<Page<ReservationResponse>> getUserReservations(
             Authentication authentication,
@@ -143,6 +144,7 @@ public class ReservationController {
         return ResponseEntity.ok(response);
     }
 
+    //TODO : open ai 으로 gpt한테 프롬프트 넣을때 방문 수단이 대중교통인지 자차인지에 따라서 추천 여행 코스 다르게 줄 수 있을거 같아서...
     @GetMapping("/transport-options")
     public ResponseEntity<List<TransportOptionResponse>> getTransportOptions() {
         log.info("방문 수단 옵션 조회");
@@ -150,6 +152,7 @@ public class ReservationController {
         return ResponseEntity.ok(response);
     }
 
+    //TODO : 만약에 추후에 추천 여행 코스를 이메일으로 보낸다거나 그럴때 사용가능할거같은데 아니면 알림기능 꼭 넣어야한다거나...
     @GetMapping("/upcoming")
     public ResponseEntity<List<ReservationResponse>> getUpcomingReservations(
             Authentication authentication
@@ -160,7 +163,7 @@ public class ReservationController {
         List<ReservationResponse> response = reservationService.getUpcomingReservations(userId);
         return ResponseEntity.ok(response);
     }
-
+    //TODO : 리뷰 작성 가능 활용 가능
     @GetMapping("/review-targets")
     public ResponseEntity<List<ReservationResponse>> getReviewTargetReservations(
             Authentication authentication
