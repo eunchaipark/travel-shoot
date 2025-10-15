@@ -1,4 +1,4 @@
-package com.quadrant.travelshoot.domains.stay.service;
+package com.quadrant.travelshoot.domains.stay.service.impl;
 
 import com.quadrant.travelshoot.domains.stay.dto.request.SearchRequest;
 import com.quadrant.travelshoot.domains.stay.dto.request.FilterRequest;
@@ -9,6 +9,7 @@ import com.quadrant.travelshoot.domains.stay.entity.Stay;
 import com.quadrant.travelshoot.domains.stay.entity.SearchHistory;
 import com.quadrant.travelshoot.domains.stay.repository.StayRepository;
 import com.quadrant.travelshoot.domains.stay.repository.SearchHistoryRepository;
+import com.quadrant.travelshoot.domains.stay.service.StaySearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
