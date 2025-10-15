@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/stays")
 @RequiredArgsConstructor
-public class StayController {
+public class StayBudgetController {
 
     private final BudgetFriendlyService budgetFriendlyService;
 
