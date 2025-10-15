@@ -13,7 +13,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
+import java.util.Collections;
 import java.time.LocalDateTime;
 
 //  인증
@@ -92,6 +98,24 @@ public class AuthServiceImpl implements AuthService {
         session.setAttribute("userId", user.getId());
         session.setAttribute("userEmail", user.getEmail());
         session.setAttribute("userName", user.getUserName());
+
+        // Spring Security에 인증 정보 저장
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(
+                        user.getId().toString(),  // principal (사용자 ID를 String으로)
+                        null,  // credentials (비밀번호는 저장하지 않음)
+                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))  // 권한
+                );
+
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(authentication);
+        SecurityContextHolder.setContext(securityContext);
+
+        //세션에 SecurityContext 저장
+        session.setAttribute(
+                HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                securityContext
+        );
 
         // 마지막 로그인 시간 업데이트
 //        user.setLastLoginAt(LocalDateTime.now()); //1005
