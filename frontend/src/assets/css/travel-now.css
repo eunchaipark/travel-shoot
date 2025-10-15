@@ -283,7 +283,8 @@
     }
     
     .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .slider-wrapper .travel-now-grid {
-        width: 33.33%; /* 전체 슬라이더의 1/4 크기 */
+        width: 25%; /* 전체 슬라이더의 1/4 크기 */
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
@@ -313,7 +314,7 @@
     }
     
     .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .slider-wrapper .travel-now-grid {
-        width: 33.33%; /* 전체 슬라이더의 1/4 크기 */
+        width: 25%; /* 전체 슬라이더의 1/4 크기 */
     }
 }
 
@@ -334,7 +335,7 @@
     left: -25px;
     }
 
-.main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-nav.slider-nav-next {
+    .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-nav.slider-nav-next {
     display: none;
     right: -25px;
     }
@@ -345,6 +346,7 @@
         gap: 8px; /* 간격 줄임 */
     }
     .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .slider-wrapper .travel-now-grid{
+        
         gap: 2px;
     }
     
@@ -389,7 +391,7 @@
     }
     
     .main-page .additional-content-section .travel-now-section .travel-now-container .content-wrapper .slider-container .slider-wrapper .travel-now-grid {
-        width: 33.33%; /* 전체 슬라이더의 1/4 크기 */
+        width: 25%; /* 전체 슬라이더의 1/4 크기 */
     }
     
     /* 모바일에서 네비게이션 버튼 위치 조정 - 더 안쪽으로 */
