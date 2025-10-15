@@ -30,6 +30,7 @@ public class StayServiceImpl implements StayService {
      * @param stayId 숙소 ID
      * @return StayDetailResponse
      */
+    @Override
     @Transactional
     public StayDetailResponse getStayDetail(Long stayId) {
         Stay stay = stayRepository.findByStayId(stayId)
@@ -44,5 +45,11 @@ public class StayServiceImpl implements StayService {
         // 모든 이미지 조회
         List<FileUpload> images = fileUploadService.findAllByReferenceTypeAndReferenceId(stayType, stayId);
         return stayMapper.toStayDetailResponse(stay, images, stayAmenities);
+    }
+
+    @Override
+    public Stay getById(Long stayId) {
+        return stayRepository.findById(stayId)
+                .orElseThrow(() -> new IllegalArgumentException("숙소 정보를 찾을 수 없습니다."));
     }
 }
