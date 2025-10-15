@@ -54,6 +54,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public ReservationInitResponse getReservationInitData(
             Long roomId, LocalDate checkInDate, LocalDate checkOutDate, Integer guestCount) {
         log.info("예약 초기 데이터 조회 - roomId: {}", roomId);
@@ -172,6 +173,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public AvailabilityResponse validateAvailability(ValidateAvailabilityRequest request) {
         log.info("예약 가능성 검증 - roomId: {}", request.getRoomId());
 
@@ -235,6 +237,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public PriceCalculationResponse calculatePrice(CalculatePriceRequest request) {
         log.info("가격 계산 - roomId: {}", request.getRoomId());
 
