@@ -192,7 +192,7 @@
     position: absolute;
     top: 12px;
     right: 12px;
-    background: linear-gradient(135deg, #FF8888 0%, #FF6B6B 100%);
+    background-color: #343a40;
     color: white;
     font-size: 15.5px;
     font-weight: 700;

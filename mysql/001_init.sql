@@ -1758,4 +1758,3 @@ INSERT INTO rooms (room_code, room_name, stay_id, stay_code, weekday_price, week
 
 commit;
 
-

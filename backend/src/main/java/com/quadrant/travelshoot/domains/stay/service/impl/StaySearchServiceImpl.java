@@ -1,4 +1,4 @@
-package com.quadrant.travelshoot.domains.stay.service;
+package com.quadrant.travelshoot.domains.stay.service.impl;
 
 import com.quadrant.travelshoot.domains.stay.dto.request.SearchRequest;
 import com.quadrant.travelshoot.domains.stay.dto.request.FilterRequest;
@@ -9,6 +9,7 @@ import com.quadrant.travelshoot.domains.stay.entity.Stay;
 import com.quadrant.travelshoot.domains.stay.entity.SearchHistory;
 import com.quadrant.travelshoot.domains.stay.repository.StayRepository;
 import com.quadrant.travelshoot.domains.stay.repository.SearchHistoryRepository;
+import com.quadrant.travelshoot.domains.stay.service.StaySearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -17,12 +18,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.quadrant.travelshoot.common.enums.PlaceType; //추가 1010
+import org.springframework.data.domain.PageRequest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 //숙소 검색
@@ -40,16 +43,35 @@ public class StaySearchServiceImpl implements StaySearchService {
     public List<AutocompleteResponse> autocomplete(String keyword) {
         log.info("지역 자동완성 실행 - keyword: {}", keyword);
 
-        List<String> regions = stayRepository.findRegionsByKeyword(keyword);
+        List<AutocompleteResponse> results = new ArrayList<>();
 
-        return regions.stream()
-                .limit(10)
+        //지역 검색하기
+        List<String> regions = stayRepository.findRegionsByKeyword(keyword);
+        List<AutocompleteResponse> regionResults = regions.stream()
+                .limit(5)
                 .map(region -> AutocompleteResponse.builder()
-                        .keyword(region)
-                        .type("REGION")
-                        .build())
+                    .keyword(region)
+                    .type("REGION")
+                    .build())
                 .collect(Collectors.toList());
-    }
+
+        //호텔명 검색하기
+        List<String> stayName = stayRepository.findStayNamesByKeyword(keyword);
+        List<AutocompleteResponse> stayResults = stayName.stream()
+                .limit(5)
+                .map(name-> AutocompleteResponse.builder()
+                    .keyword(name)
+                    .type("STAY")
+                    .build())
+                .collect(Collectors.toList());
+
+        results.addAll(regionResults);
+        results.addAll(stayResults);
+
+        log.info("자동완성 결과 - 지역 : {}개",regionResults.size(),stayResults.size());
+
+        return results;
+}
 
     @Override
     public SearchResponse search(SearchRequest request, Pageable pageable) {
@@ -62,7 +84,7 @@ public class StaySearchServiceImpl implements StaySearchService {
                 request.getTotalGuests(),
                 pageable);
 
-        return buildSearchResponse(stays);
+        return buildSearchResponse(stays,pageable.getPageNumber());
     }
 
     @Override
@@ -90,10 +112,10 @@ public class StaySearchServiceImpl implements StaySearchService {
             amenityCount = 0;
         }
 
-        // 🆕 추가: 실제 이용 인원 계산 (검색창에서 입력한 adults + children)
+        // 실제 이용 인원 계산 (검색창에서 입력한 adults + children)
         Integer actualGuests = request.getTotalGuests();
 
-        // 🆕 추가: 필터에서 입력한 수용 인원 범위
+        // 필터에서 입력한 수용 인원 범위
         Integer filterMinGuests = request.getMinGuests();
         Integer filterMaxGuests = request.getMaxGuests();
 
@@ -103,9 +125,9 @@ public class StaySearchServiceImpl implements StaySearchService {
                 request.getMaxPrice(),
                 stayTypes,
                 stayTypesSize,
-                actualGuests, // 🆕 추가: 실제 이용 인원
-                filterMinGuests, // 🔄 변경: 필터 최소 수용 인원
-                filterMaxGuests, // 🔄 변경: 필터 최대 수용 인원
+                actualGuests,
+                filterMinGuests,
+                filterMaxGuests,
                 request.getBedroomCount(),
                 request.getBathroomCount(),
                 ratings,
@@ -114,20 +136,123 @@ public class StaySearchServiceImpl implements StaySearchService {
                 amenityCount,
                 pageable);
 
-        return buildSearchResponse(stays);
+        return buildSearchResponse(stays,pageable.getPageNumber());
     }
 
     @Override
     public SearchResponse infiniteSearch(
             SearchRequest searchRequest,
             FilterRequest filterRequest,
-            Pageable pageable) {
+            Pageable pageable
+    ) {
+
+        // 1011 몇페이지인지 데이터 담고 있게 추가함
+        int currentPage = pageable.getPageNumber();
+        int pageSize = pageable.getPageSize();
+
+        log.info("무한 스크롤 - page: {}, size{}",currentPage,pageSize);
+
+        // page > 0 이면 url 공유하는 경우가 발생하게 되며는 이제 으음 .... 앞에 누적되어있는 데이터도 반드시 같이 반환해줘야함..
+        if(currentPage > 0 ){
+            log.info("url 공유 시 페이징 처리 : 0 ~ {} 페이지까지 누적된 데이터 반환 처리해야함",currentPage);
+            return getAccumulatedData(searchRequest,filterRequest,currentPage,pageSize,pageable);
+        }
+
+        // page = 0 첫번째 페이지에 해당하는 데이터 값 반환하기
         if (filterRequest != null && filterRequest.getActiveFilterCount() > 0) {
             return filterSearch(filterRequest, pageable);
         } else {
             return search(searchRequest, pageable);
         }
     }
+
+    // 1011 추가
+    // url 공유하기 위해서 누적 데이터 조회하기 page = 3 이면 0,1,2,3 페이지 모든 데이터 반환처리
+    private SearchResponse getAccumulatedData(
+            SearchRequest searchRequest,
+            FilterRequest filterRequest,
+            int targetPage,
+            int pageSize,
+            Pageable originalPageable
+    ) {
+        log.info("누적 데이터 조회 시작 - 목표 페이지: {}, 페이지 크기: {}", targetPage, pageSize);
+
+        // 0부터 targetPage까지의 모든 데이터를 가져오기 위한 크기 계산
+        int accumulatedSize = (targetPage + 1) * pageSize;
+        // 새로운 Pageable 생성 (page=0, size=누적크기, 정렬은 유지)
+        Pageable accumulatedPageable = PageRequest.of(0, accumulatedSize, originalPageable.getSort());
+
+        Page<Stay> stays;
+
+        // 필터가 있으면 필터 검색, 없으면 일반 검색
+        if (filterRequest != null && filterRequest.getActiveFilterCount() > 0) {
+            log.info("필터 적용된 누적 데이터 조회");
+            stays = executeFilterSearch(filterRequest, accumulatedPageable);
+        } else {
+            log.info("일반 검색 누적 데이터 조회");
+            validateSearchRequest(searchRequest);
+            stays = stayRepository.searchStays(
+                    searchRequest.getRegion(),
+                    searchRequest.getCheckIn(),
+                    searchRequest.getCheckOut(),
+                    searchRequest.getTotalGuests(),
+                    accumulatedPageable
+            );
+        }
+
+        // 응답 생성 시 currentPage는 targetPage로 설정
+        SearchResponse response = buildSearchResponse(stays, targetPage);
+
+        log.info("누적 데이터 반환 완료 - 총 {} 개 항목, 현재 페이지: {}",
+                stays.getContent().size(), targetPage);
+
+        return response;
+    }
+
+
+    //
+    private Page<Stay> executeFilterSearch(FilterRequest request, Pageable pageable) {
+        List<String> stayTypes = (request.getStayTypes() != null) ?
+                request.getStayTypes() : List.of();
+        List<Integer> ratings = (request.getRatings() != null) ?
+                request.getRatings() : List.of();
+        List<String> amenities = (request.getAmenities() != null) ?
+                request.getAmenities() : List.of();
+
+        int stayTypesSize = stayTypes.size();
+        int ratingsSize = ratings.size();
+        int amenityCount = amenities.size();
+
+        if (stayTypesSize == 0) stayTypes = List.of("__DUMMY__");
+        if (ratingsSize == 0) ratings = List.of(0);
+        if (amenityCount == 0) {
+            amenities = List.of("__DUMMY__");
+            amenityCount = 0;
+        }
+
+        Integer actualGuests = request.getTotalGuests();
+        Integer filterMinGuests = request.getMinGuests();
+        Integer filterMaxGuests = request.getMaxGuests();
+
+        return stayRepository.searchWithAdvancedFilters(
+                request.getRegion(),
+                request.getMinPrice(),
+                request.getMaxPrice(),
+                stayTypes,
+                stayTypesSize,
+                actualGuests,
+                filterMinGuests,
+                filterMaxGuests,
+                request.getBedroomCount(),
+                request.getBathroomCount(),
+                ratings,
+                ratingsSize,
+                amenities,
+                amenityCount,
+                pageable
+        );
+    }
+
 
     @Override
     @Transactional
@@ -213,7 +338,7 @@ public class StaySearchServiceImpl implements StaySearchService {
         }
     }
 
-    private SearchResponse buildSearchResponse(Page<Stay> stays) {
+    private SearchResponse buildSearchResponse(Page<Stay> stays,int currentPage) {
         List<StayListItem> items = stays.getContent().stream()
                 .map(this::toStayListItem)
                 .collect(Collectors.toList());
@@ -221,7 +346,7 @@ public class StaySearchServiceImpl implements StaySearchService {
         return SearchResponse.builder()
                 .stays(items)
                 .totalCount(stays.getTotalElements())
-                .currentPage(stays.getNumber())
+                .currentPage(currentPage)
                 .totalPages(stays.getTotalPages())
                 .hasNext(stays.hasNext())
                 .build();

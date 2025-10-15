@@ -33,7 +33,7 @@ import '../assets/css/travel-now.css';
 
 const MainPage = () => {
   const calendarRef = useRef(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn] = useState(true);
   const [searchValue, setSearchValue] = useState('');
   const [locationValue, setLocationValue] = useState('');
   
