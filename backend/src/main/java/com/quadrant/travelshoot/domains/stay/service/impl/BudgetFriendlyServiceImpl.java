@@ -5,6 +5,7 @@ import com.quadrant.travelshoot.domains.stay.entity.Stay;
 import com.quadrant.travelshoot.domains.stay.repository.StayRepository;
 import com.quadrant.travelshoot.domains.stay.service.BudgetFriendlyService;
 
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;

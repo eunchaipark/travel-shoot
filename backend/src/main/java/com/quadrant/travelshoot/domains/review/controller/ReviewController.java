@@ -5,7 +5,7 @@ import com.quadrant.travelshoot.domains.review.dto.response.ReviewDetailResponse
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewListResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewPageResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewRegistResponse;
-import com.quadrant.travelshoot.domains.review.service.ReviewService;
+import com.quadrant.travelshoot.domains.review.service.impl.ReviewServiceImpl;
 import com.quadrant.travelshoot.shared.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -26,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewController {
 
-    private final ReviewService reviewService;
+    private final ReviewServiceImpl reviewService;
 
     /**
      * 리뷰 등록
