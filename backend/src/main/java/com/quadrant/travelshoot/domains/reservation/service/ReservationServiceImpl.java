@@ -411,4 +411,10 @@ public class ReservationServiceImpl implements ReservationService {
                 .canCancel(reservation.canCancel())
                 .build();
     }
+
+    @Override
+    public Reservation getById(Long reservationId) {
+        return reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("예약 정보를 찾을 수 없습니다."));
+    }
 }
