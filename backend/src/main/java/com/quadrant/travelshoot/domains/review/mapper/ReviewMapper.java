@@ -1,9 +1,13 @@
 package com.quadrant.travelshoot.domains.review.mapper;
 
+import com.quadrant.travelshoot.domains.reservation.entity.Reservation;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewDetailResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewListResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewRegistResponse;
+import com.quadrant.travelshoot.domains.review.dto.response.ReviewReservationInfoDto;
 import com.quadrant.travelshoot.domains.review.entity.Review;
+import com.quadrant.travelshoot.domains.stay.entity.Room;
+import com.quadrant.travelshoot.domains.stay.entity.Stay;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +40,36 @@ public class ReviewMapper {
                 .build();
     }
 
+
+    /* 리뷰의 예약 내역 */
+    public ReviewReservationInfoDto toReservationInfoDto(Reservation reservation){
+        if (reservation == null) {
+            return null;
+        }
+
+        Stay stay = reservation.getRoom().getStay();
+        Room room = reservation.getRoom();
+
+        return ReviewReservationInfoDto.builder()
+                .reservationId(reservation.getId())
+                .reservationCode(reservation.getReservationCode())
+                .checkInDate(reservation.getCheckInDate())
+                .checkOutDate(reservation.getCheckOutDate())
+                .totalNights(reservation.getTotalNights())
+                .reservationStatus(reservation.getReservationStatus())
+                .stayId(stay.getId())
+                .stayName(stay.getName())
+                .checkInTime(stay.getCheckInTime())
+                .checkOutTime(stay.getCheckOutTime())
+                .roomId(room.getId())
+                .roomName(room.getRoomName())
+                .standardCapacity(room.getStandardCapacity())
+                .maximumCapacity(room.getStandardCapacity())
+                .build();
+    }
+
+
+
     public ReviewDetailResponse toReviewDetailResponse(Review review){
         if (review == null) {
             return null;
@@ -45,6 +79,7 @@ public class ReviewMapper {
                 .reviewId(review.getReviewId())
                 .userId(review.getUser().getId())
                 .userName(review.getUser().getUserName())
+                .reservationInfoDto(toReservationInfoDto(review.getReservation()))
                 .totalRating(review.getTotalRating())
                 .cleanRating(review.getCleanRating())
                 .convenienceRating(review.getConvenienceRating())

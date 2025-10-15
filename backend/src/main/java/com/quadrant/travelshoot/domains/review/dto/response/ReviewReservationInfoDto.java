@@ -1,5 +1,6 @@
 package com.quadrant.travelshoot.domains.review.dto.response;
 
+import com.quadrant.travelshoot.domains.reservation.enums.ReservationStatus;
 import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -10,7 +11,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ReviewReservationDetailDto {
+public class ReviewReservationInfoDto {
 
     /* 예약 정보 */
     private Long reservationId;
@@ -18,7 +19,7 @@ public class ReviewReservationDetailDto {
     private LocalDate checkInDate;      // 체크인 일자
     private LocalDate checkOutDate;     // 체크아웃 일자
     private int totalNights;    // 몇 박
-    // private ReservationStatus reservationStatus; // 예약 상태 ENUM
+    private ReservationStatus reservationStatus; // 예약 상태 ENUM
 
     /* 숙소 정보  */
     private Long stayId;
