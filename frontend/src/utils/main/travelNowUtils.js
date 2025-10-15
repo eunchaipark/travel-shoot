@@ -10,14 +10,10 @@ export const formatCount = (count) => {
 
 // 반응형 설정 계산
 export const calculateResponsiveConfig = (width) => {
-  if (width <= 768) {
-    return { cardsPerSlide: 4 };
-  } else if (width <= 1024) {
-    return { cardsPerSlide: 3 };
-  } else if (width <= 1200) {
-    return { cardsPerSlide: 3 };
+  if (width <= 1200) {
+    return { cardsPerSlide: 3 }; // 1200px 이하: 3개씩 → 4슬라이드
   } else {
-    return { cardsPerSlide: 4 };
+    return { cardsPerSlide: 4 }; // 1200px 초과: 4개씩 → 3슬라이드
   }
 };
 
@@ -62,7 +58,7 @@ export const fetchTravelNowData = async () => {
   }
 };
 
-// ===== 기본 데이터 (폴백용) =====
+// Falling Back으로 사용한다
 export const TRAVEL_NOW_DATA = [
   {
     id: 1,
