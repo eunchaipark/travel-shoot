@@ -7,6 +7,9 @@ import koLocale from "@fullcalendar/core/locales/ko";
 // API Service 추가
 import { fetchCalendarCourses } from "@/services/main/calendarApiService";
 
+// Layout Components
+import Header from "@/components/layout/Header";
+
 // Hooks
 import {
   useCalendar,
@@ -41,7 +44,6 @@ import "@/assets/css/travel-now.css";
 const MainPage = () => {
   const calendarRef = useRef(null);
   const [isLoggedIn] = useState(true);
-  const [searchValue, setSearchValue] = useState("");
   const [locationValue, setLocationValue] = useState("");
 
   // 캘린더 이벤트 상태 추가
@@ -52,7 +54,6 @@ const MainPage = () => {
   const [showDateDropdown, setShowDateDropdown] = useState(false);
   const [showGuestDropdown, setShowGuestDropdown] = useState(false);
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
-  const [showHeaderDropdown, setShowHeaderDropdown] = useState(false);
 
   // 커스텀 훅
   const {
@@ -208,7 +209,6 @@ const MainPage = () => {
     setShowDateDropdown(false);
     setShowGuestDropdown(false);
     setShowLocationDropdown(false);
-    setShowHeaderDropdown(false);
   };
 
   // 날짜 입력 클릭
@@ -218,7 +218,6 @@ const MainPage = () => {
 
     setShowLocationDropdown(false);
     setShowGuestDropdown(false);
-    setShowHeaderDropdown(false);
 
     if (!dateSelectionMode) {
       activateSelectionMode();
@@ -233,7 +232,6 @@ const MainPage = () => {
 
     setShowLocationDropdown(false);
     setShowDateDropdown(false);
-    setShowHeaderDropdown(false);
 
     setShowGuestDropdown((prev) => !prev);
   };
@@ -242,7 +240,6 @@ const MainPage = () => {
   const handleLocationFocus = () => {
     setShowDateDropdown(false);
     setShowGuestDropdown(false);
-    setShowHeaderDropdown(false);
     setShowLocationDropdown(true);
   };
 
@@ -345,81 +342,8 @@ const MainPage = () => {
 
   return (
     <>
-      {/* 헤더 */}
-      <header className="app-header">
-        <div className="container">
-          <div className="row">
-            <div className="col-12 d-flex align-items-center justify-content-evenly">
-              <div className="col-sm-1 col-lg-1 col-2">
-                <div
-                  className="logo"
-                  role="img"
-                  aria-label="트래블샷 아이콘"
-                ></div>
-              </div>
-              <div className="col-sm-7 col-lg-8 col-6 position-relative">
-                <div className="search-container position-relative">
-                  <input
-                    type="text"
-                    className="search-input w-100"
-                    placeholder="어디로 떠나볼까요?"
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                    onFocus={() => setShowHeaderDropdown(true)}
-                  />
-                </div>
-                {showHeaderDropdown && (
-                  <div className="dropdown-suggestions">
-                    <button
-                      className="suggestion-item"
-                      onClick={() => {
-                        setSearchValue("SL 호텔 강릉");
-                        setShowHeaderDropdown(false);
-                      }}
-                    >
-                      <i className="fas fa-building"></i>
-                      <div>
-                        <div className="fw-bold">SL 호텔 강릉</div>
-                        <small className="text-muted">
-                          강릉특별자치도 강릉시 OO----
-                        </small>
-                      </div>
-                    </button>
-                    <button
-                      className="suggestion-item"
-                      onClick={() => {
-                        setSearchValue("유담리솜펜션");
-                        setShowHeaderDropdown(false);
-                      }}
-                    >
-                      <i className="fas fa-home"></i>
-                      <div>
-                        <div className="fw-bold">유담리솜펜션</div>
-                        <small className="text-muted">
-                          강릉특별자치도 강릉시 OO----
-                        </small>
-                      </div>
-                    </button>
-                  </div>
-                )}
-              </div>
-              <div className="col-md-3 d-flex justify-content-between col-3 px-0">
-                <button className="icon-button">
-                  <div className="search-icon"></div>
-                </button>
-                <div className="col-auto h-100 d-flex">
-                  <button className="icon-button">
-                    <div className="user-white-icon"></div>
-                  </button>
-                  <button className="icon-button">
-                    <div className="heart-icon"></div>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* 헤더 컴포넌트 사용 */}
+      <Header />
 
       {/* 메인 컨테이너 */}
       <main className="main-wrapper main-page">

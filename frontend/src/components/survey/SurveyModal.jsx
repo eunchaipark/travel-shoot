@@ -1,6 +1,6 @@
 import React from 'react';
-import { useSurvey } from '../../hooks/survey/useSurvey';
-import { SURVEY_DATA } from '../../utils/survey/surveyData';
+import { useSurvey } from '@/hooks/survey/useSurvey';
+import { SURVEY_DATA } from '@/utils/survey/surveyData';
 import '@/assets/css/survey.css';
 const ProgressSteps = ({ currentStep }) => {
   const steps = [
