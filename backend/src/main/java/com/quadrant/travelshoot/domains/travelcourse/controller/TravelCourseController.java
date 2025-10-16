@@ -21,7 +21,7 @@ public class TravelCourseController {
     public ResponseEntity<Void> generateTravelCourse(
             @Valid @RequestBody TravelCourseRequest request
             /*,@SessionAttribute("userId") Long userId*/) {
-        Long userId = 1L;
+        Long userId = 1L; //TODO: 로그인 기능 완료 시 세션 기반 userId로 갖고와야 함.
         log.info("AI 여행 코스 생성 요청: {}, userId: {}", request, userId);
         travelCourseService.generateCourse(request, userId);
         return ResponseEntity.ok().build();
