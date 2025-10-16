@@ -44,9 +44,7 @@ public class TravelCourseRecommendationServiceImpl implements TravelCourseRecomm
         log.info("추천 데이터 조회 시작 - reservationId: {}, userId: {}, totalDays: {}",
                 reservationId, userId, totalDays);
 
-        //TODO: 실제 반영할 때는 주석한 코드가 옳은 거임
-//        int requiredCount = (totalDays+1) * 5;
-        int requiredCount = 5;
+        int requiredCount = totalDays * 5;
 
         // 1. 숙소 위치 조회
         StayLocation stayLocation = getStayLocation(reservationId);
