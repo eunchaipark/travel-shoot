@@ -1,0 +1,396 @@
+.login-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.login-page.show {
+    height: 100%;
+    display: flex;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.login-page .login-box {
+    background: white;
+    border-radius: 16px;
+    padding: 80px 120px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.login-page .login-box .login-icons{
+    width: 90%;
+    height: 90%;
+}
+
+.login-page .login-box .close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.login-page .login-box .login-title {
+    margin-bottom: 80px;
+}
+
+.login-page .login-box .login-title .login-title1 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.login-page .login-box .login-title .login-title2 {
+    font-size: 23px;
+    font-weight: 700;
+    color: #F56770;
+}
+
+.login-page .login-box .login-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.login-page .login-box .login-buttons .login-btn {
+    padding: 12px 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    position: relative;
+    background-color: white;
+    border: 1px solid #d2d2d2;
+}
+
+.login-page .login-box .login-buttons .login-btn:hover {
+    background-color: #f2f2f2;
+}
+
+.login-page .login-box .modal-step {
+    display: none;
+}
+
+.login-page .login-box .modal-step.active {
+    display: block;
+}
+
+.login-page .login-box .back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.login-page .login-box .back-btn.show {
+    display: flex;
+}
+
+.login-page .login-box .modal-step .email-form-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 40px;
+}
+
+.login-page .login-box .modal-step .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.login-page .login-box .modal-step .form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.2s;
+}
+
+.login-page .login-box .modal-step .form-group input:focus {
+    outline: none;
+    border-color: #22ACED;
+    box-shadow: 0 0 0 3px rgba(34, 172, 237, 0.1);
+}
+
+.login-page .login-box .modal-step .submit-btn {
+    width: 100%;
+    padding: 13px;
+    background-color: #22ACED;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 10px;
+}
+
+.login-page .login-box .modal-step .submit-btn:hover {
+    background-color: #1e9bd4;
+}
+
+.login-page .login-box .modal-step .submit-btn.signup-btn {
+    background-color: #999999;
+    color: white;
+}
+
+.login-page .login-box .modal-step .submit-btn.signup-btn:hover {
+    background-color: #777777;
+}
+
+.login-page .login-box .modal-step .forgot-password {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.login-page .login-box .modal-step .forgot-password a {
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.login-page .login-box .modal-step .forgot-password a:hover {
+    color: #22ACED;
+}
+
+.login-page .login-box .modal-step .signup-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-page .login-box .modal-step .signup-form .form-group {
+    margin-bottom: 15px;
+}
+
+.login-page .login-box .modal-step .form-group .email-verification {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 5px;
+}
+
+.login-page .login-box .modal-step .form-group .email-verification input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.2s;
+}
+
+.login-page .login-box .modal-step .form-group .email-verification input:focus {
+    outline: none;
+    border-color: #22ACED;
+    box-shadow: 0 0 0 3px rgba(34, 172, 237, 0.1);
+}
+
+.login-page .login-box .modal-step .form-group .email-verification button {
+    padding: 12px 20px;
+    background-color: #22ACED;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    min-width: 100px;
+    height: 48px;
+    transition: background-color 0.2s;
+}
+
+.login-page .login-box .modal-step .form-group .email-verification button:hover {
+    background-color: #1e9bd4;
+}
+
+.login-page .login-box .modal-step .form-group .email-verification button:disabled {
+    background-color: #999999;
+    color: white;
+    cursor: not-allowed;
+}
+
+.login-page .login-box .modal-step .form-group .email-verification button.verify-btn {
+    background-color: #999999;
+    color: white;
+}
+
+.login-page .login-box .modal-step .form-group .email-verification button.verify-btn:not(:disabled) {
+    background-color: #999999;
+}
+
+.login-page .login-box .modal-step .form-group .email-verification button.verify-btn:hover:not(:disabled) {
+    background-color: #777777;
+}
+
+.login-page .login-box .modal-step .form-group .timer-display {
+    display: none;
+    color: #F56770;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 5px;
+    text-align: left;
+    padding-left: 0;
+}
+
+.login-page .login-box .modal-step .form-group .timer-display {
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+.login-page .login-box .modal-step .signup-form .form-group {
+    margin-bottom: 20px;
+}
+
+.login-page .login-box .modal-step .signup-form .form-group:has(.timer-display) {
+    margin-bottom: 25px;
+}
+
+@media (max-width: 768px) {
+    .login-page .login-box .modal-step .email-verification button {
+        padding: 10px 16px;
+        font-size: 14px;
+        min-width: 80px;
+        height: 44px;
+    }
+
+    .login-page .login-box .modal-step .email-verification input {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-page .login-box .modal-step .email-verification {
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+    }
+
+    .login-page .login-box .modal-step .email-verification button {
+        width: 100%;
+        height: 44px;
+        min-width: unset;
+    }
+
+    .login-page .login-box .modal-step .timer-display {
+        font-size: 12px;
+        margin-top: 5px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .login-page .login-box {
+        padding: 60px 40px;
+        margin: 20px;
+    }
+
+    .login-page .login-title1 {
+        font-size: 24px;
+    }
+
+    .login-page .login-title2 {
+        font-size: 28px;
+    }
+
+    .login-page .login-btn {
+        padding: 14px 20px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-page .login-box {
+        padding: 40px 24px;
+    }
+    .login-page .login-box {
+        padding: 40px 30px;
+    }
+    .login-page .login-title {
+        margin-bottom: 60px;
+    }
+
+    .login-page .login-title1 {
+        font-size: 22px;
+    }
+
+    .login-page .login-title2 {
+        font-size: 26px;
+    }
+
+    .login-page .email-verification {
+        flex-direction: row !important;
+        gap: 8px;
+        align-items: flex-start;
+    }
+
+    .login-page .email-verification button {
+        width: auto;
+        height: 44px;
+        min-width: 80px;
+        flex-shrink: 0;
+    }
+
+    .login-page .email-verification input {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .login-page .timer-display {
+        font-size: 12px;
+        margin-top: 5px;
+        text-align: center;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

@@ -94,7 +94,7 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalArgumentException("이메일 인증이 필요합니다");
         }
 
-        // 세션에 저장
+        // 세션에 저장!!!!!
         session.setAttribute("userId", user.getId());
         session.setAttribute("userEmail", user.getEmail());
         session.setAttribute("userName", user.getUserName());
@@ -147,9 +147,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public PasswordResetResponse resetPassword(PasswordResetRequest request) {
-        boolean verified = emailAuthService.verifyCode(request.getEmail(), request.getCode());
-        if (!verified) {
-            throw new IllegalArgumentException("잘못된 인증 코드이거나 만료된 코드입니다.");
+
+        if (!emailAuthService.isVerified(request.getEmail())) {
+            throw new IllegalArgumentException("이메일 인증이 필요합니다.");
         }
 
         User user = userRepository.findByEmail(request.getEmail())
