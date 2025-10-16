@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import SurveyModal from '../components/survey/SurveyModal';
-import '../assets/css/common.css';
-import '../assets/css/survey.css';
+import SurveyModal from '@/components/survey/SurveyModal';
+import '@/assets/css/common.css';
+import '@/assets/css/survey.css';
 
 /**
  * 회원가입 완료 페이지

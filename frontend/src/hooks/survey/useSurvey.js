@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
-import { STEP_CONFIG, validateStep, formatSurveyData } from '../../utils/survey/surveyData';
-import { submitSurveyApi } from '../../services/survey/surveyApiService';
+import { STEP_CONFIG, validateStep, formatSurveyData } from '@/utils/survey/surveyData';
+import { submitSurveyApi } from '@/services/survey/surveyApiService';
 
 export const useSurvey = (onComplete) => {
   // ============================================================================
