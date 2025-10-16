@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Header from '@/components/layout/Header';
 import SurveyModal from '@/components/survey/SurveyModal';
 import '@/assets/css/common.css';
 import '@/assets/css/survey.css';
@@ -43,20 +44,10 @@ const SignupCompletePage = () => {
 
   return (
     <>
-      {/* Header */}
-      <header className="app-header">
-        <div className="container">
-          <div className="row">
-            <div className="col-12 d-flex">
-              <div className="col-sm-1 col-lg-1 col-2">
-                <div className="logo" role="img" aria-label="트래블샷 아이콘"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* 헤더 컴포넌트 사용 */}
+      <Header />
 
-      {/* Main Content */}
+      {/* Main Content */} 
       <main>
         <div className="complete-page">
           <div className="complete-card">
