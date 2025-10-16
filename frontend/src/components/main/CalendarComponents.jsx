@@ -5,7 +5,7 @@ import {
   getTodayString,
   compareDatesOnly,
 } from "@/utils/main/calendarUtils";
-import { useMiniCalendar } from "@/hooks/useCalendarHooks";
+import { useMiniCalendar } from "@/hooks/main/useCalendarHooks";
 
 // ========================================
 // 미니 달력 컴포넌트

@@ -5,21 +5,21 @@ import interactionPlugin from "@fullcalendar/interaction";
 import koLocale from "@fullcalendar/core/locales/ko";
 
 // API Service 추가
-import { fetchCalendarCourses } from "@/services/calendarApiService";
+import { fetchCalendarCourses } from "@/services/main/calendarApiService";
 
 // Hooks
 import {
   useCalendar,
   useGuest,
   useDropdownPosition,
-} from "../hooks/useCalendarHooks";
+} from "../hooks/main/useCalendarHooks";
 
 // Components
-import { MiniCalendar } from "@/components/CalendarComponents";
-import BudgetFriendlySection from "@/components/BudgetFriendlySection";
-import RecommendStaySection from "@/components/RecommendStaySection";
-import TrendingSection from "@/components/TrendingSection";
-import TravelNowSection from "@/components/TravelNowSection";
+import { MiniCalendar } from "@/components/main/CalendarComponents";
+import BudgetFriendlySection from "@/components/main/BudgetFriendlySection";
+import RecommendStaySection from "@/components/main/RecommendStaySection";
+import TrendingSection from "@/components/main/TrendingSection";
+import TravelNowSection from "@/components/main/TravelNowSection";
 
 // Utils
 import {
