@@ -52,8 +52,9 @@ public class CalendarCourseServiceImpl implements CalendarCourseService {
             LocalDate checkInDate = convertToLocalDate(firstRow[1]);
             LocalDate checkOutDate = convertToLocalDate(firstRow[2]);
             String stayName = (String) firstRow[3];
-            String cityName = (String) firstRow[4];
-            String reservationStatus = (String) firstRow[5];
+            String stayType = (String) firstRow[4];  // stay_type 추가
+            String cityName = (String) firstRow[5];
+            String reservationStatus = (String) firstRow[6];
 
             // 모든 row에서 스케줄 생성 (checkInDate 전달)
             List<CalendarCourseResponse.ScheduleItem> schedules = rows.stream()
@@ -79,14 +80,14 @@ public class CalendarCourseServiceImpl implements CalendarCourseService {
     /**
      * Object[] row를 ScheduleItem으로 변환
      * row 구조: [0]reservation_code, [1]check_in_date, [2]check_out_date, [3]stay_name, 
-     *          [4]city_name, [5]reservation_status, [6]course_id, [7]day, [8]spot_order,
-     *          [9]spot_type, [10]start_time, [11]end_time, [12]spot_name, [13]spot_address
+     *          [4]stay_type, [5]city_name, [6]reservation_status, [7]course_id, [8]day, 
+     *          [9]spot_order, [10]spot_type, [11]start_time, [12]end_time, [13]spot_name, [14]spot_address
      */
     private CalendarCourseResponse.ScheduleItem mapToScheduleItem(Object[] row, LocalDate checkInDate) {
-        Integer day = (Integer) row[7];
-        String spotType = (String) row[9];
-        Time startTime = (Time) row[10];
-        String spotName = (String) row[12];
+        Integer day = (Integer) row[8];  // 7 → 8
+        String spotType = (String) row[10];  // 9 → 10
+        Time startTime = (Time) row[11];  // 10 → 11
+        String spotName = (String) row[13];  // 12 → 13
         
         // spotType 매핑
         String mappedType = mapSpotType(spotType);
