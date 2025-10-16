@@ -22,6 +22,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -73,6 +76,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         Review newReview = reviewRepository.save(review);
         log.info("리뷰 등록 완료 - reviewId: {}", newReview.getReviewId());
+
         return reviewMapper.toReviewRegistResponse(newReview);
     }
 
@@ -101,6 +105,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         reviewRepository.delete(review);
         log.info("리뷰 삭제 완료 - reviewId: {}", reviewId);
+
     }
 
 
@@ -135,6 +140,7 @@ public class ReviewServiceImpl implements ReviewService {
         // 이미지 수정
 
         Review updatedReview = reviewRepository.save(review);
+
         return reviewMapper.toReviewRegistResponse(updatedReview);
     }
 
@@ -178,7 +184,7 @@ public class ReviewServiceImpl implements ReviewService {
         if(roomId != null){
             reviewPage =  reviewRepository.findByStayIdAndRoomId(stayId, roomId, pageable);
         }else{
-            reviewPage = reviewRepository.findByStayId(stayId, pageable);
+            reviewPage = reviewRepository.findPageByStayId(stayId, pageable);
         }
 
         // Review -> ReviewResponse 변환
@@ -186,6 +192,31 @@ public class ReviewServiceImpl implements ReviewService {
         return ReviewPageResponse.of(responsePage);
     }
 
+
+    /**
+     * 숙소에 따른 리뷰 개수
+     * 만약 리뷰 개수가 2,147,483,647 (Integer 최대값)보다 많아지면 오버플로우 발생
+     */
+    public Integer countReview(Long stayId){
+        return Math.toIntExact(reviewRepository.countByStayId(stayId));
+    }
+
+    /**
+     * 리뷰 별점에 따른 숙소 평균별점
+     * 1. 리뷰들 모아서 집계 평균 조회
+     * 2. 조회한 값을 숙소 엔티티에 setAverageRating(1번)
+     * 3. 그거를 리뷰 cud에 호출
+     */
+
+    public BigDecimal getStayAverageRating(Long stayId){
+        Double totalRating = reviewRepository.findAverageByStayId(stayId);
+
+        if(totalRating == null){
+            totalRating = 0.0;
+        }
+
+        return BigDecimal.valueOf(totalRating).setScale(2, RoundingMode.HALF_UP); // 2자리까지
+    }
 
     /**
      * Pageable 객체 생성
@@ -220,6 +251,5 @@ public class ReviewServiceImpl implements ReviewService {
 
         return PageRequest.of(page, size, sort);
     }
-
 
 }

@@ -4,7 +4,9 @@ import com.quadrant.travelshoot.domains.activity.dto.response.ActivityTrendingRe
 import com.quadrant.travelshoot.domains.activity.entity.Activity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
@@ -127,4 +129,36 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
         LIMIT 12
         """, nativeQuery = true)
     List<ActivityTrendingResponse> findTrendingActivities();
+
+    /**
+     * 카테고리, 평점, 거리 기준으로 관광지 조회
+     * Haversine 공식 사용하여 거리 계산
+     */
+    @Query("SELECT a FROM Activity a " +
+            "WHERE a.activityType IN :categories " +
+            "AND a.rating >= :minRating " +
+            "AND (6371 * acos(cos(radians(:latitude)) * cos(radians(a.latitude)) * " +
+            "cos(radians(a.longitude) - radians(:longitude)) + " +
+            "sin(radians(:latitude)) * sin(radians(a.latitude)))) <= :maxDistanceKm " +
+            "ORDER BY a.rating DESC")
+    List<Activity> findByCategoriesAndRatingAndDistance(
+            @Param("categories") List<String> categories,
+            @Param("minRating") double minRating,
+            @Param("latitude") BigDecimal latitude,
+            @Param("longitude") BigDecimal longitude,
+            @Param("maxDistanceKm") double maxDistanceKm
+    );
+
+    @Query("SELECT a FROM Activity a " +
+            "WHERE a.rating >= :minRating " +
+            "AND (6371 * acos(cos(radians(:latitude)) * cos(radians(a.latitude)) * " +
+            "cos(radians(a.longitude) - radians(:longitude)) + " +
+            "sin(radians(:latitude)) * sin(radians(a.latitude)))) <= :maxDistanceKm " +
+            "ORDER BY a.rating DESC")
+    List<Activity> findByRatingAndDistance(
+            @Param("minRating") double minRating,
+            @Param("latitude") BigDecimal latitude,
+            @Param("longitude") BigDecimal longitude,
+            @Param("maxDistanceKm") double maxDistanceKm
+    );
 }

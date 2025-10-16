@@ -58,6 +58,8 @@ public class StayMapper {
             return null;
         }
 
+
+
         // 4. DTO 변환 및 반환
         return StayDetailResponse.builder()
                 .stayId(stay.getId())

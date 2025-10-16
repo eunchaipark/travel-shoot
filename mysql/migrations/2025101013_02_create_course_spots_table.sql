@@ -1,4 +1,5 @@
 -- 코스 상세 스팟 테이블 생성
+SET NAMES utf8mb4;
 CREATE TABLE course_spots
 (
     spot_id      BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '스팟 ID',
