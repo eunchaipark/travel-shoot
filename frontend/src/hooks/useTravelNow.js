@@ -8,7 +8,7 @@ import {
   calculateResponsiveConfig,
   calculateTotalSlides,
   handleTouchGesture
-} from '../utils/main/travelNowUtils';
+} from '@/utils/main/travelNowUtils';
 
 export const useTravelNow = () => {
   // 원본의 전역 변수와 동일

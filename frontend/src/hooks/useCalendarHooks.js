@@ -4,7 +4,7 @@ import {
   getTodayString, 
   formatDateToString,
   GUEST_LIMITS  // 상수 import 추가
-} from '../utils/main/calendarUtils';
+} from '@/utils/main/calendarUtils';
 
 /**
  * 달력 날짜 선택 훅

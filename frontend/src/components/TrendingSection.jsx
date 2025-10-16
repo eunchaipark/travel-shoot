@@ -4,9 +4,9 @@
  */
 
 import React, { useEffect, useRef, useState } from "react";
-import { useTrendingSlider } from "../hooks/useTrendingSlider";
-import { fetchAllTrendingData } from "../services/trendingApiService";
-import { TRENDING_DATA, getSlideData } from "../utils/main/trendingUtils";
+import { useTrendingSlider } from "@/hooks/useTrendingSlider";
+import { fetchAllTrendingData } from "@/services/trendingApiService";
+import { TRENDING_DATA, getSlideData } from "@/utils/main/trendingUtils";
 
 // ============================================================================
 // Trending Card 컴포넌트
