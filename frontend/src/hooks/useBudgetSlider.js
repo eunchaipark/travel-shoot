@@ -8,7 +8,7 @@ import {
   calculateResponsiveConfig,
   calculateTotalSlides,
   handleTouchGesture
-} from '../utils/main/budgetUtils';
+} from '@/utils/main/budgetUtils';
 
 export const useBudgetSlider = (data) => {
   const [currentSlide, setCurrentSlide] = useState(0);

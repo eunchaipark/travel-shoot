@@ -8,7 +8,7 @@ import {
   calculateResponsiveConfig,
   calculateTotalSlides,
   handleTouchGesture
-} from '../utils/main/trendingUtils';
+} from '@/utils/main/trendingUtils';
 
 export const useTrendingSlider = () => {
   // 원본의 state와 동일

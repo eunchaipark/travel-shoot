@@ -3,17 +3,17 @@
  * 경로: frontend/src/components/BudgetFriendlySection.jsx
  */
 
-import React, { useEffect, useRef, useState } from 'react';
-import { useBudgetSlider } from '../hooks/useBudgetSlider';
-import { 
+import React, { useEffect, useRef, useState } from "react";
+import { useBudgetSlider } from "@/hooks/useBudgetSlider";
+import {
   formatNumber,
-  getSlideData, 
-  getGridTemplateColumns, 
+  getSlideData,
+  getGridTemplateColumns,
   getGridJustifyContent,
   getSliderWidth,
-  getSlideWidth
-} from '../utils/main/budgetUtils';
-import { fetchBudgetFriendlyStays } from '../services/budgetApiService';
+  getSlideWidth,
+} from "../utils/main/budgetUtils";
+import { fetchBudgetFriendlyStays } from "@/services/budgetApiService";
 
 // ============================================================================
 // Budget Card 컴포넌트
@@ -28,15 +28,15 @@ const BudgetCard = ({ item, onClick }) => {
   };
 
   const handleImageError = (e) => {
-    e.target.src = '/images/main/main-example.svg';
+    e.target.src = "/images/main/main-example.svg";
   };
 
   return (
-    <div 
-      className="budget-item-card" 
-      data-id={item.id} 
+    <div
+      className="budget-item-card"
+      data-id={item.id}
       onClick={handleClick}
-      style={{ cursor: 'pointer' }}
+      style={{ cursor: "pointer" }}
     >
       <div className="budget-card-image">
         <img
@@ -69,7 +69,7 @@ const BudgetCard = ({ item, onClick }) => {
 // ============================================================================
 const BudgetSlider = ({ data, onCardClick, isLoading, error }) => {
   const sliderWrapperRef = useRef(null);
-  
+
   const {
     currentSlide,
     itemsPerSlide,
@@ -82,7 +82,7 @@ const BudgetSlider = ({ data, onCardClick, isLoading, error }) => {
     handleTouchMove,
     handleTouchEnd,
     canGoPrev,
-    canGoNext
+    canGoNext,
   } = useBudgetSlider(data);
 
   // 슬라이더 위치 업데이트
@@ -97,14 +97,17 @@ const BudgetSlider = ({ data, onCardClick, isLoading, error }) => {
   if (isLoading) {
     return (
       <div className="content-wrapper">
-        <div className="budget-slider-container" style={{ 
-          minHeight: '400px', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center' 
-        }}>
-          <div style={{ textAlign: 'center', color: '#666' }}>
-            <div style={{ fontSize: '24px', marginBottom: '10px' }}>⏳</div>
+        <div
+          className="budget-slider-container"
+          style={{
+            minHeight: "400px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div style={{ textAlign: "center", color: "#666" }}>
+            <div style={{ fontSize: "24px", marginBottom: "10px" }}>⏳</div>
             <div>가격착한 숙소를 불러오는 중...</div>
           </div>
         </div>
@@ -116,16 +119,19 @@ const BudgetSlider = ({ data, onCardClick, isLoading, error }) => {
   if (error) {
     return (
       <div className="content-wrapper">
-        <div className="budget-slider-container" style={{ 
-          minHeight: '400px', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center' 
-        }}>
-          <div style={{ textAlign: 'center', color: '#e74c3c' }}>
-            <div style={{ fontSize: '24px', marginBottom: '10px' }}>⚠️</div>
+        <div
+          className="budget-slider-container"
+          style={{
+            minHeight: "400px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div style={{ textAlign: "center", color: "#e74c3c" }}>
+            <div style={{ fontSize: "24px", marginBottom: "10px" }}>⚠️</div>
             <div>데이터를 불러오는데 실패했습니다.</div>
-            <div style={{ fontSize: '14px', marginTop: '5px', color: '#999' }}>
+            <div style={{ fontSize: "14px", marginTop: "5px", color: "#999" }}>
               {error}
             </div>
           </div>
@@ -138,14 +144,17 @@ const BudgetSlider = ({ data, onCardClick, isLoading, error }) => {
   if (!data || data.length === 0) {
     return (
       <div className="content-wrapper">
-        <div className="budget-slider-container" style={{ 
-          minHeight: '400px', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center' 
-        }}>
-          <div style={{ textAlign: 'center', color: '#666' }}>
-            <div style={{ fontSize: '24px', marginBottom: '10px' }}>🏨</div>
+        <div
+          className="budget-slider-container"
+          style={{
+            minHeight: "400px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div style={{ textAlign: "center", color: "#666" }}>
+            <div style={{ fontSize: "24px", marginBottom: "10px" }}>🏨</div>
             <div>가격착한 숙소가 없습니다.</div>
           </div>
         </div>
@@ -157,19 +166,27 @@ const BudgetSlider = ({ data, onCardClick, isLoading, error }) => {
   const renderSlides = () => {
     const slides = [];
     const width = window.innerWidth;
-    
+
     for (let i = 0; i < totalSlides; i++) {
       const slideData = getSlideData(data, i, itemsPerSlide);
       const itemsInThisSlide = slideData.length;
-      
-      const gridColumns = getGridTemplateColumns(itemsInThisSlide, itemsPerSlide, width);
-      const justifyContent = getGridJustifyContent(itemsInThisSlide, itemsPerSlide);
+
+      const gridColumns = getGridTemplateColumns(
+        itemsInThisSlide,
+        itemsPerSlide,
+        width
+      );
+      const justifyContent = getGridJustifyContent(
+        itemsInThisSlide,
+        itemsPerSlide
+      );
       const slideWidth = getSlideWidth(totalSlides);
-      
-      const gridClass = itemsInThisSlide < itemsPerSlide
-        ? `budget-slide-grid budget-partial-grid budget-grid-${itemsInThisSlide}`
-        : 'budget-slide-grid';
-      
+
+      const gridClass =
+        itemsInThisSlide < itemsPerSlide
+          ? `budget-slide-grid budget-partial-grid budget-grid-${itemsInThisSlide}`
+          : "budget-slide-grid";
+
       slides.push(
         <div
           key={i}
@@ -178,29 +195,29 @@ const BudgetSlider = ({ data, onCardClick, isLoading, error }) => {
             gridTemplateColumns: gridColumns,
             justifyContent: justifyContent,
             width: slideWidth,
-            flexShrink: 0
+            flexShrink: 0,
           }}
         >
-          {slideData.map(item => (
+          {slideData.map((item) => (
             <BudgetCard key={item.id} item={item} onClick={onCardClick} />
           ))}
         </div>
       );
     }
-    
+
     return slides;
   };
 
   // 인디케이터 렌더링
   const renderIndicators = () => {
     if (!showIndicators) return null;
-    
+
     return (
       <div className="slider-indicators" id="budgetIndicators">
         {Array.from({ length: totalSlides }).map((_, index) => (
           <div
             key={index}
-            className={`indicator ${index === currentSlide ? 'active' : ''}`}
+            className={`indicator ${index === currentSlide ? "active" : ""}`}
             onClick={() => goToSlide(index)}
             data-slide={index}
           />
@@ -220,7 +237,7 @@ const BudgetSlider = ({ data, onCardClick, isLoading, error }) => {
       >
         <i className="fas fa-chevron-left"></i>
       </button>
-      
+
       <button
         className="budget-slider-nav budget-slider-next"
         onClick={nextSlide}
@@ -240,10 +257,10 @@ const BudgetSlider = ({ data, onCardClick, isLoading, error }) => {
         <div
           ref={sliderWrapperRef}
           className="budget-slider-wrapper"
-          style={{ 
+          style={{
             width: getSliderWidth(totalSlides),
-            display: 'flex',
-            transition: 'transform 0.4s ease-in-out'
+            display: "flex",
+            transition: "transform 0.4s ease-in-out",
           }}
         >
           {renderSlides()}
@@ -271,13 +288,13 @@ const BudgetFriendlySection = () => {
       try {
         setIsLoading(true);
         setError(null);
-        
+
         const data = await fetchBudgetFriendlyStays();
-        console.log('변환된 데이터:', data); // 디버깅용
-        
+        console.log("변환된 데이터:", data); // 디버깅용
+
         setBudgetData(data);
       } catch (err) {
-        console.error('데이터 로드 실패:', err);
+        console.error("데이터 로드 실패:", err);
         setError(err.message);
       } finally {
         setIsLoading(false);
@@ -288,7 +305,7 @@ const BudgetFriendlySection = () => {
   }, []);
 
   const handleCardClick = (item) => {
-    console.log('Budget 카드 클릭:', item);
+    console.log("Budget 카드 클릭:", item);
     // 상세 페이지로 이동
     // 예: window.location.href = `/stay/${item.stayId}`;
   };
@@ -301,10 +318,10 @@ const BudgetFriendlySection = () => {
       reload: async () => {
         const data = await fetchBudgetFriendlyStays();
         setBudgetData(data);
-      }
+      },
     };
 
-    console.log('Budget Slider 초기화 완료');
+    console.log("Budget Slider 초기화 완료");
 
     return () => {
       delete window.BudgetSliderAPI;
@@ -324,8 +341,8 @@ const BudgetFriendlySection = () => {
 
         {/* 슬라이더 */}
         <div ref={sliderRef}>
-          <BudgetSlider 
-            data={budgetData} 
+          <BudgetSlider
+            data={budgetData}
             onCardClick={handleCardClick}
             isLoading={isLoading}
             error={error}

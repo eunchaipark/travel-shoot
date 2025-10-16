@@ -5,7 +5,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import koLocale from "@fullcalendar/core/locales/ko";
 
 // API Service 추가
-import { fetchCalendarCourses } from "../services/calendarApiService";
+import { fetchCalendarCourses } from "@/services/calendarApiService";
 
 // Hooks
 import {
@@ -15,11 +15,11 @@ import {
 } from "../hooks/useCalendarHooks";
 
 // Components
-import { MiniCalendar } from "../components/CalendarComponents";
-import BudgetFriendlySection from "../components/BudgetFriendlySection";
-import RecommendStaySection from "../components/RecommendStaySection";
-import TrendingSection from "../components/TrendingSection";
-import TravelNowSection from "../components/TravelNowSection";
+import { MiniCalendar } from "@/components/CalendarComponents";
+import BudgetFriendlySection from "@/components/BudgetFriendlySection";
+import RecommendStaySection from "@/components/RecommendStaySection";
+import TrendingSection from "@/components/TrendingSection";
+import TravelNowSection from "@/components/TravelNowSection";
 
 // Utils
 import {
@@ -28,15 +28,15 @@ import {
   CALENDAR_CONFIG,
   GUEST_LIMITS,
   RAW_RESERVATION_DATA,
-} from "../utils/main/calendarUtils";
+} from "@/utils/main/calendarUtils";
 
 // CSS
-import "../assets/css/common.css";
-import "../assets/css/main-calendar.css";
-import "../assets/css/recommend-stay.css";
-import "../assets/css/trending-section.css";
-import "../assets/css/budget-friendly.css";
-import "../assets/css/travel-now.css";
+import "@/assets/css/common.css";
+import "@/assets/css/main-calendar.css";
+import "@/assets/css/recommend-stay.css";
+import "@/assets/css/trending-section.css";
+import "@/assets/css/budget-friendly.css";
+import "@/assets/css/travel-now.css";
 
 const MainPage = () => {
   const calendarRef = useRef(null);
