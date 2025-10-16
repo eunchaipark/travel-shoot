@@ -3,13 +3,10 @@
  * 경로: C:\ITStudy\dev\travel-shoot\frontend\src\components\TravelNowSection.jsx
  */
 
-import React, { useEffect, useRef } from 'react';
-import { useTravelNow } from '../hooks/useTravelNow';
-import { 
-  TRAVEL_NOW_DATA, 
-  getSlideData, 
-  formatCount 
-} from '../utils/main/travelNowUtils';
+import React, { useEffect, useRef, useState } from 'react';
+import { useTravelNow } from '@/hooks/useTravelNow';
+import { getSlideData, formatCount } from '@/utils/main/travelNowUtils';
+import { fetchTravelNow } from "@/services/travelNowApiService";
 
 // ============================================================================
 // Travel Now Card 컴포넌트
@@ -45,7 +42,7 @@ const TravelNowCard = ({ destination, onClick }) => {
 // ============================================================================
 // Travel Now Slider 컴포넌트
 // ============================================================================
-const TravelNowSlider = ({ onCardClick }) => {
+const TravelNowSlider = ({ onCardClick, destinations }) => {
   const sliderWrapperRef = useRef(null);
   const containerRef = useRef(null);
 
@@ -61,9 +58,9 @@ const TravelNowSlider = ({ onCardClick }) => {
     handleTouchEnd,
     canGoPrev,
     canGoNext
-  } = useTravelNow();
+  } = useTravelNow(destinations.length);
 
-  // 슬라이더 위치 업데이트 (원본의 updateSliderPosition)
+  // 슬라이더 위치 업데이트
   useEffect(() => {
     if (sliderWrapperRef.current) {
       const translateX = -(currentSlide * (100 / totalSlides));
@@ -92,7 +89,6 @@ const TravelNowSlider = ({ onCardClick }) => {
       const diffX = Math.abs(touchCurrent.x - touchStart.x);
       const diffY = Math.abs(touchCurrent.y - touchStart.y);
       
-      // 가로 스크롤이 세로 스크롤보다 클 때만 기본 동작 방지 (원본과 동일)
       if (diffX > diffY && diffX > 10) {
         e.preventDefault();
       }
@@ -112,15 +108,14 @@ const TravelNowSlider = ({ onCardClick }) => {
     };
   }, []);
 
-  // 슬라이드 렌더링 (원본의 renderSlider)
+  // 슬라이드 렌더링
   const renderSlides = () => {
     const slides = [];
     
     for (let i = 0; i < totalSlides; i++) {
-      const slideData = getSlideData(TRAVEL_NOW_DATA, i, cardsPerSlide);
+      const slideData = getSlideData(destinations, i, cardsPerSlide);
       
-      // 원본의 console.log
-      console.log(`슬라이드 ${i + 1}: ${i * cardsPerSlide + 1}번부터 ${Math.min((i + 1) * cardsPerSlide, TRAVEL_NOW_DATA.length)}번까지`, slideData.map(d => d.name));
+      console.log(`슬라이드 ${i + 1}: ${i * cardsPerSlide + 1}번부터 ${Math.min((i + 1) * cardsPerSlide, destinations.length)}번까지`, slideData.map(d => d.name));
       
       slides.push(
         <div key={i} className="travel-now-grid">
@@ -138,7 +133,7 @@ const TravelNowSlider = ({ onCardClick }) => {
     return slides;
   };
 
-  // 인디케이터 렌더링 (원본의 renderIndicators)
+  // 인디케이터 렌더링
   const renderIndicators = () => {
     return (
       <div className="slider-indicators" id="travelNowIndicators">
@@ -156,7 +151,7 @@ const TravelNowSlider = ({ onCardClick }) => {
 
   return (
     <div className="content-wrapper">
-      {/* 네비게이션 버튼 (원본과 동일) */}
+      {/* 네비게이션 버튼 */}
       <button
         className="slider-nav slider-nav-prev"
         id="travelNowPrevBtn"
@@ -210,12 +205,34 @@ const TravelNowSlider = ({ onCardClick }) => {
 // ============================================================================
 const TravelNowSection = () => {
   const sliderRef = useRef(null);
+  const [destinations, setDestinations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // 카드 클릭 핸들러 (원본의 addCardEvents)
+  // API 데이터 로드
+  useEffect(() => {
+    const loadDestinations = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchTravelNow();
+        setDestinations(data);
+        console.log('Travel Now 데이터 로드 완료:', data);
+      } catch (err) {
+        console.error('Travel Now 데이터 로드 실패:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDestinations();
+  }, []);
+
+  // 카드 클릭 핸들러
   const handleCardClick = (destination) => {
     console.log('선택된 여행지:', destination);
     
-    // 검색창에 지역명 입력 (원본과 동일)
+    // 검색창에 지역명 입력
     const input = document.querySelector('.main-calendar-location-input');
     if (input) {
       input.value = destination.name;
@@ -223,7 +240,7 @@ const TravelNowSection = () => {
     }
   };
 
-  // 전역 API 제공 (원본의 window.TravelNowSection)
+  // 전역 API 제공
   useEffect(() => {
     window.TravelNowSection = {
       init: () => console.log('Travel Now Section 이미 초기화됨')
@@ -236,6 +253,43 @@ const TravelNowSection = () => {
     };
   }, []);
 
+  // 로딩 상태
+  if (loading) {
+    return (
+      <section className="travel-now-section">
+        <div className="travel-now-container">
+          <div className="section-header">
+            <h2 className="section-title">
+              <span className="travel-now-highlight">지금 떠나기 좋은 곳</span>
+            </h2>
+          </div>
+          <div style={{ textAlign: 'center', padding: '50px' }}>
+            로딩 중...
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // 에러 상태
+  if (error) {
+    return (
+      <section className="travel-now-section">
+        <div className="travel-now-container">
+          <div className="section-header">
+            <h2 className="section-title">
+              <span className="travel-now-highlight">지금 떠나기 좋은 곳</span>
+            </h2>
+          </div>
+          <div style={{ textAlign: 'center', padding: '50px', color: 'red' }}>
+            데이터를 불러오는데 실패했습니다.
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // 정상 렌더링
   return (
     <section className="travel-now-section">
       <div className="travel-now-container">
@@ -248,7 +302,10 @@ const TravelNowSection = () => {
 
         {/* 슬라이더 */}
         <div ref={sliderRef}>
-          <TravelNowSlider onCardClick={handleCardClick} />
+          <TravelNowSlider 
+            onCardClick={handleCardClick} 
+            destinations={destinations}
+          />
         </div>
       </div>
     </section>

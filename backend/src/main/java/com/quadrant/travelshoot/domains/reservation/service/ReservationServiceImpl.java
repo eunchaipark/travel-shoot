@@ -36,8 +36,9 @@ public class ReservationServiceImpl implements ReservationService {
     private final RoomRepository roomRepository;
     private final StayService stayService;
 
-    private static final BigDecimal TAX_RATE = new BigDecimal("0.10");
-    private static final BigDecimal SERVICE_FEE_RATE = new BigDecimal("0.05");
+      //TODO : 가격 계산 추후에 추가할 가능성 염두
+//    private static final BigDecimal TAX_RATE = new BigDecimal("0.10"); //TODO : 세금 10% 청구
+//    private static final BigDecimal SERVICE_FEE_RATE = new BigDecimal("0.05"); //TODO :수수료 5% 청구
 
     private StayDetailResponse getStayByRoomId(Long roomId) {
         Room room = roomRepository.findById(roomId)
@@ -267,9 +268,12 @@ public class ReservationServiceImpl implements ReservationService {
             currentDate = currentDate.plusDays(1);
         }
 
-        BigDecimal tax = subtotal.multiply(TAX_RATE).setScale(0, RoundingMode.HALF_UP);
-        BigDecimal serviceFee = subtotal.multiply(SERVICE_FEE_RATE).setScale(0, RoundingMode.HALF_UP);
-        BigDecimal totalPrice = subtotal.add(tax).add(serviceFee);
+        //TODO : 가격 계산 추후에 추가할 가능성 염두
+//        BigDecimal tax = subtotal.multiply(TAX_RATE).setScale(0, RoundingMode.HALF_UP);
+//        BigDecimal serviceFee = subtotal.multiply(SERVICE_FEE_RATE).setScale(0, RoundingMode.HALF_UP);
+//        BigDecimal totalPrice = subtotal.add(tax).add(serviceFee);
+
+        BigDecimal totalPrice = subtotal;
 
         int totalNights = (int) ChronoUnit.DAYS.between(request.getCheckInDate(), request.getCheckOutDate());
 
@@ -277,8 +281,10 @@ public class ReservationServiceImpl implements ReservationService {
                 .dailyPrices(dailyPrices)
                 .totalNights(totalNights)
                 .subtotal(subtotal)
-                .tax(tax)
-                .serviceFee(serviceFee)
+//                .tax(tax) //TODO
+                .tax(BigDecimal.ZERO)
+//                .serviceFee(serviceFee) //TODO
+                .serviceFee(BigDecimal.ZERO)
                 .totalPrice(totalPrice)
                 .build();
     }
@@ -404,5 +410,11 @@ public class ReservationServiceImpl implements ReservationService {
                 .createdAt(reservation.getCreatedAt())
                 .canCancel(reservation.canCancel())
                 .build();
+    }
+
+    @Override
+    public Reservation getById(Long reservationId) {
+        return reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("예약 정보를 찾을 수 없습니다."));
     }
 }

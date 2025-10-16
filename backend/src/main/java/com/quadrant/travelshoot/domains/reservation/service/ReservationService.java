@@ -2,6 +2,7 @@ package com.quadrant.travelshoot.domains.reservation.service;
 
 import com.quadrant.travelshoot.domains.reservation.dto.request.*;
 import com.quadrant.travelshoot.domains.reservation.dto.response.*;
+import com.quadrant.travelshoot.domains.reservation.entity.Reservation;
 import com.quadrant.travelshoot.domains.reservation.enums.ReservationStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,4 +35,6 @@ public interface ReservationService {
     List<ReservationResponse> getUpcomingReservations(Long userId);
 
     List<ReservationResponse> getReviewTargetReservations(Long userId);
+
+    Reservation getById(Long reservationId);
 }

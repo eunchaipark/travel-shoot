@@ -32,7 +32,7 @@ public class ReservationResponse {
     private Integer totalNights;
     private BigDecimal totalPrice;
     private ReservationStatus reservationStatus;
-    private TransportationMethod transportationMethod;
+    private String transportationMethod;
     private String cancelReason;
     private String cancelDetail;
     private LocalDateTime cancelledAt;

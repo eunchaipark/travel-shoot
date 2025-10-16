@@ -19,8 +19,16 @@ services:
       - mysql-data:/var/lib/mysql
       - ./mysql/001_init.sql:/docker-entrypoint-initdb.d/001_init.sql
       - ./mysql/migrations/2025101010_01_add_search_history_table.sql:/docker-entrypoint-initdb.d/2025101010_01_add_search_history_table.sql
+      - ./mysql/migrations/2025101013_01_drop_travel_courses_course_data_column.sql:/docker-entrypoint-initdb.d/2025101013_01_drop_travel_courses_course_data_column.sql
+      - ./mysql/migrations/2025101013_02_create_course_spots_table.sql:/docker-entrypoint-initdb.d/2025101013_02_create_course_spots_table.sql
+      - ./mysql/migrations/2025101013_03_change_user_survey_foods_category_to_enum.sql:/docker-entrypoint-initdb.d/2025101013_03_change_user_survey_foods_category_to_enum.sql
+      - ./mysql/migrations/2025101013_04_change_user_survey_activities_category_to_enum.sql:/docker-entrypoint-initdb.d/2025101013_04_change_user_survey_activities_category_to_enum.sql
+      - ./mysql/migrations/2025101013_05_drop_travel_courses_transportation_method.sql:/docker-entrypoint-initdb.d/2025101013_05_drop_travel_courses_transportation_method.sql
+      - ./mysql/migrations/2025101013_06_add_reservations_transportation_method.sql:/docker-entrypoint-initdb.d/2025101013_06_add_reservations_transportation_method.sql
       - ./mysql/migrations/2025101013_07_add_view_history_table.sql:/docker-entrypoint-initdb.d/2025101013_07_add_view_history_table.sql
+      - ./mysql/migrations/2025101013_08_drop_user_preferences.sql:/docker-entrypoint-initdb.d/2025101013_08_drop_user_preferences.sql
       - ./mysql/migrations/2025101013_09_add_viewCount_column.sql:/docker-entrypoint-initdb.d/2025101013_09_add_viewCount_column.sql
+      - ./mysql/migrations/2025101015_01_drop_travel_courses_stay_id_column.sql:/docker-entrypoint-initdb.d/2025101015_01_drop_travel_courses_stay_id_column.sql
     networks:
       - backendnet
     healthcheck:

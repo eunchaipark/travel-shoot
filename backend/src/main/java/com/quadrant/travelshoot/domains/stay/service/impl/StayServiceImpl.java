@@ -40,6 +40,7 @@ public class StayServiceImpl implements StayService {
      * @return StayDetailResponse
      */
 
+    @Override
     @Transactional
     public StayDetailResponse getStayDetail(Long stayId) {
         Stay stay = stayRepository.findByStayId(stayId)
@@ -77,4 +78,10 @@ public class StayServiceImpl implements StayService {
                 .orElse(BigDecimal.ZERO); // 예외 방지 (리스트가 비어있을 때)
     }
 
+
+    @Override
+    public Stay getById(Long stayId) {
+        return stayRepository.findById(stayId)
+                .orElseThrow(() -> new IllegalArgumentException("숙소 정보를 찾을 수 없습니다."));
+    }
 }

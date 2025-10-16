@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import { isMobileScreen, ACCOMMODATION_DATA } from '../utils/main/recommendationUtils';
+import { isMobileScreen, ACCOMMODATION_DATA } from '@/utils/main/recommendationUtils';
 
 export const useRecommendStay = () => {
   const [isMobile, setIsMobile] = useState(false);
