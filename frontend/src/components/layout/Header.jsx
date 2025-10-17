@@ -1,7 +1,8 @@
 import React, {useState, useRef, useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/auth/useAuth'
+// import { useAuth } from '@/hooks/auth/useAuth'
+import { useAuth } from '@/components/context/AuthContext'
 import AuthModal from '@/components/modals/AuthModal';  // 1016 추가
 
 

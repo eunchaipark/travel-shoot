@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '@/assets/css/auth-modal.css';
-import { useAuth } from '@/hooks/auth/useAuth';
+// import { useAuth } from '@/hooks/auth/useAuth';
+import { useAuth } from '@/components/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const AuthModal = ({ isOpen, onClose }) => {
