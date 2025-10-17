@@ -49,7 +49,7 @@ public class SurveySubmitRequest {
         private String region;
         
         @NotNull(message = "가중치를 입력해주세요.")
-        private Integer weight;
+        private Double weight;
     }
     
     @Data
@@ -60,7 +60,7 @@ public class SurveySubmitRequest {
         private String type;
         
         @NotNull(message = "가중치를 입력해주세요.")
-        private Integer weight;
+        private Double weight;
     }
     
     @Data
@@ -71,7 +71,7 @@ public class SurveySubmitRequest {
         private String category;
         
         @NotNull(message = "가중치를 입력해주세요.")
-        private Integer weight;
+        private Double weight;
         
         @NotNull(message = "순서를 입력해주세요.")
         private Integer order;
@@ -85,7 +85,7 @@ public class SurveySubmitRequest {
         private String activity;
         
         @NotNull(message = "가중치를 입력해주세요.")
-        private Integer weight;
+        private Double weight;
         
         @NotNull(message = "순서를 입력해주세요.")
         private Integer order;
