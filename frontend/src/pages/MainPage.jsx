@@ -23,6 +23,7 @@ import BudgetFriendlySection from "@/components/main/BudgetFriendlySection";
 import RecommendStaySection from "@/components/main/RecommendStaySection";
 import TrendingSection from "@/components/main/TrendingSection";
 import TravelNowSection from "@/components/main/TravelNowSection";
+import { useAuth } from "@/components/context/AuthContext";
 
 // Utils
 import {
@@ -43,7 +44,7 @@ import "@/assets/css/travel-now.css";
 
 const MainPage = () => {
   const calendarRef = useRef(null);
-  const [isLoggedIn] = useState(true);
+  const { isAuthenticated, user } = useAuth();
   const [locationValue, setLocationValue] = useState("");
 
   // 캘린더 이벤트 상태 추가
@@ -54,7 +55,7 @@ const MainPage = () => {
   const [showDateDropdown, setShowDateDropdown] = useState(false);
   const [showGuestDropdown, setShowGuestDropdown] = useState(false);
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
-  const [showHeaderDropdown, setShowHeaderDropdown] = useState(false);
+  // const [showHeaderDropdown, setShowHeaderDropdown] = useState(false);
 
   // 커스텀 훅
   const {
@@ -77,7 +78,7 @@ const MainPage = () => {
   // API에서 캘린더 데이터 가져오기
   useEffect(() => {
     const loadCalendarEvents = async () => {
-      if (!isLoggedIn) {
+      if (!isAuthenticated) {
         setCalendarEvents([]);
         return;
       }
@@ -104,7 +105,7 @@ const MainPage = () => {
     };
 
     loadCalendarEvents();
-  }, [isLoggedIn]);
+  }, [isAuthenticated]);
 
   // 날짜 표시 텍스트
   const getDateDisplayText = () => {
@@ -355,7 +356,7 @@ const MainPage = () => {
               {/* 달력 카드 */}
               <div
                 className={`calendar-card card shadow-lg border-0 rounded-4 ${
-                  isLoggedIn ? "logged-in" : "guest-mode"
+                  isAuthenticated ? "logged-in" : "guest-mode"
                 }`}
               >
                 <div className="card-body">
@@ -387,7 +388,7 @@ const MainPage = () => {
                 </div>
 
                 {/* 게스트 모드 메시지 */}
-                {!isLoggedIn && (
+                {!isAuthenticated && (
                   <>
                     <div className="calendar-guest-message">
                       회원가입 후 설정된 사용자 맞춤형 여행 코스 추천을
@@ -647,7 +648,7 @@ const MainPage = () => {
         <section className="additional-content-section">
           <div className="container-xxl px-5">
             {/* 숙소 추천 섹션 - React 컴포넌트 */}
-            <RecommendStaySection isLoggedIn={isLoggedIn} />
+            <RecommendStaySection isLoggedIn={isAuthenticated} />
 
             {/* 인기 급상승 섹션 - React 컴포넌트 */}
             <TrendingSection />
