@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import CompleteHeader from '@/components/layout/CompleteHeader';
 import SurveyModal from '@/components/survey/SurveyModal';
 import '@/assets/css/common.css';
 import '@/assets/css/survey.css';
@@ -9,6 +11,7 @@ import '@/assets/css/survey.css';
  */
 const SignupCompletePage = () => {
   const [showSurveyModal, setShowSurveyModal] = useState(false);
+  const navigate = useNavigate();
 
   // 설문조사 모달 열기
   const handleOpenSurvey = () => {
@@ -29,32 +32,22 @@ const SignupCompletePage = () => {
   const handleGoHome = () => {
     window.location.href = '/';
     // 또는 React Router 사용 시:
-    // navigate('/');
+    navigate('/');
   };
 
   // 설문조사 완료 처리
   const handleSurveyComplete = (surveyData) => {
     console.log('설문조사 완료 데이터:', surveyData);
     setShowSurveyModal(false);
-    
+
     // 완료 후 홈으로 이동하거나 다른 처리
     // handleGoHome();
   };
 
   return (
     <>
-      {/* Header */}
-      <header className="app-header">
-        <div className="container">
-          <div className="row">
-            <div className="col-12 d-flex">
-              <div className="col-sm-1 col-lg-1 col-2">
-                <div className="logo" role="img" aria-label="트래블샷 아이콘"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+
+        <CompleteHeader/>
 
       {/* Main Content */}
       <main>
@@ -68,14 +61,14 @@ const SignupCompletePage = () => {
             </div>
 
             <div className="complete-page-btn">
-              <button 
-                className="btn1" 
+              <button
+                className="btn1"
                 onClick={handleOpenSurvey}
               >
                 설문조사
               </button>
-              <button 
-                className="btn2" 
+              <button
+                className="btn2"
                 onClick={handleGoHome}
               >
                 홈으로
