@@ -44,7 +44,7 @@ import "@/assets/css/travel-now.css";
 
 const MainPage = () => {
   const calendarRef = useRef(null);
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [locationValue, setLocationValue] = useState("");
 
   // 캘린더 이벤트 상태 추가
