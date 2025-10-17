@@ -1,13 +1,16 @@
 export const submitSurveyApi = async (surveyData) => {
   try {
-    const response = await fetch(`${window.API_BASE_URL}/api/survey/submit`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(surveyData),
-    });
+    const response = await fetch(
+      `${window.API_BASE_URL}/api/signup-complete/submit`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(surveyData),
+      }
+    );
 
     console.log("응답 상태:", response.status);
     console.log("응답 상태 텍스트:", response.statusText);
@@ -37,7 +40,7 @@ export const submitSurveyApi = async (surveyData) => {
 export const checkSurveyStatusApi = async (userId) => {
   try {
     const response = await fetch(
-      `${window.API_BASE_URL}/api/survey/status?userId=${userId}`,
+      `${window.API_BASE_URL}/api//signup-complete/status?userId=${userId}`,
       {
         method: "GET",
         headers: {
