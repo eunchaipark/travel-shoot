@@ -27,12 +27,14 @@ public class TravelCourseController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{courseId}")
+    @GetMapping("/{id}")
     public ResponseEntity<TravelCourseResponse> getTravelCourse(
-            @PathVariable Long courseId) {
-        log.info("여행 코스 조회 요청 - courseId: {}", courseId);
-        TravelCourseResponse response = travelCourseService.getCourse(courseId);
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "course") String type) {  // course or reservation
+        log.info("여행 코스 조회 요청 - id: {}, type: {}", id, type);
+        TravelCourseResponse response = travelCourseService.getCourse(id, type);
         return ResponseEntity.ok(response);
     }
+
 }
 

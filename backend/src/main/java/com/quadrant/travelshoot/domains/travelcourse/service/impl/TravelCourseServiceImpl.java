@@ -6,6 +6,8 @@ import com.quadrant.travelshoot.domains.reservation.entity.Reservation;
 import com.quadrant.travelshoot.domains.reservation.service.ReservationService;
 import com.quadrant.travelshoot.domains.restaurant.entity.Restaurant;
 import com.quadrant.travelshoot.domains.restaurant.service.RestaurantService;
+import com.quadrant.travelshoot.domains.stay.entity.Stay;
+import com.quadrant.travelshoot.domains.stay.service.StayService;
 import com.quadrant.travelshoot.domains.travelcourse.dto.response.TravelCourseRecommendationData;
 import com.quadrant.travelshoot.domains.travelcourse.dto.response.TravelCourseResponse;
 import com.quadrant.travelshoot.domains.travelcourse.dto.request.TravelCourseRequest;
@@ -23,6 +25,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +46,7 @@ public class TravelCourseServiceImpl implements TravelCourseService {
     private final ReservationService reservationService;
     private final ActivityService activityService;
     private final RestaurantService restaurantService;
+    private final StayService stayService;
 
     @Override
     @Transactional
@@ -105,32 +109,44 @@ public class TravelCourseServiceImpl implements TravelCourseService {
         }
     }
 
-    @Override
-    public TravelCourseResponse getCourse(Long courseId) {
-        log.info("여행 코스 조회 - courseId: {}", courseId);
+    public TravelCourseResponse getCourse(Long id, String type) {
+        log.info("여행 코스 조회 - id: {}, type: {}", id, type);
 
-        // 1. TravelCourse 조회
-        TravelCourse travelCourse = travelCourseRepository.findById(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 여행 코스를 찾을 수 없습니다."));
+        TravelCourse travelCourse;
 
-        // 2. Reservation 조회 (Service 통해서!)
+        if ("reservation".equals(type)) {
+            // reservationId로 TravelCourse 조회
+            travelCourse = travelCourseRepository.findByReservationId(id)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 예약의 여행 코스를 찾을 수 없습니다."));
+        } else {
+            // courseId로 TravelCourse 조회
+            travelCourse = travelCourseRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 여행 코스를 찾을 수 없습니다."));
+        }
+
+        //TODO: 로그인 구현 다 되면 travelCourse.getUserId()와 세션 id와 같지 않으면 에러 반영
         Reservation reservation = reservationService.getById(travelCourse.getReservationId());
-
-        // 3. 여행 시작 날짜 추출
         LocalDate startDate = reservation.getCheckInDate();
-
-        // 4. CourseSpot 조회
         List<CourseSpot> courseSpots = courseSpotRepository
-                .findByTravelCourseIdOrderByDayAscSpotOrderAsc(courseId);
+                .findByTravelCourseIdOrderByDayAscSpotOrderAsc(travelCourse.getId());
 
-        // 5. 응답 생성
-        return convertToResponse(travelCourse, courseSpots, startDate);
+        return convertToResponse(travelCourse, courseSpots, reservation.getRoom().getStay().getId(), startDate);
     }
 
     private TravelCourseResponse convertToResponse(
             TravelCourse travelCourse,
             List<CourseSpot> courseSpots,
+            Long stayId,
             LocalDate startDate) {  // startDate 파라미터 추가!
+
+        Stay stay = stayService.getById(stayId);
+        TravelCourseResponse.StayInfo stayInfo = TravelCourseResponse.StayInfo.builder()
+                .name(stay.getName())
+                .address(stay.getAddress())
+                .imageUrl(stay.getMainImageUrl())
+                .latitude(stay.getLatitude())
+                .longitude(stay.getLongitude())
+                .build();
 
         // Day별로 그룹핑
         Map<Integer, List<CourseSpot>> spotsByDay = courseSpots.stream()
@@ -168,12 +184,16 @@ public class TravelCourseServiceImpl implements TravelCourseService {
                 .dailyCourses(dailyCourses)
                 .createdAt(travelCourse.getCreatedAt())
                 .updatedAt(travelCourse.getUpdatedAt())
+                .stay(stayInfo)
                 .build();
     }
 
     private TravelCourseResponse.SpotDetail convertToSpotDetail(CourseSpot spot) {
         String spotName = "";
         String address = "";
+        String type = "";
+        BigDecimal latitude = BigDecimal.valueOf(0);
+        BigDecimal longitude = BigDecimal.valueOf(0);
 
         // spotType에 따라 실제 데이터 조회
         if (spot.getSpotType() == CourseSpot.SpotType.관광지) {
@@ -181,12 +201,17 @@ public class TravelCourseServiceImpl implements TravelCourseService {
             Activity activity = activityService.getById(spot.getReferenceId());
             spotName = activity.getActivityName();
             address = activity.getAddress();
-
+            latitude = activity.getLatitude();
+            longitude = activity.getLongitude();
+            type = activity.getActivityType();
         } else if (spot.getSpotType() == CourseSpot.SpotType.맛집) {
             // Restaurant 조회 (Service 통해서!)
             Restaurant restaurant = restaurantService.getById(spot.getReferenceId());
             spotName = restaurant.getRestaurantName();
             address = restaurant.getAddress();
+            latitude = restaurant.getLatitude();
+            longitude = restaurant.getLongitude();
+            type = restaurant.getFoodType();
         }
 
         // DTO로 변환해서 반환
@@ -197,9 +222,12 @@ public class TravelCourseServiceImpl implements TravelCourseService {
                 .referenceId(spot.getReferenceId())
                 .spotName(spotName)        // Activity/Restaurant에서 가져온 이름
                 .address(address)          // Activity/Restaurant에서 가져온 주소
+                .latitude(latitude)          // Activity/Restaurant에서 가져온 위도
+                .longitude(longitude)          // Activity/Restaurant에서 가져온 경도
                 .startTime(spot.getStartTime())
                 .endTime(spot.getEndTime())
                 .aiComment(spot.getAiComment())
+                .type(type)
                 .build();
     }
 }
