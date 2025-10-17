@@ -2,7 +2,7 @@
  * Budget Friendly Section - API 연동 버전
  * 경로: frontend/src/components/BudgetFriendlySection.jsx
  */
-
+// import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from "react";
 import { useBudgetSlider } from "@/hooks/main/useBudgetSlider";
 import {
@@ -277,6 +277,7 @@ const BudgetSlider = ({ data, onCardClick, isLoading, error }) => {
 // Budget Friendly Section 컴포넌트 (메인) - API 연동
 // ============================================================================
 const BudgetFriendlySection = () => {
+  // const navigate = useNavigate();  백엔드 구현시 주석 없애기
   const sliderRef = useRef(null);
   const [budgetData, setBudgetData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -306,8 +307,43 @@ const BudgetFriendlySection = () => {
 
   const handleCardClick = (item) => {
     console.log("Budget 카드 클릭:", item);
-    // 상세 페이지로 이동
-    // 예: window.location.href = `/stay/${item.stayId}`;
+    
+    // stayId 확인
+    const stayId = item.stayId || item.id; // stayId가 없으면 id 사용
+    
+    if (!stayId) {
+      console.error('stayId가 없습니다:', item);
+      alert('숙소 정보를 찾을 수 없습니다.');
+      return;
+    }
+    
+    const detailUrl = `/stays/${stayId}`;
+    
+    // 콘솔 출력
+    console.log('==========================================');
+    console.log('숙소 상세 페이지 이동 정보');
+    console.log('==========================================');
+    console.log('숙소 ID:', stayId);
+    console.log('숙소 이름:', item.name);
+    console.log('위치:', item.location);
+    console.log('가격:', item.price);
+    console.log('URL:', detailUrl);
+    console.log('==========================================');
+    
+    // 알림 표시
+    alert(
+      `숙소 상세 페이지로 이동합니다.\n\n` +
+      `숙소: ${item.name}\n` +
+      `위치: ${item.location}\n` +
+      `가격: ${formatNumber(item.price)}원\n\n` +
+      `이동 URL:\n${detailUrl}`
+    );
+    
+    // TODO: 백엔드 구현 후 주석 해제
+    // navigate(detailUrl);
+    
+    // 또는 window.location 사용
+    // window.location.href = detailUrl;
   };
 
   // 전역 API 제공
