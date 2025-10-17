@@ -1,12 +1,9 @@
 package com.quadrant.travelshoot.domains.review.dto.response;
 
-import com.quadrant.travelshoot.domains.review.entity.Review;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 /**
  * 리뷰 상세 조회 응답 DTO
@@ -24,7 +21,7 @@ public class ReviewDetailResponse {
     private String userName;
 
     // 예약 정보
-//    private ReviewReservationDetailDto reservationDetailDto;
+    private ReviewReservationInfoDto reservationInfoDto;
 
     // 평점 정보 (BigDecimal로 변경)
     private BigDecimal totalRating;

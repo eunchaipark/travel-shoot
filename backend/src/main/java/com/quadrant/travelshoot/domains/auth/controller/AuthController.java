@@ -45,6 +45,32 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    // 세션 확인 (로그인 상태 체크)
+    @GetMapping("/session")
+    public ResponseEntity<?> checkSession(HttpSession session) {
+        log.info("세션 확인 요청");
+
+        // 세션에서 userId 확인
+        Long userId = (Long) session.getAttribute("userId");
+
+        if (userId != null) {
+            // 유저 정보 조회해서 반환
+            String userEmail = (String) session.getAttribute("userEmail");
+            String userName = (String) session.getAttribute("userName");
+
+            log.info("세션 유효 - 로그인 상태: {}", userEmail);
+
+            return ResponseEntity.ok(Map.of(
+                    "userId", userId,
+                    "email", userEmail,
+                    "userName", userName
+            ));
+        }
+
+        log.info("세션 없음 - 비로그인 상태");
+        return ResponseEntity.status(401).build();
+    }
+
     //  이메일 중복 확인 
     @GetMapping("/check-email")
     public ResponseEntity<Map<String, Object>> checkEmail(

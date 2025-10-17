@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect } from 'react';
-import { useRecommendStay } from '@/hooks/useRecommendStay';
+import { useRecommendStay } from '@/hooks/main/useRecommendStay';
 import {
   ACCOMMODATION_DATA,
   formatPrice,

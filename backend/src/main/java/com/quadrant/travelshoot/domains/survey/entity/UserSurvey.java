@@ -48,11 +48,22 @@ public class UserSurvey {
     @Builder.Default
     private List<UserSurveyActivity> activities = new ArrayList<>();
 
+    @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
+    @BatchSize(size = 100)
+    @Builder.Default
+    private List<UserSurveyRegion> regions = new ArrayList<>();
+
     public enum StayType {
         PENSION, MOTEL, HOTEL
     }
 
     // 편의 메서드
+
+    public void addRegion(UserSurveyRegion region) {
+        regions.add(region);
+        region.setSurvey(this);
+    }
+
     public void addFood(UserSurveyFood food) {
         foods.add(food);
         food.setSurvey(this);

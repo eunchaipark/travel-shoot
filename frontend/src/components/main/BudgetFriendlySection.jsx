@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect, useRef, useState } from "react";
-import { useBudgetSlider } from "@/hooks/useBudgetSlider";
+import { useBudgetSlider } from "@/hooks/main/useBudgetSlider";
 import {
   formatNumber,
   getSlideData,
@@ -12,8 +12,8 @@ import {
   getGridJustifyContent,
   getSliderWidth,
   getSlideWidth,
-} from "../utils/main/budgetUtils";
-import { fetchBudgetFriendlyStays } from "@/services/budgetApiService";
+} from "../../utils/main/budgetUtils";
+import { fetchBudgetFriendlyStays } from "@/services/main/budgetApiService";
 
 // ============================================================================
 // Budget Card 컴포넌트

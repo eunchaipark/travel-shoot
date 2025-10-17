@@ -4,9 +4,9 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useTravelNow } from '@/hooks/useTravelNow';
+import { useTravelNow } from '@/hooks/main/useTravelNow';
 import { getSlideData, formatCount } from '@/utils/main/travelNowUtils';
-import { fetchTravelNow } from "@/services/travelNowApiService";
+import { fetchTravelNow } from "@/services/main/travelNowApiService";
 
 // ============================================================================
 // Travel Now Card 컴포넌트

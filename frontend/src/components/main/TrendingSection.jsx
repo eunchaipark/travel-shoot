@@ -4,8 +4,8 @@
  */
 
 import React, { useEffect, useRef, useState } from "react";
-import { useTrendingSlider } from "@/hooks/useTrendingSlider";
-import { fetchAllTrendingData } from "@/services/trendingApiService";
+import { useTrendingSlider } from "@/hooks/main/useTrendingSlider";
+import { fetchAllTrendingData } from "@/services/main/trendingApiService";
 import { TRENDING_DATA, getSlideData } from "@/utils/main/trendingUtils";
 
 // ============================================================================
