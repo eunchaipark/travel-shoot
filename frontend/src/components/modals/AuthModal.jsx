@@ -16,6 +16,12 @@ const AuthModal = ({ isOpen, onClose }) => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
+    // 비밀번호 규칙 알림
+    const [signupPasswordError, setSignupPasswordError] = useState('');
+    const [signupConfirmError, setSignupConfirmError] = useState('');
+    const [resetPasswordError, setResetPasswordError] = useState('');
+    const [resetConfirmError, setResetConfirmError] = useState('');
+
     // 타이머 상태 (각 단계별로 분리)
     const [signupTimer, setSignupTimer] = useState(300);
     const [resetTimer, setResetTimer] = useState(300);
@@ -28,6 +34,57 @@ const AuthModal = ({ isOpen, onClose }) => {
 
     const auth = useAuth();
     const navigate = useNavigate();
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+
+    const validatePassword = (pwd) => {
+        if (!pwd) return '';
+        if (pwd.length < 8 || pwd.length > 20) {
+            return '비밀번호는 8~20자여야 합니다';
+        }
+        if (!passwordRegex.test(pwd)) {
+            return '비밀번호는 대소문자, 숫자, 특수문자를 모두 포함해야 합니다';
+        }
+        return '';
+    };
+
+    const validatePasswordMatch = (pwd1, pwd2) => {
+        if (!pwd2) return '';
+        if (pwd1 !== pwd2) {
+            return '비밀번호가 일치하지 않습니다';
+        }
+        return '';
+    };
+
+    const handleSignupPasswordChange = (e) => {
+        const pwd = e.target.value;
+        setPassword(pwd);
+        setSignupPasswordError(validatePassword(pwd));
+        if (confirmNewPassword) {
+            setSignupConfirmError(validatePasswordMatch(pwd, confirmNewPassword));
+        }
+    };
+
+    const handleSignupConfirmChange = (e) => {
+        const confirmPwd = e.target.value;
+        setConfirmNewPassword(confirmPwd);
+        setSignupConfirmError(validatePasswordMatch(password, confirmPwd));
+    };
+
+    const handleResetPasswordChange = (e) => {
+        const pwd = e.target.value;
+        setNewPassword(pwd);
+        setResetPasswordError(validatePassword(pwd));
+        if (confirmNewPassword) {
+            setResetConfirmError(validatePasswordMatch(pwd, confirmNewPassword));
+        }
+    };
+
+    const handleResetConfirmChange = (e) => {
+        const confirmPwd = e.target.value;
+        setConfirmNewPassword(confirmPwd);
+        setResetConfirmError(validatePasswordMatch(newPassword, confirmPwd));
+    };
 
     // 회원가입 타이머
     useEffect(() => {
@@ -93,6 +150,12 @@ const AuthModal = ({ isOpen, onClose }) => {
         setPassword('');
         setUserName('');
         setVerificationCode('');
+        setNewPassword('');
+        setConfirmNewPassword('');
+        setSignupPasswordError('');
+        setSignupConfirmError('');
+        setResetPasswordError('');
+        setResetConfirmError('');
         setSignupTimer(300);
         setResetTimer(300);
         setIsSignupTimerActive(false);
@@ -219,8 +282,19 @@ const AuthModal = ({ isOpen, onClose }) => {
     };
 
     const handleSignup = async () => {
-        if (password !== confirmNewPassword) {
-            alert('비밀번호가 일치하지 않습니다.');
+        const pwdError = validatePassword(password);
+        const confirmError = validatePasswordMatch(password, confirmNewPassword);
+
+        if (pwdError) {
+            setSignupPasswordError(pwdError);
+            return;
+        }
+        if (confirmError) {
+            setSignupConfirmError(confirmError);
+            return;
+        }
+        if (!userName.trim()) {
+            alert('이름을 입력해주세요.');
             return;
         }
 
@@ -252,8 +326,15 @@ const AuthModal = ({ isOpen, onClose }) => {
     };
 
     const handlePasswordReset = async () => {
-        if (newPassword !== confirmNewPassword) {
-            alert('비밀번호가 일치하지 않습니다.');
+        const pwdError = validatePassword(newPassword);
+        const confirmError = validatePasswordMatch(newPassword, confirmNewPassword);
+
+        if (pwdError) {
+            setResetPasswordError(pwdError);
+            return;
+        }
+        if (confirmError) {
+            setResetConfirmError(confirmError);
             return;
         }
 
@@ -324,7 +405,7 @@ const AuthModal = ({ isOpen, onClose }) => {
                         <div className="form-group">
                             <input
                                 type="email"
-                                placeholder="이메일을 입력하세요"
+                                placeholder="이메일 입력"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
@@ -332,7 +413,7 @@ const AuthModal = ({ isOpen, onClose }) => {
                         <div className="form-group">
                             <input
                                 type="password"
-                                placeholder="비밀번호를 입력하세요"
+                                placeholder="비밀번호 입력"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
@@ -362,7 +443,7 @@ const AuthModal = ({ isOpen, onClose }) => {
                             <div className="email-verification">
                                 <input
                                     type="email"
-                                    placeholder="이메일을 입력하세요"
+                                    placeholder="이메일 입력"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
@@ -376,7 +457,7 @@ const AuthModal = ({ isOpen, onClose }) => {
                             <div className="email-verification">
                                 <input
                                     type="text"
-                                    placeholder="인증번호를 입력하세요"
+                                    placeholder="인증번호 입력"
                                     value={verificationCode}
                                     onChange={(e) => setVerificationCode(e.target.value)}
                                 />
@@ -399,10 +480,15 @@ const AuthModal = ({ isOpen, onClose }) => {
                         <div className="form-group">
                             <input
                                 type="password"
-                                placeholder="비밀번호를 입력하세요"
+                                placeholder="비밀번호 입력"
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={handleSignupPasswordChange}
                             />
+                            {password && signupPasswordError && (
+                                <div className="form-text-invalid">
+                                    * {signupPasswordError}
+                                </div>
+                            )}
                         </div>
 
                         <div className="form-group">
@@ -410,14 +496,19 @@ const AuthModal = ({ isOpen, onClose }) => {
                                 type="password"
                                 placeholder="비밀번호 확인"
                                 value={confirmNewPassword}
-                                onChange={(e) => setConfirmNewPassword(e.target.value)}
+                                onChange={handleSignupConfirmChange}
                             />
+                            {confirmNewPassword && signupConfirmError && (
+                                <div className="form-text-invalid">
+                                    * {signupConfirmError}
+                                </div>
+                            )}
                         </div>
 
                         <div className="form-group">
                             <input
                                 type="text"
-                                placeholder="이름을 입력하세요"
+                                placeholder="이름 입력"
                                 value={userName}
                                 onChange={(e) => setUserName(e.target.value)}
                             />
@@ -437,7 +528,7 @@ const AuthModal = ({ isOpen, onClose }) => {
                             <div className="email-verification">
                                 <input
                                     type="email"
-                                    placeholder="이메일을 입력하세요"
+                                    placeholder="이메일 입력"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
@@ -451,7 +542,7 @@ const AuthModal = ({ isOpen, onClose }) => {
                             <div className="email-verification">
                                 <input
                                     type="text"
-                                    placeholder="인증번호를 입력하세요"
+                                    placeholder="인증번호 입력"
                                     value={verificationCode}
                                     onChange={(e) => setVerificationCode(e.target.value)}
                                 />
@@ -474,10 +565,15 @@ const AuthModal = ({ isOpen, onClose }) => {
                         <div className="form-group">
                             <input
                                 type="password"
-                                placeholder="새로운 비밀번호를 입력하세요"
+                                placeholder="새로운 비밀번호 입력"
                                 value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
+                                onChange={handleResetPasswordChange}
                             />
+                            {newPassword && resetPasswordError && (
+                                <div className="form-text-invalid">
+                                    * {resetPasswordError}
+                                </div>
+                            )}
                         </div>
 
                         <div className="form-group">
@@ -485,11 +581,16 @@ const AuthModal = ({ isOpen, onClose }) => {
                                 type="password"
                                 placeholder="비밀번호 확인"
                                 value={confirmNewPassword}
-                                onChange={(e) => setConfirmNewPassword(e.target.value)}
+                                onChange={handleResetConfirmChange}
                             />
+                            {confirmNewPassword && resetConfirmError && (
+                                <div className="form-text-invalid">
+                                    * {resetConfirmError}
+                                </div>
+                            )}
                         </div>
 
-                        <button className="submit-btn" onClick={handlePasswordReset}>
+                        <button className="submit-btn" onClick={handlePasswordReset} disabled={resetPasswordError || resetConfirmError || !newPassword || !confirmNewPassword}>
                             확인
                         </button>
                     </div>
