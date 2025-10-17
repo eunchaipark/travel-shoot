@@ -54,6 +54,7 @@ const MainPage = () => {
   const [showDateDropdown, setShowDateDropdown] = useState(false);
   const [showGuestDropdown, setShowGuestDropdown] = useState(false);
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
+  const [showHeaderDropdown, setShowHeaderDropdown] = useState(false);
 
   // 커스텀 훅
   const {
