@@ -121,8 +121,8 @@ export const useSurvey = (onComplete) => {
         onComplete();
       }
 
-      // API 성공/실패 상관없이 메인 페이지로 이동
-      window.location.href = '/';
+      // API 성공/실패 상관없이 메인 페이지로 이동 및 뒤로가 막기를 위한 replace
+      window.location.replace('/');
     }
   }, [currentStep, selections, onComplete]);
 
