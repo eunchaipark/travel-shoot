@@ -32,7 +32,17 @@ services:
     networks:
       - backendnet
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pmysql"]
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-pmysql",
+        ]
       timeout: 20s
       retries: 10
       interval: 10s
@@ -47,7 +57,6 @@ services:
       - redis-data:/data
     networks:
       - backendnet
-
 
   # === Spring Boot Backend ===
   backend:
@@ -64,6 +73,7 @@ services:
     ports:
       - "8080:8080"
     environment:
+      SPRING_PROFILES_ACTIVE: dev #TODO : 테스트 계정 생성 때문에 추가
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/travel_shoot?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: kcc
       SPRING_DATASOURCE_PASSWORD: kcc
@@ -86,7 +96,7 @@ services:
       - ./frontend:/app
       - /app/node_modules
     environment:
-      - CHOKIDAR_USEPOLLING=true  # Force file change detection
+      - CHOKIDAR_USEPOLLING=true # Force file change detection
       - WATCHPACK_POLLING=true
     depends_on:
       - backend

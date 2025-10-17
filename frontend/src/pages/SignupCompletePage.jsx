@@ -18,12 +18,7 @@ const SignupCompletePage = () => {
 
   // 설문조사 모달 닫기
   const handleCloseSurvey = () => {
-    const isConfirmed = window.confirm(
-      "설문조사를 종료하시겠습니까? 입력한 내용이 사라집니다."
-    );
-    if (isConfirmed) {
-      setShowSurveyModal(false);
-    }
+    setShowSurveyModal(false); // confirm 제거!
   };
 
   // 홈으로 이동

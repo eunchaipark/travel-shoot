@@ -127,7 +127,7 @@ export const SURVEY_DATA = [
         image: "/images/survey/survey-seafood.svg",
       },
       {
-        value: "고기류",
+        value: "고기",
         label: "고기류",
         image: "/images/survey/survey-meat.svg",
       },
@@ -158,7 +158,7 @@ export const SURVEY_DATA = [
         image: "/images/survey/survey-culturalexperience.svg",
       },
       {
-        value: "레저 스포츠",
+        value: "레포츠",
         label: "레저 스포츠",
         image: "/images/survey/survey-leisuresports.svg",
       },
@@ -177,9 +177,9 @@ export const SURVEY_DATA = [
         label: "사진",
         image: "/images/survey/survey-phototour.svg",
       },
-      { value: "휴식", label: "휴식", image: "/images/survey/survey-rest.svg" },
+      { value: "휴양", label: "휴식", image: "/images/survey/survey-rest.svg" },
       {
-        value: "축제/이벤트",
+        value: "축제",
         label: "축제/이벤트",
         image: "/images/survey/survey-festival.svg",
       },
