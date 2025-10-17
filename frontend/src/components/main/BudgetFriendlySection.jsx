@@ -319,18 +319,7 @@ const BudgetFriendlySection = () => {
     
     const detailUrl = `/stays/${stayId}`;
     
-    // 콘솔 출력
-    console.log('==========================================');
-    console.log('숙소 상세 페이지 이동 정보');
-    console.log('==========================================');
-    console.log('숙소 ID:', stayId);
-    console.log('숙소 이름:', item.name);
-    console.log('위치:', item.location);
-    console.log('가격:', item.price);
-    console.log('URL:', detailUrl);
-    console.log('==========================================');
-    
-    // 알림 표시
+    // 알림 표시 --> 차후 없애야함
     alert(
       `숙소 상세 페이지로 이동합니다.\n\n` +
       `숙소: ${item.name}\n` +
