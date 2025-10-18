@@ -1,13 +1,13 @@
-import React from 'react';
-import { useSurvey } from '@/hooks/survey/useSurvey';
-import { SURVEY_DATA } from '@/utils/survey/surveyData';
-import '@/assets/css/survey.css';
+import React from "react";
+import { useSurvey } from "@/hooks/survey/useSurvey";
+import { SURVEY_DATA } from "@/utils/survey/surveyData";
+import "@/assets/css/survey.css";
 const ProgressSteps = ({ currentStep }) => {
   const steps = [
-    { number: 1, label: '지역' },
-    { number: 2, label: '숙소' },
-    { number: 3, label: '음식' },
-    { number: 4, label: '액티비티' }
+    { number: 1, label: "지역" },
+    { number: 2, label: "숙소" },
+    { number: 3, label: "음식" },
+    { number: 4, label: "액티비티" },
   ];
 
   return (
@@ -15,19 +15,22 @@ const ProgressSteps = ({ currentStep }) => {
       <div className="progress-steps">
         {steps.map((step, index) => (
           <React.Fragment key={step.number}>
-            <div 
+            <div
               className={`step ${
-                step.number === currentStep ? 'active' : 
-                step.number < currentStep ? 'completed' : ''
+                step.number === currentStep
+                  ? "active"
+                  : step.number < currentStep
+                  ? "completed"
+                  : ""
               }`}
             >
               <div className="step-number">{step.number}</div>
               <div className="step-label">{step.label}</div>
             </div>
             {index < steps.length - 1 && (
-              <div 
+              <div
                 className={`progress-line ${
-                  step.number < currentStep ? 'completed' : ''
+                  step.number < currentStep ? "completed" : ""
                 }`}
               />
             )}
@@ -43,8 +46,8 @@ const ProgressSteps = ({ currentStep }) => {
 // ============================================================================
 const OptionCard = ({ value, image, label, isSelected, onClick }) => {
   return (
-    <div 
-      className={`option-card ${isSelected ? 'selected' : ''}`}
+    <div
+      className={`option-card ${isSelected ? "selected" : ""}`}
       data-value={value}
       onClick={() => onClick(value)}
     >
@@ -59,10 +62,17 @@ const OptionCard = ({ value, image, label, isSelected, onClick }) => {
 // ============================================================================
 // Option Row 컴포넌트 (리스트 형태 옵션 - 숙소용)
 // ============================================================================
-const OptionRow = ({ value, title, description, icon, isSelected, onClick }) => {
+const OptionRow = ({
+  value,
+  title,
+  description,
+  icon,
+  isSelected,
+  onClick,
+}) => {
   return (
-    <div 
-      className={`option-row ${isSelected ? 'selected' : ''}`}
+    <div
+      className={`option-row ${isSelected ? "selected" : ""}`}
       data-value={value}
       onClick={() => onClick(value)}
     >
@@ -82,7 +92,7 @@ const OptionRow = ({ value, title, description, icon, isSelected, onClick }) => 
 // ============================================================================
 const SurveyStep = ({ step, data, selections, onSelect, isActive }) => {
   const { question, subtitle, options, type } = data;
-  
+
   if (!isActive) return null;
 
   return (
@@ -92,7 +102,7 @@ const SurveyStep = ({ step, data, selections, onSelect, isActive }) => {
         <p className="question-subtitle">{subtitle}</p>
       </div>
 
-      {type === 'grid' ? (
+      {type === "grid" ? (
         <div className="options-grid">
           {options.map((option) => (
             <OptionCard
@@ -127,28 +137,24 @@ const SurveyStep = ({ step, data, selections, onSelect, isActive }) => {
 // ============================================================================
 // Survey Navigation 컴포넌트 (하단 버튼)
 // ============================================================================
-const SurveyNavigation = ({ 
-  currentStep, 
-  totalSteps, 
-  canGoNext, 
-  onPrev, 
-  onNext 
+const SurveyNavigation = ({
+  currentStep,
+  totalSteps,
+  canGoNext,
+  onPrev,
+  onNext,
 }) => {
   return (
     <footer className="button-container">
-      <button 
-        className="btn btn-prev" 
+      <button
+        className="btn btn-prev"
         onClick={onPrev}
         disabled={currentStep === 1}
       >
         이전
       </button>
-      <button 
-        className="btn btn-next" 
-        onClick={onNext}
-        disabled={!canGoNext}
-      >
-        {currentStep === totalSteps ? '완료' : '다음'}
+      <button className="btn btn-next" onClick={onNext} disabled={!canGoNext}>
+        {currentStep === totalSteps ? "완료" : "다음"}
       </button>
     </footer>
   );
@@ -168,7 +174,7 @@ const SurveyModal = ({ onClose, onComplete }) => {
     handleOptionSelect,
     handlePrevStep,
     handleNextStep,
-    handleComplete
+    handleComplete,
   } = useSurvey(onComplete);
 
   // 마운트 시 애니메이션 시작
@@ -177,7 +183,7 @@ const SurveyModal = ({ onClose, onComplete }) => {
     const timer = setTimeout(() => {
       setIsAnimating(true);
     }, 10);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -187,18 +193,46 @@ const SurveyModal = ({ onClose, onComplete }) => {
   // 현재 스텝의 선택 항목
   const getCurrentSelections = () => {
     switch (currentStep) {
-      case 1: return selections.regions;
-      case 2: return selections.stay;
-      case 3: return selections.foods;
-      case 4: return selections.activities;
-      default: return [];
+      case 1:
+        return selections.regions;
+      case 2:
+        return selections.stay;
+      case 3:
+        return selections.foods;
+      case 4:
+        return selections.activities;
+      default:
+        return [];
     }
   };
 
   // 닫기 버튼 클릭
   const handleClose = () => {
-    if (window.confirm('설문조사를 종료하시겠습니까? 입력한 내용이 사라집니다.')) {
-      onClose();
+    // 입력한 내용이 있는지 확인
+    const hasAnySelection =
+      selections.regions.length > 0 ||
+      selections.stay !== null ||
+      selections.foods.length > 0 ||
+      selections.activities.length > 0;
+
+    if (hasAnySelection) {
+      if (
+        window.confirm(
+          "설문조사를 종료하시겠습니까?\n입력한 내용이 사라집니다."
+        )
+      ) {
+        // 애니메이션 효과 적용
+        setIsAnimating(false);
+        setTimeout(() => {
+          onClose();
+        }, 300); // CSS transition 시간과 동일
+      }
+    } else {
+      // 아무것도 선택 안 했으면 애니메이션과 함께 바로 닫기
+      setIsAnimating(false);
+      setTimeout(() => {
+        onClose();
+      }, 300);
     }
   };
 
@@ -212,23 +246,23 @@ const SurveyModal = ({ onClose, onComplete }) => {
   };
 
   return (
-    <div 
-      className="modal-overlay" 
-      style={{ 
-        display: 'flex',
+    <div
+      className="modal-overlay"
+      style={{
+        display: "flex",
         opacity: isAnimating ? 1 : 0,
-        visibility: isAnimating ? 'visible' : 'hidden'
+        visibility: isAnimating ? "visible" : "hidden",
       }}
     >
-      <div 
+      <div
         className="modal-content survey-modal-container"
         style={{
-          transform: isAnimating ? 'scale(1)' : 'scale(0.8)'
+          transform: isAnimating ? "scale(1)" : "scale(0.8)",
         }}
       >
         {/* 닫기 버튼 */}
-        <button 
-          className="close-button" 
+        <button
+          className="close-button"
           onClick={handleClose}
           aria-label="닫기"
         >
@@ -236,9 +270,7 @@ const SurveyModal = ({ onClose, onComplete }) => {
         </button>
 
         {/* 진행률 표시 */}
-        <ProgressSteps 
-          currentStep={currentStep}
-        />
+        <ProgressSteps currentStep={currentStep} />
 
         {/* 설문 내용 */}
         <main className="survey-content">

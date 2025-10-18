@@ -127,7 +127,7 @@ export const SURVEY_DATA = [
         image: "/images/survey/survey-seafood.svg",
       },
       {
-        value: "고기류",
+        value: "고기",
         label: "고기류",
         image: "/images/survey/survey-meat.svg",
       },
@@ -158,7 +158,7 @@ export const SURVEY_DATA = [
         image: "/images/survey/survey-culturalexperience.svg",
       },
       {
-        value: "레저 스포츠",
+        value: "레포츠",
         label: "레저 스포츠",
         image: "/images/survey/survey-leisuresports.svg",
       },
@@ -177,9 +177,9 @@ export const SURVEY_DATA = [
         label: "사진",
         image: "/images/survey/survey-phototour.svg",
       },
-      { value: "휴식", label: "휴식", image: "/images/survey/survey-rest.svg" },
+      { value: "휴양", label: "휴식", image: "/images/survey/survey-rest.svg" },
       {
-        value: "축제/이벤트",
+        value: "축제",
         label: "축제/이벤트",
         image: "/images/survey/survey-festival.svg",
       },
@@ -242,26 +242,26 @@ export const formatSurveyData = (selections) => {
     // 1. 선호 지역 (1~5개, 순서대로 가중치 부여)
     preferred_regions: selections.regions.map((region, index) => ({
       region: region,
-      weight: 5 - index, // 첫 번째: 5, 두 번째: 4, ...
+      weight: parseFloat((1.0 - index * 0.2).toFixed(2)),
     })),
 
-    // 2. 숙박 유형 (1개, 고정 가중치 5)
+    // 2. 숙박 유형
     stay_type: {
       type: convertStayTypeToEnglish(selections.stay),
-      weight: 5,
+      weight: 1.0,
     },
 
     // 3. 음식 선호도 (2~5개, 순서와 가중치)
     food_preferences: selections.foods.map((food, index) => ({
       category: food,
-      weight: 5 - index,
+      weight: parseFloat((1.0 - index * 0.2).toFixed(2)),
       order: index + 1,
     })),
 
     // 4. 액티비티 선호도 (2~4개, 순서와 가중치)
     activity_preferences: selections.activities.map((activity, index) => ({
       activity: activity,
-      weight: 5 - index,
+      weight: parseFloat((1.0 - index * 0.2).toFixed(2)),
       order: index + 1,
     })),
   };

@@ -227,6 +227,13 @@
     box-shadow: 0 0 0 3px rgba(34, 172, 237, 0.1);
 }
 
+.login-page .login-box .modal-step .signup-form .form-group .form-text-invalid {
+    color: #FF0000;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
 .login-page .login-box .modal-step .form-group .email-verification button {
     padding: 12px 20px;
     background-color: #22ACED;
@@ -305,14 +312,18 @@
 @media (max-width: 480px) {
     .login-page .login-box .modal-step .email-verification {
         flex-direction: column;
-        gap: 8px;
-        align-items: stretch;
+        gap: 6px;
+        align-items: center;
     }
 
     .login-page .login-box .modal-step .email-verification button {
-        width: 100%;
-        height: 44px;
-        min-width: unset;
+        width: auto;
+        height: 40px;
+        min-width: 65px;
+        padding: 6px 10px;
+        font-size: 13px;
+        white-space: nowrap;
+        flex-shrink: 0;
     }
 
     .login-page .login-box .modal-step .timer-display {

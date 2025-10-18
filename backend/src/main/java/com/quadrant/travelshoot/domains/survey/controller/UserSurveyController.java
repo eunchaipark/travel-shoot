@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/survey")
+@RequestMapping("/api/signup-complete")
 @RequiredArgsConstructor
 public class UserSurveyController {
     
@@ -22,7 +22,7 @@ public class UserSurveyController {
     @PostMapping("/submit")
     public ResponseEntity<ApiResponse<SurveySubmitResponse>> submitSurvey(
             @Valid @RequestBody SurveySubmitRequest request,
-            @RequestParam(required = false, defaultValue = "1") Long userId
+            @SessionAttribute("userId") Long userId
     ) {
         log.info("설문조사 제출 API 호출 - userId: {}", userId);
         

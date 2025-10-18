@@ -24,24 +24,28 @@ public class UserSurveyPostServiceImpl implements UserSurveyPostService {
     @Override
     @Transactional
     public SurveySubmitResponse submitSurvey(Long userId, SurveySubmitRequest request) {
-        log.info("설문조사 제출 시작 - userId: {}", userId);
-        
         // 1. 중복 제출 확인
         if (userSurveyRepository.existsByUserId(userId)) {
             throw new CustomExceptions.SurveyAlreadyCompletedException("이미 설문조사를 완료하셨습니다.");
         }
-        
-        // 2. UserSurvey 메인 엔티티 생성
-        UserSurvey survey = UserSurvey.builder()
-                .userId(userId)
-                .stayType(UserSurvey.StayType.valueOf(request.getStayType().getType()))
-                .isCompleted(false)
-                .build();
+        UserSurvey survey;
+        try {
+            survey = UserSurvey.builder()
+                    .userId(userId)
+                    .stayType(UserSurvey.StayType.valueOf(request.getStayType().getType()))
+                    .isCompleted(false)
+                    .build();
+        } catch (IllegalArgumentException e) {
+            log.error("     StayType Enum 변환 실패!");
+            log.error("    받은 값: '{}'", request.getStayType().getType());
+            log.error("    에러 메시지: {}", e.getMessage());
+            throw new IllegalArgumentException("유효하지 않은 숙소 타입: " + request.getStayType().getType() + 
+                    " (가능한 값: PENSION, MOTEL, HOTEL)");
+        }
         
         // 3. 지역 선호도 추가
         for (int i = 0; i < request.getPreferredRegions().size(); i++) {
             SurveySubmitRequest.RegionPreference pref = request.getPreferredRegions().get(i);
-            
             UserSurveyRegion region = UserSurveyRegion.builder()
                     .regionName(pref.getRegion())
                     .rankOrder(i + 1)
@@ -53,24 +57,41 @@ public class UserSurveyPostServiceImpl implements UserSurveyPostService {
         
         // 4. 음식 선호도 추가
         for (SurveySubmitRequest.FoodPreference pref : request.getFoodPreferences()) {
-            UserSurveyFood food = UserSurveyFood.builder()
-                    .foodCategory(UserSurveyFood.FoodCategory.valueOf(pref.getCategory()))
-                    .preferenceOrder(pref.getOrder())
-                    .weight(BigDecimal.valueOf(pref.getWeight()))
-                    .build();
-            
-            survey.addFood(food);
+            try {
+                UserSurveyFood food = UserSurveyFood.builder()
+                        .foodCategory(UserSurveyFood.FoodCategory.valueOf(pref.getCategory()))
+                        .preferenceOrder(pref.getOrder())
+                        .weight(BigDecimal.valueOf(pref.getWeight()))
+                        .build();
+                
+                survey.addFood(food);
+            } catch (IllegalArgumentException e) {
+                log.error("     음식 Enum 변환 실패!");
+                log.error("    받은 값: '{}'", pref.getCategory());
+                log.error("    에러 메시지: {}", e.getMessage());
+                throw new IllegalArgumentException("유효하지 않은 음식 카테고리: " + pref.getCategory() + 
+                        " (가능한 값: 한식, 중식, 일식, 양식, 카페, 해산물, 고기, 디저트)");
+            }
         }
         
         // 5. 액티비티 선호도 추가
         for (SurveySubmitRequest.ActivityPreference pref : request.getActivityPreferences()) {
-            UserSurveyActivity activity = UserSurveyActivity.builder()
-                    .activityCategory(UserSurveyActivity.ActivityCategory.valueOf(pref.getActivity()))
-                    .preferenceOrder(pref.getOrder())
-                    .weight(BigDecimal.valueOf(pref.getWeight()))
-                    .build();
-            
-            survey.addActivity(activity);
+            log.info("    액티비티 변환 시도 - 받은 값: '{}'", pref.getActivity());
+            try {
+                UserSurveyActivity activity = UserSurveyActivity.builder()
+                        .activityCategory(UserSurveyActivity.ActivityCategory.valueOf(pref.getActivity()))
+                        .preferenceOrder(pref.getOrder())
+                        .weight(BigDecimal.valueOf(pref.getWeight()))
+                        .build();
+                
+                survey.addActivity(activity);
+            } catch (IllegalArgumentException e) {
+                log.error("     액티비티 Enum 변환 실패!");
+                log.error("    받은 값: '{}'", pref.getActivity());
+                log.error("    에러 메시지: {}", e.getMessage());
+                throw new IllegalArgumentException("유효하지 않은 액티비티 카테고리: " + pref.getActivity() + 
+                        " (가능한 값: 자연관광, 문화체험, 레포츠, 맛집탐방, 쇼핑, 사진, 휴양, 축제)");
+            }
         }
         
         // 6. 완료 처리
@@ -78,9 +99,6 @@ public class UserSurveyPostServiceImpl implements UserSurveyPostService {
         
         // 7. 저장
         UserSurvey savedSurvey = userSurveyRepository.save(survey);
-        
-        log.info("설문조사 제출 완료 - surveyId: {}, userId: {}", savedSurvey.getSurveyId(), userId);
-        
         return SurveySubmitResponse.builder()
                 .surveyId(savedSurvey.getSurveyId())
                 .userId(userId)
