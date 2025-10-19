@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Header from "@/components/layout/Header";
+import Header from "@/components/layout/CompleteHeader";
 import SurveyModal from "@/components/survey/SurveyModal";
 import "@/assets/css/common.css";
 import "@/assets/css/survey.css";
@@ -40,7 +40,7 @@ const SignupCompletePage = () => {
   return (
     <>
       {/* 헤더 컴포넌트 사용 */}
-      <Header />
+      <CompleteHeader />
 
       {/* Main Content */}
       <main>
