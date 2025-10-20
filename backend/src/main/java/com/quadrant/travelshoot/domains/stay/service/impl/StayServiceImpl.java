@@ -2,9 +2,11 @@ package com.quadrant.travelshoot.domains.stay.service.impl;
 
 import com.quadrant.travelshoot.domains.common.entity.FileUpload;
 import com.quadrant.travelshoot.domains.common.service.impl.FileUploadServiceImpl;
-import com.quadrant.travelshoot.domains.review.service.ReviewService;
+import com.quadrant.travelshoot.domains.review.repository.ReviewRepository;
 import com.quadrant.travelshoot.domains.review.service.impl.ReviewServiceImpl;
+import com.quadrant.travelshoot.domains.stay.dto.response.RoomFilterDto;
 import com.quadrant.travelshoot.domains.stay.dto.response.StayDetailResponse;
+import com.quadrant.travelshoot.domains.stay.dto.response.StayRatingResponse;
 import com.quadrant.travelshoot.domains.stay.entity.Room;
 import com.quadrant.travelshoot.domains.stay.entity.Stay;
 import com.quadrant.travelshoot.domains.stay.entity.StayAmenity;
@@ -48,7 +50,7 @@ public class StayServiceImpl implements StayService {
 
         // 조회수 증가 - 조회수 테이블 따로 있어서
 //        stayRepository.incrementViewCount(stayId);
-        String stayType = "숙소";
+        String referenceType = "STAY";
 
         // 최저가 minPrice 조회
         BigDecimal minPrice = findRoomMinPrice(stay.getRooms());
@@ -57,16 +59,22 @@ public class StayServiceImpl implements StayService {
         // 리뷰 개수 reviewCount
         stay.setReviewCount(reviewService.countReview(stayId));
 
-        // 숙소 평균평점 averageRating
+        // 숙소 평균평점 averageRating 저장
         stay.updateAverageRating(reviewService.getStayAverageRating(stayId)); // 엔티티 갱신
 
         // 편의시설 조회
         List<StayAmenity> stayAmenities = stayAmenityService.findByStayId(stayId);
         // 모든 이미지 조회
-        List<FileUpload> images = fileUploadService.findAllByReferenceTypeAndReferenceId(stayType, stayId);
+        List<FileUpload> images = fileUploadService.findAllByReferenceTypeAndReferenceId(referenceType, stayId);
         return stayMapper.toStayDetailResponse(stay, images, stayAmenities);
     }
 
+    /**
+     * 숙소 내 객실 조회
+     */
+    public List<RoomFilterDto> getRoomFilters(Long stayId){
+        return roomRepository.findByStayId(stayId);
+    }
 
     /**
      * 최저가 구하는 메서드
@@ -83,5 +91,17 @@ public class StayServiceImpl implements StayService {
     public Stay getById(Long stayId) {
         return stayRepository.findById(stayId)
                 .orElseThrow(() -> new IllegalArgumentException("숙소 정보를 찾을 수 없습니다."));
+    }
+
+    /**
+     * 숙소 리뷰 별점 7개 조회
+     */
+    private final ReviewRepository reviewRepository;
+    public StayRatingResponse getStayRating(Long stayId) {
+
+        StayRatingResponse stayRatingResponse = reviewRepository.findStayRatingByStayId(stayId);
+        System.out.println("stayRatingResponse : " + stayRatingResponse);
+
+        return stayRatingResponse;
     }
 }

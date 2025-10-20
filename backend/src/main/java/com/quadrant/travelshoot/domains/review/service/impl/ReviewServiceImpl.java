@@ -1,5 +1,7 @@
 package com.quadrant.travelshoot.domains.review.service.impl;
 
+import com.quadrant.travelshoot.domains.common.entity.FileUpload;
+import com.quadrant.travelshoot.domains.common.repository.FileUploadRepository;
 import com.quadrant.travelshoot.domains.review.dto.request.ReviewRegistRequest;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewDetailResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewListResponse;
@@ -10,6 +12,7 @@ import com.quadrant.travelshoot.domains.review.mapper.ReviewMapper;
 import com.quadrant.travelshoot.domains.review.repository.ReviewRepository;
 import com.quadrant.travelshoot.domains.reservation.repository.ReservationRepository;
 import com.quadrant.travelshoot.domains.review.service.ReviewService;
+import com.quadrant.travelshoot.domains.stay.dto.response.StayRatingResponse;
 import com.quadrant.travelshoot.domains.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -24,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -173,9 +178,6 @@ public class ReviewServiceImpl implements ReviewService {
         log.info("숙박시설 리뷰 페이징 조회 - stayId: {}, roomId : {}, page: {}, size: {}, sortBy: {}",
                 stayId, roomId, page, size, sortBy);
 
-        // 숙소에 6개 평점 추가 안하면 ? - 리뷰의 평점 불러온 다음 그걸로 계산해서 dto에 세팅해서 보여주어야 함
-        // 숙소에 6개 평점 추가 하면 ? - 추가 하면 계산한 다음 저장할 수 있긴 한데, 어차피 다음 번에 리뷰 갱신 전 이력을 안 불러와도 됨
-
         // pageable
         Pageable pageable = createPageable(page, size, sortBy);
 
@@ -192,10 +194,9 @@ public class ReviewServiceImpl implements ReviewService {
         return ReviewPageResponse.of(responsePage);
     }
 
-
     /**
      * 숙소에 따른 리뷰 개수
-     * 만약 리뷰 개수가 2,147,483,647 (Integer 최대값)보다 많아지면 오버플로우 발생
+     * 만약 리뷰 개수가 2,147,483,647(Integer 최대값)보다 많아지면 오버플로우 발생
      */
     public Integer countReview(Long stayId){
         return Math.toIntExact(reviewRepository.countByStayId(stayId));
@@ -207,16 +208,15 @@ public class ReviewServiceImpl implements ReviewService {
      * 2. 조회한 값을 숙소 엔티티에 setAverageRating(1번)
      * 3. 그거를 리뷰 cud에 호출
      */
-
     public BigDecimal getStayAverageRating(Long stayId){
         Double totalRating = reviewRepository.findAverageByStayId(stayId);
 
         if(totalRating == null){
             totalRating = 0.0;
         }
-
         return BigDecimal.valueOf(totalRating).setScale(2, RoundingMode.HALF_UP); // 2자리까지
     }
+
 
     /**
      * Pageable 객체 생성
@@ -248,8 +248,26 @@ public class ReviewServiceImpl implements ReviewService {
                 sort = Sort.by(Sort.Direction.DESC, "createdAt");
                 break;
         }
-
         return PageRequest.of(page, size, sort);
+    }
+
+    /**
+     * 리뷰 이미지 목록
+     * @param stayId
+     * @return
+     */
+    private final FileUploadRepository fileUploadRepository;
+    public List<String> getReviewImagesUrl(Long stayId) {
+        // stayId로 모든 review의 id를 조회
+        List<Long> reviewIds = reviewRepository.findIdsByStayId(stayId);
+
+        // 각 review마다 이미지 조회
+        return reviewIds.stream()
+            .flatMap(reviewId -> fileUploadRepository
+                    .findAllByReferenceTypeAndReferenceId("REVIEW", reviewId)
+                    .stream()
+                    .map(FileUpload::getS3Url))
+            .collect(Collectors.toList());
     }
 
 }

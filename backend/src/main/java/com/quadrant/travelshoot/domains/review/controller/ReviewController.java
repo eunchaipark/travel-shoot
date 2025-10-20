@@ -15,6 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/reviews")
@@ -66,9 +68,6 @@ public class ReviewController {
         return ResponseEntity.ok(ApiResponse.success("리뷰 수정 성공", response));
     }
 
-
-
-
     /**
      * 리뷰 삭제
      * @param userId 현재 로그인한 사용자 ID
@@ -111,7 +110,7 @@ public class ReviewController {
      * @param sortBy 정렬 기준 (latest: 최신순, rating_desc: 별점높은순, rating_asc: 별점낮은순, 기본값: latest)
      * @return 페이징된 리뷰 목록
      */
-    @GetMapping("/stay/{stayId}/paging")
+    @GetMapping("/stays/{stayId}/paging")
     public ResponseEntity<ReviewPageResponse<?>> getReviewsWithPaging(
             @PathVariable Long stayId,
             @RequestParam(required = false) Long roomId,
@@ -124,6 +123,15 @@ public class ReviewController {
 
         ReviewPageResponse<ReviewListResponse> reviewsPage = reviewService.getReviewsWithPaging(stayId, roomId ,page, size, sortBy);
         return ResponseEntity.ok().body(reviewsPage);
+    }
+
+    /**
+     * 리뷰 이미지 목록 조회
+     */
+    @GetMapping("/{stayId}/review-images")
+    public ResponseEntity<List<String>> getReviewImages(@PathVariable Long stayId) {
+        List<String> imageUrls = reviewService.getReviewImagesUrl(stayId);
+        return ResponseEntity.ok(imageUrls);
     }
 
 
