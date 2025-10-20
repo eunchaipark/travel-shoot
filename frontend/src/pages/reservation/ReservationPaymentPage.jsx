@@ -7,6 +7,7 @@ import { reservationFormatters } from '@/utils/formatters/reservationFormatters'
 import CompleteHeader from "@/components/layout/CompleteHeader";
 import '@/assets/css/common.css';
 import '@/assets/css/reservation-payment.css';
+import PaymentLoading from "@/components/loading/PaymentLoading";
 
 const ReservationPaymentPage = () => {
     const [searchParams] = useSearchParams();
@@ -19,7 +20,7 @@ const ReservationPaymentPage = () => {
 
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState({ title: '', content: '' });
-
+    const [isPaymentLoading, setIsPaymentLoading] = useState(false); //결제로딩 추가
 
     // URL 파라미터
     const roomId = parseInt(searchParams.get('roomId') || '1');
@@ -135,11 +136,21 @@ const ReservationPaymentPage = () => {
         }
 
         // 5. 모든 검증 통과 시 예약 진행
-        const result = await createReservation(formData);
+        try {
+            setIsPaymentLoading(true); // 로딩 시작
 
-        // 예약 성공 시 완료 페이지로 이동
-        if (result && result.success) {
-            navigate('/payment-complete');
+            const result = await createReservation(formData);
+
+            if (result && result.success) {
+                navigate("/payment-complete");
+            } else {
+                alert("결제 처리 중 오류가 발생했습니다.");
+            }
+        } catch (error) {
+            console.error(error);
+            alert("결제 처리 중 문제가 발생했습니다.");
+        } finally {
+            setIsPaymentLoading(false); // 로딩 종료
         }
     };
 
@@ -581,6 +592,8 @@ const ReservationPaymentPage = () => {
             </div>
         </main>
 
+            {isPaymentLoading && <PaymentLoading message="결제 처리 중입니다..." />}
+
             {/*모달 모달 ~ */}
             {showModal && (
                 <div
@@ -634,6 +647,8 @@ const ReservationPaymentPage = () => {
                     </div>
                 </div>
             )}
+
+
         </>
     );
 };
