@@ -104,11 +104,23 @@ export const useReservation = (roomId, checkInDate, checkOutDate, guestCount, sk
                 ...formData,
             };
 
+            // 가짜 결제 처리 (2초 지연)
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+
             // 예약 처리
             const result = await reservationApiService.processReservation(reservationData);
 
-            alert('예약이 완료되었습니다!');
-            navigate(`/reservation/complete/${result.reservationId}`);
+            // alert('예약이 완료되었습니다!');
+            // navigate(`/reservation/complete/${result.reservationId}`);
+
+            // 성공 반환
+            return {
+                success: true,
+                reservationId: result.reservationId
+            };
+
+
         } catch (err) {
             alert(err.message || '예약에 실패했습니다.');
             console.error(err);

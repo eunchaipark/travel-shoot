@@ -28,6 +28,13 @@ const ReservationPaymentPage = () => {
     const guestCount = parseInt(searchParams.get('guestCount') || '2');
 
     useEffect(() => {
+        // 이미 한 번 이 페이지에 정상 진입했다면 체크 스킵
+        const hasEnteredPage = sessionStorage.getItem('reservationPageEntered');
+
+        if (hasEnteredPage === 'true') {
+            return; // 새로고침이므로 아무것도 안 함
+        }
+
         // 이미 체크했으면 스킵
         if (hasCheckedAuth.current) {
             return;
@@ -35,8 +42,9 @@ const ReservationPaymentPage = () => {
 
         hasCheckedAuth.current = true; // 체크 완료 표시
 
-        // 로그인이 되어 있으면 아무것도 없이 그냥 예약 페이지로 넘어가고
+        // 로그인이 되어 있으면 페이지 진입 완료 표시하고 리턴
         if (isAuthenticated) {
+            sessionStorage.setItem('reservationPageEntered', 'true');
             return;
         }
 
@@ -90,7 +98,7 @@ const ReservationPaymentPage = () => {
         isAllAgreed
     } = useReservationForm();
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         // 1. 이름 입력 확인
         if (!formData.guestName || formData.guestName.trim() === '') {
             alert('이용자 이름을 입력해주세요.');
@@ -127,7 +135,12 @@ const ReservationPaymentPage = () => {
         }
 
         // 5. 모든 검증 통과 시 예약 진행
-        createReservation(formData);
+        const result = await createReservation(formData);
+
+        // 예약 성공 시 완료 페이지로 이동
+        if (result && result.success) {
+            navigate('/payment-complete');
+        }
     };
 
     const openModal = (type) => {
