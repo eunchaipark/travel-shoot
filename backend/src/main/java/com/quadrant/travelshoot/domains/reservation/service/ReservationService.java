@@ -37,4 +37,8 @@ public interface ReservationService {
     List<ReservationResponse> getReviewTargetReservations(Long userId);
 
     Reservation getById(Long reservationId);
+
+    List<Reservation> getRecentCompletedReservations(Long userId, int limit);
+
+    int getCompletedReservationCount(Long userId);
 }

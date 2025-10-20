@@ -84,4 +84,35 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
                "ORDER BY r.check_in_date ASC, tc.course_id, cs.day, cs.spot_order",
         nativeQuery = true)
         List<Object[]> findReservationsWithCoursesByUserId(@Param("userId") Long userId);
+
+
+        //개인 추천화 섹션
+
+        // 완료된 예약 조회 (예약확정 + 이용완료)
+        @Query("""
+                SELECT DISTINCT r FROM Reservation r
+                JOIN FETCH r.room room
+                JOIN FETCH room.stay stay
+                WHERE r.userId = :userId
+                AND r.reservationStatus IN ('예약확정', '이용완료')
+                ORDER BY r.checkOutDate DESC
+        """)
+    List<Reservation> findCompletedReservations(@Param("userId") Long userId);       
+
+
+
+    // 개인화 추천 AI
+    @Query("SELECT r FROM Reservation r " +
+        "WHERE r.userId = :userId " +
+        "AND r.reservationStatus IN ('예약확정', '이용완료') " +
+        "ORDER BY r.checkInDate DESC")
+        List<Reservation> findRecentCompletedReservations(
+        @Param("userId") Long userId, 
+        @Param("limit") int limit
+        );
+
+    @Query("SELECT COUNT(r) FROM Reservation r " +
+       "WHERE r.userId = :userId " +
+       "AND r.reservationStatus IN ('예약확정', '이용완료')")
+        int countCompletedReservations(@Param("userId") Long userId);  
 }

@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface UserSurveyService {
     Optional<UserSurvey> getByUserId(Long userId);
+
+    Optional<UserSurvey> findByUserIdWithDetails(Long userId);
 }
