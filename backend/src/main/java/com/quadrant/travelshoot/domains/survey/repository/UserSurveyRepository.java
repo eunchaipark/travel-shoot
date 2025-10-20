@@ -23,4 +23,12 @@ public interface UserSurveyRepository extends JpaRepository<UserSurvey, Long> {
     @Query("SELECT us FROM UserSurvey us " +
             "WHERE us.userId = :userId AND us.isCompleted = true")
     Optional<UserSurvey> findCompletedSurveyByUserId(@Param("userId") Long userId);
+
+    // 실존하는 ID인가 검증
+    boolean existsByUserId(Long userId);
+
+    @Query("SELECT DISTINCT s FROM UserSurvey s " +
+           "LEFT JOIN FETCH s.regions " +
+           "WHERE s.userId = :userId")
+    Optional<UserSurvey> findByUserIdWithDetails(@Param("userId") Long userId);
 }

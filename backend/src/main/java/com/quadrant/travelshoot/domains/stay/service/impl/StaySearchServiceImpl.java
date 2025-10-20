@@ -318,9 +318,10 @@ public class StaySearchServiceImpl implements StaySearchService {
             throw new IllegalArgumentException("체크인/체크아웃 날짜는 필수입니다.");
         }
 
-        if (checkIn.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("체크인 날짜는 오늘 이후여야 합니다.");
-        }
+        //TODO : 체크인 오늘도 가능하게 하기로 한거 까먹었음... ㅜㅠ
+//        if (checkIn.isBefore(LocalDate.now())) {
+//            throw new IllegalArgumentException("체크인 날짜는 오늘 이후여야 합니다.");
+//        }
 
         if (checkOut.isBefore(checkIn.plusDays(1))) {
             throw new IllegalArgumentException("체크아웃은 체크인 다음 날 이후여야 합니다.");

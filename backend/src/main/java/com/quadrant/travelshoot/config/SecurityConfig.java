@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +24,12 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .formLogin(login -> login.disable())
             .httpBasic(basic -> basic.disable())
+            .sessionManagement(session -> session
+                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // 필요시 세션 생성
+                    .maximumSessions(1)  // 동시 로그인 1개만 허용
+            )
+
+
             .authorizeHttpRequests(auth -> auth
 //                  //여기 아래에 추가하면 됩니다요
 //                .requestMatchers("/api/auth/**", "/api/survey/**" ,"/api/search/**" ).permitAll()

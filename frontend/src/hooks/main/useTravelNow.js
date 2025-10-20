@@ -1,6 +1,6 @@
 /**
- * Budget Slider 커스텀 훅
- * 경로: C:\ITStudy\dev\travel-shoot\frontend\src\hooks\useBudgetSlider.js
+ * Travel Now 커스텀 훅
+ * 경로: C:\ITStudy\dev\travel-shoot\frontend\src\hooks\useTravelNow.js
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
@@ -8,60 +8,61 @@ import {
   calculateResponsiveConfig,
   calculateTotalSlides,
   handleTouchGesture
-} from '../utils/main/budgetUtils';
+} from '@/utils/main/travelNowUtils';
 
-export const useBudgetSlider = (data) => {
+export const useTravelNow = () => {
+  // 원본의 전역 변수와 동일
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [itemsPerSlide, setItemsPerSlide] = useState(3);
-  const [showIndicators, setShowIndicators] = useState(false);
+  const [cardsPerSlide, setCardsPerSlide] = useState(4);
   const [isDragging, setIsDragging] = useState(false);
   
   const touchStartRef = useRef({ x: 0, y: 0 });
   const touchCurrentRef = useRef({ x: 0, y: 0 });
-  const hasMoved = useRef(false); // 실제로 움직였는지 추적
+  const hasMoved = useRef(false);
 
-  const totalSlides = calculateTotalSlides(data.length, itemsPerSlide);
+  const totalSlides = calculateTotalSlides(cardsPerSlide);
 
-  // 반응형 설정 업데이트
-  const updateResponsiveConfig = useCallback(() => {
+  // 화면 크기별 카드 개수 설정 (원본의 updateCardsPerSlide)
+  const updateCardsPerSlide = useCallback(() => {
     const width = window.innerWidth;
-    const prevItems = itemsPerSlide;
+    const prevCards = cardsPerSlide;
     const config = calculateResponsiveConfig(width);
     
-    setItemsPerSlide(config.itemsPerSlide);
-    setShowIndicators(config.showIndicators);
+    setCardsPerSlide(config.cardsPerSlide);
     
-    const newTotalSlides = calculateTotalSlides(data.length, config.itemsPerSlide);
+    const newTotalSlides = calculateTotalSlides(config.cardsPerSlide);
     
     // 현재 슬라이드가 범위를 벗어나면 조정
     if (currentSlide >= newTotalSlides) {
       setCurrentSlide(Math.max(0, newTotalSlides - 1));
     }
     
-    // itemsPerSlide가 변경되었을 때만 재렌더링 트리거
-    return prevItems !== config.itemsPerSlide;
-  }, [data.length, itemsPerSlide, currentSlide]);
+    // 원본의 console.log
+    console.log(`화면 크기: ${width}px, 카드 개수: ${config.cardsPerSlide}개, 총 슬라이드: ${newTotalSlides}개`);
+    
+    // 카드 개수가 변경되었으면 재렌더링 트리거
+    return prevCards !== config.cardsPerSlide;
+  }, [cardsPerSlide, currentSlide]);
 
-  // 슬라이드 이동
+  // 슬라이드 제어 (원본의 goToSlide, prevSlide, nextSlide)
   const goToSlide = useCallback((index) => {
-    if (index >= 0 && index < totalSlides) {
-      setCurrentSlide(index);
-    }
+    if (index < 0 || index >= totalSlides) return;
+    setCurrentSlide(index);
   }, [totalSlides]);
-
-  const nextSlide = useCallback(() => {
-    if (currentSlide < totalSlides - 1) {
-      setCurrentSlide(prev => prev + 1);
-    }
-  }, [currentSlide, totalSlides]);
 
   const prevSlide = useCallback(() => {
     if (currentSlide > 0) {
-      setCurrentSlide(prev => prev - 1);
+      goToSlide(currentSlide - 1);
     }
-  }, [currentSlide]);
+  }, [currentSlide, goToSlide]);
 
-  // 터치 이벤트 핸들러
+  const nextSlide = useCallback(() => {
+    if (currentSlide < totalSlides - 1) {
+      goToSlide(currentSlide + 1);
+    }
+  }, [currentSlide, totalSlides, goToSlide]);
+
+  // 터치 이벤트 핸들러 (원본의 setupTouchEvents)
   const handleTouchStart = useCallback((e) => {
     touchStartRef.current = {
       x: e.touches[0].clientX,
@@ -71,7 +72,7 @@ export const useBudgetSlider = (data) => {
       x: e.touches[0].clientX,
       y: e.touches[0].clientY
     };
-    hasMoved.current = false; // 리셋
+    hasMoved.current = false;
     setIsDragging(true);
   }, []);
 
@@ -92,9 +93,7 @@ export const useBudgetSlider = (data) => {
     }
     
     // 가로 스와이프가 세로 스크롤보다 크면 스크롤 방지
-    // passive 경고를 피하기 위해 조건 체크만 수행
     if (diffX > diffY && diffX > 10) {
-      // preventDefault는 컴포넌트에서 non-passive로 설정 필요
       hasMoved.current = true;
     }
   }, [isDragging]);
@@ -119,30 +118,32 @@ export const useBudgetSlider = (data) => {
     hasMoved.current = false;
   }, [isDragging, nextSlide, prevSlide]);
 
-  // 윈도우 리사이즈 이벤트
+  // 초기화 및 리사이즈 이벤트 (원본의 handleResize)
   useEffect(() => {
-    updateResponsiveConfig();
-    window.addEventListener('resize', updateResponsiveConfig);
+    updateCardsPerSlide();
+    
+    const handleResize = () => {
+      updateCardsPerSlide();
+    };
+    
+    window.addEventListener('resize', handleResize);
     
     return () => {
-      window.removeEventListener('resize', updateResponsiveConfig);
+      window.removeEventListener('resize', handleResize);
     };
-  }, [updateResponsiveConfig]);
+  }, [updateCardsPerSlide]);
 
   return {
     currentSlide,
-    itemsPerSlide,
+    cardsPerSlide,
     totalSlides,
-    showIndicators,
-    isDragging,
     goToSlide,
-    nextSlide,
     prevSlide,
+    nextSlide,
     handleTouchStart,
     handleTouchMove,
     handleTouchEnd,
     canGoPrev: currentSlide > 0,
-    canGoNext: currentSlide < totalSlides - 1,
-    hasMoved: hasMoved.current // 카드 클릭 판단용
+    canGoNext: currentSlide < totalSlides - 1
   };
 };

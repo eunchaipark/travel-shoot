@@ -4,9 +4,10 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useTravelNow } from '../hooks/useTravelNow';
-import { getSlideData, formatCount } from '../utils/main/travelNowUtils';
-import { fetchTravelNow } from "../services/travelNowApiService";
+import { useTravelNow } from '@/hooks/main/useTravelNow';
+import { getSlideData, formatCount } from '@/utils/main/travelNowUtils';
+import { fetchTravelNow } from "@/services/main/travelNowApiService";
+//import { useNavigate } from 'react-router-dom'; 백엔드 구현후 사용 예정
 
 // ============================================================================
 // Travel Now Card 컴포넌트
@@ -204,6 +205,7 @@ const TravelNowSlider = ({ onCardClick, destinations }) => {
 // Travel Now Section 컴포넌트 (메인)
 // ============================================================================
 const TravelNowSection = () => {
+  // const navigate = useNavigate(); 백엔드 구현후 사용예정
   const sliderRef = useRef(null);
   const [destinations, setDestinations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -232,12 +234,45 @@ const TravelNowSection = () => {
   const handleCardClick = (destination) => {
     console.log('선택된 여행지:', destination);
     
-    // 검색창에 지역명 입력
-    const input = document.querySelector('.main-calendar-location-input');
-    if (input) {
-      input.value = destination.name;
-      input.focus();
-    }
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const dayAfterTomorrow = new Date(tomorrow);
+    dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 1);
+    
+    const formatDate = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+    
+    const checkIn = formatDate(tomorrow);
+    const checkOut = formatDate(dayAfterTomorrow);
+    
+    const params = new URLSearchParams({
+      region: destination.name,
+      checkIn: checkIn,
+      checkOut: checkOut,
+      adults: 2,
+      children: 0
+    });
+    
+    const searchUrl = `/search?${params.toString()}`;
+
+    // 알림 표시
+    alert(
+      `검색 페이지로 이동합니다.\n\n` +
+      `지역: ${destination.name}\n` +
+      `체크인: ${checkIn}\n` +
+      `체크아웃: ${checkOut} (1박 2일)\n` +
+      `성인: 2명\n` +
+      `어린이: 0명\n\n` +
+      `이동 URL:\n${searchUrl}`
+    );
+    
+    // 백엔드 구현 후 주석 해제
+    // navigate(searchUrl);
   };
 
   // 전역 API 제공

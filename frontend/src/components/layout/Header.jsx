@@ -1,5 +1,9 @@
 import React, {useState, useRef, useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from 'react-router-dom';
+// import { useAuth } from '@/hooks/auth/useAuth'
+import { useAuth } from '@/components/context/AuthContext'
+
 
 const Header = () => {
     const [searchValue, setSearchValue] = useState('SL 호텔 강릉');
@@ -8,6 +12,12 @@ const Header = () => {
     const [showGuestDropdown, setShowGuestDropdown] = useState(false);
     const [adultCount, setAdultCount] = useState(2);
     const [childCount, setChildCount] = useState(0);
+
+    const { isAuthenticated, openLoginModal } = useAuth();
+    const navigate = useNavigate();
+
+    // TODO : 디버깅할라고 추가함( 지워도 됨 )
+    console.log('Header - isAuthenticated:', isAuthenticated);
 
     const searchInputRef = useRef(null);
     const suggestionsRef = useRef(null);
@@ -67,6 +77,15 @@ const Header = () => {
             displayText += `, 어린이 ${childCount}명`;
         }
         return displayText;
+    };
+
+    //TODO : 로그인 완료 상태면 마이페이지로
+    const handleUserIconClick = () => {
+        if (isAuthenticated) {
+            navigate('/mypage');
+        } else {
+            openLoginModal();
+        }
     };
 
     return (
@@ -224,7 +243,7 @@ const Header = () => {
                                 <button className="icon-button">
                                     <div className="search-icon"></div>
                                 </button>
-                                <button className="icon-button">
+                                <button className="icon-button" onClick={handleUserIconClick} >
                                     <div className="user-white-icon"></div>
                                 </button>
                                 <button className="icon-button">

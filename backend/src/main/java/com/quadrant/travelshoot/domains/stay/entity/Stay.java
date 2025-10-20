@@ -112,6 +112,11 @@ public class Stay {
         this.minPrice = minPrice;
     }
 
+    public void updateAverageRating(BigDecimal averageRating) {
+        this.averageRating = averageRating;
+        System.out.println("Stay 안의 updateAverageRating 메서드 호출");
+    }
+
     public void setMainImageUrl(String mainImageUrl) {
         this.mainImageUrl = mainImageUrl;
     }
