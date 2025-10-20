@@ -4,13 +4,14 @@ import * as authApi from '@/services/auth/authApiService';
 export const useAuth = () => {
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
-    // 페이지 로드 시 세션 확인!!!!!!!
-    useEffect(() => {
-        const checkSession = async () => {
+
+        // 예약할때도 세션 확인할라고 외부에서도 호출 가능하게 수정
+        const checkSession =  useCallback(async () => {
             try {
                 const response = await fetch('http://localhost:8080/api/auth/session', {
                     credentials: 'include'  // 쿠키 포함해서 보내기
@@ -28,17 +29,43 @@ export const useAuth = () => {
                     setIsAuthenticated(true);
 
                     console.log('로그인 상태 복원:', userData.email);
+                    return true;
                 } else {
+                    setUser(null);
+                    setIsAuthenticated(false);
                     // 세션 없음 (로그인 안됨)
                     console.log('세션 없음');
+                    return false;
                 }
             } catch (error) {
                 console.log('세션 확인 실패:', error);
+                setUser(null);
+                setIsAuthenticated(false);
+                return false;
+            } finally {
+                setLoading(false);
             }
-        };
+        }, []);
 
+    //페이지 로드 시 세션 확인
+    useEffect(() => {
         checkSession();
+    }, [checkSession]);
+
+    // 로그인 모달 열기
+    const openLoginModal = useCallback(() => {
+        console.log('로그인 모달 열기');
+        setIsLoginModalOpen(true);
     }, []);
+
+    //로그인 모달 닫기
+    const closeLoginModal = useCallback(async () => {
+        console.log(' fh그인 모달 닫기');
+        setIsLoginModalOpen(false);
+
+        await checkSession(); // 모달 닫을때 또 확인
+    }, [checkSession]);
+
 
     //이메일 인증코드 발송하기
     const sendVerificationCode = useCallback(async (email) => {
@@ -114,16 +141,7 @@ export const useAuth = () => {
         try {
             const response = await authApi.login(loginData);
 
-            // 로그인 성공 시 사용자 정보 저장
-            setUser({
-                userId: response.userId,
-                email: response.email,
-                userName: response.userName,
-            });
-            setIsAuthenticated(true);
-
-            console.log('로그인 완료:', response.email);  // TODO : 디버깅용
-            console.log('isAuthenticated 설정:', true);   // TODO : 디버깅
+            await checkSession(); //세션 확인하고
 
             return {
                 success: true,
@@ -138,7 +156,7 @@ export const useAuth = () => {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [checkSession]);
 
     // 비밀번호 재설정 요청하기
     const requestPasswordReset = useCallback(async (email) => {
@@ -204,6 +222,7 @@ export const useAuth = () => {
         isAuthenticated,
         loading,
         error,
+        isLoginModalOpen,
 
         // 함수
         sendVerificationCode,
@@ -214,5 +233,8 @@ export const useAuth = () => {
         resetPassword,
         logout,
         clearError,
+        openLoginModal,
+        closeLoginModal,
+        checkSession,
     };
 };
