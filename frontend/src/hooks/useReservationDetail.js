@@ -4,7 +4,7 @@
  * @returns {Object} 예약 데이터, 코스 데이터, 로딩 상태, 에러
  */
 import { useState, useEffect } from 'react';
-import { fetchReservationDetail } from '@/services/reservation/reservationApiService';
+import { fetchReservationDetail } from '@/services/reservation/reservationDetailApiService';
 import { fetchCourseData } from '@/services/reservation/courseApiService';
 export const useReservationDetail = (reservationId) => {
     const [reservationData, setReservationData] = useState(null);
