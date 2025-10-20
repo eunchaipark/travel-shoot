@@ -4,6 +4,7 @@ import { useAuth } from '@/components/context/AuthContext';
 import { useReservation } from '@/hooks/reservation/useReservation';
 import { useReservationForm } from '@/hooks/reservation/useReservationForm';
 import { reservationFormatters } from '@/utils/formatters/reservationFormatters';
+import CompleteHeader from "@/components/layout/CompleteHeader";
 import '@/assets/css/common.css';
 import '@/assets/css/reservation-payment.css';
 
@@ -114,6 +115,9 @@ const ReservationPaymentPage = () => {
 
 
     return (
+        <>
+            <CompleteHeader />
+
         <main>
             <div className="container payment-page">
                 <div className="row">
@@ -130,15 +134,15 @@ const ReservationPaymentPage = () => {
                                     <div className="stay-image-wrapper">
                                         <img
                                             className="stay-img"
-                                            src={initData?.stay?.mainImage || "/img/payment_hotel_imgae.jpg"}
-                                            alt={initData?.stay?.name}
+                                            src={initData?.mainImageUrl || "/img/payment_hotel_imgae.jpg"}
+                                            alt={initData?.stayName}
                                         />
                                     </div>
                                     <div className="stay-info flex-fill lodging-info">
-                                        <div className="stay-name mb-1">{initData?.stay?.name}</div>
+                                        <div className="stay-name mb-1">{initData?.stayName}</div>
                                         <div className="stay-location text-muted small mb-3">
                                             <img className="location_icon me-1" src="/img/payment_location_icon.svg" alt="위치" />
-                                            {initData?.stay?.address}
+                                            {initData?.address}
                                         </div>
 
                                         <div className="checkin-checkout mb-3">
@@ -146,7 +150,7 @@ const ReservationPaymentPage = () => {
                                                 <div className="col-5">
                                                     <div className="mb-1">체크인</div>
                                                     <div className="fw-bold">{reservationFormatters.formatDate(checkInDate)}</div>
-                                                    <div className="fw-bold">{initData?.stay?.checkInTime || '15:00'}</div>
+                                                    <div className="fw-bold">{initData?.checkInTime || '15:00'}</div>
                                                 </div>
                                                 <div className="col-2 reservation-detail-arrow-con">
                                                     <div className="reservation-detail-arrow"></div>
@@ -154,7 +158,7 @@ const ReservationPaymentPage = () => {
                                                 <div className="col-5">
                                                     <div className="mb-1">체크아웃</div>
                                                     <div className="fw-bold">{reservationFormatters.formatDate(checkOutDate)}</div>
-                                                    <div className="fw-bold">{initData?.stay?.checkOutTime || '11:00'}</div>
+                                                    <div className="fw-bold">{initData?.checkOutTime || '11:00'}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -490,6 +494,7 @@ const ReservationPaymentPage = () => {
                 </div>
             </div>
         </main>
+        </>
     );
 };
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Header from "@/components/layout/CompleteHeader";
+import CompleteHeader from "@/components/layout/CompleteHeader";
 import SurveyModal from "@/components/survey/SurveyModal";
 import "@/assets/css/common.css";
 import "@/assets/css/survey.css";
