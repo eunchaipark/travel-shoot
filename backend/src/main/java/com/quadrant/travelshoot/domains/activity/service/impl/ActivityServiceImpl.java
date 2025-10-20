@@ -45,4 +45,15 @@ public class ActivityServiceImpl implements ActivityService {
                 .orElseThrow(() -> new IllegalArgumentException(
                         "관광지 정보를 찾을 수 없습니다. ID: " + activityId));
     }
+
+    @Override
+    public Activity findByNameAndCoordinates(String name, BigDecimal latitude, BigDecimal longitude) {
+        return activityRepository.findByNameAndCoordinates(name, latitude, longitude).orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public Activity save(Activity activity) {
+        return activityRepository.save(activity);
+    }
 }
