@@ -8,7 +8,8 @@ function StayDetailPage() {
 
     // 테스트용 예약하기
     const handleReservation = () => {
-        navigate('/reservation/payment?roomId=3&checkInDate=2025-10-20&checkOutDate=2025-10-23&guestCount=2');
+        navigate('/reservation/payment?roomId=3&checkInDate=2025-10-21&checkOutDate=2025-10-23&guestCount=2');
+
     };
 
     return (

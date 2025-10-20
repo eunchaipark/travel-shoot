@@ -7,7 +7,7 @@ import reservationValidationService from '@/services/reservation/reservationVali
 //예약 메인 로직 훅
 export const useReservation = (roomId, checkInDate, checkOutDate, guestCount, skipAuthCheck = false) => {
     const navigate = useNavigate();
-    const { openLoginModal } = useAuth(); //AuthContext에서 openLoginModal 가져오기
+    const { openLoginModal, isAuthenticated } = useAuth(); //AuthContext에서 openLoginModal 가져오기
 
     const [initData, setInitData] = useState(null);
     const [priceData, setPriceData] = useState(null);
@@ -77,7 +77,7 @@ export const useReservation = (roomId, checkInDate, checkOutDate, guestCount, sk
     const createReservation = async (formData) => {
         try {
             // 로그인 재확인
-            if (!reservationValidationService.checkAuthentication()) {
+            if (!isAuthenticated) {
 
                 //현재 URL 저장
                 const currentUrl = window.location.pathname + window.location.search;
