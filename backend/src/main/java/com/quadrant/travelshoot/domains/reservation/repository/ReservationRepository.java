@@ -98,4 +98,21 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
                 ORDER BY r.checkOutDate DESC
         """)
     List<Reservation> findCompletedReservations(@Param("userId") Long userId);       
+
+
+
+    // 개인화 추천 AI
+    @Query("SELECT r FROM Reservation r " +
+        "WHERE r.userId = :userId " +
+        "AND r.reservationStatus IN ('예약확정', '이용완료') " +
+        "ORDER BY r.checkInDate DESC")
+        List<Reservation> findRecentCompletedReservations(
+        @Param("userId") Long userId, 
+        @Param("limit") int limit
+        );
+
+    @Query("SELECT COUNT(r) FROM Reservation r " +
+       "WHERE r.userId = :userId " +
+       "AND r.reservationStatus IN ('예약확정', '이용완료')")
+        int countCompletedReservations(@Param("userId") Long userId);  
 }

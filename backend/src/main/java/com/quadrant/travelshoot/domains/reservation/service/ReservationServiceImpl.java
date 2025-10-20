@@ -417,4 +417,22 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("예약 정보를 찾을 수 없습니다."));
     }
+
+
+
+    @Override
+        public List<Reservation> getRecentCompletedReservations(Long userId, int limit) {
+        log.info("완료된 예약 조회 - userId: {}, limit: {}", userId, limit);
+        
+        // Repository 메서드 호출
+        return reservationRepository.findRecentCompletedReservations(userId, limit);
+        }
+
+        @Override
+        public int getCompletedReservationCount(Long userId) {
+        log.info("완료된 예약 건수 조회 - userId: {}", userId);
+        
+        // Repository 메서드 호출
+        return reservationRepository.countCompletedReservations(userId);
+        }
 }

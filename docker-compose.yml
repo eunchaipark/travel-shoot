@@ -29,7 +29,6 @@ services:
       - ./mysql/migrations/2025101013_08_drop_user_preferences.sql:/docker-entrypoint-initdb.d/2025101013_08_drop_user_preferences.sql
       - ./mysql/migrations/2025101013_09_add_viewCount_column.sql:/docker-entrypoint-initdb.d/2025101013_09_add_viewCount_column.sql
       - ./mysql/migrations/2025101015_01_drop_travel_courses_stay_id_column.sql:/docker-entrypoint-initdb.d/2025101015_01_drop_travel_courses_stay_id_column.sql
-      - ./mysql/migrations/2025101019_01_create_user_stay_recommendations.sql:/docker-entrypoint-initdb.d/2025101019_01_create_user_stay_recommendations.sql
     networks:
       - backendnet
     healthcheck:
