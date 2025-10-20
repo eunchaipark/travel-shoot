@@ -51,8 +51,19 @@ public class TravelCourseGenerationService {
     private String buildSystemPrompt() {
         return "You are a professional travel course planner. " +
                 "Analyze user preferences and create an optimal travel itinerary. " +
-                "Return only valid JSON format without any additional text. " +
-                "**Write the 'comment' field in KOREAN.**";
+                "Each location must be used only once. " +
+                "\n\n" +
+                "🎯 PRIMARY GOAL: Minimize total travel distance by creating geographically logical routes. " +
+                "Think like a GPS - what is the shortest path visiting all spots? " +
+                "Use the provided coordinates to calculate distances. " +
+                "Avoid zigzagging back and forth across the map. Visit nearby locations consecutively. " +
+                "Create routes that flow naturally in one direction (north→south, east→west, or circular). " +
+                "\n\n" +
+                "CRITICAL INSTRUCTION: You MUST correctly identify whether each spotId is a restaurant or activity. " +
+                "Check the candidate list section carefully - restaurants use '맛집' type, activities use '관광지' type. " +
+                "This is mandatory for system functionality. " +
+                "\n\n" +
+                "Return only valid JSON without additional text.";
     }
 
     private String buildUserPrompt(Integer totalDays, TravelCourseRecommendationData data) {
@@ -84,7 +95,7 @@ public class TravelCourseGenerationService {
         if (data.getRestaurants() != null && !data.getRestaurants().isEmpty()) {
             for (int i = 0; i < data.getRestaurants().size(); i++) {
                 Restaurant r = data.getRestaurants().get(i);
-                prompt.append(String.format("%d. [ID: %d] %s\n",
+                prompt.append(String.format("%d. [ID: %d] %s [TYPE: 맛집]\n",
                         i + 1, r.getId(), r.getRestaurantName()));
                 prompt.append(String.format("   - Address: %s\n", r.getAddress()));
                 if (r.getFoodType() != null) {
@@ -112,7 +123,7 @@ public class TravelCourseGenerationService {
         if (data.getActivities() != null && !data.getActivities().isEmpty()) {
             for (int i = 0; i < data.getActivities().size(); i++) {
                 Activity a = data.getActivities().get(i);
-                prompt.append(String.format("%d. [ID: %d] %s\n",
+                prompt.append(String.format("%d. [ID: %d] %s [TYPE: 관광지]\n",
                         i + 1, a.getId(), a.getActivityName()));
                 prompt.append(String.format("   - Address: %s\n", a.getAddress()));
                 if (a.getActivityType() != null) {
@@ -133,13 +144,15 @@ public class TravelCourseGenerationService {
         prompt.append("\n=== Requirements ===\n");
         prompt.append("1. Select spots ONLY from the candidates provided above\n");
         prompt.append("2. Use the exact ID as spotId in your response\n");
-        prompt.append("3. Optimize routes considering accommodation location and coordinates\n");
+        prompt.append("3. Optimize routes to minimize travel distance. End each day near accommodation when possible\n");
         prompt.append("4. Schedule restaurants for lunch (12:00-14:00) and dinner (18:00-20:00) times\n");
         prompt.append("5. Daily schedule should be between 09:00-21:00\n");
         prompt.append("6. Consider appropriate duration and travel time between spots (use coordinates to estimate distance)\n");
         prompt.append("7. Avoid restaurants on their closed days if specified\n");
         prompt.append("8. **IMPORTANT: Provide 'comment' field in KOREAN**\n");
-        prompt.append("9. Use '관광지' for activities and '맛집' for restaurants in the 'type' field\n\n");
+        prompt.append("9. **CRITICAL: Match 'type' with actual data source**\n");
+        prompt.append("   - If spotId is from Restaurant Candidates → type MUST be '맛집'\n");
+        prompt.append("   - If spotId is from Activity Candidates → type MUST be '관광지'\n\n");
 
         // JSON format
         prompt.append("=== Response Format (JSON) ===\n");

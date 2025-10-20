@@ -21,4 +21,8 @@ public class UserSurveyServiceImpl implements UserSurveyService {
     public Optional<UserSurvey> getByUserId(Long userId) {
         return userSurveyRepository.findByUserId(userId);
     }
+    @Override
+    public Optional<UserSurvey> findByUserIdWithDetails(Long userId) {
+        return userSurveyRepository.findByUserIdWithDetails(userId);
+    }
 }

@@ -1,5 +1,6 @@
 package com.quadrant.travelshoot.domains.survey.entity;
 
+import com.quadrant.travelshoot.domains.survey.enums.FoodCategory;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -46,10 +47,6 @@ public class UserSurveyFood {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    public enum FoodCategory {
-        한식, 중식, 일식, 양식, 카페, 해산물, 고기, 디저트
-    }
 
     // 연관관계 편의 메서드
     public void setSurvey(UserSurvey survey) {

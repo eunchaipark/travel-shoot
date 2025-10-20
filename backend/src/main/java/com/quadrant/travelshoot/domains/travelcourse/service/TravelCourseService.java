@@ -1,6 +1,7 @@
 package com.quadrant.travelshoot.domains.travelcourse.service;
 
 import com.quadrant.travelshoot.domains.travelcourse.dto.request.TravelCourseRequest;
+import com.quadrant.travelshoot.domains.travelcourse.dto.request.TravelCourseUpdateRequest;
 import com.quadrant.travelshoot.domains.travelcourse.dto.response.TravelCourseResponse;
 
 public interface TravelCourseService {
@@ -18,6 +19,12 @@ public interface TravelCourseService {
     /**
      * 여행 코스 조회
      */
-    TravelCourseResponse getCourse(Long courseId);
+    TravelCourseResponse getCourse(Long courseId, String type);
+
+
+    /**
+     * 여행 코스 수정
+     */
+    void updateCourseSpot(TravelCourseUpdateRequest request, Long userId);
 }
 

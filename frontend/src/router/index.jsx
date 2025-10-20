@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/components/context/AuthContext';
 
 import MainPage from '@/pages/MainPage';
+import ReservationDetailPage from '@/pages/ReservationDetailPage';
 import MapTestPage from '@/pages/MapTestPage';
 import SignupCompletePage from '@/pages/SignupCompletePage';
 import ReservationPaymentPage from '@/pages/reservation/ReservationPaymentPage';
@@ -17,6 +18,7 @@ function Router() {
         <AuthModal/>
       <Routes>
         <Route path="/" element={<MainPage />} />
+        <Route path="/reservation/detail" element={<ReservationDetailPage />} />
         <Route path="/map" element={<MapTestPage />} />
         <Route path="/survey" element={<SignupCompletePage />} />
         <Route path="/signup-complete" element={<SignupCompletePage />} />
