@@ -50,4 +50,15 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .orElseThrow(() -> new IllegalArgumentException(
                         "맛집 정보를 찾을 수 없습니다. ID: " + restaurantId));
     }
+
+    @Override
+    public Restaurant findByNameAndCoordinates(String name, BigDecimal latitude, BigDecimal longitude) {
+        return restaurantRepository.findByNameAndCoordinates(name, latitude, longitude).orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public Restaurant save(Restaurant restaurant) {
+        return restaurantRepository.save(restaurant);
+    }
 }

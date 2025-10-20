@@ -1,6 +1,7 @@
 package com.quadrant.travelshoot.domains.travelcourse.controller;
 
 import com.quadrant.travelshoot.domains.travelcourse.dto.request.TravelCourseRequest;
+import com.quadrant.travelshoot.domains.travelcourse.dto.request.TravelCourseUpdateRequest;
 import com.quadrant.travelshoot.domains.travelcourse.dto.response.TravelCourseResponse;
 import com.quadrant.travelshoot.domains.travelcourse.service.TravelCourseService;
 import jakarta.validation.Valid;
@@ -36,5 +37,17 @@ public class TravelCourseController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/update")
+    public ResponseEntity<Void> updateCourseSpot(
+            @Valid @RequestBody TravelCourseUpdateRequest request
+            /*,@SessionAttribute("userId") Long userId*/) {
+        Long userId = 1L; //TODO: 로그인 기능 완료 시 세션 기반 userId로 갖고와야 함.
+        log.info("여행 코스 수정 요청 - spotId: {}, placeName: {}",
+                request.getSpotId(), request.getPlace().getPlace_name());
+
+        travelCourseService.updateCourseSpot(request, userId);
+
+        return ResponseEntity.ok().build();
+    }
 }
 

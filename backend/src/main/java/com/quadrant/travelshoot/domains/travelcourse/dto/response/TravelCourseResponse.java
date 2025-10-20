@@ -40,6 +40,7 @@ public class TravelCourseResponse {
         private String imageUrl;
         private BigDecimal latitude;
         private BigDecimal longitude;
+        private String stayType;
     }
 
     @Getter
