@@ -120,9 +120,25 @@ export const login = async (loginData) => {
             body: JSON.stringify(loginData),
         });
 
+        // 에러 응답 처리
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            let errorMessage = '로그인 실패.';
+
+            try {
+                const errorData = await response.json();
+                errorMessage = errorData.message || errorMessage;
+            } catch {
+                // JSON 파싱 실패 시 상태 코드에 따른 메시지
+                if (response.status === 401) {
+                    errorMessage = '이메일 또는 비밀번호가 올바르지 않습니다.';
+                } else if (response.status === 404) {
+                    errorMessage = '존재하지 않는 이메일입니다.';
+                } else if (response.status >= 500) {
+                    errorMessage = '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+                }
+            }
+
+            throw new Error(errorMessage);
         }
 
         const data = await response.json();

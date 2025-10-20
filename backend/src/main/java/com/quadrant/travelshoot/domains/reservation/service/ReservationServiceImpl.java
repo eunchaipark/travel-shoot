@@ -17,7 +17,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.quadrant.travelshoot.domains.reservation.entity.Payment;
+import com.quadrant.travelshoot.domains.reservation.repository.PaymentRepository;
 
+import java.time.LocalDateTime;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;
@@ -35,6 +38,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
     private final RoomRepository roomRepository;
     private final StayService stayService;
+    private final PaymentRepository paymentRepository;
 
       //TODO : 가격 계산 추후에 추가할 가능성 염두
 //    private static final BigDecimal TAX_RATE = new BigDecimal("0.10"); //TODO : 세금 10% 청구
@@ -166,11 +170,28 @@ public class ReservationServiceImpl implements ReservationService {
 
         Reservation saved = reservationRepository.save(reservation);
 
+        Reservation savedReservation = reservationRepository.save(reservation);
+        log.info("예약 저장 완료 - reservationId: {}", savedReservation.getId());
+
         if (Boolean.TRUE.equals(request.getMarketingAgreed())) {
             log.info("마케팅 수신 동의 - userId: {}", userId);
         }
+        String paymentCode = "PAY" + System.currentTimeMillis() + new Random().nextInt(1000);
 
-        return toDetailResponse(saved);
+        Payment payment = Payment.builder()
+                .paymentCode(paymentCode)
+                .reservationId(savedReservation.getId())
+                .paymentMethod(request.getPaymentMethod().name())
+                .paymentAmount(request.getTotalPrice())
+                .paymentStatus("결제완료")
+                .completedAt(LocalDateTime.now())
+                .build();
+
+        paymentRepository.save(payment);
+        log.info("결제 정보 저장 완료 - paymentCode: {} / reservationId: {}, paymentMethod: {}, amount: {}",
+                payment.getPaymentCode(), savedReservation.getId(), payment.getPaymentMethod(), payment.getPaymentAmount());
+
+        return toDetailResponse(savedReservation);
     }
 
     @Override
@@ -403,7 +424,8 @@ public class ReservationServiceImpl implements ReservationService {
                 .totalNights(reservation.getTotalNights())
                 .totalPrice(reservation.getTotalPrice())
                 .reservationStatus(reservation.getReservationStatus())
-                .transportationMethod(reservation.getTransportationMethod())
+//                .transportationMethod(reservation.getTransportationMethod())
+                .transportationMethod(reservation.getTransportationMethod().getDisplayName())
                 .cancelReason(reservation.getCancelReason())
                 .cancelDetail(reservation.getCancelDetail())
                 .cancelledAt(reservation.getCancelledAt())

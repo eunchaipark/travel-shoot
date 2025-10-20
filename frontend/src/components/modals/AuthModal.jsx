@@ -33,6 +33,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     const [isResetVerifyEnabled, setIsResetVerifyEnabled] = useState(false);
 
     const auth = useAuth();
+    const { isLoginModalOpen, closeLoginModal } = auth;
     const navigate = useNavigate();
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
@@ -162,7 +163,7 @@ const AuthModal = ({ isOpen, onClose }) => {
         setIsResetTimerActive(false);
         setIsSignupVerifyEnabled(false);
         setIsResetVerifyEnabled(false);
-        onClose();
+        closeLoginModal();
     };
 
     // 회원가입 이메일 인증
@@ -266,12 +267,20 @@ const AuthModal = ({ isOpen, onClose }) => {
             const result = await auth.login({ email, password });
 
             if (result.success) {
-                if (result.surveyCompleted) {
-                    console.log('메인 페이지로 이동:', result.goMain);
-                } else {
-                    // TODO: navigate('/survey')  설문조사 페이지로 이동해야함
-                }
+
+                const redirectUrl = sessionStorage.getItem('redirectUrl');
+
                 handleClose();
+                if (redirectUrl) {
+                    sessionStorage.removeItem('redirectUrl');
+                    navigate(redirectUrl);
+                }else {
+                    if (result.surveyCompleted) {
+                        console.log('메인 페이지로 이동:', result.goMain);
+                    } else {
+                        // TODO: navigate('/survey')  설문조사 페이지로 이동해야함
+                    }
+                }
             } else {
                 alert(result.error || '로그인에 실패했습니다.');
             }
@@ -363,10 +372,10 @@ const AuthModal = ({ isOpen, onClose }) => {
         }
     };
 
-    if (!isOpen) return null;
+    if (!isLoginModalOpen) return null;
 
     return (
-        <div className={`login-page ${isOpen ? 'show' : ''}`} onClick={handleClose}>
+        <div className={`login-page ${isLoginModalOpen ? 'show' : ''}`} onClick={handleClose}>
             <div className="login-box" onClick={(e) => e.stopPropagation()}>
                 <button className="close-btn" onClick={handleClose}>
                     <img className="login-icons" src="/images/common/modal-close-icon.svg" alt="닫기" />

@@ -3,7 +3,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 // import { useAuth } from '@/hooks/auth/useAuth'
 import { useAuth } from '@/components/context/AuthContext'
-import AuthModal from '@/components/modals/AuthModal';  // 1016 추가
 
 
 const Header = () => {
@@ -13,9 +12,8 @@ const Header = () => {
     const [showGuestDropdown, setShowGuestDropdown] = useState(false);
     const [adultCount, setAdultCount] = useState(2);
     const [childCount, setChildCount] = useState(0);
-    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false); //1016
 
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, openLoginModal } = useAuth();
     const navigate = useNavigate();
 
     // TODO : 디버깅할라고 추가함( 지워도 됨 )
@@ -84,9 +82,9 @@ const Header = () => {
     //TODO : 로그인 완료 상태면 마이페이지로
     const handleUserIconClick = () => {
         if (isAuthenticated) {
-            navigate('/mypage'); // 로그인 상태 → 마이페이지로 이동
+            navigate('/mypage');
         } else {
-            setIsAuthModalOpen(true); // 비로그인 → 로그인 모달 열기
+            openLoginModal();
         }
     };
 
@@ -256,8 +254,6 @@ const Header = () => {
                     </div>
                 </div>
             </header>
-            <AuthModal isOpen={isAuthModalOpen}
-                onClose={() => setIsAuthModalOpen(false)}/>
         </>
     );
 };
