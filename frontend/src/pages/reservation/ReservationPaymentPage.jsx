@@ -1,4 +1,4 @@
-import React, { useEffect, useRef  } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/components/context/AuthContext';
 import { useReservation } from '@/hooks/reservation/useReservation';
@@ -17,6 +17,10 @@ const ReservationPaymentPage = () => {
     const wasModalOpen = useRef(false);
     const userCancelled = useRef(false); // confirm 취소 선택
 
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState({ title: '', content: '' });
+
+
     // URL 파라미터
     const roomId = parseInt(searchParams.get('roomId') || '1');
     const checkInDate = searchParams.get('checkInDate') || '2025-10-20';
@@ -24,6 +28,13 @@ const ReservationPaymentPage = () => {
     const guestCount = parseInt(searchParams.get('guestCount') || '2');
 
     useEffect(() => {
+        // 이미 한 번 이 페이지에 정상 진입했다면 체크 스킵
+        const hasEnteredPage = sessionStorage.getItem('reservationPageEntered');
+
+        if (hasEnteredPage === 'true') {
+            return; // 새로고침이므로 아무것도 안 함
+        }
+
         // 이미 체크했으면 스킵
         if (hasCheckedAuth.current) {
             return;
@@ -31,8 +42,9 @@ const ReservationPaymentPage = () => {
 
         hasCheckedAuth.current = true; // 체크 완료 표시
 
-        // 로그인이 되어 있으면 아무것도 없이 그냥 예약 페이지로 넘어가고
+        // 로그인이 되어 있으면 페이지 진입 완료 표시하고 리턴
         if (isAuthenticated) {
+            sessionStorage.setItem('reservationPageEntered', 'true');
             return;
         }
 
@@ -66,7 +78,7 @@ const ReservationPaymentPage = () => {
         // 모달이 닫혔는지만 체크
         if (!isLoginModalOpen && !isAuthenticated) {
             console.log('모달 닫힘 + 비로그인 → 숙소 페이지로');
-            navigate('/stay/1');
+            navigate('/stay/1'); //TODO : 숙소 상세 페이지 경로 임시 - 윤하님
         }
     }, [isLoginModalOpen, isAuthenticated, navigate]);
 
@@ -86,8 +98,113 @@ const ReservationPaymentPage = () => {
         isAllAgreed
     } = useReservationForm();
 
-    const handleSubmit = () => {
-        createReservation(formData);
+    const handleSubmit = async () => {
+        // 1. 이름 입력 확인
+        if (!formData.guestName || formData.guestName.trim() === '') {
+            alert('이용자 이름을 입력해주세요.');
+            return;
+        }
+
+        // 2. 전화번호 입력 확인
+        if (!formData.guestPhone || formData.guestPhone.trim() === '') {
+            alert('전화번호를 입력해주세요.');
+            return;
+        }
+
+        // 3. 전화번호 형식 확인 (010-0000-0000)
+        const phonePattern = /^010-\d{4}-\d{4}$/;
+        if (!phonePattern.test(formData.guestPhone)) {
+            alert('전화번호 형식이 올바르지 않습니다. (예: 010-1234-5678)');
+            return;
+        }
+
+        // 4. 필수 약관 동의 확인
+        if (!formData.ageAgreed) {
+            alert('만 18세 이상 동의는 필수입니다.');
+            return;
+        }
+
+        if (!formData.termsAgreed) {
+            alert('이용 약관 동의는 필수입니다.');
+            return;
+        }
+
+        if (!formData.refundPolicyAgreed) {
+            alert('취소 및 환불 규칙 동의는 필수입니다.');
+            return;
+        }
+
+        // 5. 모든 검증 통과 시 예약 진행
+        const result = await createReservation(formData);
+
+        // 예약 성공 시 완료 페이지로 이동
+        if (result && result.success) {
+            navigate('/payment-complete');
+        }
+    };
+
+    const openModal = (type) => {
+        let title = '';
+        let content = '';
+
+        if (type === 'terms') {
+            title = '이용 약관';
+            content = `
+            <div>제1조 (목적)</div>
+            <p>본 약관은 숙박업체(이하 "업체")와 이용 고객(이하 "고객") 간 숙박 서비스 이용에 관한 권리, 의무 및 책임 사항을 규정함을 목적으로 합니다.</p>
+            
+            <div>제2조 (계약의 성립)</div>
+            <p>고객이 예약 신청을 하고 업체가 이를 승낙한 시점에 숙박 계약이 성립합니다. 온라인 예약 시 예약 확인서(또는 이메일/문자 통보)를 발송함으로써 계약이 성립됩니다.</p>
+            
+            <div>제3조 (요금 및 결제)</div>
+            <p>숙박 요금은 업체가 고지한 기준에 따르며, 고객은 예약 시 선택한 결제 수단을 통해 요금을 지불해야 합니다.</p>
+            
+            <div>제4조 (체크인 및 체크아웃)</div>
+            <ul>
+                <li>체크인: 오후 15시 이후</li>
+                <li>체크아웃: 오전 11시까지</li>
+                <li>시간을 초과할 경우 추가 요금이 부과될 수 있습니다.</li>
+            </ul>
+        `;
+        } else if (type === 'refund') {
+            title = '취소 및 환불 규정';
+            content = `
+            <div>제1조 (고객에 의한 취소)</div>
+            <ul>
+                <li>숙박 예정일 7일 전까지 취소: 전액 환불</li>
+                <li>숙박 예정일 6일 ~ 1일 전 취소: 결제 금액의 일부 위약금 공제 후 환불</li>
+                <li>숙박 당일 취소 또는 No-Show: 환불 불가</li>
+            </ul>
+            
+            <div>제2조 (업체에 의한 취소)</div>
+            <p>업체 귀책 사유(시설 고장, 만실 등)로 숙박이 불가한 경우, 고객에게 전액 환불하며 필요 시 손해 배상을 진행합니다.</p>
+        `;
+        } else if (type === 'privacy') {
+            title = '마케팅, 혜택 정보 수신을 위한 개인정보 수집 및 이용 동의';
+            content = `
+            <div>제1조 (수집하는 개인정보 항목)</div>
+            <p>업체는 마케팅 및 혜택 정보 제공을 위해 다음의 개인정보를 수집합니다.</p>
+            <ul>
+                <li>필수 항목: 성명, 휴대전화번호, 이메일 주소</li>
+                <li>선택 항목: 관심 지역, 선호 숙박, 여행 스타일</li>
+            </ul>
+            
+            <div>제2조 (개인정보의 이용 목적)</div>
+            <ul>
+                <li>신규 서비스 및 이벤트, 할인 혜택 안내</li>
+                <li>맞춤형 프로모션 및 광고성 정보 제공</li>
+            </ul>
+        `;
+        }
+
+        setModalContent({ title, content });
+        setShowModal(true);
+        document.body.style.overflow = 'hidden'; // 스크롤 방지
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        document.body.style.overflow = 'auto'; // 스크롤 복원
     };
 
     // 비로그인 상태면 아무것도 렌더링 안 함
@@ -134,14 +251,14 @@ const ReservationPaymentPage = () => {
                                     <div className="stay-image-wrapper">
                                         <img
                                             className="stay-img"
-                                            src={initData?.mainImageUrl || "/img/payment_hotel_imgae.jpg"}
+                                            src={initData?.mainImageUrl || "/images/reservation/payment-hotel-imgae.jpg"}
                                             alt={initData?.stayName}
                                         />
                                     </div>
                                     <div className="stay-info flex-fill lodging-info">
                                         <div className="stay-name mb-1">{initData?.stayName}</div>
                                         <div className="stay-location text-muted small mb-3">
-                                            <img className="location_icon me-1" src="/img/payment_location_icon.svg" alt="위치" />
+                                            <span className="location_icon me-1"></span>
                                             {initData?.address}
                                         </div>
 
@@ -166,7 +283,7 @@ const ReservationPaymentPage = () => {
                                         {priceData && (
                                             <div className="price-highlight text-nowrap">
                                                 <span className="small-text me-2 mb-1 standard">숙박/1박당</span>
-                                                ₩ {reservationFormatters.formatPrice(priceData.nightlyPrice)}
+                                                ₩ {reservationFormatters.formatPrice(Math.round(priceData.subtotal / priceData.totalNights))}
                                             </div>
                                         )}
                                     </div>
@@ -189,6 +306,7 @@ const ReservationPaymentPage = () => {
                                     <span className="radio-custom"></span>
                                     <span className="transport-text">차량</span>
                                 </label>
+
                                 <label className="transport-option">
                                     <input
                                         type="radio"
@@ -203,15 +321,15 @@ const ReservationPaymentPage = () => {
                             </div>
                         </div>
 
-                        {/* 예약자 정보 */}
+                        {/* 이용자 정보 */}
                         <div className="section-card mb-4">
-                            <div className="section-header">예약자 정보</div>
+                            <div className="section-header">이용자 정보</div>
                             <div className="mb-3">
                                 <label className="user-info mb-2">이름</label>
                                 <input
                                     type="text"
                                     className="user-inputbox w-100"
-                                    placeholder="예약자 이름을 입력하세요"
+                                    placeholder="이용자 이름을 입력하세요"
                                     value={formData.guestName}
                                     onChange={(e) => handleChange('guestName', e.target.value)}
                                 />
@@ -243,12 +361,8 @@ const ReservationPaymentPage = () => {
                                     />
                                     <span className="radio-custom"></span>
                                     <div className="payment-info d-flex align-items-center ms-3">
-                                        <img
-                                            className="payment_images"
-                                            src="/img/payment_card.svg"
-                                            alt="카드결제"
-                                        />
-                                        <span className="payment-text">카드 결제</span>
+                                        <img className="payment_images" src="/images/reservation/payment-card.svg" alt="카드결제" />
+                                        <span className="payment-text">일반 카드 결제</span>
                                     </div>
                                 </label>
 
@@ -262,11 +376,7 @@ const ReservationPaymentPage = () => {
                                     />
                                     <span className="radio-custom"></span>
                                     <div className="payment-info d-flex align-items-center ms-3">
-                                        <img
-                                            className="payment_images"
-                                            src="/img/payment_kakaopay.svg"
-                                            alt="카카오페이"
-                                        />
+                                        <img className="payment_images" src="/images/reservation/payment-kakaopay.svg" alt="카카오페이" />
                                         <span className="payment-text">카카오페이 결제</span>
                                     </div>
                                 </label>
@@ -281,18 +391,14 @@ const ReservationPaymentPage = () => {
                                     />
                                     <span className="radio-custom"></span>
                                     <div className="payment-info d-flex align-items-center ms-3">
-                                        <img
-                                            className="payment_images"
-                                            src="/img/payment_naverpay.svg"
-                                            alt="네이버페이"
-                                        />
+                                        <img className="payment_images" src="/images/reservation/payment-naverpay.svg" alt="네이버페이" />
                                         <span className="payment-text">네이버페이 결제</span>
                                     </div>
                                 </label>
                             </div>
                         </div>
 
-                        {/* ✅ 정책 알림 및 약관 (퍼블과 동일하게) */}
+                        {/* 정책 알림 및 약관  */}
                         <div className="section-card">
                             <div className="agreement-section">
                                 {/* 정책 알림 */}
@@ -301,7 +407,7 @@ const ReservationPaymentPage = () => {
                                         <div className="notice-title fw-bold mb-1">
                                             <img
                                                 className="notice-icon me-1"
-                                                src="/img/payment_agree_icon.svg"
+                                                src="/images/reservation/payment_agree_icon.svg"
                                                 alt=""
                                             />
                                             미성년자 및 법정대리인 필수
@@ -355,7 +461,7 @@ const ReservationPaymentPage = () => {
                                             (필수) 이용 약관
                                         </span>
                                     </div>
-                                    <a href="#" className="view-modal text-decoration-none ms-2">
+                                    <a href="#" className="view-modal text-decoration-none ms-2" onClick={(e) => {e.preventDefault();openModal('terms');}}>
                                         보기
                                     </a>
                                 </label>
@@ -373,7 +479,7 @@ const ReservationPaymentPage = () => {
                                             (필수) 취소 및 환불 규칙
                                         </span>
                                     </div>
-                                    <a href="#" className="view-modal text-decoration-none ms-2">
+                                    <a href="#" className="view-modal text-decoration-none ms-2" onClick={(e) => {e.preventDefault();openModal('refund');}}>
                                         보기
                                     </a>
                                 </label>
@@ -404,7 +510,14 @@ const ReservationPaymentPage = () => {
                                             (선택) 개인정보 수집 및 이용 동의
                                         </span>
                                     </div>
-                                    <a href="#" className="view-modal text-decoration-none ms-2">
+                                    <a
+                                        href="#"
+                                        className="view-modal text-decoration-none ms-2"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            openModal('privacy');
+                                        }}
+                                    >
                                         보기
                                     </a>
                                 </label>
@@ -421,43 +534,16 @@ const ReservationPaymentPage = () => {
                                 <>
                                     <div className="final-payment-info mb-3 row">
                                         <div className="final-payment-detail final-payment-date-detail col-12 text-muted small mb-1">
-                                            객실 1개 x {priceData.nights}박
+                                            객실 1개 x {priceData.totalNights}박
                                         </div>
 
                                         <div className="col-1">
                                             <span>₩</span>
                                         </div>
                                         <div className="col-11 text-end">
-                                            <span>{reservationFormatters.formatPrice(priceData.basePrice)}</span>
+                                            <span>{reservationFormatters.formatPrice(priceData.subtotal)}</span>
                                         </div>
 
-                                        {priceData.weekendSurcharge > 0 && (
-                                            <>
-                                                <div className="final-payment-detail col-7 text-muted small">
-                                                    주말 할증
-                                                </div>
-                                                <div className="col-1">
-                                                    <span>₩</span>
-                                                </div>
-                                                <div className="col-4 text-end">
-                                                    <span>{reservationFormatters.formatPrice(priceData.weekendSurcharge)}</span>
-                                                </div>
-                                            </>
-                                        )}
-
-                                        {priceData.discountAmount > 0 && (
-                                            <>
-                                                <div className="final-payment-detail col-7 text-danger small">
-                                                    할인
-                                                </div>
-                                                <div className="col-1 text-danger">
-                                                    <span>₩</span>
-                                                </div>
-                                                <div className="col-4 text-end text-danger">
-                                                    <span>-{reservationFormatters.formatPrice(priceData.discountAmount)}</span>
-                                                </div>
-                                            </>
-                                        )}
                                     </div>
 
                                     <div className="price-section d-flex justify-content-between align-items-center mb-4">
@@ -494,6 +580,60 @@ const ReservationPaymentPage = () => {
                 </div>
             </div>
         </main>
+
+            {/*모달 모달 ~ */}
+            {showModal && (
+                <div
+                    className="payment-modal"
+                    style={{ display: 'flex' }}
+                    onClick={(e) => {
+                        if (e.target.className === 'payment-modal') {
+                            closeModal();
+                        }
+                    }}
+                >
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            {modalContent.title}
+                            <span
+                                style={{
+                                    position: 'absolute',
+                                    right: '20px',
+                                    cursor: 'pointer',
+                                    fontSize: '20px'
+                                }}
+
+                                onClick={closeModal}
+                            >
+                            ✕
+                        </span>
+                        </div>
+                        <div
+                            className="modal-body"
+                            dangerouslySetInnerHTML={{ __html: modalContent.content }}
+                        />
+                        <div
+                            className="modal-footer"
+                            onClick={() => {
+                                if (modalContent.title === '이용 약관') {
+                                    handleChange('termsAgreed', true);
+                                } else if (modalContent.title === '취소 및 환불 규정') {
+                                    handleChange('refundPolicyAgreed', true);
+                                } else if (modalContent.title.includes('개인정보')) {
+                                    handleChange('marketingAgreed', true);
+                                    handleChange('privacyCollectionAgreed', true);
+                                }
+                                closeModal();
+                            }}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            {modalContent.title === '이용 약관' && '약관 동의하기'}
+                            {modalContent.title === '취소 및 환불 규정' && '취소 및 환불 규정 동의하기'}
+                            {modalContent.title.includes('개인정보') && '개인정보 수집 및 이용 동의하기'}
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 };

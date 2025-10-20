@@ -38,7 +38,7 @@
 .payment-page .section-card .stay-info .checkin-checkout .reservation-detail-arrow-con .reservation-detail-arrow {
     width: 15px;
     height: 15px;
-    background-image: url(../img/reservation-detail-arrow.svg);
+    background-image: url(/images/reservation/reservation-detail-arrow.svg);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -120,6 +120,11 @@
     /* 이미지 크기가 너무 커서 줄이려고 만들었음  */
     width: 15px;
     height: 15px;
+    background-image: url(/images/reservation/payment_location_icon.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: inline-block;
 }
 
 .payment-page .section-card .stay-location{
@@ -172,6 +177,11 @@
 .payment-page .agreement-section .notice-icon{
     width: 18px;
     height: 18px;
+    background-image: url(/images/reservation/payment-agree-icon.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: inline-block;
 }
 
 .payment-page .agreement-section .notice-title {
@@ -420,22 +430,6 @@
     position: relative;
     justify-content: center;
     border-bottom: none;
-}
-
-/* X 버튼 (오른쪽 상단) */
-.payment-modal .modal-header::after {
-    content: '✕';
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 16px;
-    cursor: pointer;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .payment-modal .modal-body {
