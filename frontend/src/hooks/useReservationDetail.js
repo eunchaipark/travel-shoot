@@ -12,41 +12,43 @@ export const useReservationDetail = (reservationId) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            const [reservation, course] = await Promise.all([
+                fetchReservationDetail(reservationId),
+                fetchCourseData(reservationId)
+            ]);
+            setReservationData(reservation);
+            setCourseData(course);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // 코스 데이터만 다시 로드하는 함수
+    const refetchCourseData = async () => {
+        try {
+            const course = await fetchCourseData(reservationId);
+            setCourseData(course);
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
     useEffect(() => {
-        const loadData = async () => {
-            if (!reservationId) {
-                setError('예약 ID가 없습니다.');
-                setLoading(false);
-                return;
-            }
-
-            try {
-                setLoading(true);
-                setError(null);
-
-                // 두 API를 병렬로 호출
-                const [reservation, course] = await Promise.all([
-                    fetchReservationDetail(reservationId),
-                    fetchCourseData(reservationId)
-                ]);
-
-                setReservationData(reservation);
-                setCourseData(course);
-            } catch (err) {
-                console.error('데이터 로딩 실패:', err);
-                setError(err.message || '데이터를 불러오는데 실패했습니다.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadData();
+        if (reservationId) {
+            fetchData();
+        }
     }, [reservationId]);
 
     return {
         reservationData,
         courseData,
         loading,
-        error
+        error,
+        refetchCourseData
     };
 };

@@ -116,7 +116,6 @@ export const useKakaoMap = (isOpen, locationData = [], stayData = null) => {
                 content: stayOverlayContent,
             });
             stayOverlay.setMap(kakaoMapRef.current);
-            console.log('숙소 오버레이 추가됨:', stayOverlay);
             overlaysRef.current.push(stayOverlay);
         }
 

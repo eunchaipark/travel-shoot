@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import SimpleHeader from '@/components/layout/SimpleHeader';
-import { useReservationDetail } from '@/hooks/useReservationDetail';
+import {useReservationDetail} from '@/hooks/useReservationDetail';
 import CourseMap from '@/components/reservation/CourseMap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@/assets/css/reservation.css';
@@ -9,13 +9,14 @@ import SearchMapModal from '@/components/modals/SearchMapModal';
 const ReservationDetailPage = () => {
     const [activeDay, setActiveDay] = useState(1);
     const [showSearchMap, setShowSearchMap] = useState(false);
+    const [editingSpotId, setEditingSpotId] = useState(null);
 
     // URL에서 reservationId 가져오기
     const queryParams = new URLSearchParams(window.location.search);
     const reservationId = queryParams.get('reservationId');
 
     // 커스텀 훅으로 데이터 관리
-    const { reservationData, courseData, loading, error } = useReservationDetail(reservationId);
+    const { reservationData, courseData, loading, error, refetchCourseData } = useReservationDetail(reservationId);
 
     const handleCopyAddress = (address) => {
         navigator.clipboard.writeText(address);
@@ -30,7 +31,7 @@ const ReservationDetailPage = () => {
     if (loading) {
         return (
             <>
-                <SimpleHeader />
+                <SimpleHeader/>
                 <main className="content-area">
                     <div className="container text-center py-5">
                         <div>로딩 중...</div>
@@ -44,7 +45,7 @@ const ReservationDetailPage = () => {
     if (error) {
         return (
             <>
-                <SimpleHeader />
+                <SimpleHeader/>
                 <main className="content-area">
                     <div className="container text-center py-5">
                         <div className="text-danger">{error}</div>
@@ -56,7 +57,7 @@ const ReservationDetailPage = () => {
 
     return (
         <>
-            <SimpleHeader />
+            <SimpleHeader/>
 
             <main className="content-area reservation-detail-page">
                 <div className="container">
@@ -305,11 +306,13 @@ const ReservationDetailPage = () => {
                                                 .find(dc => dc.day === activeDay)
                                                 ?.spots.map((spot) => (
                                                     <div className="course-item" key={spot.spotId}>
-                                                        <div className={`course-number ${getSpotTypeClass(spot.spotType)}`}>
+                                                        <div
+                                                            className={`course-number ${getSpotTypeClass(spot.spotType)}`}>
                                                             {spot.order}
                                                         </div>
                                                         <div className="course-content">
-                                                            <div className="course-title d-flex flex-column justify-content-between flex-sm-row">
+                                                            <div
+                                                                className="course-title d-flex flex-column justify-content-between flex-sm-row">
                                                                 <div>
                                                                     <span className="me-1 mb-1 mb-sm-0">
                                                                         [{spot.startTime.slice(0, 5)}~{spot.endTime.slice(0, 5)}]
@@ -322,7 +325,10 @@ const ReservationDetailPage = () => {
                                                                     </span>
                                                                 </div>
                                                                 <div>
-                                                                    <button onClick={() => setShowSearchMap(true)} className="edit-btn">
+                                                                    <button onClick={() => {
+                                                                        setEditingSpotId(spot.spotId);
+                                                                        setShowSearchMap(true);
+                                                                    }} className="edit-btn">
                                                                         수정하기
                                                                     </button>
                                                                 </div>
@@ -337,7 +343,7 @@ const ReservationDetailPage = () => {
                                                                 <div
                                                                     className="copy-btn-con"
                                                                     onClick={() => handleCopyAddress(spot.address)}
-                                                                    style={{ cursor: 'pointer' }}
+                                                                    style={{cursor: 'pointer'}}
                                                                 >
                                                                     <div className="copy-image"></div>
                                                                     <span className="copy-btn">복사</span>
@@ -348,7 +354,7 @@ const ReservationDetailPage = () => {
                                                 ))}
                                         </div>
                                     </div>
-                                    )}
+                                )}
                             </div>
                         </div>
                     </div>
@@ -356,7 +362,12 @@ const ReservationDetailPage = () => {
             </main>
             <SearchMapModal
                 isOpen={showSearchMap}
-                onClose={() => setShowSearchMap(false)}
+                onClose={() => {
+                    setShowSearchMap(false);
+                    setEditingSpotId(null);
+                }}
+                spotId={editingSpotId}
+                onUpdateSuccess={refetchCourseData}
             />
         </>
     );

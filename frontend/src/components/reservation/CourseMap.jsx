@@ -1,11 +1,12 @@
 // components/common/CourseMap.jsx
 import React from 'react';
 import { useKakaoMap } from '@/hooks/useKakaoMap';
+import { getStayType } from '@/utils/formatters';
 import '@/assets/css/map.css';
 
 const CourseMap = ({ spots = [], stayData = null }) => {
     const { mapRef, kakaoLoaded, selectedLocation } = useKakaoMap(true, spots, stayData);
-
+    const spotTypeEn = selectedLocation?.spotType === '맛집' ? 'restaurant' : 'activity';
     return (
         <div className="map-page position-relative" style={{ height: '400px', marginBottom: '20px' }}>
             <div ref={mapRef} className="w-100 h-100" style={{ borderRadius: '8px' }} />
@@ -20,13 +21,12 @@ const CourseMap = ({ spots = [], stayData = null }) => {
                                 {selectedLocation.name && !selectedLocation.spotType ? (
                                     <>
                                         <div className="d-flex align-items-center mb-2">
-                                            <div className="title-icon stay-icon me-2"></div>
+                                            <div className={`${getStayType(selectedLocation.stayType)}-icon title-icon me-2`}></div>
                                             <h5 className="mb-0 title-text">{selectedLocation.name}</h5>
                                         </div>
-                                        <span className="badge bg-success mb-2">숙소</span>
                                         <div className="d-flex align-items-start text-muted">
                                             <span className="location-icon me-2"></span>
-                                            <span className="location-text" style={{ fontSize: '0.85rem' }}>
+                                            <span className="location-text">
                                                 {selectedLocation.address}
                                             </span>
                                         </div>
@@ -35,25 +35,23 @@ const CourseMap = ({ spots = [], stayData = null }) => {
                                     /* 코스 카드 */
                                     <>
                                         <div className="d-flex align-items-center mb-2">
-                                            <div className={`title-icon ${selectedLocation.spotType === '맛집' ? 'restaurant' : 'activity'}-icon me-2`}></div>
+                                            <div className={`title-icon ${spotTypeEn}-icon me-2`}></div>
                                             <h5 className="mb-0 title-text">{selectedLocation.spotName}</h5>
                                         </div>
 
                                         <div className="d-flex align-items-center mb-2">
-                                            <span className="badge bg-primary me-2">{selectedLocation.order}번째</span>
-                                            <span className="badge bg-secondary me-2">
+                                            <span className={`badge me-2 ${spotTypeEn}`}>{selectedLocation.spotType}</span>
+                                            <span className="badge time">
                                                 {selectedLocation.startTime?.slice(0, 5)} ~ {selectedLocation.endTime?.slice(0, 5)}
                                             </span>
-                                            <span className="badge bg-info">{selectedLocation.spotType}</span>
                                         </div>
-
-                                        <p className="mb-2" style={{ fontSize: '0.9rem' }}>
+                                        <p className="mb-2 ai-comment">
                                             {selectedLocation.aiComment}
                                         </p>
 
                                         <div className="d-flex align-items-start text-muted">
                                             <span className="location-icon me-2"></span>
-                                            <span className="location-text" style={{ fontSize: '0.85rem' }}>
+                                            <span className="location-text">
                                                 {selectedLocation.address}
                                             </span>
                                         </div>
@@ -80,3 +78,4 @@ const CourseMap = ({ spots = [], stayData = null }) => {
 };
 
 export default CourseMap;
+
