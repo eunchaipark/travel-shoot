@@ -325,4 +325,31 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
 //        void incrementViewCount(Long stayId);
 
         Optional<Stay> findById(Long stayId);
+
+
+        // 개인화 추천 섹션 
+
+        /**
+         * 활성화된 모든 숙소 조회
+         */
+        @Query("""
+                SELECT DISTINCT s FROM Stay s
+                LEFT JOIN FETCH s.rooms r
+                WHERE s.isActive = true
+                AND r.isAvailable = true
+                ORDER BY s.averageRating DESC
+        """)
+        List<Stay> findAllActiveWithRooms();
+
+        /**
+         * 전체 숙소의 평균 가격 계산 
+         */
+        @Query("""
+                SELECT AVG((r.weekdayPrice + r.weekendPrice) / 2)
+                FROM Room r
+                WHERE r.isAvailable = true
+        """)
+        BigDecimal calculateAveragePrice();
+
+        
 }
