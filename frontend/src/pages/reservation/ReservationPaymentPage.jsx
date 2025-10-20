@@ -166,7 +166,7 @@ const ReservationPaymentPage = () => {
                                         {priceData && (
                                             <div className="price-highlight text-nowrap">
                                                 <span className="small-text me-2 mb-1 standard">숙박/1박당</span>
-                                                ₩ {reservationFormatters.formatPrice(priceData.nightlyPrice)}
+                                                ₩ {reservationFormatters.formatPrice(Math.round(priceData.subtotal / priceData.totalNights))}
                                             </div>
                                         )}
                                     </div>
@@ -421,43 +421,16 @@ const ReservationPaymentPage = () => {
                                 <>
                                     <div className="final-payment-info mb-3 row">
                                         <div className="final-payment-detail final-payment-date-detail col-12 text-muted small mb-1">
-                                            객실 1개 x {priceData.nights}박
+                                            객실 1개 x {priceData.totalNights}박
                                         </div>
 
                                         <div className="col-1">
                                             <span>₩</span>
                                         </div>
                                         <div className="col-11 text-end">
-                                            <span>{reservationFormatters.formatPrice(priceData.basePrice)}</span>
+                                            <span>{reservationFormatters.formatPrice(priceData.subtotal)}</span>
                                         </div>
 
-                                        {priceData.weekendSurcharge > 0 && (
-                                            <>
-                                                <div className="final-payment-detail col-7 text-muted small">
-                                                    주말 할증
-                                                </div>
-                                                <div className="col-1">
-                                                    <span>₩</span>
-                                                </div>
-                                                <div className="col-4 text-end">
-                                                    <span>{reservationFormatters.formatPrice(priceData.weekendSurcharge)}</span>
-                                                </div>
-                                            </>
-                                        )}
-
-                                        {priceData.discountAmount > 0 && (
-                                            <>
-                                                <div className="final-payment-detail col-7 text-danger small">
-                                                    할인
-                                                </div>
-                                                <div className="col-1 text-danger">
-                                                    <span>₩</span>
-                                                </div>
-                                                <div className="col-4 text-end text-danger">
-                                                    <span>-{reservationFormatters.formatPrice(priceData.discountAmount)}</span>
-                                                </div>
-                                            </>
-                                        )}
                                     </div>
 
                                     <div className="price-section d-flex justify-content-between align-items-center mb-4">

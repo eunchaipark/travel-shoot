@@ -88,6 +88,11 @@ const reservationApiService = {
     //예약 초기화 (5 + 6 통합)
     initializeReservation: async (roomId, checkInDate, checkOutDate, guestCount) => {
         try {
+
+            //TODO : 결제 금액 , 1박당 금액 데이터 .. 확인할라고 임시로 만들었음
+            console.log('=== 예약 초기화 시작 ===');
+            console.log('파라미터:', { roomId, checkInDate, checkOutDate, guestCount });
+
             // 5. 초기 데이터 조회
             const initData = await reservationApiService.getInitData(
                 roomId,
@@ -95,6 +100,8 @@ const reservationApiService = {
                 checkOutDate,
                 guestCount
             );
+            console.log('initData:', initData); //TODO
+
 
             // 6. 가격 계산
             const priceData = await reservationApiService.calculatePrice(
@@ -102,6 +109,7 @@ const reservationApiService = {
                 checkInDate,
                 checkOutDate
             );
+            console.log('priceData:', priceData); //TODO
 
             return { initData, priceData };
         } catch (error) {
