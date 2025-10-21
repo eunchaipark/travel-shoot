@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 import SimpleHeader from '@/components/layout/SimpleHeader';
 import {useReservationDetail} from '@/hooks/useReservationDetail';
 import CourseMap from '@/components/reservation/CourseMap';
@@ -14,10 +15,11 @@ const ReservationDetailPage = () => {
     // URL에서 reservationId 가져오기
     const queryParams = new URLSearchParams(window.location.search);
     const reservationId = queryParams.get('reservationId');
+    const navigate = useNavigate();
 
     // 커스텀 훅으로 데이터 관리
     const { reservationData, courseData, loading, error, refetchCourseData } = useReservationDetail(reservationId);
-
+    const pricePerNight = (reservationData?.totalPrice / reservationData?.totalNights).toLocaleString()
     const handleCopyAddress = (address) => {
         navigator.clipboard.writeText(address);
         alert('주소가 복사되었습니다.');
@@ -66,17 +68,20 @@ const ReservationDetailPage = () => {
                         <div className="col-12 content-section">
                             <div className="content-section-state-inner">
                                 <div className="content-section-title mb-4">
-                                    예약 완료
+                                    {reservationData?.reservationStatus}
                                     <span className="reservation-number">
-                                        (숙소 예약 번호 : {reservationData?.reservationNumber})
+                                        (숙소 예약 번호 : {reservationData?.reservationCode})
                                     </span>
                                 </div>
+                                {
+                                    reservationData?.reservationStatus === '이용완료' && (
                                 <div className="col-12 reservation-complete d-flex">
                                     <div className="col-6 d-flex justify-content-start">
                                         <input
                                             type="button"
                                             value="후기 작성하기"
                                             className="review-btn"
+                                            onClick={() => navigate(`/reviews/reservations/${reservationId}`)}
                                         />
                                     </div>
                                     <div className="col-6 d-flex justify-content-end">
@@ -84,9 +89,58 @@ const ReservationDetailPage = () => {
                                             type="button"
                                             value="다시 예약하기"
                                             className="re-reservation-btn"
+                                            onClick={() => navigate(`/stays/${reservation?.stayId}`)}
                                         />
                                     </div>
                                 </div>
+                                    )}
+                                {  reservationData?.reservationStatus === '예약확정' && (
+                                <div className="col-12 reservation-complete d-flex">
+                                    <div className="col-6 d-flex justify-content-start">
+                                        <input
+                                            type="button"
+                                            value="예약 목록 보기"
+                                            className="review-btn"
+                                            onClick={() => navigate("/mypage/reservation")}
+                                        />
+                                    </div>
+                                    <div className="col-6 d-flex justify-content-end">
+                                        <input
+                                            type="button"
+                                            value="숙소 길찾기"
+                                            className="re-reservation-btn"
+                                            onClick={() => {
+                                                const url = `https://map.kakao.com/link/map/${reservationData?.stayName},${reservationData?.latitude},${reservationData?.longitude}`;
+                                                window.open(url, '_blank');
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                                    )
+                                }
+
+                                {
+                                    reservationData?.reservationStatus === '예약취소' && (
+                                        <div className="col-12 reservation-complete d-flex">
+                                            <div className="col-6 d-flex justify-content-start">
+                                                <input
+                                                    type="button"
+                                                    value="예약 목록 보기"
+                                                    className="review-btn"
+                                                    onClick={() => navigate("/mypage/reservation")}
+                                                />
+                                            </div>
+                                            <div className="col-6 d-flex justify-content-end">
+                                                <input
+                                                    type="button"
+                                                    value="다시 예약하기"
+                                                    className="re-reservation-btn"
+                                                    onClick={() => navigate(`/stays/${reservation?.stayId}`)}
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+
                             </div>
                         </div>
 
@@ -103,8 +157,8 @@ const ReservationDetailPage = () => {
                                     </div>
                                     <div className="col-auto lodging-image-con">
                                         <img
-                                            src={reservationData?.lodgingImage}
-                                            alt={reservationData?.lodgingName}
+                                            src={reservationData?.mainImageUrl}
+                                            alt={reservationData?.stayName}
                                             className="lodging-image"
                                         />
                                     </div>
@@ -112,17 +166,17 @@ const ReservationDetailPage = () => {
                                         <div className="row lodging-info">
                                             <div className="col-12 mb-3">
                                                 <h5 className="mb-3 mt-2 fw-bold">
-                                                    {reservationData?.lodgingName}
+                                                    {reservationData?.stayName}
                                                 </h5>
 
                                                 <div className="row small-text mb-2">
                                                     <div className="col-5">
                                                         <div className="mb-1">체크인</div>
                                                         <div className="fw-bold">
-                                                            {reservationData?.checkIn.date}
+                                                            {reservationData?.checkInDate}
                                                         </div>
                                                         <div className="fw-bold">
-                                                            {reservationData?.checkIn.time}
+                                                            {reservationData?.checkInTime}
                                                         </div>
                                                     </div>
                                                     <div className="col-2 reservation-detail-arrow-con">
@@ -131,10 +185,10 @@ const ReservationDetailPage = () => {
                                                     <div className="col-5">
                                                         <div className="mb-1">체크아웃</div>
                                                         <div className="fw-bold">
-                                                            {reservationData?.checkOut.date}
+                                                            {reservationData?.checkOutDate}
                                                         </div>
                                                         <div className="fw-bold">
-                                                            {reservationData?.checkOut.time}
+                                                            {reservationData?.checkOutTime}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -144,7 +198,7 @@ const ReservationDetailPage = () => {
                                                     <span className="small-text me-2 mb-1 standard">
                                                         숙박/1박당
                                                     </span>
-                                                    ₩ {reservationData?.pricePerNight.toLocaleString()}
+                                                    ₩ {pricePerNight}
                                                 </div>
                                             </div>
                                         </div>
@@ -161,7 +215,7 @@ const ReservationDetailPage = () => {
 
                                     <div className="mb-3">
                                         <div className="mb-2 room-night-summary">
-                                            객실 {reservationData?.numberOfRooms}개 x {reservationData?.numberOfNights}박
+                                            객실 {1}개 x {reservationData?.totalNights}박
                                         </div>
                                         <div className="d-flex">
                                             <div className="col-1 pay-line-con">
@@ -171,13 +225,13 @@ const ReservationDetailPage = () => {
                                                 <div className="row align-items-center mb-2">
                                                     <div className="col">객실 요금</div>
                                                     <div className="col-auto">
-                                                        ₩ {reservationData?.pricePerNight.toLocaleString()}
+                                                        ₩ {pricePerNight}
                                                     </div>
                                                 </div>
                                                 <div className="row align-items-center mb-2">
                                                     <div className="col">숙박 일수</div>
                                                     <div className="col-auto">
-                                                        {reservationData?.numberOfNights}박
+                                                        {reservationData?.totalNights}박
                                                     </div>
                                                 </div>
                                                 <div className="row align-items-center pb-3">
