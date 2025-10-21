@@ -264,40 +264,6 @@
   background-color: #f05650;
 }
 
-.search-map-modal .updating-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(255, 255, 255, 0.95);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  backdrop-filter: blur(5px);
-}
-
-.search-map-modal .updating-content {
-  text-align: center;
-}
-
-.search-map-modal .updating-content .updating-title {
-  font-size: 19px;
-  font-weight: 700;
-  color: #02b8eb;
-}
-
-.search-map-modal .updating-content .updating-description {
-  font-size: 14px;
-}
-
-.search-map-modal .updating-content .spinner-border{
-  --bs-text-opacity: 1;
-  color: #02b8eb !important;
-}
-
-
 @media (max-width: 480px) {
   .map-page .map-card-overlay {
     bottom: 28px;
