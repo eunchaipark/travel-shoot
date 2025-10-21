@@ -4,6 +4,7 @@
  */
 // import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useBudgetSlider } from "@/hooks/main/useBudgetSlider";
 import {
   formatNumber,
@@ -96,22 +97,14 @@ const BudgetSlider = ({ data, onCardClick, isLoading, error }) => {
   // 로딩 상태
   if (isLoading) {
     return (
-      <div className="content-wrapper">
-        <div
-          className="budget-slider-container"
-          style={{
-            minHeight: "400px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div style={{ textAlign: "center", color: "#666" }}>
-            <div style={{ fontSize: "24px", marginBottom: "10px" }}>⏳</div>
-            <div>가격착한 숙소를 불러오는 중...</div>
+      <section className="recommend-stay-section">
+        <div className="recommend-stay-container">
+          <div className="loading-container">
+            <div className="circular-spinner"></div>
+            <p>AI가 추천 숙소를 분석 중입니다...</p>
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 
@@ -305,7 +298,10 @@ const BudgetFriendlySection = () => {
     loadBudgetData();
   }, []);
 
+  
+  const navigate = useNavigate();
   const handleCardClick = (item) => {
+    
     console.log("Budget 카드 클릭:", item);
     
     // stayId 확인
@@ -322,14 +318,14 @@ const BudgetFriendlySection = () => {
     // 알림 표시 --> 차후 없애야함
     alert(
       `숙소 상세 페이지로 이동합니다.\n\n` +
-      `숙소: ${item.name}\n` +
+      `숙소: ${item.id}\n` +
       `위치: ${item.location}\n` +
       `가격: ${formatNumber(item.price)}원\n\n` +
       `이동 URL:\n${detailUrl}`
     );
     
     // TODO: 백엔드 구현 후 주석 해제
-    // navigate(detailUrl);
+    navigate(detailUrl);
     
     // 또는 window.location 사용
     // window.location.href = detailUrl;
