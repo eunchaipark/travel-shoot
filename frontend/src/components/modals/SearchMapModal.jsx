@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchKakaoMap } from '@/hooks/useSearchKakaoMap';
+import CommonLoading from '@/components/loading/CommonLoading';
 import '@/assets/css/reservation.css';
 
 const SearchMapModal = ({ isOpen, onClose, spotId, onUpdateSuccess }) => {
@@ -41,18 +42,15 @@ const SearchMapModal = ({ isOpen, onClose, spotId, onUpdateSuccess }) => {
                 <div className="search-map-modal modal-content">
                     {/* 로딩 오버레이 추가 */}
                     {isUpdating && (
-                        <div className="updating-overlay">
-                            <div className="updating-content">
-                                <div className="spinner-border mb-3" role="status" style={{ width: '3rem', height: '3rem' }}>
-                                    <span className="visually-hidden">Loading...</span>
-                                </div>
-                                <h4 className="updating-title mb-2">일정 수정 중...</h4>
-                                <p className="updating-description text-muted">
-                                    AI가 장소 정보를 분석하고 있습니다.<br/>
-                                    최대 20초 정도 소요됩니다.
-                                </p>
-                            </div>
-                        </div>
+                        <CommonLoading
+                        title="일정 수정 중..."
+                        description={
+                        <>
+                        AI가 장소 정보를 분석하고 있습니다.<br/>
+                        최대 20초 정도 소요됩니다.
+                        </>
+                    }
+                />
                     )}
                     <div className="modal-header">
                         <h3 className="modal-title">일정 수정</h3>
