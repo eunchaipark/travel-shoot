@@ -84,7 +84,7 @@ function StayCard({ stay }) {
                             <span className="stay-score">({stay.rating ? stay.rating.toFixed(1) : '0.0'} / 5)</span>
                         </div>
                         <div className="stay_location">
-                            <img className="location_icon" src="/images/gray-location-icon.svg" alt="위치" />
+                            <img className="location_icon" src="/images/common/gray-location-icon.svg" alt="위치" />
                             {stay.region}
                         </div>
                     </div>
@@ -414,7 +414,7 @@ export default function SearchResultPage() {
                                         onChange={() => handleStayTypeToggle(type)}
                                     />
                                     <span className="form-checkbox__text">
-                                        <img className="stays_image" src={`/images/stay/${type === '호텔' ? 'hotel' : type === '모텔' ? 'motel' : 'pension'}-icon.svg`} alt={type} />
+                                        <img className="stays_image" src={`/images/common/${type === '호텔' ? 'hotel' : type === '모텔' ? 'motel' : 'pension'}-icon.svg`} alt={type} />
                                         {type}
                                     </span>
                                 </label>
