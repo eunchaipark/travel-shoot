@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { useRecommendStay } from '@/hooks/main/useRecommendStay';
 import { useAuth } from '@/components/context/AuthContext';
 import { fetchAIRecommendedStays } from '@/services/main/recommendationApiService';
+import CommonLoading from '@/components/loading/CommonLoading';
 import {
   formatPrice,
   generateStarRating
@@ -179,31 +180,25 @@ const RecommendStaySection = () => {
     return (
       <section className="recommend-stay-section">
         <div className="recommend-stay-container">
-          <div className="loading-container">
-            <i className="fas fa-spinner fa-spin"></i>
-            <p>AI가 추천 숙소를 분석 중입니다...</p>
-          </div>
+          <CommonLoading
+            title="사용자에게 맞는 숙소 추천중..."
+            description={
+              <>
+                AI가 장소 정보를 분석하고 있습니다.<br />
+                최대 20초 정도 소요됩니다.
+              </>
+            }
+            isModal={false}
+          />
         </div>
       </section>
     );
   }
 
-  //  에러 상태
-  if (error) {
-    return (
-      <section className="recommend-stay-section">
-        <div className="recommend-stay-container">
-          <div className="error-container">
-            <i className="fas fa-exclamation-triangle"></i>
-            <p>{error}</p>
-            <button onClick={() => window.location.reload()}>
-              다시 시도
-            </button>
-          </div>
-        </div>
-      </section>
-    );
-  }
+
+  //  로그인은 했는데 설문조사는 안함
+  if (error) return null;
+
 
   //  데이터 없음
   if (!accommodations || accommodations.length === 0) {
