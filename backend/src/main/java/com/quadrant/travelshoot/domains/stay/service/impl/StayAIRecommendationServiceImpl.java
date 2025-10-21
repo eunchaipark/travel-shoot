@@ -12,6 +12,7 @@ import com.quadrant.travelshoot.domains.stay.dto.response.StayRecommendationResp
 import com.quadrant.travelshoot.domains.stay.entity.Stay;
 import com.quadrant.travelshoot.domains.stay.repository.StayRepository;
 import com.quadrant.travelshoot.domains.stay.service.StayAIRecommendationService;
+import com.quadrant.travelshoot.domains.stay.service.StayBasedFindService;
 import com.quadrant.travelshoot.domains.stay.service.StayRecommendationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,7 @@ public class StayAIRecommendationServiceImpl implements StayAIRecommendationServ
     private final ObjectMapper objectMapper;
     private final FileUploadRepository fileUploadRepository;
     private final StayRepository stayRepository;
+    private final StayBasedFindService stayBasedFindService;
     
     private static final String CACHE_KEY_PREFIX = "stay:ai:recommendation:";
     private static final Duration CACHE_TTL = Duration.ofDays(90); // 90일
@@ -139,6 +141,11 @@ public class StayAIRecommendationServiceImpl implements StayAIRecommendationServ
                 .filter(summary -> summary != null)
                 .collect(Collectors.toList());
             
+            log.info("숙소 기반 추천 조회 시작 - 숙소: {}개", selectedIds.size());
+            Map<Long, List<Object>> stayRecommendations = 
+                stayBasedFindService.findRecommendations(selectedIds, 2, 2);
+            log.info("숙소 기반 추천 조회 완료 - 결과: {}개", stayRecommendations.size());
+
             // 6. Redis 캐시 저장
             saveSummariesToCache(userId, selectedSummaries, reservationCount);
             
