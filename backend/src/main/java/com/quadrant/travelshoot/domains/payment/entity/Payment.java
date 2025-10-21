@@ -1,5 +1,6 @@
-package com.quadrant.travelshoot.domains.reservation.entity;
+package com.quadrant.travelshoot.domains.payment.entity;
 
+import com.quadrant.travelshoot.domains.reservation.enums.PaymentMethod;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -27,7 +28,7 @@ public class Payment {
     private Long reservationId;
 
     @Column(name = "payment_method", nullable = false)
-    private String paymentMethod;
+    private PaymentMethod paymentMethod;
 
     @Column(name = "payment_amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal paymentAmount;
@@ -45,7 +46,7 @@ public class Payment {
     private LocalDateTime refundedAt;
 
     @Builder
-    public Payment(String paymentCode, Long reservationId, String paymentMethod,
+    public Payment(String paymentCode, Long reservationId, PaymentMethod paymentMethod,
                    BigDecimal paymentAmount, String paymentStatus, LocalDateTime completedAt) {
         this.paymentCode = paymentCode;
         this.reservationId = reservationId;

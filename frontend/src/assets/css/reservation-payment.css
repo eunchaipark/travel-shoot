@@ -38,7 +38,7 @@
 .payment-page .section-card .stay-info .checkin-checkout .reservation-detail-arrow-con .reservation-detail-arrow {
     width: 15px;
     height: 15px;
-    background-image: url(/images/reservation/reservation-detail-arrow.svg);
+    background-image: url(/images/common/reservation-detail-arrow.svg);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -120,7 +120,7 @@
     /* 이미지 크기가 너무 커서 줄이려고 만들었음  */
     width: 15px;
     height: 15px;
-    background-image: url(/images/reservation/payment_location_icon.svg);
+    background-image: url(/images/common/gray-location-icon.svg);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;

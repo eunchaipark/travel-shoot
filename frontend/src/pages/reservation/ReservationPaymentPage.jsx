@@ -416,11 +416,7 @@ const ReservationPaymentPage = () => {
                                 <div className="policy-notice d-flex align-items-start mb-4">
                                     <div className="notice-content">
                                         <div className="notice-title fw-bold mb-1">
-                                            <img
-                                                className="notice-icon me-1"
-                                                src="/images/reservation/payment_agree_icon.svg"
-                                                alt=""
-                                            />
+                                            <span className="notice-icon me-1"></span>
                                             미성년자 및 법정대리인 필수
                                         </div>
                                         <div className="notice-desc text-muted small">

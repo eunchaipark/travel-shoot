@@ -114,5 +114,14 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query("SELECT COUNT(r) FROM Reservation r " +
        "WHERE r.userId = :userId " +
        "AND r.reservationStatus IN ('예약확정', '이용완료')")
-        int countCompletedReservations(@Param("userId") Long userId);  
+        int countCompletedReservations(@Param("userId") Long userId);
+
+    @Query("SELECT r FROM Reservation r " +
+            "JOIN FETCH r.room rm " +
+            "JOIN FETCH rm.stay " +
+            "WHERE r.id = :reservationId AND r.userId = :userId")
+    Optional<Reservation> findByIdAndUserIdWithStay(
+            @Param("reservationId") Long reservationId,
+            @Param("userId") Long userId
+    );
 }

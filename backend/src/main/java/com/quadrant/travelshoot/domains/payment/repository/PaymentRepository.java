@@ -1,6 +1,6 @@
-package com.quadrant.travelshoot.domains.reservation.repository;
+package com.quadrant.travelshoot.domains.payment.repository;
 
-import com.quadrant.travelshoot.domains.reservation.entity.Payment;
+import com.quadrant.travelshoot.domains.payment.entity.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

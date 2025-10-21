@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 // import { useAuth } from '@/hooks/auth/useAuth'
 import { useAuth } from '@/components/context/AuthContext'
 
-
 const Header = () => {
     const [searchValue, setSearchValue] = useState('SL 호텔 강릉');
     const [showSuggestions, setShowSuggestions] = useState(false);

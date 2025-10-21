@@ -6,9 +6,9 @@ import com.quadrant.travelshoot.domains.stay.dto.response.SearchResponse;
 import com.quadrant.travelshoot.domains.stay.dto.response.AutocompleteResponse;
 import com.quadrant.travelshoot.domains.stay.dto.response.StayListItem;
 import com.quadrant.travelshoot.domains.stay.entity.Stay;
-import com.quadrant.travelshoot.domains.stay.entity.SearchHistory;
+//import com.quadrant.travelshoot.domains.stay.entity.SearchHistory; //TODO 1021
 import com.quadrant.travelshoot.domains.stay.repository.StayRepository;
-import com.quadrant.travelshoot.domains.stay.repository.SearchHistoryRepository;
+//import com.quadrant.travelshoot.domains.stay.repository.SearchHistoryRepository; //TODO 1021
 import com.quadrant.travelshoot.domains.stay.service.StaySearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 public class StaySearchServiceImpl implements StaySearchService {
 
     private final StayRepository stayRepository;
-    private final SearchHistoryRepository searchHistoryRepository;
+//    private final SearchHistoryRepository searchHistoryRepository; //TODO 1021
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -253,60 +253,60 @@ public class StaySearchServiceImpl implements StaySearchService {
         );
     }
 
-
-    @Override
-    @Transactional
-    public void saveSearchHistory(Long userId, SearchRequest request) {
-        boolean isDuplicate = searchHistoryRepository.existsByUserIdAndRegionAndCreatedAtAfter(
-                userId,
-                request.getRegion(),
-                LocalDateTime.now().minusMinutes(1));
-
-        if (isDuplicate) {
-            log.info(" 중복 검색 - 기록 저장 스킵");
-            return;
-        }
-
-        SearchHistory history = SearchHistory.builder()
-                .userId(userId)
-                .region(request.getRegion())
-                .checkIn(request.getCheckIn())
-                .checkOut(request.getCheckOut())
-                .adults(request.getAdults())
-                .children(request.getChildren())
-                .createdAt(LocalDateTime.now())
-                .build();
-
-        searchHistoryRepository.save(history);
-        log.info("검색 기록 저장 완료 - userId: {}, 성인: {}명, 어린이: {}명",
-                userId, request.getAdults(), request.getChildren());
-
-        maintainRecentHistory(userId);
-    }
-
-    @Override
-    public List<SearchRequest> getSearchHistory(Long userId) {
-        List<SearchHistory> histories = searchHistoryRepository
-                .findTop5ByUserIdOrderByCreatedAtDesc(userId);
-
-        return histories.stream()
-                .map(this::toSearchRequest)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional
-    public void deleteSearchHistory(Long userId, Long historyId) {
-        SearchHistory history = searchHistoryRepository.findById(historyId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 검색 기록입니다."));
-
-        if (!history.getUserId().equals(userId)) {
-            throw new IllegalArgumentException("삭제 권한이 없습니다.");
-        }
-
-        searchHistoryRepository.delete(history);
-        log.info("검색 기록 삭제 완료 - historyId: {}", historyId);
-    }
+////TODO  : 1021
+//    @Override
+//    @Transactional
+//    public void saveSearchHistory(Long userId, SearchRequest request) {
+//        boolean isDuplicate = searchHistoryRepository.existsByUserIdAndRegionAndCreatedAtAfter(
+//                userId,
+//                request.getRegion(),
+//                LocalDateTime.now().minusMinutes(1));
+//
+//        if (isDuplicate) {
+//            log.info(" 중복 검색 - 기록 저장 스킵");
+//            return;
+//        }
+//
+//        SearchHistory history = SearchHistory.builder()
+//                .userId(userId)
+//                .region(request.getRegion())
+//                .checkIn(request.getCheckIn())
+//                .checkOut(request.getCheckOut())
+//                .adults(request.getAdults())
+//                .children(request.getChildren())
+//                .createdAt(LocalDateTime.now())
+//                .build();
+//
+//        searchHistoryRepository.save(history);
+//        log.info("검색 기록 저장 완료 - userId: {}, 성인: {}명, 어린이: {}명",
+//                userId, request.getAdults(), request.getChildren());
+//
+//        maintainRecentHistory(userId);
+//    }
+//
+//    @Override
+//    public List<SearchRequest> getSearchHistory(Long userId) {
+//        List<SearchHistory> histories = searchHistoryRepository
+//                .findTop5ByUserIdOrderByCreatedAtDesc(userId);
+//
+//        return histories.stream()
+//                .map(this::toSearchRequest)
+//                .collect(Collectors.toList());
+//    }
+//
+//    @Override
+//    @Transactional
+//    public void deleteSearchHistory(Long userId, Long historyId) {
+//        SearchHistory history = searchHistoryRepository.findById(historyId)
+//                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 검색 기록입니다."));
+//
+//        if (!history.getUserId().equals(userId)) {
+//            throw new IllegalArgumentException("삭제 권한이 없습니다.");
+//        }
+//
+//        searchHistoryRepository.delete(history);
+//        log.info("검색 기록 삭제 완료 - historyId: {}", historyId);
+//    }
 
     // ===== Private 메서드 =====
 
@@ -424,24 +424,24 @@ public class StaySearchServiceImpl implements StaySearchService {
         }
     }
 
-    private SearchRequest toSearchRequest(SearchHistory history) {
-        return SearchRequest.builder()
-                .region(history.getRegion())
-                .checkIn(history.getCheckIn())
-                .checkOut(history.getCheckOut())
-                .adults(history.getAdults())
-                .children(history.getChildren())
-                .build();
-    }
+//    private SearchRequest toSearchRequest(SearchHistory history) {
+//        return SearchRequest.builder()
+//                .region(history.getRegion())
+//                .checkIn(history.getCheckIn())
+//                .checkOut(history.getCheckOut())
+//                .adults(history.getAdults())
+//                .children(history.getChildren())
+//                .build();
+//    }
 
-    private void maintainRecentHistory(Long userId) {
-        List<SearchHistory> all = searchHistoryRepository
-                .findByUserIdOrderByCreatedAtDesc(userId);
-
-        if (all.size() > 5) {
-            List<SearchHistory> toDelete = all.subList(5, all.size());
-            searchHistoryRepository.deleteAll(toDelete);
-            log.info("오래된 검색 {} 개 삭제", toDelete.size());
-        }
-    }
+//    private void maintainRecentHistory(Long userId) {
+//        List<SearchHistory> all = searchHistoryRepository
+//                .findByUserIdOrderByCreatedAtDesc(userId);
+//
+//        if (all.size() > 5) {
+//            List<SearchHistory> toDelete = all.subList(5, all.size());
+//            searchHistoryRepository.deleteAll(toDelete);
+//            log.info("오래된 검색 {} 개 삭제", toDelete.size());
+//        }
+//    }
 }
