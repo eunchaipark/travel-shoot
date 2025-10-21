@@ -3,9 +3,11 @@ package com.quadrant.travelshoot;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
 @EnableJpaAuditing
+@EnableAsync  /* 비동기를 위한 어노테이션 */
 public class BackendApplication {
 
 	public static void main(String[] args) {
