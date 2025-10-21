@@ -1,8 +1,7 @@
 package com.quadrant.travelshoot.domains.stay.service;
 
-import com.quadrant.travelshoot.domains.stay.dto.response.StayBasedFindResponse;
-
 import java.util.List;
+import java.util.Map;
 
 public interface StayBasedFindService {
 
@@ -12,9 +11,9 @@ public interface StayBasedFindService {
      * @param stayIds 숙소 ID 목록
      * @param restaurantCount 숙소당 맛집 개수
      * @param activityCount 숙소당 관광지 개수
-     * @return 숙소별 추천 결과 목록
+     * @return 숙소 ID별로 [숙소정보, 맛집1, 맛집2, 관광지1, 관광지2] 형태의 리스트
      */
-    List<StayBasedFindResponse> findRecommendations(
+    Map<Long, List<Object>> findRecommendations(
             List<Long> stayIds,
             int restaurantCount,
             int activityCount

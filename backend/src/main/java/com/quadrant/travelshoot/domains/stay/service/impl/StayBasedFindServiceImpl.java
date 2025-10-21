@@ -2,10 +2,15 @@ package com.quadrant.travelshoot.domains.stay.service.impl;
 
 import com.quadrant.travelshoot.domains.activity.entity.Activity;
 import com.quadrant.travelshoot.domains.activity.service.ActivityService;
+import com.quadrant.travelshoot.domains.common.entity.FileUpload;
+import com.quadrant.travelshoot.domains.common.service.impl.FileUploadServiceImpl;
 import com.quadrant.travelshoot.domains.restaurant.entity.Restaurant;
 import com.quadrant.travelshoot.domains.restaurant.service.RestaurantService;
+import com.quadrant.travelshoot.domains.stay.entity.Room;
 import com.quadrant.travelshoot.domains.stay.entity.Stay;
 import com.quadrant.travelshoot.domains.stay.service.StayService;
+import com.quadrant.travelshoot.domains.stay.dto.response.FindActivityResponse;
+import com.quadrant.travelshoot.domains.stay.dto.response.FindRestaurantResponse;
 import com.quadrant.travelshoot.domains.stay.dto.response.StayBasedFindResponse;
 import com.quadrant.travelshoot.domains.stay.service.StayBasedFindService;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +19,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -27,47 +37,95 @@ public class StayBasedFindServiceImpl implements StayBasedFindService {
     private final StayService stayService;
     private final RestaurantService restaurantService;
     private final ActivityService activityService;
+    private final FileUploadServiceImpl fileUploadService;
 
     private static final double EARTH_RADIUS_KM = 6371.0;
 
     @Override
-    public List<StayBasedFindResponse> findRecommendations(
-            List<Long> stayIds,
-            int restaurantCount,
-            int activityCount) {
-
-        log.info("숙소 기반 추천 시작 - 숙소 {}개, 맛집 {}개/숙소, 관광지 {}개/숙소",
-                stayIds.size(), restaurantCount, activityCount);
-
-        return stayIds.stream()
-                .map(stayId -> findForStay(stayId, restaurantCount, activityCount))
-                .collect(Collectors.toList());
+    public Map<Long, List<Object>> findRecommendations(List<Long> stayIds, int restaurantCount, int activityCount) {
+        Map<Long, List<Object>> result = new LinkedHashMap<>();
+        
+        for (Long stayId : stayIds) {
+            List<Object> stayData = findForStay(stayId, restaurantCount, activityCount);
+            if (!stayData.isEmpty()) {
+                result.put(stayId, stayData);
+            }
+        }
+        
+        return result;
     }
 
     /**
      * 단일 숙소에 대한 맛집/관광지 추천
+     * 순서: 숙소 정보 -> 맛집들 -> 관광지들
      */
-    private StayBasedFindResponse findForStay(Long stayId, int restaurantCount, int activityCount) {
+    private List<Object> findForStay(Long stayId, int restaurantCount, int activityCount) {
         Stay stay = stayService.getById(stayId);
 
-        log.info("숙소 '{}' 추천 시작 - 위치: ({}, {})",
-                stay.getName(), stay.getLatitude(), stay.getLongitude());
+        if (stay == null) {
+            log.warn("숙소 ID {}를 찾을 수 없습니다.", stayId);
+            return Collections.emptyList();
+        }
 
-        // 맛집 추천 (단계별 완화)
-        List<Restaurant> restaurants = findRestaurants(stay, restaurantCount);
+        // 최저가 설정
+        BigDecimal minPrice = findRoomMinPrice(stay.getRooms());
+        stay.setMinPrice(minPrice);
 
-        // 관광지 추천 (단계별 완화)
-        List<Activity> activities = findActivities(stay, activityCount);
+        // 이미지 설정
+        List<FileUpload> images = fileUploadService.findAllByReferenceTypeAndReferenceId("숙소", stayId);
+        String mainImageUrl = "";
+        if (!images.isEmpty()) {
+            mainImageUrl = images.stream()
+                .filter(img -> Boolean.TRUE.equals(img.getIsRepresentative()))
+                .findFirst()
+                .map(FileUpload::getS3Url)
+                .orElseGet(() -> images.get(0).getS3Url());
+        }
+        stay.setMainImageUrl(mainImageUrl);
 
-        log.info("숙소 '{}' 추천 완료 - 맛집: {}개, 관광지: {}개",
-                stay.getName(), restaurants.size(), activities.size());
+        log.debug("숙소 조회 - ID: {}, 이름: {}, 최저가: {}, 이미지: {}", 
+                stay.getId(), stay.getName(), minPrice, mainImageUrl);
 
-        return StayBasedFindResponse.builder()
-                .stayId(stay.getId())
-                .stayName(stay.getName())
-                .restaurants(restaurants)
-                .activities(activities)
+        List<Object> result = new ArrayList<>();
+
+        // 1. 숙소 정보 추가
+        StayBasedFindResponse stayDto = StayBasedFindResponse.builder()
+                .id(stay.getId())
+                .latitude(stay.getLatitude())
+                .longitude(stay.getLongitude())
+                .name(stay.getName())
+                .lowestPrice(stay.getMinPrice() != null ? stay.getMinPrice() : BigDecimal.ZERO)
+                .stayType(stay.getStayType())
+                .placeType("stay")
+                .mainImageUrl(stay.getMainImageUrl() != null ? stay.getMainImageUrl() : "")
+                .restaurants(null)
+                .activities(null)
                 .build();
+        result.add(stayDto);
+
+        // 2. 맛집 추천 추가
+        List<Restaurant> restaurants = findRestaurants(stay, restaurantCount);
+        for (Restaurant r : restaurants) {
+            result.add(FindRestaurantResponse.from(r));
+        }
+
+        // 3. 관광지 추천 추가
+        List<Activity> activities = findActivities(stay, activityCount);
+        for (Activity a : activities) {
+            result.add(FindActivityResponse.from(a));
+        }
+
+        return result;
+    }
+
+    /**
+     * 최저가 구하는 메서드 (StayServiceImpl의 로직 복사)
+     */
+    private BigDecimal findRoomMinPrice(List<Room> rooms) {
+        return rooms.stream()
+                .flatMap(room -> Stream.of(room.getWeekdayPrice(), room.getWeekendPrice()))
+                .min(Comparator.naturalOrder())
+                .orElse(BigDecimal.ZERO);
     }
 
     /**
@@ -101,7 +159,9 @@ public class StayBasedFindServiceImpl implements StayBasedFindService {
         result = restaurantService.getByRatingAndDistance(
                 3.0, stay.getLatitude(), stay.getLongitude(), 30.0);
 
-        log.warn("숙소 '{}' 맛집 {}개 미만 확보 - 실제: {}개", stay.getName(), count, result.size());
+        if (result.size() < count) {
+            log.warn("숙소 '{}' 맛집 {}개 미만 확보 - 실제: {}개", stay.getName(), count, result.size());
+        }
         return sortAndLimit(result, stay, count);
     }
 
@@ -136,7 +196,9 @@ public class StayBasedFindServiceImpl implements StayBasedFindService {
         result = activityService.getByRatingAndDistance(
                 3.0, stay.getLatitude(), stay.getLongitude(), 30.0);
 
-        log.warn("숙소 '{}' 관광지 {}개 미만 확보 - 실제: {}개", stay.getName(), count, result.size());
+        if (result.size() < count) {
+            log.warn("숙소 '{}' 관광지 {}개 미만 확보 - 실제: {}개", stay.getName(), count, result.size());
+        }
         return sortAndLimitActivities(result, stay, count);
     }
 
