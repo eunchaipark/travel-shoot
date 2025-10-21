@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useTrendingSlider } from "@/hooks/main/useTrendingSlider";
 import { fetchAllTrendingData } from "@/services/main/trendingApiService";
 import { TRENDING_DATA, getSlideData } from "@/utils/main/trendingUtils";
-
+import { useNavigate } from 'react-router-dom';
 // ============================================================================
 // Trending Card 컴포넌트
 // ============================================================================
@@ -257,19 +257,24 @@ const TrendingSection = () => {
   }, []); // 컴포넌트 마운트 시 한번만 실행
 
   // 카드 클릭 핸들러
+
+
+  const navigate = useNavigate();
   const handleCardClick = (item, tabType) => {
     console.log("Trending 카드 클릭:", tabType, item.id);
     // 여기에 카드 클릭 시 동작 구현
     // 예: 상세 페이지 이동, 모달 표시 등
 
     // 예시: 상세 페이지로 이동
-    // if (tabType === 'stay') {
-    //   window.location.href = `/stays/${item.id}`;
-    // } else if (tabType === 'restaurants') {
-    //   window.location.href = `/restaurants/${item.id}`;
-    // } else if (tabType === 'attractions') {
-    //   window.location.href = `/activities/${item.id}`;
-    // }
+     if (tabType === 'stay') {
+      navigate(`/stays/${item.id}`);
+     } else if (tabType === 'restaurants' && item.latitude && item.longitude) {
+      const url = `https://map.kakao.com/link/map/${encodeURIComponent(item.title)},${item.latitude},${item.longitude}`;
+      window.open(url, '_blank');
+    } else if (tabType === 'attractions' && item.latitude && item.longitude) {
+      const url = `https://map.kakao.com/link/map/${encodeURIComponent(item.title)},${item.latitude},${item.longitude}`;
+      window.open(url, '_blank');
+    }
   };
 
   // 전역 API 제공

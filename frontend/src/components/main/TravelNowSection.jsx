@@ -2,12 +2,11 @@
  * Travel Now Section - 통합 컴포넌트
  * 경로: C:\ITStudy\dev\travel-shoot\frontend\src\components\TravelNowSection.jsx
  */
-
+import { useNavigate } from "react-router-dom";
 import React, { useEffect, useRef, useState } from 'react';
 import { useTravelNow } from '@/hooks/main/useTravelNow';
 import { getSlideData, formatCount } from '@/utils/main/travelNowUtils';
 import { fetchTravelNow } from "@/services/main/travelNowApiService";
-//import { useNavigate } from 'react-router-dom'; 백엔드 구현후 사용 예정
 
 // ============================================================================
 // Travel Now Card 컴포넌트
@@ -230,6 +229,9 @@ const TravelNowSection = () => {
     loadDestinations();
   }, []);
 
+
+
+  const navigate = useNavigate();
   // 카드 클릭 핸들러
   const handleCardClick = (destination) => {
     console.log('선택된 여행지:', destination);
@@ -272,7 +274,7 @@ const TravelNowSection = () => {
     );
     
     // 백엔드 구현 후 주석 해제
-    // navigate(searchUrl);
+    navigate(searchUrl);
   };
 
   // 전역 API 제공
