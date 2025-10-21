@@ -2,8 +2,6 @@
  * 경로: frontend/src/components/review/ReviewHeader.jsx
  */
 
-import { useState } from "react";
-
 const ReviewHeader = () => {
 
     const handleBack = () => {
