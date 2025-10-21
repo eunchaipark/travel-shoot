@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 import SimpleHeader from '@/components/layout/SimpleHeader';
 import {useReservationDetail} from '@/hooks/useReservationDetail';
 import CourseMap from '@/components/reservation/CourseMap';
@@ -14,9 +15,11 @@ const ReservationDetailPage = () => {
     // URL에서 reservationId 가져오기
     const queryParams = new URLSearchParams(window.location.search);
     const reservationId = queryParams.get('reservationId');
+    const navigate = useNavigate();
 
     // 커스텀 훅으로 데이터 관리
     const { reservationData, courseData, loading, error, refetchCourseData } = useReservationDetail(reservationId);
+    const pricePerNight = reservationData ? (reservationData.totalPrice / reservationData.totalNights).toLocaleString() : '0';
 
     const handleCopyAddress = (address) => {
         navigator.clipboard.writeText(address);
@@ -26,20 +29,6 @@ const ReservationDetailPage = () => {
     const getSpotTypeClass = (spotType) => {
         return spotType === '맛집' ? 'course-restaurant' : 'course-attraction';
     };
-
-    // 로딩 중
-    if (loading) {
-        return (
-            <>
-                <SimpleHeader/>
-                <main className="content-area">
-                    <div className="container text-center py-5">
-                        <div>로딩 중...</div>
-                    </div>
-                </main>
-            </>
-        );
-    }
 
     // 에러 발생
     if (error) {
@@ -65,28 +54,93 @@ const ReservationDetailPage = () => {
                         {/* 예약 완료 섹션 */}
                         <div className="col-12 content-section">
                             <div className="content-section-state-inner">
-                                <div className="content-section-title mb-4">
-                                    예약 완료
-                                    <span className="reservation-number">
-                                        (숙소 예약 번호 : {reservationData?.reservationNumber})
-                                    </span>
-                                </div>
-                                <div className="col-12 reservation-complete d-flex">
-                                    <div className="col-6 d-flex justify-content-start">
-                                        <input
-                                            type="button"
-                                            value="후기 작성하기"
-                                            className="review-btn"
-                                        />
-                                    </div>
-                                    <div className="col-6 d-flex justify-content-end">
-                                        <input
-                                            type="button"
-                                            value="다시 예약하기"
-                                            className="re-reservation-btn"
-                                        />
-                                    </div>
-                                </div>
+                                {loading ? (
+                                    <>
+                                        <div className="content-section-title mb-4">
+                                            <div style={{height: '32px', width: '200px', background: '#e0e0e0', borderRadius: '4px'}}></div>
+                                        </div>
+                                        <div className="col-12 reservation-complete d-flex">
+                                            <div className="col-6 d-flex justify-content-start">
+                                                <div style={{height: '40px', width: '120px', background: '#e0e0e0', borderRadius: '4px'}}></div>
+                                            </div>
+                                            <div className="col-6 d-flex justify-content-end">
+                                                <div style={{height: '40px', width: '120px', background: '#e0e0e0', borderRadius: '4px'}}></div>
+                                            </div>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="content-section-title mb-4">
+                                            {reservationData?.reservationStatus}
+                                            <span className="reservation-number">
+                                                (숙소 예약 번호 : {reservationData?.reservationCode})
+                                            </span>
+                                        </div>
+                                        {reservationData?.reservationStatus === '이용완료' && (
+                                            <div className="col-12 reservation-complete d-flex">
+                                                <div className="col-6 d-flex justify-content-start">
+                                                    <input
+                                                        type="button"
+                                                        value="후기 작성하기"
+                                                        className="review-btn"
+                                                        onClick={() => navigate(`/reviews/reservations/${reservationId}`)}
+                                                    />
+                                                </div>
+                                                <div className="col-6 d-flex justify-content-end">
+                                                    <input
+                                                        type="button"
+                                                        value="다시 예약하기"
+                                                        className="re-reservation-btn"
+                                                        onClick={() => navigate(`/stays/${reservationData?.stayId}`)}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                        {reservationData?.reservationStatus === '예약확정' && (
+                                            <div className="col-12 reservation-complete d-flex">
+                                                <div className="col-6 d-flex justify-content-start">
+                                                    <input
+                                                        type="button"
+                                                        value="예약 목록 보기"
+                                                        className="review-btn"
+                                                        onClick={() => navigate("/mypage/reservation")}
+                                                    />
+                                                </div>
+                                                <div className="col-6 d-flex justify-content-end">
+                                                    <input
+                                                        type="button"
+                                                        value="숙소 길찾기"
+                                                        className="re-reservation-btn"
+                                                        onClick={() => {
+                                                            const url = `https://map.kakao.com/link/map/${reservationData?.stayName},${reservationData?.latitude},${reservationData?.longitude}`;
+                                                            window.open(url, '_blank');
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                        {reservationData?.reservationStatus === '예약취소' && (
+                                            <div className="col-12 reservation-complete d-flex">
+                                                <div className="col-6 d-flex justify-content-start">
+                                                    <input
+                                                        type="button"
+                                                        value="예약 목록 보기"
+                                                        className="review-btn"
+                                                        onClick={() => navigate("/mypage/reservation")}
+                                                    />
+                                                </div>
+                                                <div className="col-6 d-flex justify-content-end">
+                                                    <input
+                                                        type="button"
+                                                        value="다시 예약하기"
+                                                        className="re-reservation-btn"
+                                                        onClick={() => navigate(`/stays/${reservationData?.stayId}`)}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
                             </div>
                         </div>
 
@@ -95,61 +149,98 @@ const ReservationDetailPage = () => {
                             <div className="content-section-inner">
                                 <div className="content-section-title mb-3">숙소</div>
 
-                                <div className="row align-items-center">
-                                    <div className="col-12">
-                                        <span className="lodging-caption">
-                                            • 숙소와 날짜를 다시 한번 확인하세요
-                                        </span>
-                                    </div>
-                                    <div className="col-auto lodging-image-con">
-                                        <img
-                                            src={reservationData?.lodgingImage}
-                                            alt={reservationData?.lodgingName}
-                                            className="lodging-image"
-                                        />
-                                    </div>
-                                    <div className="col">
-                                        <div className="row lodging-info">
-                                            <div className="col-12 mb-3">
-                                                <h5 className="mb-3 mt-2 fw-bold">
-                                                    {reservationData?.lodgingName}
-                                                </h5>
-
-                                                <div className="row small-text mb-2">
-                                                    <div className="col-5">
-                                                        <div className="mb-1">체크인</div>
-                                                        <div className="fw-bold">
-                                                            {reservationData?.checkIn.date}
+                                {loading ? (
+                                    <div className="row align-items-center">
+                                        <div className="col-12">
+                                            <span className="lodging-caption">
+                                                • 숙소와 날짜를 다시 한번 확인하세요
+                                            </span>
+                                        </div>
+                                        <div className="col-auto lodging-image-con">
+                                            <div style={{width: '120px', height: '120px', background: '#e0e0e0', borderRadius: '8px'}}></div>
+                                        </div>
+                                        <div className="col">
+                                            <div className="row lodging-info">
+                                                <div className="col-12 mb-3">
+                                                    <div style={{height: '28px', width: '60%', background: '#e0e0e0', borderRadius: '4px', marginBottom: '16px'}}></div>
+                                                    <div className="row small-text mb-2">
+                                                        <div className="col-5">
+                                                            <div style={{height: '16px', width: '50px', background: '#e0e0e0', borderRadius: '4px', marginBottom: '8px'}}></div>
+                                                            <div style={{height: '20px', width: '80px', background: '#e0e0e0', borderRadius: '4px', marginBottom: '4px'}}></div>
+                                                            <div style={{height: '20px', width: '60px', background: '#e0e0e0', borderRadius: '4px'}}></div>
                                                         </div>
-                                                        <div className="fw-bold">
-                                                            {reservationData?.checkIn.time}
+                                                        <div className="col-2 reservation-detail-arrow-con">
+                                                            <div className="reservation-detail-arrow"></div>
                                                         </div>
-                                                    </div>
-                                                    <div className="col-2 reservation-detail-arrow-con">
-                                                        <div className="reservation-detail-arrow"></div>
-                                                    </div>
-                                                    <div className="col-5">
-                                                        <div className="mb-1">체크아웃</div>
-                                                        <div className="fw-bold">
-                                                            {reservationData?.checkOut.date}
-                                                        </div>
-                                                        <div className="fw-bold">
-                                                            {reservationData?.checkOut.time}
+                                                        <div className="col-5">
+                                                            <div style={{height: '16px', width: '60px', background: '#e0e0e0', borderRadius: '4px', marginBottom: '8px'}}></div>
+                                                            <div style={{height: '20px', width: '80px', background: '#e0e0e0', borderRadius: '4px', marginBottom: '4px'}}></div>
+                                                            <div style={{height: '20px', width: '60px', background: '#e0e0e0', borderRadius: '4px'}}></div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div className="col-xl-5 mb-3 text-end">
-                                                <div className="price-highlight text-nowrap">
-                                                    <span className="small-text me-2 mb-1 standard">
-                                                        숙박/1박당
-                                                    </span>
-                                                    ₩ {reservationData?.pricePerNight.toLocaleString()}
+                                                <div className="col-xl-5 mb-3 text-end">
+                                                    <div style={{height: '24px', width: '120px', background: '#e0e0e0', borderRadius: '4px', marginLeft: 'auto'}}></div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                ) : (
+                                    <div className="row align-items-center">
+                                        <div className="col-12">
+                                            <span className="lodging-caption">
+                                                • 숙소와 날짜를 다시 한번 확인하세요
+                                            </span>
+                                        </div>
+                                        <div className="col-auto lodging-image-con">
+                                            <img
+                                                src={reservationData?.mainImageUrl}
+                                                alt={reservationData?.stayName}
+                                                className="lodging-image"
+                                            />
+                                        </div>
+                                        <div className="col">
+                                            <div className="row lodging-info">
+                                                <div className="col-12 mb-3">
+                                                    <h5 className="mb-3 mt-2 fw-bold">
+                                                        {reservationData?.stayName}
+                                                    </h5>
+                                                    <div className="row small-text mb-2">
+                                                        <div className="col-5">
+                                                            <div className="mb-1">체크인</div>
+                                                            <div className="fw-bold">
+                                                                {reservationData?.checkInDate}
+                                                            </div>
+                                                            <div className="fw-bold">
+                                                                {reservationData?.checkInTime}
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-2 reservation-detail-arrow-con">
+                                                            <div className="reservation-detail-arrow"></div>
+                                                        </div>
+                                                        <div className="col-5">
+                                                            <div className="mb-1">체크아웃</div>
+                                                            <div className="fw-bold">
+                                                                {reservationData?.checkOutDate}
+                                                            </div>
+                                                            <div className="fw-bold">
+                                                                {reservationData?.checkOutTime}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="col-xl-5 mb-3 text-end">
+                                                    <div className="price-highlight text-nowrap">
+                                                        <span className="small-text me-2 mb-1 standard">
+                                                            숙박/1박당
+                                                        </span>
+                                                        ₩ {pricePerNight}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -159,47 +250,93 @@ const ReservationDetailPage = () => {
                                 <div className="content-section-inner">
                                     <div className="content-section-title mb-4">결제 정보</div>
 
-                                    <div className="mb-3">
-                                        <div className="mb-2 room-night-summary">
-                                            객실 {reservationData?.numberOfRooms}개 x {reservationData?.numberOfNights}박
-                                        </div>
-                                        <div className="d-flex">
-                                            <div className="col-1 pay-line-con">
-                                                <div className="vr pay-line"></div>
-                                            </div>
-                                            <div className="col-11">
-                                                <div className="row align-items-center mb-2">
-                                                    <div className="col">객실 요금</div>
-                                                    <div className="col-auto">
-                                                        ₩ {reservationData?.pricePerNight.toLocaleString()}
+                                    {loading ? (
+                                        <div className="mb-3">
+                                            <div style={{height: '20px', width: '100px', background: '#e0e0e0', borderRadius: '4px', marginBottom: '16px'}}></div>
+                                            <div className="d-flex">
+                                                <div className="col-1 pay-line-con">
+                                                    <div className="vr pay-line"></div>
+                                                </div>
+                                                <div className="col-11">
+                                                    <div className="row align-items-center mb-2">
+                                                        <div className="col">
+                                                            <div style={{height: '16px', width: '60px', background: '#e0e0e0', borderRadius: '4px'}}></div>
+                                                        </div>
+                                                        <div className="col-auto">
+                                                            <div style={{height: '16px', width: '80px', background: '#e0e0e0', borderRadius: '4px'}}></div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row align-items-center mb-2">
+                                                        <div className="col">
+                                                            <div style={{height: '16px', width: '60px', background: '#e0e0e0', borderRadius: '4px'}}></div>
+                                                        </div>
+                                                        <div className="col-auto">
+                                                            <div style={{height: '16px', width: '40px', background: '#e0e0e0', borderRadius: '4px'}}></div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row align-items-center pb-3">
+                                                        <div className="col">
+                                                            <div style={{height: '16px', width: '60px', background: '#e0e0e0', borderRadius: '4px'}}></div>
+                                                        </div>
+                                                        <div className="col-auto">
+                                                            <div style={{height: '16px', width: '100px', background: '#e0e0e0', borderRadius: '4px'}}></div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div className="row align-items-center mb-2">
-                                                    <div className="col">숙박 일수</div>
-                                                    <div className="col-auto">
-                                                        {reservationData?.numberOfNights}박
-                                                    </div>
+                                            </div>
+                                            <div className="payment-info-dotted-line mb-3"></div>
+                                            <div className="row align-items-center">
+                                                <div className="col">
+                                                    <div style={{height: '20px', width: '80px', background: '#e0e0e0', borderRadius: '4px'}}></div>
                                                 </div>
-                                                <div className="row align-items-center pb-3">
-                                                    <div className="col">결제 방법</div>
-                                                    <div className="col-auto">
-                                                        {reservationData?.paymentMethod}
-                                                    </div>
+                                                <div className="col-auto">
+                                                    <div style={{height: '24px', width: '120px', background: '#e0e0e0', borderRadius: '4px'}}></div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="payment-info-dotted-line mb-3"></div>
-                                        <div className="row align-items-center">
-                                            <div className="col">
-                                                <strong>최종 가격</strong>
+                                    ) : (
+                                        <div className="mb-3">
+                                            <div className="mb-2 room-night-summary">
+                                                객실 {1}개 x {reservationData?.totalNights}박
                                             </div>
-                                            <div className="col-auto">
-                                                <span className="final-price">
-                                                    ₩ {reservationData?.totalPrice.toLocaleString()}
-                                                </span>
+                                            <div className="d-flex">
+                                                <div className="col-1 pay-line-con">
+                                                    <div className="vr pay-line"></div>
+                                                </div>
+                                                <div className="col-11">
+                                                    <div className="row align-items-center mb-2">
+                                                        <div className="col">객실 요금</div>
+                                                        <div className="col-auto">
+                                                            ₩ {pricePerNight}
+                                                        </div>
+                                                    </div>
+                                                    <div className="row align-items-center mb-2">
+                                                        <div className="col">숙박 일수</div>
+                                                        <div className="col-auto">
+                                                            {reservationData?.totalNights}박
+                                                        </div>
+                                                    </div>
+                                                    <div className="row align-items-center pb-3">
+                                                        <div className="col">결제 방법</div>
+                                                        <div className="col-auto">
+                                                            {reservationData?.paymentMethod}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="payment-info-dotted-line mb-3"></div>
+                                            <div className="row align-items-center">
+                                                <div className="col">
+                                                    <strong>최종 가격</strong>
+                                                </div>
+                                                <div className="col-auto">
+                                                    <span className="final-price">
+                                                        ₩ {reservationData?.totalPrice.toLocaleString()}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -223,16 +360,6 @@ const ReservationDetailPage = () => {
                                                 </li>
                                             ))}
                                         </ul>
-
-                                        {/* Map Skeleton */}
-                                        <div className="map-placeholder mb-4" style={{background: '#f0f0f0'}}>
-                                            <div className="text-center py-5">
-                                                <div className="spinner-border text-secondary" role="status">
-                                                    <span className="visually-hidden">Loading...</span>
-                                                </div>
-                                                <div className="mt-2 text-muted">지도 로딩 중...</div>
-                                            </div>
-                                        </div>
 
                                         {/* Course Items Skeleton */}
                                         <div className="course-list">
