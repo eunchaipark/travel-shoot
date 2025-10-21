@@ -19,7 +19,7 @@ public interface TravelCourseService {
     /**
      * 여행 코스 조회
      */
-    TravelCourseResponse getCourse(Long courseId, String type);
+    TravelCourseResponse getCourse(Long courseId, String type, Long userId);
 
 
     /**
