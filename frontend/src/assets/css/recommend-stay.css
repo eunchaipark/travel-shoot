@@ -58,8 +58,7 @@
 }
 
 .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .section-subtitle .username-sub {
-    color: #FF8888;
-    font-weight: 600;
+    color: #666666;
 }
 
 /* ==========================================================================
@@ -246,7 +245,7 @@
 }
 
 .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper .accommodation-list-container .accommodation-list .accommodation-item .accommodation-info .accommodation-header .accommodation-location .location-text {
-    font-size: 14px;
+    font-size: 13px;
     color: #666;
     font-weight: 500;
 }

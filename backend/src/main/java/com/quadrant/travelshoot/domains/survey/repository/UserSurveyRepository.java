@@ -27,10 +27,8 @@ public interface UserSurveyRepository extends JpaRepository<UserSurvey, Long> {
     // 실존하는 ID인가 검증
     boolean existsByUserId(Long userId);
 
-    @Query("SELECT s FROM UserSurvey s " +
+    @Query("SELECT DISTINCT s FROM UserSurvey s " +
            "LEFT JOIN FETCH s.regions " +
-           "LEFT JOIN FETCH s.foods " +
-           "LEFT JOIN FETCH s.activities " +
            "WHERE s.userId = :userId")
     Optional<UserSurvey> findByUserIdWithDetails(@Param("userId") Long userId);
 }

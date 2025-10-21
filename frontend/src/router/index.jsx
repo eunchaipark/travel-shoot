@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import MainPage from '@/pages/MainPage';
+import ReservationDetailPage from '@/pages/ReservationDetailPage';
 import MapTestPage from '@/pages/MapTestPage';
 import SignupCompletePage from '@/pages/SignupCompletePage';
 import SearchResultPage from '@/pages/stay/SearchResultPage';
@@ -33,6 +34,7 @@ function Router() {
         <AuthModal/>
       <Routes>
         <Route path="/" element={<MainPage />} />
+        <Route path="/reservation/detail" element={<ReservationDetailPage />} />
         <Route path="/map" element={<MapTestPage />} />
         <Route path="/survey" element={<SignupCompletePage />} />
         <Route path="/signup-complete" element={<SignupCompletePage />} />
