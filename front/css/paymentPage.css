@@ -38,7 +38,7 @@
 .payment-page .section-card .stay-info .checkin-checkout .reservation-detail-arrow-con .reservation-detail-arrow {
   width: 15px;
   height: 15px;
-  background-image: url(../img/reservation-detail-arrow.svg);
+  background-image: url(/images/common/reservation-detail-arrow.svg);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

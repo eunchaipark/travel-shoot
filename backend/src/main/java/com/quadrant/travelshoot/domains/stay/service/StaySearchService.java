@@ -24,11 +24,11 @@ public interface StaySearchService {
     SearchResponse infiniteSearch(SearchRequest searchRequest, FilterRequest filterRequest, Pageable pageable);
 
     // 검색 기록 5개
-    void saveSearchHistory(Long userId, SearchRequest request);
+//    void saveSearchHistory(Long userId, SearchRequest request);
 
     // 검색 기록 조회 ?
-    List<SearchRequest> getSearchHistory(Long userId);
+//    List<SearchRequest> getSearchHistory(Long userId);
 
     // 검색 기록 삭제
-    void deleteSearchHistory(Long userId, Long historyId);
+//    void deleteSearchHistory(Long userId, Long historyId);
 }
