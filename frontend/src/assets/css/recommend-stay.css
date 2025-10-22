@@ -2,6 +2,46 @@
    숙소 추천 섹션 CSS (recommend-stay.css) - 기존 main.html에 추가될 스타일
    부모-자식 관계를 명확하게 표현한 계층구조
    ========================================================================== */
+.main-page .recommend-survey-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 70px 0;
+}
+.main-page .recommend-survey-container .recommend-survey-title{
+    font-family: "Pretendard", sans-serif !important;
+    font-size: 24px;
+    font-weight: 700;
+    color: #343a40;
+    margin-bottom: 3px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+
+
+.main-page .recommend-survey-container .recommmend-survey-write{
+    font-family: "Pretendard", sans-serif !important;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 7px;
+    text-align: center;
+}
+
+.main-page .recommend-survey-container .recommend-survey-button{
+    font-family: "Pretendard", sans-serif !important;
+    background: #FF8888;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 77px;
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+    flex: 1;
+    text-align: center;
+    margin-bottom: 30px;
+}
 
 /* ==========================================================================
    추가 콘텐츠 섹션 내 숙소 추천 영역
@@ -408,6 +448,23 @@
 
 /* 모바일 화면 (768px 이하) */
 @media (max-width: 768px) {
+
+    .main-page .recommend-survey-container{
+        margin-top: 20px;
+        margin-bottom: 80px;
+    }
+
+    .main-page .recommend-survey-container .recommend-survey-title{
+        font-size: 24px;
+        font-weight: 600;
+    }
+    .main-page .recommend-survey-container .recommmend-survey-write {
+        margin-bottom: 16px;
+    }
+    .main-page .recommend-survey-container .recommend-survey-button{
+        padding: 9px 37px;
+    }
+
     .main-page .additional-content-section .recommend-stay-section {
         padding-top: 85px;
         padding-bottom: 0px;

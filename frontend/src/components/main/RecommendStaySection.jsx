@@ -8,6 +8,7 @@ import { useRecommendStay } from '@/hooks/main/useRecommendStay';
 import { useAuth } from '@/components/context/AuthContext';
 import { fetchAIRecommendedStays } from '@/services/main/recommendationApiService';
 import CommonLoading from '@/components/loading/CommonLoading';
+import SurveyModal from "@/components/survey/SurveyModal";
 import {
   formatPrice,
   generateStarRating
@@ -107,7 +108,7 @@ const AccommodationCard = ({ accommodation, onClick }) => {
 const RecommendStaySection = () => {
   const { handleAccommodationClick } = useRecommendStay();
   const { user, isAuthenticated } = useAuth();
-  
+  const [modalOpen, setModalOpen] = useState(false);
   // 상태 관리
   const [accommodations, setAccommodations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -197,7 +198,32 @@ const RecommendStaySection = () => {
 
 
   //  로그인은 했는데 설문조사는 안함
-  if (error) return null;
+  if (error)
+  return (
+      <section className="recommend-stay-section">
+        <div className="recommend-stay-container">
+          <div className="recommend-survey-container">
+            
+            <p className='recommend-survey-title'>추천 숙소가 없습니다</p>
+            <p className='recommmend-survey-write'>설문조사를 완료하시면 맞춤 숙소를 추천해드립니다</p>
+            <button
+              className="recommend-survey-button"
+              onClick={() => setModalOpen(true)} // 버튼 클릭 시 모달 열기
+            >
+              설문조사 참여하기
+            </button>
+          </div>
+        </div>
+
+        {modalOpen && (
+          <SurveyModal
+            onClose={() => setModalOpen(false)} // 모달 닫기
+            onComplete={() => setModalOpen(false)} // 완료 후 모달 닫기
+          />
+        )}
+      </section>
+    );
+
 
 
   //  데이터 없음

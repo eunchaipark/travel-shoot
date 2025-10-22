@@ -48,7 +48,7 @@ public class TravelNowServiceImpl implements TravelNowService {
         // 제주도
         dbDestinations.add(TravelNowResponse.builder()
             .id(3L)
-            .name("제주도")
+            .name("제주")
             .location("제주특별자치도")
             .image("https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=500&h=400&fit=crop")
             .features(Arrays.asList("자연", "힐링", "드라이브"))

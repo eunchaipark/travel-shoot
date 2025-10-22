@@ -3,7 +3,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import koLocale from "@fullcalendar/core/locales/ko";
-
+import { useNavigate } from "react-router-dom";
 // API Service 추가
 import { fetchCalendarCourses } from "@/services/main/calendarApiService";
 
@@ -178,6 +178,7 @@ const MainPage = () => {
     return { html: event.title };
   };
 
+  const navigate = useNavigate();
   // 검색 처리
   const handleSearch = () => {
     if (!selectedDates.checkin || !selectedDates.checkout) {
@@ -197,13 +198,28 @@ const MainPage = () => {
     };
 
     console.log("검색 조건:", searchData);
+
+    const params = new URLSearchParams({
+      location: locationValue,
+      checkin: selectedDates.checkin,
+      checkout: selectedDates.checkout,
+      adults: guestCounts.adult,
+      children: guestCounts.child,
+    });
+
+    const searchUrl = `/search?${params.toString()}`;
     alert(
-      `검색 실행:\n지역: ${locationValue}\n체크인: ${
-        selectedDates.checkin
-      }\n체크아웃: ${selectedDates.checkout}\n${nights}박 ${
-        nights + 1
-      }일\n성인: ${guestCounts.adult}명\n어린이: ${guestCounts.child}명`
+      `검색 실행:
+      지역: ${locationValue}
+      체크인: ${selectedDates.checkin}
+      체크아웃: ${selectedDates.checkout}
+      ${nights}박 ${nights + 1}일
+      성인: ${guestCounts.adult}명
+      어린이: ${guestCounts.child}명
+      이동URL:${searchUrl}`
     );
+    navigate(searchUrl);
+
   };
 
   // 모든 드롭다운 닫기
