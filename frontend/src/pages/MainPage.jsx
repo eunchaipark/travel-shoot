@@ -44,7 +44,7 @@ import "@/assets/css/travel-now.css";
 
 const MainPage = () => {
   const calendarRef = useRef(null);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [locationValue, setLocationValue] = useState("");
 
   // 캘린더 이벤트 상태 추가
@@ -79,10 +79,12 @@ const MainPage = () => {
   const dateCardRef = useDropdownPosition(showDateDropdown, "date");
   const guestCardRef = useDropdownPosition(showGuestDropdown, "guest");
 
+
+
   // API에서 캘린더 데이터 가져오기
   useEffect(() => {
     const loadCalendarEvents = async () => {
-      if (!isAuthenticated) {
+      if (!isAuthenticated || !user ) {
         setCalendarEvents([]);
         return;
       }
@@ -90,8 +92,7 @@ const MainPage = () => {
       try {
         setIsLoadingEvents(true);
 
-        // TODO: 실제 로그인한 사용자 ID로 변경
-        const userId = 1;
+        const userId = user.userId;
 
         const reservationData = await fetchCalendarCourses(userId);
         const events = convertToCalendarEvents(reservationData);
@@ -109,7 +110,7 @@ const MainPage = () => {
     };
 
     loadCalendarEvents();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user]);
 
   // 날짜 표시 텍스트
   const getDateDisplayText = () => {
