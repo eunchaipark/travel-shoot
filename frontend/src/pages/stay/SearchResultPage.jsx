@@ -8,9 +8,7 @@ import MapModal from '@/components/modals/MapModal';
 import '@/assets/css/stay-search.css'
 import '@/assets/css/payment-loading.css'
 import '@/assets/css/header-calendar.css'
-
 import '@/assets/css/common.css'
-import '@/assets/css/stay-search.css'
 
 // StayCard 컴포넌트
 function StayCard({ stay, searchParams  }) {
@@ -104,7 +102,7 @@ function StayCard({ stay, searchParams  }) {
                         </div>
                         <div className="stay_location">
                             <img className="location_icon" src="/images/common/gray-location-icon.svg" alt="위치" />
-                            {stay.region}
+                            {stay.address}
                         </div>
                     </div>
                     <div className="card_options">이용가능한 서비스 / 옵션</div>

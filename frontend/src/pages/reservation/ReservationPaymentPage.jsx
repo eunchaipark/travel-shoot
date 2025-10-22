@@ -142,7 +142,9 @@ const ReservationPaymentPage = () => {
             const result = await createReservation(formData);
 
             if (result && result.success) {
-                navigate("/payment-complete");
+                // navigate("/payment-complete");
+                navigate(`/payment-complete?reservationId=${result.reservationId}`);
+
             } else {
                 alert("결제 처리 중 오류가 발생했습니다.");
             }
@@ -588,7 +590,7 @@ const ReservationPaymentPage = () => {
             </div>
         </main>
 
-            {/*{isPaymentLoading && <PaymentLoading message="결제 처리 중입니다..." />}*/} //TODO : 1021 삭제하자
+            {/*{isPaymentLoading && <PaymentLoading message="결제 처리 중입니다..." />}*/}
             {isPaymentLoading && (
                 <PaymentLoading message="결제 처리 중입니다..." mode="full" />
             )}
