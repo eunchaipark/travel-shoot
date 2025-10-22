@@ -8,7 +8,7 @@ import koLocale from "@fullcalendar/core/locales/ko";
 import { fetchCalendarCourses } from "@/services/main/calendarApiService";
 
 // Layout Components
-import Header from "@/components/layout/Header";
+import SimpleHeader from "@/components/layout/SimpleHeader";
 
 // Hooks
 import {
@@ -345,7 +345,7 @@ const MainPage = () => {
   return (
     <>
       {/* 헤더 컴포넌트 사용 */}
-      <Header />
+      <SimpleHeader />
 
       {/* 메인 컨테이너 */}
       <main className="main-wrapper main-page">
