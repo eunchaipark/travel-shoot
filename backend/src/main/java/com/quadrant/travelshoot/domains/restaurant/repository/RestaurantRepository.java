@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
@@ -157,4 +158,11 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
             @Param("latitude") BigDecimal latitude,
             @Param("longitude") BigDecimal longitude,
             @Param("maxDistanceKm") double maxDistanceKm);
+
+    @Query("SELECT r FROM Restaurant r WHERE r.restaurantName = :name " +
+            "AND ABS(r.latitude - :latitude) < 0.0001 " +
+            "AND ABS(r.longitude - :longitude) < 0.0001")
+    Optional<Restaurant> findByNameAndCoordinates(@Param("name") String name,
+                                                  @Param("latitude") BigDecimal latitude,
+                                                  @Param("longitude") BigDecimal longitude);
 }

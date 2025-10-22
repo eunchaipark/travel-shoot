@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
@@ -84,4 +85,60 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
                "ORDER BY r.check_in_date ASC, tc.course_id, cs.day, cs.spot_order",
         nativeQuery = true)
         List<Object[]> findReservationsWithCoursesByUserId(@Param("userId") Long userId);
+
+
+        //개인 추천화 섹션
+
+        // 완료된 예약 조회 (예약확정 + 이용완료)
+        @Query("""
+                SELECT DISTINCT r FROM Reservation r
+                JOIN FETCH r.room room
+                JOIN FETCH room.stay stay
+                WHERE r.userId = :userId
+                AND r.reservationStatus IN ('예약확정', '이용완료')
+                ORDER BY r.checkOutDate DESC
+        """)
+    List<Reservation> findCompletedReservations(@Param("userId") Long userId);       
+
+
+
+    // 개인화 추천 AI
+    @Query("SELECT r FROM Reservation r " +
+        "WHERE r.userId = :userId " +
+        "AND r.reservationStatus IN ('예약확정', '이용완료') " +
+        "ORDER BY r.checkInDate DESC")
+        List<Reservation> findRecentCompletedReservations(
+        @Param("userId") Long userId, 
+        @Param("limit") int limit
+        );
+
+    @Query("SELECT COUNT(r) FROM Reservation r " +
+       "WHERE r.userId = :userId " +
+       "AND r.reservationStatus IN ('예약확정', '이용완료')")
+        int countCompletedReservations(@Param("userId") Long userId);
+
+    @Query("SELECT r FROM Reservation r " +
+            "JOIN FETCH r.room rm " +
+            "JOIN FETCH rm.stay " +
+            "WHERE r.id = :reservationId AND r.userId = :userId")
+    Optional<Reservation> findByIdAndUserIdWithStay(
+            @Param("reservationId") Long reservationId,
+            @Param("userId") Long userId
+    );
+
+    // 사용자의 예약 목록 조회 (최신순)
+    @Query("SELECT r FROM Reservation r " +
+            "JOIN FETCH r.room room " +
+            "JOIN FETCH room.stay stay " +
+            "WHERE r.userId = :userId " +
+            "ORDER BY r.createdAt DESC")
+    List<Reservation> findByUserIdWithRoomAndStay(@Param("userId") Long userId);
+
+    // 여러 예약의 reviewId 한 번에 조회 (N+1 방지)
+    @Query("SELECT rev.reservation.id, rev.reviewId, rev.createdAt " +
+            "FROM Review rev " +
+            "WHERE rev.reservation.id IN :reservationIds")
+    List<Object[]> findReviewIdsByReservationIds(@Param("reservationIds") List<Long> reservationIds);
+
+    Optional<Reservation> findByIdAndUserIdAndReservationStatus(Long reservationId, Long userId, ReservationStatus reservationStatus );
 }

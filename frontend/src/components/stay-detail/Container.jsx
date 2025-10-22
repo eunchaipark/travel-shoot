@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+
 import AIReviewSummaryCard from "./card/AIReviewSummaryCard";
 import FacilitiesCard from "./card/FacilitiesCard";
 import HotelMapCard from "./card/HotelMapCard";
@@ -8,8 +8,6 @@ import RoomSelectionCard from "./card/RoomSelectionCard";
 import StayDetailTitleCard from "./card/StayDetailTitleCard";
 
 const Container = ({data, searchParams}) => {
-
-    const navigate = useNavigate();
 
 
     const like = () => {

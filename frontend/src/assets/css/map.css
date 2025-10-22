@@ -15,23 +15,23 @@
   margin-right: 6px;
 }
 
-.map-page .stay-card .motel-icon {
+.map-page .motel-icon {
   background-image: url(/images/common/motel-icon.svg);
 }
 
-.map-page .stay-card .hotel-icon {
+.map-page .hotel-icon {
   background-image: url(/images/common/hotel-icon.svg);
 }
 
-.map-page .stay-card .pension-icon {
+.map-page .pension-icon {
   background-image: url(/images/common/pension-icon.svg);
 }
 
-.map-page .restaurant-card .restaurant-icon {
+.map-page .restaurant-icon {
   background-image: url(/images/map/restaurant-black-icon.svg);
 }
 
-.map-page .activity-card .activity-icon {
+.map-page .activity-icon {
   background-image: url(/images/map/activity-black-icon.svg);
   width: 17px;
   height: 17px;
@@ -95,6 +95,12 @@
   font-size: 11px;
 }
 
+.map-page .btn-search.white {
+  background-color: white;
+  border: 1.2px solid #ff8888;
+  color: #ff8888;
+}
+
 .modal-overlay .modal-content.map-modal-content{
   max-width: 780px;
 }
@@ -104,7 +110,12 @@
   color: white;
 }
 
-.map-page .activity-card .location-text {
+.map-page .btn-search.white:hover {
+  background-color: #ffebeb;
+  color: #ff8888;
+}
+
+.map-page .location-text {
   font-size: 11px;
   color: #675c5c;
   font-weight: 500;
@@ -229,6 +240,28 @@
 
 .map-page .map-tag.activity .tag-content.active .icon {
   background-image: url(/images/map/activity-white-icon.svg);
+}
+
+.map-page .ai-comment{
+  font-size: 13.3px;
+}
+
+.map-page .badge{
+  font-weight: 400;
+  font-size: 11px;
+  border-radius: 10px;
+}
+
+.map-page .badge.time{
+  background-color: #939393;
+}
+
+.map-page .badge.activity{
+  background-color: #75b611;
+}
+
+.map-page .badge.restaurant{
+  background-color: #f05650;
 }
 
 @media (max-width: 480px) {

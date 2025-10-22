@@ -25,22 +25,6 @@ public class StayBudgetController {
     private final BudgetFriendlyService budgetFriendlyService;
 
     /**
-     * 가격착한 숙소 6개 조회
-     * GET /api/stays/budget-friendly
-     */
-    @GetMapping("/budget-friendly")
-    public ResponseEntity<List<BudgetFriendlyResponse>> getBudgetFriendlyStays() {
-        log.info("가격착한 숙소 조회 API 호출");
-
-        List<BudgetFriendlyResponse> stays = budgetFriendlyService.getBudgetFriendlyStays();
-
-        log.info("가격착한 숙소 조회 완료 - 결과: {} 개", stays.size());
-        return ResponseEntity.ok(stays);
-    }
-
-    private final StayServiceImpl stayService;
-
-    /**
      * 숙소 상세 조회
      */
     @GetMapping("/{stayId}")

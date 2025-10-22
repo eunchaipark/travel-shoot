@@ -44,7 +44,7 @@ public class Review {
 
     @DecimalMin("0.00")
     @DecimalMax("5.00")
-    @Column(name = "total_rating", nullable = false, precision = 3, scale = 2)
+    @Column(name = "overall_rating", nullable = false, precision = 3, scale = 2) //TODO : 윤하님 확인 필요 DB랑 이름이 다름....ㅎ
     private BigDecimal totalRating;
 
     @DecimalMin("0.00")

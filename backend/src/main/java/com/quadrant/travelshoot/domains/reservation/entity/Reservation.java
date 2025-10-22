@@ -73,9 +73,10 @@ public class Reservation {
     @Column(name = "cancel_reason", length = 100)
     private String cancelReason;
 
-    // 1013 추가
-    @Column(name = "transportation_method", length = 20)
-    private String transportationMethod;
+    // 1013 추가 - 1020 수정
+    @Enumerated(EnumType.STRING)
+    @Column(name = "transportation_method", nullable = true)
+    private TransportationMethod transportationMethod;
 
     @Column(name = "cancel_detail", columnDefinition = "TEXT")
     private String cancelDetail;

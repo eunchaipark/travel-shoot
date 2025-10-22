@@ -2,10 +2,16 @@ package com.quadrant.travelshoot.domains.travelcourse.service.impl;
 
 import com.quadrant.travelshoot.domains.activity.entity.Activity;
 import com.quadrant.travelshoot.domains.activity.service.ActivityService;
+import com.quadrant.travelshoot.domains.ai.service.SpotCategorizationService;
 import com.quadrant.travelshoot.domains.reservation.entity.Reservation;
 import com.quadrant.travelshoot.domains.reservation.service.ReservationService;
 import com.quadrant.travelshoot.domains.restaurant.entity.Restaurant;
 import com.quadrant.travelshoot.domains.restaurant.service.RestaurantService;
+import com.quadrant.travelshoot.domains.stay.entity.Region;
+import com.quadrant.travelshoot.domains.stay.entity.Stay;
+import com.quadrant.travelshoot.domains.stay.service.RegionService;
+import com.quadrant.travelshoot.domains.stay.service.StayService;
+import com.quadrant.travelshoot.domains.travelcourse.dto.request.TravelCourseUpdateRequest;
 import com.quadrant.travelshoot.domains.travelcourse.dto.response.TravelCourseRecommendationData;
 import com.quadrant.travelshoot.domains.travelcourse.dto.response.TravelCourseResponse;
 import com.quadrant.travelshoot.domains.travelcourse.dto.request.TravelCourseRequest;
@@ -23,11 +29,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -43,6 +47,9 @@ public class TravelCourseServiceImpl implements TravelCourseService {
     private final ReservationService reservationService;
     private final ActivityService activityService;
     private final RestaurantService restaurantService;
+    private final StayService stayService;
+    private final SpotCategorizationService spotCategorizationService;
+    private final RegionService regionService;
 
     @Override
     @Transactional
@@ -105,32 +112,45 @@ public class TravelCourseServiceImpl implements TravelCourseService {
         }
     }
 
-    @Override
-    public TravelCourseResponse getCourse(Long courseId) {
-        log.info("여행 코스 조회 - courseId: {}", courseId);
+    public TravelCourseResponse getCourse(Long id, String type, Long userId) {
+        log.info("여행 코스 조회 - id: {}, type: {}", id, type);
 
-        // 1. TravelCourse 조회
-        TravelCourse travelCourse = travelCourseRepository.findById(courseId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 여행 코스를 찾을 수 없습니다."));
+        TravelCourse travelCourse;
 
-        // 2. Reservation 조회 (Service 통해서!)
+        if ("reservation".equals(type)) {
+            // reservationId로 TravelCourse 조회
+            travelCourse = travelCourseRepository.findByReservationId(id)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 예약의 여행 코스를 찾을 수 없습니다."));
+        } else {
+            // courseId로 TravelCourse 조회
+            travelCourse = travelCourseRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 여행 코스를 찾을 수 없습니다."));
+        }
+
+        if(!Objects.equals(travelCourse.getUserId(), userId)) throw new IllegalArgumentException("올바른 경로가 아닙니다.");
         Reservation reservation = reservationService.getById(travelCourse.getReservationId());
-
-        // 3. 여행 시작 날짜 추출
         LocalDate startDate = reservation.getCheckInDate();
-
-        // 4. CourseSpot 조회
         List<CourseSpot> courseSpots = courseSpotRepository
-                .findByTravelCourseIdOrderByDayAscSpotOrderAsc(courseId);
+                .findByTravelCourseIdOrderByDayAscSpotOrderAsc(travelCourse.getId());
 
-        // 5. 응답 생성
-        return convertToResponse(travelCourse, courseSpots, startDate);
+        return convertToResponse(travelCourse, courseSpots, reservation.getRoom().getStay().getId(), startDate);
     }
 
     private TravelCourseResponse convertToResponse(
             TravelCourse travelCourse,
             List<CourseSpot> courseSpots,
+            Long stayId,
             LocalDate startDate) {  // startDate 파라미터 추가!
+
+        Stay stay = stayService.getById(stayId);
+        TravelCourseResponse.StayInfo stayInfo = TravelCourseResponse.StayInfo.builder()
+                .name(stay.getName())
+                .address(stay.getAddress())
+                .imageUrl(stay.getMainImageUrl())
+                .latitude(stay.getLatitude())
+                .longitude(stay.getLongitude())
+                .stayType(stay.getStayType())
+                .build();
 
         // Day별로 그룹핑
         Map<Integer, List<CourseSpot>> spotsByDay = courseSpots.stream()
@@ -168,12 +188,16 @@ public class TravelCourseServiceImpl implements TravelCourseService {
                 .dailyCourses(dailyCourses)
                 .createdAt(travelCourse.getCreatedAt())
                 .updatedAt(travelCourse.getUpdatedAt())
+                .stay(stayInfo)
                 .build();
     }
 
     private TravelCourseResponse.SpotDetail convertToSpotDetail(CourseSpot spot) {
         String spotName = "";
         String address = "";
+        String type = "";
+        BigDecimal latitude = BigDecimal.valueOf(0);
+        BigDecimal longitude = BigDecimal.valueOf(0);
 
         // spotType에 따라 실제 데이터 조회
         if (spot.getSpotType() == CourseSpot.SpotType.관광지) {
@@ -181,12 +205,17 @@ public class TravelCourseServiceImpl implements TravelCourseService {
             Activity activity = activityService.getById(spot.getReferenceId());
             spotName = activity.getActivityName();
             address = activity.getAddress();
-
+            latitude = activity.getLatitude();
+            longitude = activity.getLongitude();
+            type = activity.getActivityType();
         } else if (spot.getSpotType() == CourseSpot.SpotType.맛집) {
             // Restaurant 조회 (Service 통해서!)
             Restaurant restaurant = restaurantService.getById(spot.getReferenceId());
             spotName = restaurant.getRestaurantName();
             address = restaurant.getAddress();
+            latitude = restaurant.getLatitude();
+            longitude = restaurant.getLongitude();
+            type = restaurant.getFoodType();
         }
 
         // DTO로 변환해서 반환
@@ -197,9 +226,164 @@ public class TravelCourseServiceImpl implements TravelCourseService {
                 .referenceId(spot.getReferenceId())
                 .spotName(spotName)        // Activity/Restaurant에서 가져온 이름
                 .address(address)          // Activity/Restaurant에서 가져온 주소
+                .latitude(latitude)          // Activity/Restaurant에서 가져온 위도
+                .longitude(longitude)          // Activity/Restaurant에서 가져온 경도
                 .startTime(spot.getStartTime())
                 .endTime(spot.getEndTime())
                 .aiComment(spot.getAiComment())
+                .type(type)
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public void updateCourseSpot(TravelCourseUpdateRequest request, Long userId) {
+        log.info("코스 스팟 수정 시작 - spotId: {}, placeName: {}",
+                request.getSpotId(), request.getPlace().getPlace_name());
+
+        // 1. CourseSpot 조회 및 권한 확인
+        CourseSpot courseSpot = courseSpotRepository.findById(request.getSpotId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 스팟을 찾을 수 없습니다."));
+
+        TravelCourse travelCourse = courseSpot.getTravelCourse();
+        if (!travelCourse.getUserId().equals(userId)) {
+            throw new IllegalArgumentException("수정 권한이 없습니다.");
+        }
+
+        TravelCourseUpdateRequest.PlaceData place = request.getPlace();
+        boolean isRestaurant = !place.getCategory_group_name().isEmpty();
+
+        BigDecimal latitude = new BigDecimal(place.getY());
+        BigDecimal longitude = new BigDecimal(place.getX());
+
+        // 2. 기존 CourseSpot과 동일한 장소인지 확인
+        if (isRestaurant && courseSpot.getSpotType() == CourseSpot.SpotType.맛집) {
+            Restaurant currentRestaurant = restaurantService.getById(courseSpot.getReferenceId());
+            if (currentRestaurant.getRestaurantName().equals(place.getPlace_name()) &&
+                    currentRestaurant.getLatitude().compareTo(latitude) == 0 &&
+                    currentRestaurant.getLongitude().compareTo(longitude) == 0) {
+                log.info("동일한 맛집으로 수정 요청 - 변경 없이 종료");
+                return;
+            }
+        } else if (!isRestaurant && courseSpot.getSpotType() == CourseSpot.SpotType.관광지) {
+            Activity currentActivity = activityService.getById(courseSpot.getReferenceId());
+            if (currentActivity.getActivityName().equals(place.getPlace_name()) &&
+                    currentActivity.getLatitude().compareTo(latitude) == 0 &&
+                    currentActivity.getLongitude().compareTo(longitude) == 0) {
+                log.info("동일한 관광지로 수정 요청 - 변경 없이 종료");
+                return;
+            }
+        }
+
+        // 주소에서 지역 정보 추출
+        Region region = regionService.findByAddress(place.getAddress_name());
+        log.info("주소에서 추출된 지역 - address: {}, regionId: {}, regionName: {}",
+                place.getAddress_name(), region.getId(), region.getRegionName());
+
+        // 3. 기존 데이터 존재 여부 확인
+        Long referenceId;
+        CourseSpot.SpotType spotType;
+
+        if (isRestaurant) {
+            // 맛집 처리
+            spotType = CourseSpot.SpotType.맛집;
+            Restaurant existingRestaurant = restaurantService.findByNameAndCoordinates(
+                    place.getPlace_name(), latitude, longitude);
+
+            if (existingRestaurant != null) {
+                // 기존 데이터 있음 - AI 호출 없이 바로 업데이트
+                referenceId = existingRestaurant.getId();
+                log.info("기존 맛집 데이터 사용 - AI 호출 스킵");
+                updateCourseSpotData(courseSpot, spotType, referenceId,
+                        existingRestaurant.getRestaurantName() + " 방문");
+
+            } else {
+                // 기존 데이터 없음 - AI에서 전체 정보 받아오기
+                SpotCategorizationService.SpotCategoryInfo aiInfo =
+                        spotCategorizationService.getCategoryAndSummary(
+                                place.getPlace_name(),
+                                place.getCategory_name(),
+                                true
+                        );
+
+                // Restaurant 생성
+                Restaurant newRestaurant = Restaurant.builder()
+                        .regionId(region.getId())
+                        .restaurantName(place.getPlace_name())
+                        .foodType(aiInfo.getCategory())
+                        .address(place.getAddress_name())
+                        .latitude(latitude)
+                        .longitude(longitude)
+                        .rating(aiInfo.getRating())
+                        .isActive(true)
+                        .build();
+
+                Restaurant savedRestaurant = restaurantService.save(newRestaurant);
+                referenceId = savedRestaurant.getId();
+
+                updateCourseSpotData(courseSpot, spotType, referenceId, aiInfo.getSummary());
+            }
+
+        } else {
+            // 관광지 처리
+            spotType = CourseSpot.SpotType.관광지;
+            Activity existingActivity = activityService.findByNameAndCoordinates(
+                    place.getPlace_name(), latitude, longitude);
+
+            if (existingActivity != null) {
+                // 기존 데이터 있음 - AI 호출 없이 바로 업데이트
+                referenceId = existingActivity.getId();
+                log.info("기존 관광지 데이터 사용 - AI 호출 스킵");
+                updateCourseSpotData(courseSpot, spotType, referenceId,
+                        existingActivity.getActivityName() + " 방문");
+
+            } else {
+                // 기존 데이터 없음 - AI에서 전체 정보 받아오기
+                SpotCategorizationService.SpotCategoryInfo aiInfo =
+                        spotCategorizationService.getCategoryAndSummary(
+                                place.getPlace_name(),
+                                place.getCategory_name(),
+                                false
+                        );
+
+                // Activity 생성
+                Activity newActivity = Activity.builder()
+                        .regionId(region.getId())
+                        .activityName(place.getPlace_name())
+                        .activityType(aiInfo.getCategory())
+                        .address(place.getAddress_name())
+                        .latitude(latitude)
+                        .longitude(longitude)
+                        .rating(aiInfo.getRating())
+                        .isActive(true)
+                        .build();
+
+                Activity savedActivity = activityService.save(newActivity);
+                referenceId = savedActivity.getId();
+
+                updateCourseSpotData(courseSpot, spotType, referenceId, aiInfo.getSummary());
+            }
+        }
+
+        log.info("코스 스팟 수정 완료 - spotId: {}, referenceId: {}, spotType: {}",
+                courseSpot.getId(), referenceId, spotType);
+    }
+
+    private void updateCourseSpotData(CourseSpot courseSpot, CourseSpot.SpotType spotType,
+                                      Long referenceId, String aiComment) {
+        CourseSpot updatedSpot = CourseSpot.builder()
+                .id(courseSpot.getId())
+                .travelCourse(courseSpot.getTravelCourse())
+                .day(courseSpot.getDay())
+                .spotOrder(courseSpot.getSpotOrder())
+                .spotType(spotType)
+                .referenceId(referenceId)
+                .startTime(courseSpot.getStartTime())
+                .endTime(courseSpot.getEndTime())
+                .aiComment(aiComment)
+                .createdAt(courseSpot.getCreatedAt())
+                .build();
+
+        courseSpotRepository.save(updatedSpot);
     }
 }

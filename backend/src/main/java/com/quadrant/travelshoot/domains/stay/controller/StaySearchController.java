@@ -46,11 +46,11 @@ public class StaySearchController {
 
         SearchResponse response = staySearchService.search(request, pageable);
 
-        // 로그인 사용자면 검색 히스토리 저장
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId != null) {
-            staySearchService.saveSearchHistory(userId, request);
-        }
+//        // 로그인 사용자면 검색 히스토리 저장 TODO : 1021 검색 기록 일반 없는 상태로 먼저 구현 완료하고 마무리할 생각입니다
+//        Long userId = (Long) session.getAttribute("userId");
+//        if (userId != null) {
+//            staySearchService.saveSearchHistory(userId, request);
+//        }
 
         log.info("검색 완료 - 총 인원: {}명, 결과: {} 개",
                 request.getTotalGuests(), response.getTotalCount());
@@ -87,29 +87,29 @@ public class StaySearchController {
         return ResponseEntity.ok(response);
     }
 
-    // 최근 5개 검색 목록
-    @GetMapping("/history")
-    public ResponseEntity<List<SearchRequest>> getHistory(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            return ResponseEntity.ok(List.of());
-        }
-
-        List<SearchRequest> history = staySearchService.getSearchHistory(userId);
-        return ResponseEntity.ok(history);
-    }
-
+    // 최근 5개 검색 목록 // TODO : 1021
+//    @GetMapping("/history")
+//    public ResponseEntity<List<SearchRequest>> getHistory(HttpSession session) {
+//        Long userId = (Long) session.getAttribute("userId");
+//        if (userId == null) {
+//            return ResponseEntity.ok(List.of());
+//        }
+//
+//        List<SearchRequest> history = staySearchService.getSearchHistory(userId);
+//        return ResponseEntity.ok(history);
+//    }
+    // TODO : 1021
     // 검색 목록 삭제하기
-    @DeleteMapping("/history/{historyId}")
-    public ResponseEntity<Void> deleteHistory(
-            @PathVariable Long historyId,
-            HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            return ResponseEntity.status(401).build();
-        }
-
-        staySearchService.deleteSearchHistory(userId, historyId);
-        return ResponseEntity.noContent().build();
-    }
+//    @DeleteMapping("/history/{historyId}")
+//    public ResponseEntity<Void> deleteHistory(
+//            @PathVariable Long historyId,
+//            HttpSession session) {
+//        Long userId = (Long) session.getAttribute("userId");
+//        if (userId == null) {
+//            return ResponseEntity.status(401).build();
+//        }
+//
+//        staySearchService.deleteSearchHistory(userId, historyId);
+//        return ResponseEntity.noContent().build();
+//    }
 }
