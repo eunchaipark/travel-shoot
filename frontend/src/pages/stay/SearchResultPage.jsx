@@ -660,71 +660,82 @@ export default function SearchResultPage() {
 
             <div className={`mobile-filter-modal ${isMobileFilterOpen ? 'show' : ''}`}>
                 <div className="mobile-filter-header">
-                    <button className="mobile-filter-close" onClick={closeMobileFilter}>×</button>
-                    <h3 className="mobile-filter-title">필터 검색</h3>
+                    <button className="mobile-filter-close" onClick={closeMobileFilter}>
+                        <img src="/images/stay/stayfilter-modal-close.svg" alt="닫기" />
+                    </button>
+                    <div className="mobile-filter-title">조건검색</div>
+                    <button className="mobile-filter-home">
+                        <img src="/images/common/payment_home_icon.svg" alt="홈" />
+                    </button>
                 </div>
 
                 <div className="mobile-filter-content">
                     {/* ===== 요금 ===== */}
                     <div className="filter-section">
-                        <div className="filter-section_title">1박당 요금</div>
-                        <div className="form-price-range">
-                            <span className="won-icon">₩</span>
-                            <input
-                                type="number"
-                                className="form-input form-input-price"
-                                placeholder="최소금액"
-                                min="0"
-                                value={filters.minPrice}
-                                onChange={(e) => handlePriceChange('minPrice', e.target.value)}
-                            />
-                            <span className="form-guest-range_separator">
-          <img src="/images/stay/stayslist-line.svg" alt="-" />
-        </span>
-                            <span className="won-icon">₩</span>
-                            <input
-                                type="number"
-                                className="form-input form-input-price"
-                                placeholder="최대금액"
-                                min="0"
-                                value={filters.maxPrice}
-                                onChange={(e) => handlePriceChange('maxPrice', e.target.value)}
-                            />
+                        <div className="mfilter-section_title">1박당 요금</div>
+                        <div className="mform-price-range">
+                            <div>
+                                <span className="won-icon">₩</span>
+                                <input
+                                    type="number"
+                                    className="mform-input mform-input--price"
+                                    placeholder="최소금액"
+                                    min="0"
+                                    value={filters.minPrice}
+                                    onChange={(e) => handlePriceChange('minPrice', e.target.value)}
+                                />
+                            </div>
+                            <span className="mform-guest-range_separator">
+                    <img src="/images/stay/stayslist-line.svg" alt="-" />
+                </span>
+                            <div>
+                                <span className="won-icon">₩</span>
+                                <input
+                                    type="number"
+                                    className="mform-input mform-input--price"
+                                    placeholder="최대금액"
+                                    min="0"
+                                    value={filters.maxPrice}
+                                    onChange={(e) => handlePriceChange('maxPrice', e.target.value)}
+                                />
+                            </div>
                         </div>
                     </div>
 
-                    {/* 숙소 유형*/}
-
+                    {/* 숙소 유형 */}
                     <div className="filter-section">
-                        <div className="filter-section_title">숙소 유형</div>
-                        <div className="filter-checkbox-group">
+                        <div className="mfilter-section_title">숙소 유형</div>
+                        <div className="mobile-stays-group">
                             {['호텔', '모텔', '펜션'].map((type) => (
-                                <label key={type} className="form-checkbox">
-                                    <input
-                                        type="checkbox"
-                                        className="form-checkbox_input"
-                                        checked={filters.stayTypes.includes(type)}
-                                        onChange={() => handleStayTypeToggle(type)}
+                                <button
+                                    key={type}
+                                    className="mfilter-stays-btn"
+                                    onClick={() => handleStayTypeToggle(type)}
+                                    style={filters.stayTypes.includes(type) ? {
+                                        borderColor: '#ff6b6b',
+                                        backgroundColor: '#FFF4EC',
+                                        fontWeight: 600
+                                    } : {}}
+                                >
+                                    <img
+                                        className="stays_image-m"
+                                        src={`/images/common/${type === '호텔' ? 'hotel' : type === '모텔' ? 'motel' : 'pension'}-icon.svg`}
+                                        alt={type}
                                     />
-                                    <span className="form-checkbox__text">
-                                          <img className="stays_image" src={`/images/common/${type === '호텔' ? 'hotel' : type === '모텔' ? 'motel' : 'pension'}-icon.svg`} alt={type}/>
-                                            {type}
-                                    </span>
-                                </label>
+                                    {type}
+                                </button>
                             ))}
                         </div>
                     </div>
 
-
-                    {/*숙소 특성*/}
-
+                    {/* 숙소 특성 */}
                     <div className="filter-section">
-                        <div className="filter-section_title">숙소 특성</div>
+                        <div className="mfilter-section_title">숙소 특성</div>
 
                         {/* 침실 수 */}
-                        <div className="filter-subsection">
-                            <div className="filter-subsection_title">침실 수</div>
-                            <div className="filter-bed-btn">
+                        <div className="mobile-feature-section">
+                            <div className="mfilter-subsection_title">침실 수</div>
+                            <div className="mfilter-bed-btn">
                                 {[1, 2, 3].map((count) => (
                                     <button
                                         key={count}
@@ -744,8 +755,8 @@ export default function SearchResultPage() {
 
                         {/* 욕실 수 */}
                         <div className="filter-subsection">
-                            <div className="filter-subsection_title">욕실 수</div>
-                            <div className="filter-bath-btn">
+                            <div className="mfilter-subsection_title">욕실 수</div>
+                            <div className="mfilter-bath-btn">
                                 {[1, 2].map((count) => (
                                     <button
                                         key={count}
@@ -765,63 +776,66 @@ export default function SearchResultPage() {
 
                         {/* 수용 인원 */}
                         <div className="filter-subsection">
-                            <div className="filter-subsection_title">수용 인원</div>
-                            <div className="form-guest-range">
-                                <img className="filter-person-icon" src="/images/stay/filter-person-icon.svg" alt="인원" />
-                                <input
-                                    type="number"
-                                    className="form-input form-input-guest"
-                                    placeholder="최소인원"
-                                    min="1"
-                                    max="20"
-                                    value={filters.minGuests}
-                                    onChange={(e) => handleGuestChange('minGuests', e.target.value)}
-                                />
-                                <span className="form-guest-range_separator">
-                                    <img src="/images/stay/stayslist-line.svg" alt="-" />
-                                </span>
-
-                                <img className="filter-person-icon" src="/images/stay/filter-person-icon.svg" alt="인원" />
-                                <input
-                                    type="number"
-                                    className="form-input form-input-guest"
-                                    placeholder="최대인원"
-                                    min="1"
-                                    max="30"
-                                    value={filters.maxGuests}
-                                    onChange={(e) => handleGuestChange('maxGuests', e.target.value)}
-                                />
+                            <div className="mfilter-subsection_title">수용 인원</div>
+                            <div className="mform-guest-range">
+                                <div>
+                                    <img className="mfilter-person-icon" src="/images/stay/filter-person-icon.svg" alt="인원" />
+                                    <input
+                                        type="number"
+                                        className="mform-input mform-input--guest"
+                                        placeholder="최소인원"
+                                        min="1"
+                                        max="20"
+                                        value={filters.minGuests}
+                                        onChange={(e) => handleGuestChange('minGuests', e.target.value)}
+                                    />
+                                </div>
+                                <span className="mform-guest-range_separator">
+                        <img src="/images/stay/stayslist-line.svg" alt="-" />
+                    </span>
+                                <div>
+                                    <img className="mfilter-person-icon" src="/images/stay/filter-person-icon.svg" alt="인원" />
+                                    <input
+                                        type="number"
+                                        className="mform-input mform-input--guest"
+                                        placeholder="최대인원"
+                                        min="1"
+                                        max="30"
+                                        value={filters.maxGuests}
+                                        onChange={(e) => handleGuestChange('maxGuests', e.target.value)}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     {/* 숙소 평점 */}
-
                     <div className="filter-section">
-                        <div className="filter-section_title">숙소 평점</div>
-                        <div className="filter-stars-group">
-                            {[5, 4, 3, 2, 1].map((rating) => (
-                                <label key={rating} className="form-stars">
-                                    <input
-                                        type="checkbox"
-                                        className="form-stars_input"
-                                        checked={filters.ratings.includes(rating)}
-                                        onChange={() => handleRatingToggle(rating)}
-                                    />
-                                    <div className="star-display">
-                                        {[...Array(rating)].map((_, idx) => (
-                                            <img key={idx} src="/images/stay/stayfilter-star.svg" alt="★" />
-                                        ))}
-                                    </div>
-                                </label>
+                        <div className="mfilter-section_title">숙소 평점</div>
+                        <div className="mobile-rating-buttons">
+                            {[1, 2, 3, 4, 5].map((rating) => (
+                                <button
+                                    key={rating}
+                                    className="filter-star-btn"
+                                    onClick={() => handleRatingToggle(rating)}
+                                    style={filters.ratings.includes(rating) ? {
+                                        borderColor: '#ff6b6b',
+                                        backgroundColor: '#FFF4EC',
+                                        fontWeight: 600
+                                    } : {}}
+                                >
+                        <span className="star-content">
+                            <img className="star-icons-img" src="/images/stay/stayfilter-star.svg" alt="★" />
+                            {rating}
+                        </span>
+                                </button>
                             ))}
                         </div>
                     </div>
 
-                    {/* 이용 가능한 옵션*/}
-
+                    {/* 이용 가능한 옵션 */}
                     <div className="filter-section">
-                        <div className="filter-section_title">이용가능한 서비스 / 옵션</div>
+                        <div className="mfilter-section_title">이용가능한 서비스 / 옵션</div>
                         <div className="filter-checkbox-group">
                             {['조식 포함', '무료 취소일', '수영장', 'OTT 이용가능', '주차장', '금연',
                                 '피트니스 센터', '반려동물 동반 가능', '장애인용 편의시설', '공항 이동 교통편 서비스'].map((option) => (
@@ -841,10 +855,10 @@ export default function SearchResultPage() {
 
                 <div className="mobile-filter-bottom">
                     <button className="mobile-apply-btn" onClick={closeMobileFilter}>
-                        적용하기
+                        필터 적용
                     </button>
                 </div>
-        </div>
+            </div>
         </div>
 
 

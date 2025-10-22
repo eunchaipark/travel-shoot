@@ -546,41 +546,41 @@ const ReservationPaymentPage = () => {
                                             객실 1개 x {priceData.totalNights}박
                                         </div>
 
-                                        <div className="col-1">
-                                            <span>₩</span>
+                                        <div className="col-12 d-flex">
+                                            <div className="col-1 pt-2 pay-line-con">
+                                                <div className="vr pay-line"></div>
+                                            </div>
+                                            <div className="col-11">
+                                                <div className="final-payment-detail text-muted small mb-1">
+                                                    1박당 가격 : {reservationFormatters.formatPrice(Math.round(priceData.subtotal / priceData.totalNights))}원
+                                                </div>
+                                                <div className="final-payment-detail text-muted small">
+                                                    이용 인원 : {guestCount}명
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="col-11 text-end">
-                                            <span>{reservationFormatters.formatPrice(priceData.subtotal)}</span>
-                                        </div>
-
                                     </div>
 
-                                    <div className="price-section d-flex justify-content-between align-items-center mb-4">
-                                        <div className="final-price-label">총 결제 금액</div>
-                                        <div className="final-price-won">
-                                            ₩{reservationFormatters.formatPrice(priceData.totalPrice)}
+                                    <div className="payment-info-dotted-line"></div>
+
+                                    <div className="price-section d-flex justify-content-between align-items-center pt-3 mb-4">
+                                        <div className="final-price-label fw-bold">최종 가격</div>
+                                        <div className="final-price-won fw-bold">
+                                            ₩ {reservationFormatters.formatPrice(priceData.totalPrice)}
                                         </div>
                                     </div>
 
                                     <button
-                                        className="payment-btn w-100"
+                                        className="payment-btn w-100 btn"
                                         onClick={handleSubmit}
                                         disabled={loading}
-                                    >
-                                        {loading ? (
-                                            <>
-                                                <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                                                예약 처리 중...
-                                            </>
-                                        ) : (
-                                            '결제하기'
-                                        )}
+                                    > 결제하기
                                     </button>
                                 </>
                             ) : (
                                 <div className="text-center py-5">
                                     <div className="spinner-border spinner-border-sm" role="status">
-                                        <span className="visually-hidden">가격 계산 중...</span>
+                                        {/*<span className="visually-hidden">가격 계산 중...</span>*/}
                                     </div>
                                 </div>
                             )}
