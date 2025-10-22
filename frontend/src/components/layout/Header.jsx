@@ -14,9 +14,17 @@ const Header = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
 
-    //url으로 초기 검색한 값 가지고 와서 담아야함
-    const [searchValue, setSearchValue] = useState(searchParams.get('region') || '');
+
+    //region 또는 stayName 중 있는 값을 가져옴
+    const [searchValue, setSearchValue] = useState(
+        searchParams.get('region') || searchParams.get('stayName') || ''
+    );
     const [suggestions, setSuggestions] = useState([]);
+
+    // stayName이 있으면 STAY, 없으면 REGION
+    const [selectedType, setSelectedType] = useState(
+        searchParams.get('stayName') ? "STAY" : "REGION"
+    );
 
 
     // URL에서 날짜/인원 초기값 설정
@@ -125,6 +133,7 @@ const Header = () => {
     // 자동완성 항목 선택
         const handleSuggestionClick = (suggestion) => {
             setSearchValue(suggestion.keyword);
+            setSelectedType(suggestion.type);
             setShowSuggestions(false);
         };
 
@@ -159,12 +168,18 @@ const Header = () => {
             }
 
             const params = new URLSearchParams({
-                region: searchValue,
                 checkIn: selectedDates.checkin,
                 checkOut: selectedDates.checkout,
                 adults: adultCount,
                 children: childCount
             });
+
+            // 숙소 / 지역 선택 각각 다르게 전달해야함.
+            if (selectedType === "STAY") {
+                params.append("stayName", searchValue);
+            } else {
+                params.append("region", searchValue);
+            }
 
             navigate(`/search?${params.toString()}`);
         };
@@ -255,7 +270,9 @@ const Header = () => {
                                                         <i className={suggestion.type === 'REGION' ? 'fas fa-map-marker-alt' : 'fas fa-building'}></i>
                                                         <div>
                                                             <div className="fw-bold">{suggestion.keyword}</div>
-                                                            <small className="text-muted">{suggestion.type}</small>
+
+                                                            {/*<small className="text-muted">{suggestion.type}</small>*/}
+
                                                         </div>
                                                     </button>
                                                 ))}
