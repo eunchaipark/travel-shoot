@@ -178,11 +178,9 @@ public class ReservationController {
     @GetMapping("/detail/{reservationId}")
     public ResponseEntity<ReservationWithPaymentResponse> getReservationDetailWithPayment(
             @PathVariable Long reservationId
-//            , Authentication authentication
+            , Authentication authentication
     ) {
-        //TODO: 테스트 끝난 뒤에
-//        Long userId = Long.valueOf(authentication.getName());
-        Long userId = 1L;
+        Long userId = Long.valueOf(authentication.getName());
         log.info("예약 및 결제 상세 조회 - reservationId: {}, userId: {}", reservationId, userId);
 
         ReservationWithPaymentResponse response = reservationService.getReservationDetailWithPayment(reservationId, userId);

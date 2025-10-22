@@ -2,18 +2,30 @@ import React, { useEffect, useRef, useCallback, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import Header from '@/components/layout/Header';
-import '@/assets/css/stay-search.css'
+import PaymentLoading from "@/components/loading/PaymentLoading";
 import '@/assets/css/common.css'
+import '@/assets/css/stay-search.css'
 
 // StayCard 컴포넌트
-function StayCard({ stay }) {
+function StayCard({ stay, searchParams  }) {
     const navigate = useNavigate()
     const likeButtonRef = useRef(null)
     const [isLiked, setIsLiked] = useState(false)
 
-    const handleCardClick = () => {
-        navigate(`/stays/${stay.stayId}`) //TODO : 윤하님 숙소 상세 페이지로 이동할 주소
+    // 검색 조건 url에 가지고 있도록
+    const handleCardClick = () => { //TODO : 윤하님 숙소 상세 페이지로 이동할 URL
+        const params = new URLSearchParams({
+            checkIn: searchParams.checkIn,
+            checkOut: searchParams.checkOut,
+            adults: searchParams.adults,
+            children: searchParams.children
+        });
+        navigate(`/stays/${stay.stayId}?${params.toString()}`);
     }
+    //
+    // const handleCardClick = () => {
+    //     navigate(`/stays/${stay.stayId}`) //TODO : 윤하님 숙소 상세 페이지로 이동할 주소 임시로 넣었음
+    // }
 
     useEffect(() => {
         const likeBtn = likeButtonRef.current
@@ -107,10 +119,18 @@ function StayCard({ stay }) {
     )
 }
 
-// ========== 메인 SearchResultPage ==========
+// 메인 SearchResultPage
 export default function SearchResultPage() {
     const [searchParams] = useSearchParams()
+
     const observerTarget = useRef(null)
+
+    const [isReady, setIsReady] = useState(false);
+
+    const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+
+    const openMobileFilter = () => setIsMobileFilterOpen(true);
+    const closeMobileFilter = () => setIsMobileFilterOpen(false);
 
     // mo.js, gsap 로드
     useEffect(() => {
@@ -129,6 +149,11 @@ export default function SearchResultPage() {
             document.head.appendChild(gsapScript)
         }
     }, [])
+
+    useEffect(() => {
+        const timer = setTimeout(() => setIsReady(true), 0); //검색이 여러번 진행되서 디버깅중..1021
+        return () => clearTimeout(timer);
+    }, []);
 
     // URL에서 기본 검색 조건 가져오기
     const baseSearchParams = {
@@ -256,17 +281,8 @@ export default function SearchResultPage() {
             return lastPage.hasNext ? lastPage.currentPage + 1 : undefined
         },
         staleTime: 1000 * 60 * 5,
+        enabled: isReady,
     })
-
-    // 필터 변경 시 자동 리페치 (디바운스)
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            console.log('🔄 필터 변경 감지 - 검색 재실행', filters)
-            refetch()
-        }, 500)
-
-        return () => clearTimeout(timer)
-    }, [filters])
 
     // 필터 변경 핸들러들
     const handlePriceChange = (type, value) => {
@@ -341,10 +357,6 @@ export default function SearchResultPage() {
     // totalCount는 나중에 사용할 예정 (페이지네이션 정보 표시 등)
     // eslint-disable-next-line no-unused-vars
     const totalCount = data?.pages[0]?.totalCount || 0
-
-    if (isLoading) {
-        return <div style={{ padding: '50px', textAlign: 'center' }}>검색 중</div>
-    }
 
     if (isError) {
         return (
@@ -569,18 +581,23 @@ export default function SearchResultPage() {
                 </div>
 
                 {/* ========== 오른쪽 검색 결과 ========== */}
-                <div className="search-results-section">
-                    {allStays.length === 0 ? (
+                <div className="search-results-section" style={{ position: 'relative', overflow: 'hidden' }}>
+                    {isLoading && (
+                        <PaymentLoading message="숙소 리스트 검색 중..." mode="section" />
+                    )}
+
+                    {!isLoading && allStays.length === 0 ? (
                         <div style={{ padding: '40px', textAlign: 'center', background: '#f8f9fa', borderRadius: '8px' }}>
                             검색 조건에 맞는 숙소가 없습니다.
                         </div>
                     ) : (
                         <>
                             {allStays.map((stay) => (
-                                <StayCard key={stay.stayId} stay={stay} />
+                                <StayCard key={stay.stayId} stay={stay} searchParams={baseSearchParams} />
                             ))}
                         </>
                     )}
+
 
                     <div ref={observerTarget} style={{ padding: '40px', textAlign: 'center' }}>
                         {isFetchingNextPage && (
@@ -598,13 +615,209 @@ export default function SearchResultPage() {
 
             {/* 모바일 플로팅 버튼 */}
             <div className="mobile-floating-buttons">
-                <button className="floating-btn">
-                    <span><img className="mfloating-icon" src="/images/stay/map-modal-icon.svg" alt="지도" /> 지도</span>
+                <button className="floating-btn" onClick={openMobileFilter}>
+    <span>
+      <img className="mfloating-icon" src="/images/stay/map-modal-icon.svg" alt="지도" /> 지도
+    </span>
                     <div className="floating-btn-divider"></div>
-                    <span><img className="mfloating-icon" src="/images/stay/filter-icon.svg" alt="필터" /> 조건검색</span>
+                    <span>
+      <img className="mfloating-icon" src="/images/stay/filter-icon.svg" alt="필터" /> 조건검색
+    </span>
                 </button>
             </div>
+
+            {/* ✅ 모바일 필터 모달 — 퍼블 동일 */}
+            <div className={`mobile-filter-modal ${isMobileFilterOpen ? 'show' : ''}`}>
+                <div className="mobile-filter-header">
+                    <button className="mobile-filter-close" onClick={closeMobileFilter}>×</button>
+                    <h3 className="mobile-filter-title">필터 검색</h3>
+                </div>
+
+                <div className="mobile-filter-content">
+                    {/* ===== 요금 ===== */}
+                    <div className="filter-section">
+                        <div className="filter-section_title">1박당 요금</div>
+                        <div className="form-price-range">
+                            <span className="won-icon">₩</span>
+                            <input
+                                type="number"
+                                className="form-input form-input-price"
+                                placeholder="최소금액"
+                                min="0"
+                                value={filters.minPrice}
+                                onChange={(e) => handlePriceChange('minPrice', e.target.value)}
+                            />
+                            <span className="form-guest-range_separator">
+          <img src="/images/stay/stayslist-line.svg" alt="-" />
+        </span>
+                            <span className="won-icon">₩</span>
+                            <input
+                                type="number"
+                                className="form-input form-input-price"
+                                placeholder="최대금액"
+                                min="0"
+                                value={filters.maxPrice}
+                                onChange={(e) => handlePriceChange('maxPrice', e.target.value)}
+                            />
+                        </div>
+                    </div>
+
+                    {/* ===== 숙소 유형 ===== */}
+                    <div className="filter-section">
+                        <div className="filter-section_title">숙소 유형</div>
+                        <div className="filter-checkbox-group">
+                            {['호텔', '모텔', '펜션'].map((type) => (
+                                <label key={type} className="form-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        className="form-checkbox_input"
+                                        checked={filters.stayTypes.includes(type)}
+                                        onChange={() => handleStayTypeToggle(type)}
+                                    />
+                                    <span className="form-checkbox__text">
+              <img
+                  className="stays_image"
+                  src={`/images/common/${type === '호텔'
+                      ? 'hotel'
+                      : type === '모텔'
+                          ? 'motel'
+                          : 'pension'}-icon.svg`}
+                  alt={type}
+              />
+                                        {type}
+            </span>
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* ===== 숙소 특성 ===== */}
+                    <div className="filter-section">
+                        <div className="filter-section_title">숙소 특성</div>
+
+                        {/* 침실 수 */}
+                        <div className="filter-subsection">
+                            <div className="filter-subsection_title">침실 수</div>
+                            <div className="filter-bed-btn">
+                                {[1, 2, 3].map((count) => (
+                                    <button
+                                        key={count}
+                                        className="filter-cnt-btn"
+                                        onClick={() => handleBedroomSelect(count)}
+                                        style={filters.bedroomCount === count ? {
+                                            borderColor: '#ff6b6b',
+                                            backgroundColor: '#FFF4EC',
+                                            fontWeight: 600
+                                        } : {}}
+                                    >
+                                        {count === 3 ? '3개 이상' : `${count}개`}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 욕실 수 */}
+                        <div className="filter-subsection">
+                            <div className="filter-subsection_title">욕실 수</div>
+                            <div className="filter-bath-btn">
+                                {[1, 2].map((count) => (
+                                    <button
+                                        key={count}
+                                        className="filter-cnt-btn"
+                                        onClick={() => handleBathroomSelect(count)}
+                                        style={filters.bathroomCount === count ? {
+                                            borderColor: '#ff6b6b',
+                                            backgroundColor: '#FFF4EC',
+                                            fontWeight: 600
+                                        } : {}}
+                                    >
+                                        {count === 2 ? '2개 이상' : `${count}개`}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 수용 인원 */}
+                        <div className="filter-subsection">
+                            <div className="filter-subsection_title">수용 인원</div>
+                            <div className="form-guest-range">
+                                <img className="filter-person-icon" src="/images/stay/filter-person-icon.svg" alt="인원" />
+                                <input
+                                    type="number"
+                                    className="form-input form-input-guest"
+                                    placeholder="최소인원"
+                                    min="1"
+                                    max="20"
+                                    value={filters.minGuests}
+                                    onChange={(e) => handleGuestChange('minGuests', e.target.value)}
+                                />
+                                <span className="form-guest-range_separator">
+            <img src="/images/stay/stayslist-line.svg" alt="-" />
+          </span>
+                                <img className="filter-person-icon" src="/images/stay/filter-person-icon.svg" alt="인원" />
+                                <input
+                                    type="number"
+                                    className="form-input form-input-guest"
+                                    placeholder="최대인원"
+                                    min="1"
+                                    max="30"
+                                    value={filters.maxGuests}
+                                    onChange={(e) => handleGuestChange('maxGuests', e.target.value)}
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* ===== 숙소 평점 ===== */}
+                    <div className="filter-section">
+                        <div className="filter-section_title">숙소 평점</div>
+                        <div className="filter-stars-group">
+                            {[5, 4, 3, 2, 1].map((rating) => (
+                                <label key={rating} className="form-stars">
+                                    <input
+                                        type="checkbox"
+                                        className="form-stars_input"
+                                        checked={filters.ratings.includes(rating)}
+                                        onChange={() => handleRatingToggle(rating)}
+                                    />
+                                    <div className="star-display">
+                                        {[...Array(rating)].map((_, idx) => (
+                                            <img key={idx} src="/images/stay/stayfilter-star.svg" alt="★" />
+                                        ))}
+                                    </div>
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* ===== 이용 가능한 옵션 ===== */}
+                    <div className="filter-section">
+                        <div className="filter-section_title">이용가능한 서비스 / 옵션</div>
+                        <div className="filter-checkbox-group">
+                            {['조식 포함', '무료 취소일', '수영장', 'OTT 이용가능', '주차장', '금연',
+                                '피트니스 센터', '반려동물 동반 가능', '장애인용 편의시설', '공항 이동 교통편 서비스'].map((option) => (
+                                <label key={option} className="form-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        className="form-checkbox_input"
+                                        checked={filters.amenities.includes(option)}
+                                        onChange={() => handleAmenityToggle(option)}
+                                    />
+                                    <span className="form-checkbox__text">{option}</span>
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mobile-filter-bottom">
+                    <button className="mobile-apply-btn" onClick={closeMobileFilter}>
+                        적용하기
+                    </button>
+                </div>
+        </div>
         </div>
         </>
     )
 }
+
