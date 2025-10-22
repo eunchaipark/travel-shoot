@@ -57,6 +57,10 @@ const MainPage = () => {
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
   // const [showHeaderDropdown, setShowHeaderDropdown] = useState(false);
 
+  const [suggestions, setSuggestions] = useState([]);
+  const locationInputRef = useRef(null);
+  const locationDropdownRef = useRef(null);
+
   // 커스텀 훅
   const {
     selectedDates,
@@ -258,19 +262,41 @@ const MainPage = () => {
   const handleLocationFocus = () => {
     setShowDateDropdown(false);
     setShowGuestDropdown(false);
-    setShowLocationDropdown(true);
-  };
-
-  const handleLocationInput = (e) => {
-    setLocationValue(e.target.value);
-    if (e.target.value.length > 0) {
+    if (suggestions.length > 0) {
       setShowLocationDropdown(true);
     }
   };
 
+  const handleLocationInput = async (e) => {
+    const value = e.target.value;
+    setLocationValue(value);
+    
+    setShowDateDropdown(false);
+    setShowGuestDropdown(false);
+    
+    if (value.trim().length < 1) {
+      setSuggestions([]);
+      setShowLocationDropdown(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/stays/autocomplete?keyword=${encodeURIComponent(value)}`
+      );
+      const data = await response.json();
+      console.log('자동완성 결과:', data);
+      setSuggestions(data || []);
+      setShowLocationDropdown(true);
+    } catch (error) {
+      console.error('자동완성 에러:', error);
+      setSuggestions([]);
+    }
+  };
+
   // 지역 선택
-  const handleLocationSelect = (location) => {
-    setLocationValue(location);
+  const handleSuggestionSelect = (suggestion) => {
+    setLocationValue(suggestion.keyword);
     setShowLocationDropdown(false);
   };
 
@@ -433,6 +459,7 @@ const MainPage = () => {
                     />
                   </div>
                   <input
+                    ref={locationInputRef}
                     type="text"
                     className="search-input main-calendar-location-input"
                     placeholder="어디로 떠나시나요?"
@@ -441,44 +468,25 @@ const MainPage = () => {
                     onFocus={handleLocationFocus}
                   />
 
-                  {showLocationDropdown && (
-                    <div className="dropdown-suggestions">
-                      <button
-                        className="suggestion-item"
-                        onClick={() => handleLocationSelect("SL 호텔 강릉")}
-                      >
-                        <i className="fas fa-building"></i>
-                        <div>
-                          <div className="fw-bold">SL 호텔 강릉</div>
-                          <small className="text-muted">
-                            강릉특별자치도 강릉시 OO----
-                          </small>
-                        </div>
-                      </button>
-                      <button
-                        className="suggestion-item"
-                        onClick={() => handleLocationSelect("유담리솜펜션")}
-                      >
-                        <i className="fas fa-home"></i>
-                        <div>
-                          <div className="fw-bold">유담리솜펜션</div>
-                          <small className="text-muted">
-                            강릉특별자치도 강릉시 OO----
-                          </small>
-                        </div>
-                      </button>
-                      <button
-                        className="suggestion-item"
-                        onClick={() => handleLocationSelect("강릉씨고호텔")}
-                      >
-                        <i className="fas fa-building"></i>
-                        <div>
-                          <div className="fw-bold">강릉씨고호텔</div>
-                          <small className="text-muted">
-                            강릉특별자치도 강릉시 OO----
-                          </small>
-                        </div>
-                      </button>
+                  {showLocationDropdown && suggestions.length > 0 && (
+                    <div ref={locationDropdownRef} className="dropdown-suggestions">
+                      {suggestions.map((suggestion, index) => (
+                        <button
+                          key={index}
+                          className="suggestion-item"
+                          onClick={() => handleSuggestionSelect(suggestion)}
+                        >
+                          <i className={
+                            suggestion.type === 'REGION' 
+                              ? 'fas fa-map-marker-alt' 
+                              : 'fas fa-building'
+                          }></i>
+                          <div>
+                            <div className="fw-bold">{suggestion.keyword}</div>
+                            <small className="text-muted">{suggestion.type}</small>
+                          </div>
+                        </button>
+                      ))}
                     </div>
                   )}
                 </div>

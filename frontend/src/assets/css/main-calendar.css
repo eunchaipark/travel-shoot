@@ -84,8 +84,10 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   z-index: 99999 !important;
   margin-top: 0; /* 간격 제거 */
-  max-height: 300px;
+  max-height: 225px;
+  min-height: 225px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* 날짜 드롭다운보다 위에 */
