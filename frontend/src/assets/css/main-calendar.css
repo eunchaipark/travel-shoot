@@ -421,14 +421,11 @@
    날짜 선택 드롭다운 (미니 달력)
    ========================================================================== */
 
-.main-page
-  .calendar-section-wrapper
-  .calendar-search-container
-  .search-section-container
-  .date-dropdown-container {
+.main-page .calendar-section-wrapper .calendar-search-container .search-section-container .date-dropdown-container {
   max-height: 0;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 0.3s ease;
   opacity: 0;
   background: white;
   border-left: 1px solid #ddd;
@@ -436,10 +433,56 @@
   border-bottom: 1px solid #ddd;
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
-  margin-bottom: 1rem;
+  margin-bottom: 0rem;
+  visibility: hidden;
   width: 100%;
   box-sizing: border-box;
 }
+
+/* 날짜 드롭다운 - 열린 상태 */
+.main-page
+  .calendar-section-wrapper
+  .calendar-search-container
+  .search-section-container
+  .date-dropdown-container.open {
+  visibility: visible;
+  margin-bottom: 1rem;
+  max-height: 500px;
+  opacity: 1;
+}
+
+/* 인원 드롭다운 - 닫힌 상태 (기본) */
+.main-page
+  .calendar-section-wrapper
+  .calendar-search-container
+  .search-section-container
+  .guest-dropdown-container {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 0.3s ease;
+  opacity: 0;
+  background: white;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  margin-bottom: 0rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 인원 드롭다운 - 열린 상태 */
+.main-page
+  .calendar-section-wrapper
+  .calendar-search-container
+  .search-section-container
+  .guest-dropdown-container.open {
+  max-height: 250px;
+  opacity: 1;
+}
+
 
 /* 미니 달력 컨테이너 */
 .main-page
@@ -560,7 +603,7 @@
   font-size: 14px;
   cursor: pointer;
   border-radius: 8px;
-  transition: all 0.2s ease;
+  /* transition: all 0.2s ease; */
   min-height: 36px;
   background-color: #ffffff;
   border: 1px solid transparent;
@@ -1246,7 +1289,7 @@
   border-bottom: 1px solid #ddd;
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
-  margin-bottom: 1rem;
+  margin-bottom: 0rem;
   width: 100%;
   box-sizing: border-box;
 }
