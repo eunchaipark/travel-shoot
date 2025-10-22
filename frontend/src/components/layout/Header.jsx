@@ -14,6 +14,7 @@ const Header = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
 
+
     //region 또는 stayName 중 있는 값을 가져옴
     const [searchValue, setSearchValue] = useState(
         searchParams.get('region') || searchParams.get('stayName') || ''
@@ -269,7 +270,9 @@ const Header = () => {
                                                         <i className={suggestion.type === 'REGION' ? 'fas fa-map-marker-alt' : 'fas fa-building'}></i>
                                                         <div>
                                                             <div className="fw-bold">{suggestion.keyword}</div>
+
                                                             {/*<small className="text-muted">{suggestion.type}</small>*/}
+
                                                         </div>
                                                     </button>
                                                 ))}

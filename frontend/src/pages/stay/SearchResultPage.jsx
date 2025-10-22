@@ -8,13 +8,16 @@ import MapModal from '@/components/modals/MapModal';
 import '@/assets/css/stay-search.css'
 import '@/assets/css/payment-loading.css'
 import '@/assets/css/header-calendar.css'
+
 import '@/assets/css/common.css'
+import '@/assets/css/stay-search.css'
 
 // StayCard 컴포넌트
 function StayCard({ stay, searchParams  }) {
     const navigate = useNavigate();
     const likeButtonRef = useRef(null);
     const [isLiked, setIsLiked] = useState(false);
+
 
     // 검색 조건 url에 가지고 있도록
     const handleCardClick = () => { //TODO : 윤하님 숙소 상세 페이지로 이동할 URL
@@ -656,6 +659,7 @@ export default function SearchResultPage() {
             </div>
 
             {/* 모바일 필터 모달 */}
+
             <div className={`mobile-filter-modal ${isMobileFilterOpen ? 'show' : ''}`}>
                 <div className="mobile-filter-header">
                     <button className="mobile-filter-close" onClick={closeMobileFilter}>×</button>
@@ -692,6 +696,7 @@ export default function SearchResultPage() {
                     </div>
 
                     {/* 숙소 유형*/}
+
                     <div className="filter-section">
                         <div className="filter-section_title">숙소 유형</div>
                         <div className="filter-checkbox-group">
@@ -712,7 +717,9 @@ export default function SearchResultPage() {
                         </div>
                     </div>
 
+
                     {/*숙소 특성*/}
+
                     <div className="filter-section">
                         <div className="filter-section_title">숙소 특성</div>
 
@@ -775,6 +782,7 @@ export default function SearchResultPage() {
                                 <span className="form-guest-range_separator">
                                     <img src="/images/stay/stayslist-line.svg" alt="-" />
                                 </span>
+
                                 <img className="filter-person-icon" src="/images/stay/filter-person-icon.svg" alt="인원" />
                                 <input
                                     type="number"
@@ -790,6 +798,7 @@ export default function SearchResultPage() {
                     </div>
 
                     {/* 숙소 평점 */}
+
                     <div className="filter-section">
                         <div className="filter-section_title">숙소 평점</div>
                         <div className="filter-stars-group">
@@ -812,6 +821,7 @@ export default function SearchResultPage() {
                     </div>
 
                     {/* 이용 가능한 옵션*/}
+
                     <div className="filter-section">
                         <div className="filter-section_title">이용가능한 서비스 / 옵션</div>
                         <div className="filter-checkbox-group">

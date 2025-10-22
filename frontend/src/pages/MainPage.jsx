@@ -501,28 +501,19 @@ const MainPage = () => {
                   />
                 </div>
 
-                {showDateDropdown && (
-                  <div
-                    className="date-dropdown-container"
-                    style={{
-                      maxHeight: "400px",
-                      opacity: 1,
-                      transition: "all 0.3s ease",
-                    }}
-                  >
-                    <div style={{ padding: "15px" }}>
-                      <div
-                        className="mini-calendar-container"
-                        style={{ justifyContent: "center", width: "100%" }}
-                      >
-                        <MiniCalendar
-                          selectedDates={selectedDates}
-                          onDateSelect={handleMiniCalendarDateSelection}
-                        />
-                      </div>
+                <div className={`date-dropdown-container ${showDateDropdown ? 'open' : ''}`}>
+                  <div style={{ padding: "15px" }}>
+                    <div
+                      className="mini-calendar-container"
+                      style={{ justifyContent: "center", width: "100%" }}
+                    >
+                      <MiniCalendar
+                        selectedDates={selectedDates}
+                        onDateSelect={handleMiniCalendarDateSelection}
+                      />
                     </div>
                   </div>
-                )}
+                </div>
 
                 {/* 인원 선택 */}
                 <div
@@ -545,107 +536,98 @@ const MainPage = () => {
                   />
                 </div>
 
-                {showGuestDropdown && (
-                  <div
-                    className="guest-dropdown-container"
-                    style={{
-                      maxHeight: "160px",
-                      opacity: 1,
-                      transition: "all 0.3s ease",
-                    }}
-                  >
-                    <div style={{ padding: "20px" }}>
-                      {/* 성인 */}
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          marginBottom: "20px",
-                        }}
-                      >
-                        <div>
-                          <div style={{ fontWeight: 600, marginBottom: "4px" }}>
-                            성인
-                          </div>
-                          <small style={{ color: "#6c757d" }}>18세 이상</small>
+                <div className={`guest-dropdown-container ${showGuestDropdown ? 'open' : ''}`}>
+                  <div style={{ padding: "20px" }}>
+                    {/* 성인 */}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      <div>
+                        <div style={{ fontWeight: 600, marginBottom: "4px" }}>
+                          성인
                         </div>
-                        <div
-                          className="counter-controls"
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "15px",
-                          }}
-                        >
-                          <button
-                            type="button"
-                            className="counter-btn guest-btn guest-btn-minus"
-                            onClick={() => handleGuestChange("adult", "minus")}
-                            disabled={guestCounts.adult <= 1}
-                          >
-                            -
-                          </button>
-                          <span className="guest-count" data-type="adult">
-                            {guestCounts.adult}
-                          </span>
-                          <button
-                            type="button"
-                            className="counter-btn guest-btn guest-btn-plus"
-                            onClick={() => handleGuestChange("adult", "plus")}
-                            disabled={guestCounts.adult >= 32}
-                          >
-                            +
-                          </button>
-                        </div>
+                        <small style={{ color: "#6c757d" }}>18세 이상</small>
                       </div>
-
-                      {/* 어린이 */}
                       <div
+                        className="counter-controls"
                         style={{
                           display: "flex",
-                          justifyContent: "space-between",
                           alignItems: "center",
+                          gap: "15px",
                         }}
                       >
-                        <div>
-                          <div style={{ fontWeight: 600, marginBottom: "4px" }}>
-                            어린이
-                          </div>
-                          <small style={{ color: "#6c757d" }}>0-17세</small>
-                        </div>
-                        <div
-                          className="counter-controls"
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "15px",
-                          }}
+                        <button
+                          type="button"
+                          className="counter-btn guest-btn guest-btn-minus"
+                          onClick={() => handleGuestChange("adult", "minus")}
+                          disabled={guestCounts.adult <= 1}
                         >
-                          <button
-                            type="button"
-                            className="counter-btn guest-btn guest-btn-minus"
-                            onClick={() => handleGuestChange("child", "minus")}
-                            disabled={guestCounts.child <= 0}
-                          >
-                            -
-                          </button>
-                          <span className="guest-count" data-type="child">
-                            {guestCounts.child}
-                          </span>
-                          <button
-                            type="button"
-                            className="counter-btn guest-btn guest-btn-plus"
-                            onClick={() => handleGuestChange("child", "plus")}
-                            disabled={guestCounts.child >= 4}
-                          >
-                            +
-                          </button>
+                          -
+                        </button>
+                        <span className="guest-count" data-type="adult">
+                          {guestCounts.adult}
+                        </span>
+                        <button
+                          type="button"
+                          className="counter-btn guest-btn guest-btn-plus"
+                          onClick={() => handleGuestChange("adult", "plus")}
+                          disabled={guestCounts.adult >= 32}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* 어린이 */}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div>
+                        <div style={{ fontWeight: 600, marginBottom: "4px" }}>
+                          어린이
                         </div>
+                        <small style={{ color: "#6c757d" }}>0-17세</small>
+                      </div>
+                      <div
+                        className="counter-controls"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "15px",
+                        }}
+                      >
+                        <button
+                          type="button"
+                          className="counter-btn guest-btn guest-btn-minus"
+                          onClick={() => handleGuestChange("child", "minus")}
+                          disabled={guestCounts.child <= 0}
+                        >
+                          -
+                        </button>
+                        <span className="guest-count" data-type="child">
+                          {guestCounts.child}
+                        </span>
+                        <button
+                          type="button"
+                          className="counter-btn guest-btn guest-btn-plus"
+                          onClick={() => handleGuestChange("child", "plus")}
+                          disabled={guestCounts.child >= 4}
+                        >
+                          +
+                        </button>
                       </div>
                     </div>
                   </div>
-                )}
+                </div>
 
                 {/* 검색 버튼 */}
                 <button

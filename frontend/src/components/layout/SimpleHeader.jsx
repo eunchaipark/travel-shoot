@@ -86,6 +86,7 @@ const SimpleHeader = () => {
             params.append("region", suggestion.keyword);
         }
 
+
         navigate(`/search?${params.toString()}`);
     };
 
@@ -143,6 +144,7 @@ const SimpleHeader = () => {
                                                 <div>
                                                     <div className="fw-bold">{suggestion.keyword}</div>
                                                     {/*<small className="text-muted">{suggestion.type}</small>*/}
+
                                                 </div>
                                             </button>
                                         ))}

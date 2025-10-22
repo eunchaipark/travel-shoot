@@ -3,6 +3,7 @@ import "@/assets/css/payment-loading.css";
 
 const PaymentLoading = ({ message = "로딩 중입니다...", mode = "full" }) => {
 
+
     const overlayRef = useRef(null);
 
     useEffect(() => {
@@ -33,6 +34,7 @@ const PaymentLoading = ({ message = "로딩 중입니다...", mode = "full" }) =
         };
     }, [mode]);
 
+ 
     return (
         <div className={`loading-overlay ${mode === "section" ? "section-mode" : ""}`}>
             <div className="loading-content">
