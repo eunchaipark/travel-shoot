@@ -31,10 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -115,7 +112,7 @@ public class TravelCourseServiceImpl implements TravelCourseService {
         }
     }
 
-    public TravelCourseResponse getCourse(Long id, String type) {
+    public TravelCourseResponse getCourse(Long id, String type, Long userId) {
         log.info("여행 코스 조회 - id: {}, type: {}", id, type);
 
         TravelCourse travelCourse;
@@ -130,7 +127,7 @@ public class TravelCourseServiceImpl implements TravelCourseService {
                     .orElseThrow(() -> new IllegalArgumentException("해당 여행 코스를 찾을 수 없습니다."));
         }
 
-        //TODO: 로그인 구현 다 되면 travelCourse.getUserId()와 세션 id와 같지 않으면 에러 반영
+        if(!Objects.equals(travelCourse.getUserId(), userId)) throw new IllegalArgumentException("올바른 경로가 아닙니다.");
         Reservation reservation = reservationService.getById(travelCourse.getReservationId());
         LocalDate startDate = reservation.getCheckInDate();
         List<CourseSpot> courseSpots = courseSpotRepository
