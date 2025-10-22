@@ -204,7 +204,7 @@ const MainPage = () => {
     console.log("검색 조건:", searchData);
 
     const params = new URLSearchParams({
-      location: locationValue,
+      region: locationValue,
       checkin: selectedDates.checkin,
       checkout: selectedDates.checkout,
       adults: guestCounts.adult,
