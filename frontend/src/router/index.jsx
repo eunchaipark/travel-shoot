@@ -2,7 +2,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '@/components/context/AuthContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-
+import { useEffect } from 'react';
+import { useAuth } from '@/components/context/AuthContext';
 import ScrollToTop from "@/components/common/ScrollToTop";
 
 import MainPage from '@/pages/MainPage';
@@ -27,6 +28,26 @@ const queryClient = new QueryClient({
         },
     },
 });
+
+function SessionExpiredHandler() {
+    const { openLoginModal } = useAuth();
+
+    useEffect(() => {
+        const handleSessionExpired = () => {
+            console.log('세션 만료 이벤트 수신');
+            alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+            openLoginModal();
+        };
+
+        window.addEventListener('session-expired', handleSessionExpired);
+
+        return () => {
+            window.removeEventListener('session-expired', handleSessionExpired);
+        };
+    }, [openLoginModal]);
+
+    return null;
+}
 
 function Router() {
     return (
