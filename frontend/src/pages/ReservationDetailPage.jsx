@@ -6,6 +6,7 @@ import CourseMap from '@/components/reservation/CourseMap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@/assets/css/reservation.css';
 import SearchMapModal from '@/components/modals/SearchMapModal';
+import {getDayOfWeek} from '@/utils/formatters/dateFormatter';
 
 const ReservationDetailPage = () => {
     const [activeDay, setActiveDay] = useState(1);
@@ -209,7 +210,7 @@ const ReservationDetailPage = () => {
                                                         <div className="col-5">
                                                             <div className="mb-1">체크인</div>
                                                             <div className="fw-bold">
-                                                                {reservationData?.checkInDate}
+                                                                {reservationData?.checkInDate} ({getDayOfWeek(reservationData?.checkInDate)})
                                                             </div>
                                                             <div className="fw-bold">
                                                                 {reservationData?.checkInTime}
@@ -221,7 +222,7 @@ const ReservationDetailPage = () => {
                                                         <div className="col-5">
                                                             <div className="mb-1">체크아웃</div>
                                                             <div className="fw-bold">
-                                                                {reservationData?.checkOutDate}
+                                                                {reservationData?.checkOutDate} ({getDayOfWeek(reservationData?.checkOutDate)})
                                                             </div>
                                                             <div className="fw-bold">
                                                                 {reservationData?.checkOutTime}
@@ -494,6 +495,7 @@ const ReservationDetailPage = () => {
                     setEditingSpotId(null);
                 }}
                 spotId={editingSpotId}
+                searchText={reservationData?.address.match(/^[^\s]+/)[0]}
                 onUpdateSuccess={refetchCourseData}
             />
         </>
