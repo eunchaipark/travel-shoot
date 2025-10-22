@@ -4,6 +4,7 @@ import MainPage from '@/pages/MainPage';
 import MapTestPage from '@/pages/MapTestPage';
 import ReviewListPage from '../pages/review/ReviewListPage';
 import ReviewWritePage from '../pages/review/ReviewWritePage';
+import StayDetailPage from '../pages/stay-detail/StayDetailPage';
 
 function Router() {
   return (
@@ -12,8 +13,9 @@ function Router() {
         <Route path="/" element={<MainPage />} />
         <Route path="/map" element={<MapTestPage />} />
 
-        <Route path="reviews/stays/:stayId" element={<ReviewListPage />} />
-        <Route path="reviews" element={<ReviewWritePage />} />
+        <Route path='/stays/2' element={<StayDetailPage />} />
+        <Route path="/reviews/stays/:stayId" element={<ReviewListPage />} />
+        <Route path="/reviews/reservations/:reservationId" element={<ReviewWritePage />} />
       </Routes>
     </BrowserRouter>
   );

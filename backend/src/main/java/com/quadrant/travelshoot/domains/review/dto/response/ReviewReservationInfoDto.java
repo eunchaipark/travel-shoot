@@ -18,8 +18,9 @@ public class ReviewReservationInfoDto {
     private String reservationCode;     // 예약 번호
     private LocalDate checkInDate;      // 체크인 일자
     private LocalDate checkOutDate;     // 체크아웃 일자
-    private int totalNights;    // 몇 박
+    private Integer totalNights;    // 몇 박
     private ReservationStatus reservationStatus; // 예약 상태 ENUM
+    private Integer guestCount;
 
     /* 숙소 정보  */
     private Long stayId;

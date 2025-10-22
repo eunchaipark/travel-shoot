@@ -3,31 +3,36 @@ import "../../assets/css/review-regist.css";
 import ReviewWriteHeader from "@/components/review/ReviewWriteHeader";
 import ReviewRatingSection from "@/components/review/ReviewRatingSection";
 import PhotoUploadSection from '../../components/review/PhotoUploadSection';
+import { useParams } from 'react-router-dom';
+import ReviewReservationSection from '../../components/review/ReviewReservationSection';
+import { createReview, updateReview } from '../../services/review/reviewApiService';
 
 // 세부 평점 카테고리
 const detailCategories = [
-    { key: 'clean', label: '청결도' },
-    { key: 'convenience', label: '편의성' },
-    { key: 'checkin', label: '체크인' },
-    { key: 'communication', label: '의사소통' },
-    { key: 'location', label: '위치' },
-    { key: 'value', label: '가성비' },
+    { key: 'cleanRating', label: '청결도' },
+    { key: 'convenienceRating', label: '편의성' },
+    { key: 'checkinRating', label: '체크인' },
+    { key: 'communicationRating', label: '의사소통' },
+    { key: 'locationRating', label: '위치' },
+    { key: 'valueRating', label: '가성비' },
 ];
 
 const ReviewWritePage = () => {
 
-    // 초기 평점 상태: 모든 카테고리 0
-    const initialRatings = detailCategories.reduce((acc, cat) => ({ ...acc, [cat.key]: 0 }), { overall: 0 });
+    const {reservationId} = useParams();
+
+    const initialRatings = detailCategories.reduce((acc, cat) => ({ ...acc, [cat.key]: 0 }), { totalRating: 0 });
     const [ratings, setRatings] = useState(initialRatings);
-    const [recommendationSelected, setRecommendationSelected] = useState(false);
+    const [isRecommended, setIsRecommended] = useState(false);
     const [uploadedFile, setUploadedFile] = useState(null);
     const [reviewText, setReviewText] = useState('');
-
     const [isEditMode, setIsEditMode] = useState(false);
     const [reviewId, setReviewId] = useState(null);
-    const [existingImageUrl, setExistingImageUrl] = useState(null);
+    // const [existingImageUrl, setExistingImageUrl] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const isUpdatingFromOverallRef = useRef(false);
+    const [reservationInfo, setReservationInfo] = useState(null);
+    const isUpdatingFromTotalRef = useRef(false);
+    const photoInputRef = useRef(null);
 
     // 전체 평점 평균 계산 로직
     const calculateOverallAverage = useCallback(() => {
@@ -38,6 +43,7 @@ const ReviewWritePage = () => {
         if (validRatings.length === 0) return 0;
         
         const sum = validRatings.reduce((acc, rating) => acc + rating, 0);
+        
         return Math.round(sum / validRatings.length);
     }, [ratings]);
 
@@ -46,9 +52,9 @@ const ReviewWritePage = () => {
         setRatings(prevRatings => {
             const newRatings = { ...prevRatings, [category]: rating };
 
-            if (category === 'overall') {
+            if (category === 'totalRating') {
                 // 전체 평점 변경 시 -> 세부 평점 업데이트
-                isUpdatingFromOverallRef.current = true;
+                isUpdatingFromTotalRef.current = true;
                 const updatedDetails = detailCategories.reduce((acc, cat) => ({ ...acc, [cat.key]: rating }), {});
                 return { ...newRatings, ...updatedDetails };
             } else {
@@ -60,19 +66,78 @@ const ReviewWritePage = () => {
 
     // 세부 평점 변경에 따른 전체 평점 업데이트 (Side Effect)
     useEffect(() => {
-        if (isUpdatingFromOverallRef.current) {
-            isUpdatingFromOverallRef.current = false;
+        if (isUpdatingFromTotalRef.current) {
+            isUpdatingFromTotalRef.current = false;
             return;
         }
 
         const averageRating = calculateOverallAverage();
-        if (ratings.overall !== averageRating) {
-            setRatings(prevRatings => ({ ...prevRatings, overall: averageRating }));
+        if (ratings.totalRating !== averageRating) {
+            setRatings(prevRatings => ({ ...prevRatings, totalRating: averageRating }));
         }
     }, [ratings, calculateOverallAverage]);
 
+
+        // 컴포넌트 마운트 시 기존 리뷰 데이터 불러오기
+    useEffect(() => {
+        const fetchReviewData = async () => {
+            try {
+                // 예약번호를 기반으로 리뷰 조회 API 호출
+                const response = await fetch(`http://localhost:8080/api/reviews/reservations/${reservationId}`);
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    if (result.success && result.data) {
+                        const data = result.data;
+
+                        console.log("예약 + 리뷰 데이터: ", data);
+                        // 예약 정보 설정
+                        setReservationInfo(data.reservationInfoDto);
+
+                        if(data.reviewId){
+                            setIsEditMode(true);
+                            setReviewId(data.reviewId);
+
+                             // 평점 데이터 설정
+                            const loadedRatings = {
+                                totalRating: Math.round(data.totalRating),
+                                cleanRating: data.cleanRating,
+                                convenienceRating: data.convenienceRating,
+                                checkinRating: data.checkinRating,
+                                communicationRating: data.communicationRating,
+                                locationRating: data.locationRating,
+                                valueRating: data.valueRating,
+                            };
+                            setRatings(loadedRatings);
+                            
+                            // 텍스트 및 기타 데이터 설정
+                            setReviewText(data.reviewContent || '');
+                            setIsRecommended(data.isRecommended);
+                            // setExistingImageUrl(data.reviewImageUrl);
+                        } else {
+                            // 리뷰가 없는 경우 - 등록 모드
+                            setIsEditMode(false);
+                        }
+                    }
+
+                } else {
+                    console.error('리뷰 조회 실패');
+                    setIsEditMode(false);
+                }
+            } catch (error) {
+                console.error('리뷰 조회 중 오류:', error);
+                setIsEditMode(false);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchReviewData();
+    }, [reservationId]);
+
     // 제출 버튼 활성화 조건
-    const isSubmitEnabled = detailCategories.every(cat => ratings[cat.key] > 0) && ratings.overall > 0;
+    const isSubmitEnabled = detailCategories.every(cat => ratings[cat.key] > 0) && ratings.totalRating > 0;
     
     // 파일 변경/제거 핸들러
     const handleFileChange = (file) => setUploadedFile(file);
@@ -80,72 +145,76 @@ const ReviewWritePage = () => {
         setUploadedFile(null);
         if (photoInputRef.current) photoInputRef.current.value = ''; // input 초기화
     };
-    const photoInputRef = useRef(null); // PhotoUploadSection에서 사용할 ref
 
-    // 제출 버튼 클릭 핸들러 (실제 제출 로직은 여기에 구현)
-    const handleSubmit = () => {
+
+    // 제출 버튼 핸들러
+    const handleSubmit = async() => {
         if (isSubmitEnabled) {
-            const reviewData = {
-                reservationNumber: '250603002946000110',
-                ratings: ratings,
-                text: reviewText,
-                recommendation: recommendationSelected,
-                hasPhoto: !!uploadedFile,
-                // uploadedFile: uploadedFile // 실제 제출 시에는 파일을 FormData에 담아 전송
-            };
-            console.log('리뷰 제출 데이터:', reviewData);
-            alert('리뷰를 등록합니다.');
-            // API 호출 로직
+            try {
+                // FormData 생성
+                const formData = new FormData();
+                
+                // 기본 필드 추가
+                formData.append('reservationId', Number(reservationId));
+                formData.append('stayId', reservationInfo.stayId);
+                // ratings 객체의 각 필드를 개별적으로 추가
+                Object.keys(ratings).forEach(key => {
+                    formData.append(key, ratings[key]);
+                }); 
+                formData.append('reviewContent', reviewText);
+                formData.append('isRecommended', isRecommended);
+                // 이미지 파일 추가 (있는 경우)
+                if (uploadedFile) {
+                    formData.append('reviewImage', uploadedFile);
+                }
+                console.log('리뷰 제출 데이터 준비 완료');
+                
+                // API 호출
+                if(isEditMode){
+                    const res = await updateReview(reviewId, formData);
+                    console.log('리뷰 수정 성공:', res?.data);
+                    alert('리뷰가 수정되었습니다. 🥰');
+                }else{
+                    const res = await createReview(formData);
+                    console.log('리뷰 등록 성공:', res?.data);
+                    alert('리뷰가 등록되었습니다. 🥰');
+                }
+
+                 // 성공 후 페이지 이동 : 리뷰 목록 페이지 or 나의 리뷰 페이지
+                // navigate('/reviews'); 
+                
+            } catch (error) {
+                console.error(`리뷰 ${isEditMode ? '수정' : '등록'} 실패:`, error);
+                alert(`리뷰 ${isEditMode ? '수정' : '등록'}에 실패했습니다. 다시 시도해주세요.`);
+            }
         } else {
-            alert('모든 필수 항목(별점)을 입력해주세요.');
+            alert('모든 필수 항목을 입력해주세요.');
         }
     };
+
+
+     // 취소 버튼 핸들러
+    const handleCancel = () => {
+        if (window.confirm('작성 중인 내용이 사라집니다. 정말 취소하시겠습니까?')) {
+            navigate(-1);
+        }
+    };
+
     
     return (
         <div className="review-write-page">
             {/* 헤더 */}
             <ReviewWriteHeader />
-
             {/* 메인 콘텐츠 */}
             <main className="main-content py-5">
-                {/* 숙소 정보 */}
-                <section className="accommodation-info-section">
-                    <div className="reservation-number">
-                        <span className="reservation-value">숙소 예약번호: 250603002946000110</span>
-                        <div className="accommodation-card">
-                            <div className="accommodation-image-wrapper">
-                                <img src="" alt="부산 더스카이" className="accommodation-image" />
-                            </div>
-                            <div className="accommodation-details">
-                                <div className="accommodation-header">
-                                    <h2 className="accommodation-name">부산 더스카이</h2>
-                                    <span className="status-badge">이용완료</span>
-                                </div>
-                                <div className="booking-details">
-                                    <div className="booking-item">
-                                        <i className="fas fa-calendar-alt booking-icon calendar-icon"></i>
-                                        <span className="booking-text">2025.04.21 ~ 04.22 (1박)</span>
-                                    </div>
-                                    <div className="booking-item">
-                                        <i className="fas fa-users booking-icon users-icon"></i>
-                                        <span className="booking-text">성인 2명 · 객실 1개</span>
-                                    </div>
-                                    <div className="booking-item">
-                                        <i className="fas fa-clock booking-icon clock-icon"></i>
-                                        <span className="booking-text">체크인 15:00 | 체크아웃 11:00</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                {/* 숙소 예약 정보 */}
+                {reservationInfo && <ReviewReservationSection reservationInfo={reservationInfo}/> }
 
                 {/* 평점 섹션 (전체 + 세부) */}
                 <ReviewRatingSection ratings={ratings} onRatingChange={handleRatingChange} detailCategories={detailCategories}/>
-
                 {/* 텍스트 후기 */}
                 <section className="text-review-section">
-                    <h3 className="section-title">텍스트 후기 작성 (선택)</h3>
+                    <h3 className="section-title">텍스트 후기 작성</h3>
                     <textarea 
                         className="review-textarea" 
                         placeholder="이용한 경험을 자세히 알려주세요." 
@@ -167,10 +236,10 @@ const ReviewWritePage = () => {
                 <section className="recommendation-section">
                     <div className="recommendation-question">이 숙소를 다른 사람에게 추천하시겠습니까?</div>
                     <button 
-                        className={`recommendation-button ${recommendationSelected ? 'active' : ''}`} 
-                        id="recommendation-button" 
+                        className={`recommendation-button ${isRecommended ? 'active' : ''}`} 
+                        id="recommendation-button"
                         type="button"
-                        onClick={() => setRecommendationSelected(prev => !prev)}
+                        onClick={() => setIsRecommended(prev => !prev)}
                     >
                         <i className="fas fa-heart"></i>네, 추천합니다.
                     </button>
@@ -179,16 +248,19 @@ const ReviewWritePage = () => {
                 {/* 액션 버튼 */}
                 <section className="action-buttons-section">
                     <div className="button-group">
-                        <button className="cancel-button" type="button">취소</button>
+                        <button
+                            className="cancel-button"
+                            type="button"
+                            onClick={handleCancel}
+                        >취소</button>
+
                         <button 
                             className={`submit-button ${isSubmitEnabled ? 'active' : ''}`} 
                             id="submit-button" 
                             type="button"
                             disabled={!isSubmitEnabled}
                             onClick={handleSubmit}
-                        >
-                            등록
-                        </button>
+                        > {isEditMode ? '수정' : '등록'} </button>
                     </div>
                 </section>
 

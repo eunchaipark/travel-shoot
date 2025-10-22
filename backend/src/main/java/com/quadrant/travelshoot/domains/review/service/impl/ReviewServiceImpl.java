@@ -2,6 +2,7 @@ package com.quadrant.travelshoot.domains.review.service.impl;
 
 import com.quadrant.travelshoot.domains.common.entity.FileUpload;
 import com.quadrant.travelshoot.domains.common.repository.FileUploadRepository;
+import com.quadrant.travelshoot.domains.reservation.entity.Reservation;
 import com.quadrant.travelshoot.domains.review.dto.request.ReviewRegistRequest;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewDetailResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewListResponse;
@@ -12,9 +13,7 @@ import com.quadrant.travelshoot.domains.review.mapper.ReviewMapper;
 import com.quadrant.travelshoot.domains.review.repository.ReviewRepository;
 import com.quadrant.travelshoot.domains.reservation.repository.ReservationRepository;
 import com.quadrant.travelshoot.domains.review.service.ReviewService;
-import com.quadrant.travelshoot.domains.stay.dto.response.StayRatingResponse;
 import com.quadrant.travelshoot.domains.user.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -153,14 +153,35 @@ public class ReviewServiceImpl implements ReviewService {
     /**
      * 리뷰 상세 조회
      *
-     * @param reviewId
+     * @param reservationId
      * @return
      */
-    public ReviewDetailResponse getReviewDetail(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new EntityNotFoundException("리뷰를 찾을 수 없습니다. ID: " + reviewId));
+    public ReviewDetailResponse getReviewDetail(Long reservationId) {
 
-        return reviewMapper.toReviewDetailResponse(review);
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("예약을 찾을 수 없습니다"));
+
+        log.info("예약 조회 - {}",  reservation);
+
+        Optional<Review> reviewInfo = reviewRepository.findByReservation_Id(reservationId);
+//                .orElseThrow(() -> new EntityNotFoundException("해당 예약에 대한 리뷰가 없습니다. ID: " + reservationId));
+
+        log.info("리뷰 조회 - {}", reviewInfo);
+
+        ReviewDetailResponse response;
+        if (reviewInfo.isPresent()) {
+            // 리뷰가 있는 경우 - 전체 정보 반환
+            Review review = reviewInfo.get();
+            response = reviewMapper.toReviewDetailResponse(review);
+        } else {
+            // 리뷰가 없는 경우 - 예약 정보만 반환
+            response = ReviewDetailResponse.builder()
+                    .reservationInfoDto(reviewMapper.toReservationInfoDto(reservation))
+                    .build();
+            // @JsonInclude(NON_NULL) 덕분에 null 필드는 자동 제외됨
+        }
+
+        return response;
     }
 
 

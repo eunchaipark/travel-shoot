@@ -15,21 +15,6 @@ const ReviewRatingSection = ({ ratings, onRatingChange, detailCategories }) => {
         onRatingChange(category, rating);
     };
 
-    // 별점 목록을 렌더링하는 함수
-    const renderStarRatingContainer = (category) => (
-        <div className="star-rating-container" data-category={category}>
-            {[1, 2, 3, 4, 5].map(ratingValue => (
-                <StarButton
-                    key={ratingValue}
-                    ratingValue={ratingValue}
-                    isActive={ratings[category] >= ratingValue}
-                    onClick={() => handleStarClick(category, ratingValue)}
-                />
-            ))}
-        </div>
-    );
-
-
     /**
      * 별점 버튼 컴포넌트
      * @param {object} props
@@ -48,12 +33,27 @@ const ReviewRatingSection = ({ ratings, onRatingChange, detailCategories }) => {
         </button>
     );
 
+    // 별점 목록을 렌더링하는 함수
+    const renderStarRatingContainer = (category) => (
+        <div className="star-rating-container" data-category={category}>
+            {[1, 2, 3, 4, 5].map(ratingValue => (
+                <StarButton
+                    key={ratingValue}
+                    ratingValue={ratingValue}
+                    isActive={ratings[category] >= ratingValue}
+                    onClick={() => handleStarClick(category, ratingValue)}
+                />
+            ))}
+        </div>
+    );
+
+
     return (
         <section className="rating-section">
             {/* 전체 만족도 */}
             <div className="overall-rating">
                 <div className="rating-question">부산 더스카이 이용에 만족하셨나요?</div>
-                {renderStarRatingContainer('overall')}
+                {renderStarRatingContainer('totalRating')}
             </div>
             
             {/* 세부 평점 */}

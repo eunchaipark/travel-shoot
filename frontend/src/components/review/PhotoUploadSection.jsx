@@ -1,3 +1,4 @@
+import { useState } from "react";
 
 /**
  * 사진 업로드 섹션 컴포넌트
@@ -6,8 +7,8 @@
  * @param {function} props.onFileChange - 파일 변경 핸들러
  * @param {function} props.onFileRemove - 파일 제거 핸들러
  */
-const PhotoUploadSection = ({ uploadedFile, onFileChange, onFileRemove }) => {
-    const photoInputRef = useRef(null);
+const PhotoUploadSection = ({ uploadedFile, onFileChange, onFileRemove, photoInputRef }) => {
+    // const photoInputRef = useRef(null);
     const [isDragOver, setIsDragOver] = useState(false);
 
     const fileUrl = uploadedFile ? URL.createObjectURL(uploadedFile) : '';

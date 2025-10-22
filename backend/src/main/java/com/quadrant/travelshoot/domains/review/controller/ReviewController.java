@@ -88,14 +88,13 @@ public class ReviewController {
 
 
     /**
-     * 리뷰 상세 조회
+     * 리뷰 등록, 수정 시 상세 조회
      * 수정할 때 사용
      */
-    @GetMapping("/{reviewId}")
+    @GetMapping("/reservations/{reservationId}")
     public ResponseEntity<ApiResponse<ReviewDetailResponse>> getReviewDetail(
-            @PathVariable Long reviewId){
-
-        ReviewDetailResponse reviewDetailResponse = reviewService.getReviewDetail(reviewId);
+            @PathVariable Long reservationId){
+        ReviewDetailResponse reviewDetailResponse = reviewService.getReviewDetail(reservationId);
         return ResponseEntity.ok().body(ApiResponse.success("리뷰 상세 조회 성공", reviewDetailResponse));
     }
 
