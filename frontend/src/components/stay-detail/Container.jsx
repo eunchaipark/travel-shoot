@@ -11,11 +11,6 @@ const Container = ({data, searchParams}) => {
 
     const navigate = useNavigate();
 
-    const handleReservation = (roomId) => {
-        console.log(`예약합시다~ roomId:${roomId}`);
-         const { stayId, checkIn, checkOut, adults, children } = searchParams;
-        navigate(`/reservation/payment?stayId=${stayId}&checkIn=${checkIn}&checkOut=${checkOut}&adults=${adults}&children=${children}`);
-    };
 
     const like = () => {
         console.log('좋아요 기능입니다.');
@@ -42,7 +37,7 @@ const Container = ({data, searchParams}) => {
                     <AIReviewSummaryCard stayId={data.stayId} score={data.averageRating} review={data.overallSummary} totalReview={data.reviewCount}/>
                     <HotelMapCard longitude={data.longitude} latitude={data.latitude} address={data.address}/>
                 </div>
-                <RoomSelectionCard searchParams={searchParams} rooms={data.rooms} handleReservation={handleReservation}/>
+                <RoomSelectionCard searchParams={searchParams} rooms={data.rooms} />
                 <ReservationNoticeCard notice={data.reservationNotice}/>
             </div>
         </div>

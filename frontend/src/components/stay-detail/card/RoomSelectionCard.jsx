@@ -1,7 +1,23 @@
 import { useEffect } from "react";
 import { formatNumber } from "../../../utils/stay/StayDetailUtils";
+import { useNavigate } from "react-router-dom";
 
-const RoomSelectionCard = ({ searchParams, rooms, handleReservation }) => {
+const RoomSelectionCard = ({ searchParams, rooms }) => {
+
+    const navigate = useNavigate();
+    const { stayId, checkIn, checkOut, adults, children } = searchParams;
+
+    // searchParams 에서 LocalDate로 받아온다고 가정
+    const checkInDate = new Date("2025-10-27");
+    const checkOutDate = new Date("2025-10-29");
+
+    const nights = Number((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+    // const nights = (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24);
+
+    const handleReservation = (roomId) => {
+        console.log(`예약 페이지로 이동: roomId:${roomId}`);
+        navigate(`/reservation/payment?stayId=${stayId}&checkIn=${checkIn}&checkOut=${checkOut}&adults=${adults}&children=${children}`);
+    };
 
 
     return (
@@ -15,7 +31,7 @@ const RoomSelectionCard = ({ searchParams, rooms, handleReservation }) => {
                             <div className="row align-items-stretch">
                                 <div className="col-lg-4 col-md-4 mb-3 mb-md-0">
                                     <img
-                                        src="../img/product/placeholder-sehsn.png"
+                                        src="../../../public/images/product/placeholder-room.png"
                                         alt="슈페리어 더블룸"
                                         className="img-fluid rounded room-image w-100 align-self-stretch" />
                                 </div>
@@ -27,19 +43,20 @@ const RoomSelectionCard = ({ searchParams, rooms, handleReservation }) => {
                                         </div>
                                         {room.singleBedCount!==0&&
                                         <div className="mb-1">
-                                            <img src="../img/product/icon-single-bed.svg" className="me-1" /> 싱글 {room.singleBedCount}개
+                                            <i class="fa-solid fa-bed me-1"></i> 싱글 {room.singleBedCount}개
                                         </div>}
                                         {room.doubleBedCount!==0&&
                                         <div className="mb-1">
-                                            <img src="../img/product/icon-double-bed.svg" className="me-1" /> 더블 {room.doubleBedCount}개
+                                            <i class="fa-solid fa-bed me-1"></i> 더블 {room.doubleBedCount}개
                                         </div>}
                                         {room.queenBedCount!==0&&
                                         <div className="mb-1">
-                                            <img src="../img/product/icon-queen-bed.svg" className="me-1" /> 퀸 {room.queenBedCount}개
+                                            <i class="fa-solid fa-bed me-1"></i> 퀸 {room.queenBedCount}개
                                         </div>}
                                         {room.kingBedCount!==0&&
                                         <div className="mb-1">
-                                            <img src="../img/product/icon-queen-bed.svg" className="me-1" /> 퀸 {room.kingBedCount}개
+                                            {/* <img src="../img/product/icon-queen-bed.svg" className="me-1" /> 퀸 {room.kingBedCount}개 */}
+                                            <i class="fa-solid fa-bed me-1"></i> 킹 {room.kingBedCount}개
                                         </div>}
 
 
@@ -47,7 +64,7 @@ const RoomSelectionCard = ({ searchParams, rooms, handleReservation }) => {
                                             <i className="bi bi-door-open me-1"></i> 침실 {room.bedroomCount}개
                                         </div>
                                         <div className="mb-1">
-                                            <img src="../img/product/icon-bathroom.svg" className="me-1" /> 욕실 {room.bathroomCount}개
+                                            <img src="../../../../public/images/product/icon-bathroom.svg" className="me-1" /> 욕실 {room.bathroomCount}개
                                         </div>
                                     </div>
                                 </div>
@@ -58,21 +75,20 @@ const RoomSelectionCard = ({ searchParams, rooms, handleReservation }) => {
                                     </div>
                                     <div className="text-muted small d-flex justify-content-end">
                                         <div className="me-2">
-                                            <div className="font-12 mb-0 gray">{room.minimumNights}박 평균 {formatNumber((room.weekdayPrice+room.weekendPrice)/2..toString().toLocaleString())}원</div>
+                                            {/* <div className="font-12 mb-0 gray">{room.minimumNights}박 평균 {formatNumber((room.weekdayPrice+room.weekendPrice)/2..toString().toLocaleString())}원</div> */}
+                                            <div className="font-12 mb-0 gray">{room.minimumNights}박 평균 {formatNumber((room.weekdayPrice).toString().toLocaleString())}원</div>
                                             <div className="price-text">
-                                                ₩ {formatNumber(room.weekdayPrice)} <small>/{room.minimumNights}박</small>
+                                                ₩ {formatNumber(room.weekdayPrice * nights)} <small>/{nights}박</small>
                                             </div>
                                         </div>
 
                                         {room.roomCount && room.isAvailable ? 
                                             <button className="btn btn-custom fw-bold"
-                                                style={{ fontSize: '.85em' }}
                                                 onClick={()=>handleReservation(room.roomId)}>
                                                 예약하기
                                             </button> :
                                             <button 
                                                 className="btn btn-custom fw-bold"
-                                                style={{ fontSize: '.85em' }}
                                                 disabled>
                                                 예약마감
                                             </button>
