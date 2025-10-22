@@ -77,12 +77,24 @@ public class StaySearchServiceImpl implements StaySearchService {
     public SearchResponse search(SearchRequest request, Pageable pageable) {
         validateSearchRequest(request);
 
-        Page<Stay> stays = stayRepository.searchStays(
+        Page<Stay> stays;
+
+        // 숙소명으로 검색
+        if (request.getStayName() != null && !request.getStayName().isEmpty()) {
+            stays = stayRepository.searchStaysByName(
+                    request.getStayName(),
+                    request.getCheckIn(),
+                    request.getCheckOut(),
+                    pageable
+            );
+        } else {
+            stays = stayRepository.searchStays(
                 request.getRegion(),
                 request.getCheckIn(),
                 request.getCheckOut(),
                 request.getTotalGuests(),
                 pageable);
+        }
 
         return buildSearchResponse(stays,pageable.getPageNumber());
     }

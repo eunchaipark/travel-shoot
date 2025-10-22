@@ -3,6 +3,8 @@ import { AuthProvider } from '@/components/context/AuthContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
+import ScrollToTop from "@/components/common/ScrollToTop";
+
 import MainPage from '@/pages/MainPage';
 import ReservationDetailPage from '@/pages/ReservationDetailPage';
 import MapTestPage from '@/pages/MapTestPage';
@@ -14,7 +16,7 @@ import AuthModal from '@/components/modals/AuthModal'; // 로그인 모달창 �
 import PaymentCompletePage from "@/pages/reservation/PaymentCompletePage.jsx";
 import MyPage from '@/pages/MyPage';
 
-//리액트쿼리 클라이언트 생성해야함
+//리액트쿼리 클라이언트 생성해야함 (무한스크롤)
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
@@ -31,6 +33,7 @@ function Router() {
     <QueryClientProvider client={queryClient}>
     <AuthProvider>
     <BrowserRouter>
+        <ScrollToTop />
         <AuthModal/>
       <Routes>
         <Route path="/" element={<MainPage />} />
