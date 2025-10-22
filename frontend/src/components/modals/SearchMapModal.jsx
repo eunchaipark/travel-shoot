@@ -3,8 +3,8 @@ import { useSearchKakaoMap } from '@/hooks/useSearchKakaoMap';
 import CommonLoading from '@/components/loading/CommonLoading';
 import '@/assets/css/reservation.css';
 
-const SearchMapModal = ({ isOpen, onClose, spotId, onUpdateSuccess }) => {
-    const [keyword, setKeyword] = useState('제주 맛집'); //TODO: reservation에 담겨있는 숙소에 OO시+ 맛집 이라고 들어가야 함.
+const SearchMapModal = ({ isOpen, onClose, spotId, searchText, onUpdateSuccess }) => {
+    const [keyword, setKeyword] = useState("");
     const {
         mapRef,
         kakaoLoaded,
@@ -16,7 +16,10 @@ const SearchMapModal = ({ isOpen, onClose, spotId, onUpdateSuccess }) => {
         moveToPlace,
         isUpdating
     } = useSearchKakaoMap(isOpen, onClose, spotId, onUpdateSuccess);
-    useEffect(() => { if (kakaoLoaded && isOpen) { searchPlaces(keyword); } }, [kakaoLoaded, isOpen]);
+
+    useEffect(() => { if (searchText) { setKeyword(searchText + ' 맛집');}
+    }, [searchText]);
+    useEffect(() => { if (kakaoLoaded && isOpen && searchText) { searchPlaces(keyword); } }, [kakaoLoaded, isOpen]);
     const handleSearch = (e) => {
         e.preventDefault();
         searchPlaces(keyword);
