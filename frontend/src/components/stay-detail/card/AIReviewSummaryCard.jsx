@@ -1,6 +1,7 @@
+import { useEffect } from "react";
 import { formatNumber } from "../../../utils/stay/StayDetailUtils";
 
-const AIReviewSummaryCard = ({score,review, totalReview}) => {
+const AIReviewSummaryCard = ({stayId, score, review, totalReview}) => {
 
     return (
         <div className="card mb-4 card-section-border">
@@ -13,7 +14,7 @@ const AIReviewSummaryCard = ({score,review, totalReview}) => {
                 <div className="ai-review-text room-content">
                     {review}
                 </div>
-                <a href="#" className="view-more-btn">
+                <a href={`/reviews/stays/${stayId}`} className="view-more-btn">
                     전체 {formatNumber(totalReview)}건 리뷰
                     <i className="bi bi-chevron-right"></i>
                 </a>

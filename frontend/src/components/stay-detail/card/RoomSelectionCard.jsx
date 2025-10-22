@@ -1,22 +1,24 @@
+import { useEffect } from "react";
 import { formatNumber } from "../../../utils/stay/StayDetailUtils";
 
-const RoomSelectionCard = ({ rooms, reservation }) => {
+const RoomSelectionCard = ({ searchParams, rooms, handleReservation }) => {
+
+
     return (
         <div className="col-lg-8 col-sm-12 mb-4">
             <div className="card card-section-border">
                 <div className="card-body px-4 py-4">
                     <h5 className="card-title ms-2 mt-1 mb-4 fw-bold">객실 선택</h5>
+
                     {rooms.map((room, i) => room.isAvailable&&(
                         <div key={i} className="border rounded p-4 mb-3 room-card">
                             <div className="row align-items-stretch">
-
                                 <div className="col-lg-4 col-md-4 mb-3 mb-md-0">
                                     <img
                                         src="../img/product/placeholder-sehsn.png"
                                         alt="슈페리어 더블룸"
                                         className="img-fluid rounded room-image w-100 align-self-stretch" />
                                 </div>
-
                                 <div className="col-lg-4 col-md-3 mb-lg-0">
                                     <div className="mb-2 fw-bold font-15">{room.roomName}</div>
                                     <div className="room-details text-muted">
@@ -41,7 +43,6 @@ const RoomSelectionCard = ({ rooms, reservation }) => {
                                         </div>}
 
 
-
                                         <div className="mb-1">
                                             <i className="bi bi-door-open me-1"></i> 침실 {room.bedroomCount}개
                                         </div>
@@ -59,14 +60,26 @@ const RoomSelectionCard = ({ rooms, reservation }) => {
                                         <div className="me-2">
                                             <div className="font-12 mb-0 gray">{room.minimumNights}박 평균 {formatNumber((room.weekdayPrice+room.weekendPrice)/2..toString().toLocaleString())}원</div>
                                             <div className="price-text">
-                                                ₩ {formatNumber(room.price)} <small>/{room.minimumNights}박</small>
+                                                ₩ {formatNumber(room.weekdayPrice)} <small>/{room.minimumNights}박</small>
                                             </div>
                                         </div>
-                                        <button className="btn btn-custom fw-bold"
-                                            style={{ fontSize: '.85em' }}
-                                            onClick={()=>reservation(room.roomCode, room.roomId)}>
-                                            예약하기
-                                        </button>
+
+                                        {room.roomCount && room.isAvailable ? 
+                                            <button className="btn btn-custom fw-bold"
+                                                style={{ fontSize: '.85em' }}
+                                                onClick={()=>handleReservation(room.roomId)}>
+                                                예약하기
+                                            </button> :
+                                            <button 
+                                                className="btn btn-custom fw-bold"
+                                                style={{ fontSize: '.85em' }}
+                                                disabled>
+                                                예약마감
+                                            </button>
+
+                                    
+                                        }
+                                        
                                     </div>
                                 </div>
                             </div>

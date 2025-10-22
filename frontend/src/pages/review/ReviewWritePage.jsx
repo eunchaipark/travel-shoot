@@ -78,12 +78,12 @@ const ReviewWritePage = () => {
     }, [ratings, calculateOverallAverage]);
 
 
-        // 컴포넌트 마운트 시 기존 리뷰 데이터 불러오기
+    // 예약 + 기존 리뷰 데이터 불러오기
     useEffect(() => {
         const fetchReviewData = async () => {
             try {
                 // 예약번호를 기반으로 리뷰 조회 API 호출
-                const response = await fetch(`http://localhost:8080/api/reviews/reservations/${reservationId}`);
+                const response = await fetch(`${API_BASE_URL}/reviews/reservations/${reservationId}`);
                 
                 if (response.ok) {
                     const result = await response.json();

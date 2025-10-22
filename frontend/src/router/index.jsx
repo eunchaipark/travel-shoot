@@ -13,7 +13,7 @@ function Router() {
         <Route path="/" element={<MainPage />} />
         <Route path="/map" element={<MapTestPage />} />
 
-        <Route path='/stays/2' element={<StayDetailPage />} />
+        <Route path='/stays/:stayId' element={<StayDetailPage />} />
         <Route path="/reviews/stays/:stayId" element={<ReviewListPage />} />
         <Route path="/reviews/reservations/:reservationId" element={<ReviewWritePage />} />
       </Routes>

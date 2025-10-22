@@ -81,7 +81,7 @@
 .product-detail-container .price-text {
     color: #F56770 !important;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 18px;
     min-width: 100px;
 }
 
@@ -152,7 +152,7 @@
     .product-detail-container .price-text {
         color: #F56770 !important;
         font-weight: bold;
-        font-size: 17px;
+        font-size: 15.5px;
         min-width: 100px;
     }
 }

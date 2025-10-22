@@ -18,7 +18,7 @@ const handleResponse = async (response) => {
  * @param {Long} stayId - 숙소 ID
  * @returns {Promise<StayDetailResponse>}
  */
-export const getReviewDetail = async (stayId) => {
+export const getStayDetail = async (stayId) => {
     try {
         const response = await fetch(`${API_BASE_URL}/stays/${stayId}`, {
             method: 'GET',
