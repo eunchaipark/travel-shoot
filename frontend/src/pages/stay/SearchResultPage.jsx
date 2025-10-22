@@ -3,14 +3,18 @@ import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import Header from '@/components/layout/Header';
 import PaymentLoading from "@/components/loading/PaymentLoading";
-import '@/assets/css/common.css'
+import MapModal from '@/components/modals/MapModal';
+
 import '@/assets/css/stay-search.css'
+import '@/assets/css/payment-loading.css'
+import '@/assets/css/header-calendar.css'
+import '@/assets/css/common.css'
 
 // StayCard 컴포넌트
 function StayCard({ stay, searchParams  }) {
-    const navigate = useNavigate()
-    const likeButtonRef = useRef(null)
-    const [isLiked, setIsLiked] = useState(false)
+    const navigate = useNavigate();
+    const likeButtonRef = useRef(null);
+    const [isLiked, setIsLiked] = useState(false);
 
     // 검색 조건 url에 가지고 있도록
     const handleCardClick = () => { //TODO : 윤하님 숙소 상세 페이지로 이동할 URL
@@ -129,8 +133,24 @@ export default function SearchResultPage() {
 
     const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
+    const [showMapModal, setShowMapModal] = useState(false);
+
     const openMobileFilter = () => setIsMobileFilterOpen(true);
     const closeMobileFilter = () => setIsMobileFilterOpen(false);
+
+    // maptest랑 동일하게 맞추고
+    const convertToLocationData = (stays) => {
+        return stays.map(stay => ({
+            id: stay.stayId,
+            latitude: stay.latitude,
+            longitude: stay.longitude,
+            name: stay.name,
+            lowestPrice: stay.lowestPrice,
+            stayType: stay.stayType,
+            placeType: stay.placeType?.toLowerCase() || "stay",
+            image: stay.thumbnailImage || ""
+        }));
+    };
 
     // mo.js, gsap 로드
     useEffect(() => {
@@ -157,7 +177,8 @@ export default function SearchResultPage() {
 
     // URL에서 기본 검색 조건 가져오기
     const baseSearchParams = {
-        region: searchParams.get('region') || '제주',
+        region: searchParams.get('region') || null,
+        stayName: searchParams.get('stayName') || null,
         checkIn: searchParams.get('checkIn') || (() => {
             const tomorrow = new Date()
             tomorrow.setDate(tomorrow.getDate() + 1)
@@ -261,8 +282,16 @@ export default function SearchResultPage() {
                 params: { ...baseSearchParams, page: pageParam, size: 10 }
             })
 
+            // 숙소가 있으면 지역 제거, 지역 있으면 숙소 제거
+            const queryParams = { ...baseSearchParams }
+            if (queryParams.stayName) {
+                delete queryParams.region
+            } else {
+                delete queryParams.stayName
+            }
+
             const params = new URLSearchParams({
-                ...baseSearchParams,
+                ...queryParams,
                 page: pageParam,
                 size: 10
             })
@@ -376,7 +405,7 @@ export default function SearchResultPage() {
                 <div className="filter-sidebar">
                     {/* 지도 */}
                     <div className="filter-section">
-                        <div className="map-finder">
+                        <div className="map-finder" onClick={() => setShowMapModal(true)} style={{ cursor: 'pointer' }}>
                             <img className="map-finder_image" src="/images/stay/stays-map-modal.svg" alt="지도" />
                             <div className="map-finder_overlay">
                                 <img className="map-icon" src="/images/stay/stayslist-map-icon.svg" alt="지도" />
@@ -580,7 +609,7 @@ export default function SearchResultPage() {
                     </div>
                 </div>
 
-                {/* ========== 오른쪽 검색 결과 ========== */}
+                {/*오른쪽 검색 결과*/}
                 <div className="search-results-section" style={{ position: 'relative', overflow: 'hidden' }}>
                     {isLoading && (
                         <PaymentLoading message="숙소 리스트 검색 중..." mode="section" />
@@ -615,18 +644,18 @@ export default function SearchResultPage() {
 
             {/* 모바일 플로팅 버튼 */}
             <div className="mobile-floating-buttons">
-                <button className="floating-btn" onClick={openMobileFilter}>
-    <span>
-      <img className="mfloating-icon" src="/images/stay/map-modal-icon.svg" alt="지도" /> 지도
-    </span>
-                    <div className="floating-btn-divider"></div>
-                    <span>
-      <img className="mfloating-icon" src="/images/stay/filter-icon.svg" alt="필터" /> 조건검색
-    </span>
+                <button className="floating-btn">
+                <span onClick={() => setShowMapModal(true)} style={{ cursor: 'pointer' }}>
+                    <img className="mfloating-icon" src="/images/stay/map-modal-icon.svg" alt="지도" /> 지도
+                </span>
+            <div className="floating-btn-divider"></div>
+                <span onClick={openMobileFilter}>
+                    <img className="mfloating-icon" src="/images/stay/filter-icon.svg" alt="필터" /> 조건검색
+                </span>
                 </button>
             </div>
 
-            {/* ✅ 모바일 필터 모달 — 퍼블 동일 */}
+            {/* 모바일 필터 모달 */}
             <div className={`mobile-filter-modal ${isMobileFilterOpen ? 'show' : ''}`}>
                 <div className="mobile-filter-header">
                     <button className="mobile-filter-close" onClick={closeMobileFilter}>×</button>
@@ -662,7 +691,7 @@ export default function SearchResultPage() {
                         </div>
                     </div>
 
-                    {/* ===== 숙소 유형 ===== */}
+                    {/* 숙소 유형*/}
                     <div className="filter-section">
                         <div className="filter-section_title">숙소 유형</div>
                         <div className="filter-checkbox-group">
@@ -675,23 +704,15 @@ export default function SearchResultPage() {
                                         onChange={() => handleStayTypeToggle(type)}
                                     />
                                     <span className="form-checkbox__text">
-              <img
-                  className="stays_image"
-                  src={`/images/common/${type === '호텔'
-                      ? 'hotel'
-                      : type === '모텔'
-                          ? 'motel'
-                          : 'pension'}-icon.svg`}
-                  alt={type}
-              />
-                                        {type}
-            </span>
+                                          <img className="stays_image" src={`/images/common/${type === '호텔' ? 'hotel' : type === '모텔' ? 'motel' : 'pension'}-icon.svg`} alt={type}/>
+                                            {type}
+                                    </span>
                                 </label>
                             ))}
                         </div>
                     </div>
 
-                    {/* ===== 숙소 특성 ===== */}
+                    {/*숙소 특성*/}
                     <div className="filter-section">
                         <div className="filter-section_title">숙소 특성</div>
 
@@ -752,8 +773,8 @@ export default function SearchResultPage() {
                                     onChange={(e) => handleGuestChange('minGuests', e.target.value)}
                                 />
                                 <span className="form-guest-range_separator">
-            <img src="/images/stay/stayslist-line.svg" alt="-" />
-          </span>
+                                    <img src="/images/stay/stayslist-line.svg" alt="-" />
+                                </span>
                                 <img className="filter-person-icon" src="/images/stay/filter-person-icon.svg" alt="인원" />
                                 <input
                                     type="number"
@@ -768,7 +789,7 @@ export default function SearchResultPage() {
                         </div>
                     </div>
 
-                    {/* ===== 숙소 평점 ===== */}
+                    {/* 숙소 평점 */}
                     <div className="filter-section">
                         <div className="filter-section_title">숙소 평점</div>
                         <div className="filter-stars-group">
@@ -790,7 +811,7 @@ export default function SearchResultPage() {
                         </div>
                     </div>
 
-                    {/* ===== 이용 가능한 옵션 ===== */}
+                    {/* 이용 가능한 옵션*/}
                     <div className="filter-section">
                         <div className="filter-section_title">이용가능한 서비스 / 옵션</div>
                         <div className="filter-checkbox-group">
@@ -817,6 +838,22 @@ export default function SearchResultPage() {
                 </div>
         </div>
         </div>
+
+
+        {/* 지도 모달 */}
+        <MapModal
+            isOpen={showMapModal}
+            onClose={() => setShowMapModal(false)}
+            locationData={convertToLocationData(allStays)}
+            filterParams={{
+                region: baseSearchParams.region,
+                checkIn: baseSearchParams.checkIn,
+                checkOut: baseSearchParams.checkOut,
+                adults: baseSearchParams.adults,
+                children: baseSearchParams.children
+            }}
+        />
+
         </>
     )
 }
