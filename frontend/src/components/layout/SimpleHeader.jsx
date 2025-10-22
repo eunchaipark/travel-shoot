@@ -1,9 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/components/context/AuthContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const SimpleHeader = () => {
+    const navigate = useNavigate();
+    const { isAuthenticated, openLoginModal } = useAuth();
+
     const [searchValue, setSearchValue] = useState('');
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const [suggestions, setSuggestions] = useState([]);
 
     const searchInputRef = useRef(null);
     const suggestionsRef = useRef(null);
@@ -23,8 +29,67 @@ const SimpleHeader = () => {
         };
     }, []);
 
+
+    // 자동완성 API 호출
+    const handleSearchChange = async (e) => {
+        const value = e.target.value;
+        setSearchValue(value);
+
+        if (value.trim().length < 1) {
+            setSuggestions([]);
+            setShowSuggestions(false);
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `http://localhost:8080/api/stays/autocomplete?keyword=${encodeURIComponent(value)}`
+            );
+            const data = await response.json();
+            console.log('----------->>> 자동완성 결과:', data);
+            setSuggestions(data || []);
+            setShowSuggestions(true);
+        } catch (error) {
+            console.error('자동완성 에러:', error);
+            setSuggestions([]);
+        }
+    };
+
     const handleSearchFocus = () => {
-        setShowSuggestions(true);
+        if (suggestions.length > 0) {
+            setShowSuggestions(true);
+        }
+    };
+
+    // 자동완성 항목 선택 → /search로 이동
+    const handleSuggestionClick = (suggestion) => {
+        // 기본 날짜 설정 (내일 ~ 모레)
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const checkIn = tomorrow.toISOString().split('T')[0];
+
+        const dayAfter = new Date();
+        dayAfter.setDate(dayAfter.getDate() + 3);
+        const checkOut = dayAfter.toISOString().split('T')[0];
+
+        const params = new URLSearchParams({
+            region: suggestion.keyword,
+            checkIn: checkIn,
+            checkOut: checkOut,
+            adults: 2,
+            children: 0
+        });
+
+        navigate(`/search?${params.toString()}`);
+    };
+
+    // 로그인/마이페이지 이동
+    const handleUserIconClick = () => {
+        if (isAuthenticated) {
+            navigate('/mypage');
+        } else {
+            openLoginModal();
+        }
     };
 
     return (
@@ -53,36 +118,29 @@ const SimpleHeader = () => {
                                         className="search-input w-100"
                                         placeholder="어디로 떠나볼까요?"
                                         value={searchValue}
-                                        onChange={(e) => setSearchValue(e.target.value)}
+                                        onChange={handleSearchChange}
                                         onFocus={handleSearchFocus}
                                     />
-                                </div>
-                                {/* 드롭다운 suggestions */}
-                                <div
-                                    ref={suggestionsRef}
-                                    className={`dropdown-suggestions ${showSuggestions ? '' : 'd-none'}`}
-                                >
-                                    <button className="suggestion-item">
-                                        <i className="fas fa-building"></i>
-                                        <div>
-                                            <div className="fw-bold">SL 호텔 강릉</div>
-                                            <small className="text-muted">강릉특별자치도 강릉시 OO----</small>
-                                        </div>
-                                    </button>
-                                    <button className="suggestion-item">
-                                        <i className="fas fa-home"></i>
-                                        <div>
-                                            <div className="fw-bold">유담리솜펜션</div>
-                                            <small className="text-muted">강릉특별자치도 강릉시 OO----</small>
-                                        </div>
-                                    </button>
-                                    <button className="suggestion-item">
-                                        <i className="fas fa-building"></i>
-                                        <div>
-                                            <div className="fw-bold">강릉씨고호텔</div>
-                                            <small className="text-muted">강릉특별자치도 강릉시 OO----</small>
-                                        </div>
-                                    </button>
+
+                                    {/* 드롭다운 suggestions */}
+                                    <div
+                                        ref={suggestionsRef}
+                                        className={`dropdown-suggestions ${showSuggestions && suggestions.length > 0 ? 'show' : ''}`}
+                                    >
+                                        {suggestions.map((suggestion, index) => (
+                                            <button
+                                                key={index}
+                                                className="suggestion-item"
+                                                onClick={() => handleSuggestionClick(suggestion)}
+                                            >
+                                                <i className={suggestion.type === 'REGION' ? 'fas fa-map-marker-alt' : 'fas fa-building'}></i>
+                                                <div>
+                                                    <div className="fw-bold">{suggestion.keyword}</div>
+                                                    <small className="text-muted">{suggestion.type}</small>
+                                                </div>
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                             <div className="col-md-3 d-flex justify-content-between col-3 px-0">
@@ -90,7 +148,7 @@ const SimpleHeader = () => {
                                     <div className="search-icon"></div>
                                 </button>
                                 <div className="col-auto h-100 d-flex">
-                                    <button className="icon-button">
+                                    <button className="icon-button" onClick={handleUserIconClick}>
                                         <div className="user-white-icon"></div>
                                     </button>
                                     <button className="icon-button">

@@ -588,7 +588,10 @@ const ReservationPaymentPage = () => {
             </div>
         </main>
 
-            {isPaymentLoading && <PaymentLoading message="결제 처리 중입니다..." />}
+            {/*{isPaymentLoading && <PaymentLoading message="결제 처리 중입니다..." />}*/} //TODO : 1021 삭제하자
+            {isPaymentLoading && (
+                <PaymentLoading message="결제 처리 중입니다..." mode="full" />
+            )}
 
             {/*모달 모달 ~ */}
             {showModal && (

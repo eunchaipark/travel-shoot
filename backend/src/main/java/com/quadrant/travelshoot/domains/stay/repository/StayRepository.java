@@ -45,8 +45,11 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
         @Query(value = "SELECT DISTINCT s.* FROM stays s " +
                         "INNER JOIN rooms r ON s.stay_id = r.stay_id " +
                         "INNER JOIN regions reg ON s.region_id = reg.region_id " +
-                        "WHERE (reg.area_name LIKE CONCAT('%', :region, '%') " +
-                        "   OR reg.city_name LIKE CONCAT('%', :region, '%')) " +
+                        "WHERE (" +
+                        "   reg.area_name LIKE CONCAT('%', :region, '%') " +
+                        "   OR reg.city_name LIKE CONCAT('%', :region, '%') " +
+                        "   OR CONCAT(reg.area_name, ' ', reg.city_name) LIKE CONCAT('%', :region, '%')" +
+                        ") " +
                         "AND r.maximum_capacity >= :guests " +
                         "AND s.is_active = true " +
                         "AND r.is_available = true " +
@@ -59,8 +62,11 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                         "ORDER BY s.created_at DESC", countQuery = "SELECT COUNT(DISTINCT s.stay_id) FROM stays s " +
                                         "INNER JOIN rooms r ON s.stay_id = r.stay_id " +
                                         "INNER JOIN regions reg ON s.region_id = reg.region_id " +
-                                        "WHERE (reg.area_name LIKE CONCAT('%', :region, '%') " +
-                                        "   OR reg.city_name LIKE CONCAT('%', :region, '%')) " +
+                                        "WHERE (" +
+                                        "   reg.area_name LIKE CONCAT('%', :region, '%') " +
+                                        "   OR reg.city_name LIKE CONCAT('%', :region, '%') " +
+                                        "   OR CONCAT(reg.area_name, ' ', reg.city_name) LIKE CONCAT('%', :region, '%')" +
+                                        ") " +
                                         "AND r.maximum_capacity >= :guests " +
                                         "AND s.is_active = true " +
                                         "AND r.is_available = true", nativeQuery = true)
@@ -76,7 +82,8 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                         "INNER JOIN rooms r ON s.stay_id = r.stay_id " +
                         "INNER JOIN regions reg ON s.region_id = reg.region_id " +
                         "WHERE (:region IS NULL OR reg.area_name LIKE CONCAT('%', :region, '%') " +
-                        "   OR reg.city_name LIKE CONCAT('%', :region, '%')) " +
+                        "   OR reg.city_name LIKE CONCAT('%', :region, '%') " +
+                        "   OR CONCAT(reg.area_name, ' ', reg.city_name) LIKE CONCAT('%', :region, '%'))" +
                         "AND (:minPrice IS NULL OR r.weekday_price >= :minPrice) " +
                         "AND (:maxPrice IS NULL OR r.weekday_price <= :maxPrice) " +
                         "AND (:stayTypesSize = 0 OR s.stay_type IN :stayTypes) " +
