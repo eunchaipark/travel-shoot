@@ -370,6 +370,33 @@ const MainPage = () => {
     }
   }, [selectedDates, deactivateSelectionMode]);
 
+  //지역 드롭다운 높이에 따라 다음 카드 밀어내기
+  useEffect(() => {
+    if (showLocationDropdown && locationDropdownRef.current && suggestions.length > 0) {
+      const dropdown = locationDropdownRef.current;
+      const nextCard = locationCardRef.current?.nextElementSibling;
+      
+      if (nextCard && nextCard.classList.contains('search-card')) {
+        // requestAnimationFrame으로 DOM 렌더링 완료 대기
+        requestAnimationFrame(() => {
+          const dropdownHeight = dropdown.offsetHeight;
+          console.log('드롭다운 높이:', dropdownHeight); // 디버깅용
+          
+          if (dropdownHeight > 0) {
+            nextCard.style.marginTop = `${dropdownHeight + 16}px`;
+            nextCard.style.transition = 'margin-top 0.3s ease';
+          }
+        });
+      }
+    } else {
+      // 드롭다운 닫힐 때 margin 제거
+      const nextCard = locationCardRef.current?.nextElementSibling;
+      if (nextCard && nextCard.classList.contains('search-card')) {
+        nextCard.style.marginTop = '';
+      }
+    }
+  }, [showLocationDropdown, suggestions]);
+
   return (
     <>
       {/* 헤더 컴포넌트 사용 */}
