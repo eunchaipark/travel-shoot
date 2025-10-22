@@ -73,12 +73,19 @@ const SimpleHeader = () => {
         const checkOut = dayAfter.toISOString().split('T')[0];
 
         const params = new URLSearchParams({
-            region: suggestion.keyword,
             checkIn: checkIn,
             checkOut: checkOut,
             adults: 2,
             children: 0
         });
+
+        // 숙소 / 지역 선택 각각 다르게 전달해야함.
+        if (suggestion.type === "STAY") {
+            params.append("stayName", suggestion.keyword);
+        } else {
+            params.append("region", suggestion.keyword);
+        }
+
 
         navigate(`/search?${params.toString()}`);
     };
@@ -136,7 +143,8 @@ const SimpleHeader = () => {
                                                 <i className={suggestion.type === 'REGION' ? 'fas fa-map-marker-alt' : 'fas fa-building'}></i>
                                                 <div>
                                                     <div className="fw-bold">{suggestion.keyword}</div>
-                                                    <small className="text-muted">{suggestion.type}</small>
+                                                    {/*<small className="text-muted">{suggestion.type}</small>*/}
+
                                                 </div>
                                             </button>
                                         ))}

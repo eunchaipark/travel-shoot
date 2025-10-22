@@ -77,6 +77,32 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                         @Param("guests") Integer guests,
                         Pageable pageable);
 
+        @Query(value = "SELECT DISTINCT s.* FROM stays s " +
+                "INNER JOIN rooms r ON s.stay_id = r.stay_id " +
+                "WHERE s.stay_name LIKE CONCAT('%', :stayName, '%') " +
+                "AND s.is_active = true " +
+                "AND r.is_available = true " +
+                "AND r.room_id NOT IN ( " +
+                "    SELECT res.room_id FROM reservations res " +
+                "    WHERE res.reservation_status = '예약확정' " +
+                "    AND (res.check_in_date <= :checkOut AND res.check_out_date >= :checkIn) " +
+                ") " +
+                "GROUP BY s.stay_id " +
+                "ORDER BY s.created_at DESC",
+                countQuery =
+                        "SELECT COUNT(DISTINCT s.stay_id) FROM stays s " +
+                                "INNER JOIN rooms r ON s.stay_id = r.stay_id " +
+                                "WHERE s.stay_name LIKE CONCAT('%', :stayName, '%') " +
+                                "AND s.is_active = true " +
+                                "AND r.is_available = true",
+                nativeQuery = true)
+        Page<Stay> searchStaysByName(
+                @Param("stayName") String stayName,
+                @Param("checkIn") LocalDate checkIn,
+                @Param("checkOut") LocalDate checkOut,
+                Pageable pageable);
+
+
         // 숙소 검색 리스트 페이지 사이드 필터
         @Query(value = "SELECT DISTINCT s.* FROM stays s " +
                         "INNER JOIN rooms r ON s.stay_id = r.stay_id " +
