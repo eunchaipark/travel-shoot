@@ -2,8 +2,6 @@
  * AI 추천 숙소 API 서비스
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
-
 /**
  * AI 추천 숙소 데이터 가져오기
  * @param {number} userId - 사용자 ID
@@ -16,7 +14,7 @@ export const fetchAIRecommendedStays = async (userId) => {
 
     console.log('AI 추천 요청 - userId:', userId);
 
-    const response = await fetch(`${API_BASE_URL}/stays/ai-recommendation?userId=${userId}`, {
+    const response = await fetch(`${window.API_BASE_URL}/api/stays/ai-recommendation?userId=${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
