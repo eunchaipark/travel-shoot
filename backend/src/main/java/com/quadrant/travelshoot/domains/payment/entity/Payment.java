@@ -1,18 +1,16 @@
 package com.quadrant.travelshoot.domains.payment.entity;
 
+import com.quadrant.travelshoot.domains.payment.enums.PaymentStatus;
 import com.quadrant.travelshoot.domains.reservation.enums.PaymentMethod;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "payments")
-@Getter
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Payment {
 
@@ -34,7 +32,7 @@ public class Payment {
     private BigDecimal paymentAmount;
 
     @Column(name = "payment_status", nullable = false)
-    private String paymentStatus = "결제대기";
+    private PaymentStatus paymentStatus = PaymentStatus.결제대기;
 
     @Column(name = "completed_at")
     private LocalDateTime completedAt;
@@ -47,12 +45,12 @@ public class Payment {
 
     @Builder
     public Payment(String paymentCode, Long reservationId, PaymentMethod paymentMethod,
-                   BigDecimal paymentAmount, String paymentStatus, LocalDateTime completedAt) {
+                   BigDecimal paymentAmount, PaymentStatus paymentStatus, LocalDateTime completedAt) {
         this.paymentCode = paymentCode;
         this.reservationId = reservationId;
         this.paymentMethod = paymentMethod;
         this.paymentAmount = paymentAmount;
-        this.paymentStatus = paymentStatus != null ? paymentStatus : "결제완료";
+        this.paymentStatus = paymentStatus != null ? paymentStatus : PaymentStatus.결제완료;
         this.completedAt = completedAt;
         this.refundAmount = BigDecimal.ZERO;
     }
