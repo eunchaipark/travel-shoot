@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
@@ -124,4 +125,20 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             @Param("reservationId") Long reservationId,
             @Param("userId") Long userId
     );
+
+    // 사용자의 예약 목록 조회 (최신순)
+    @Query("SELECT r FROM Reservation r " +
+            "JOIN FETCH r.room room " +
+            "JOIN FETCH room.stay stay " +
+            "WHERE r.userId = :userId " +
+            "ORDER BY r.createdAt DESC")
+    List<Reservation> findByUserIdWithRoomAndStay(@Param("userId") Long userId);
+
+    // 여러 예약의 reviewId 한 번에 조회 (N+1 방지)
+    @Query("SELECT rev.reservation.id, rev.reviewId, rev.createdAt " +
+            "FROM Review rev " +
+            "WHERE rev.reservation.id IN :reservationIds")
+    List<Object[]> findReviewIdsByReservationIds(@Param("reservationIds") List<Long> reservationIds);
+
+    Optional<Reservation> findByIdAndUserIdAndReservationStatus(Long reservationId, Long userId, ReservationStatus reservationStatus );
 }

@@ -12,6 +12,7 @@ import java.time.LocalDate;
 public class SearchRequest {
 
     private String region;
+    private String stayName;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
 //    private LocalDate checkIn;

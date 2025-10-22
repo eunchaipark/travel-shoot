@@ -1,5 +1,5 @@
 /**
- * Travel Now Section - 통합 컴포넌트
+ * Travel Now Section - Bootstrap Skeleton 버전
  * 경로: C:\ITStudy\dev\travel-shoot\frontend\src\components\TravelNowSection.jsx
  */
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,77 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTravelNow } from '@/hooks/main/useTravelNow';
 import { getSlideData, formatCount } from '@/utils/main/travelNowUtils';
 import { fetchTravelNow } from "@/services/main/travelNowApiService";
+
+// ============================================================================
+// Bootstrap Skeleton Card 컴포넌트
+// ============================================================================
+const SkeletonTravelNowCard = () => {
+  return (
+    <div className="travel-now-card">
+      <div className="card-image-container">
+        <div className="placeholder-glow">
+          <span className="placeholder col-12" style={{ height: '250px', display: 'block' }}></span>
+        </div>
+      </div>
+      <div className="card-info">
+        <div className="placeholder-glow mb-2">
+          <span className="placeholder col-7"></span>
+        </div>
+        <div className="placeholder-glow mb-2">
+          <span className="placeholder col-5"></span>
+        </div>
+        <div className="card-features mb-2">
+          <div className="placeholder-glow d-inline-block me-1" style={{ width: '60px' }}>
+            <span className="placeholder col-12"></span>
+          </div>
+          <div className="placeholder-glow d-inline-block me-1" style={{ width: '70px' }}>
+            <span className="placeholder col-12"></span>
+          </div>
+          <div className="placeholder-glow d-inline-block" style={{ width: '50px' }}>
+            <span className="placeholder col-12"></span>
+          </div>
+        </div>
+        <div className="accommodation-count">
+          <div className="placeholder-glow">
+            <span className="placeholder col-6"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================================
+// Bootstrap Skeleton Slider 컴포넌트
+// ============================================================================
+const SkeletonTravelNowSlider = () => {
+  const getSkeletonCount = () => {
+    const width = window.innerWidth;
+    if (width >= 1200) return 4;
+    if (width >= 768) return 3;
+    if (width >= 480) return 2;
+    return 1;
+  };
+
+  const skeletonCount = getSkeletonCount();
+
+  return (
+    <div className="content-wrapper">
+      <div className="slider-container">
+        <div className="travel-now-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(${skeletonCount}, 1fr)`,
+          gap: '20px',
+          width: '100%'
+        }}>
+          {Array.from({ length: skeletonCount }).map((_, index) => (
+            <SkeletonTravelNowCard key={index} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // ============================================================================
 // Travel Now Card 컴포넌트
@@ -42,7 +113,7 @@ const TravelNowCard = ({ destination, onClick }) => {
 // ============================================================================
 // Travel Now Slider 컴포넌트
 // ============================================================================
-const TravelNowSlider = ({ onCardClick, destinations }) => {
+const TravelNowSlider = ({ onCardClick, destinations, isLoading }) => {
   const sliderWrapperRef = useRef(null);
   const containerRef = useRef(null);
 
@@ -107,6 +178,11 @@ const TravelNowSlider = ({ onCardClick, destinations }) => {
       container.removeEventListener('touchmove', preventScroll);
     };
   }, []);
+
+  // 로딩 중일 때 Bootstrap 스켈레톤 표시
+  if (isLoading) {
+    return <SkeletonTravelNowSlider />;
+  }
 
   // 슬라이드 렌더링
   const renderSlides = () => {
@@ -204,7 +280,6 @@ const TravelNowSlider = ({ onCardClick, destinations }) => {
 // Travel Now Section 컴포넌트 (메인)
 // ============================================================================
 const TravelNowSection = () => {
-  // const navigate = useNavigate(); 백엔드 구현후 사용예정
   const sliderRef = useRef(null);
   const [destinations, setDestinations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -229,9 +304,8 @@ const TravelNowSection = () => {
     loadDestinations();
   }, []);
 
-
-
   const navigate = useNavigate();
+  
   // 카드 클릭 핸들러
   const handleCardClick = (destination) => {
     console.log('선택된 여행지:', destination);
@@ -262,7 +336,6 @@ const TravelNowSection = () => {
     
     const searchUrl = `/search?${params.toString()}`;
 
-    // 알림 표시
     alert(
       `검색 페이지로 이동합니다.\n\n` +
       `지역: ${destination.name}\n` +
@@ -273,7 +346,6 @@ const TravelNowSection = () => {
       `이동 URL:\n${searchUrl}`
     );
     
-    // 백엔드 구현 후 주석 해제
     navigate(searchUrl);
   };
 
@@ -290,24 +362,6 @@ const TravelNowSection = () => {
     };
   }, []);
 
-  // 로딩 상태
-  if (loading) {
-    return (
-      <section className="travel-now-section">
-        <div className="travel-now-container">
-          <div className="section-header">
-            <h2 className="section-title">
-              <span className="travel-now-highlight">지금 떠나기 좋은 곳</span>
-            </h2>
-          </div>
-          <div style={{ textAlign: 'center', padding: '50px' }}>
-            로딩 중...
-          </div>
-        </div>
-      </section>
-    );
-  }
-
   // 에러 상태
   if (error) {
     return (
@@ -318,8 +372,12 @@ const TravelNowSection = () => {
               <span className="travel-now-highlight">지금 떠나기 좋은 곳</span>
             </h2>
           </div>
-          <div style={{ textAlign: 'center', padding: '50px', color: 'red' }}>
-            데이터를 불러오는데 실패했습니다.
+          <div style={{ textAlign: 'center', padding: '50px', color: '#e74c3c' }}>
+            <div style={{ fontSize: '24px', marginBottom: '10px' }}>⚠️</div>
+            <div>데이터를 불러오는데 실패했습니다.</div>
+            <div style={{ fontSize: '14px', marginTop: '5px', color: '#999' }}>
+              {error}
+            </div>
           </div>
         </div>
       </section>
@@ -342,6 +400,7 @@ const TravelNowSection = () => {
           <TravelNowSlider 
             onCardClick={handleCardClick} 
             destinations={destinations}
+            isLoading={loading}
           />
         </div>
       </div>

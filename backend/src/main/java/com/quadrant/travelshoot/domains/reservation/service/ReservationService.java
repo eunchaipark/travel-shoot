@@ -43,4 +43,8 @@ public interface ReservationService {
     int getCompletedReservationCount(Long userId);
 
     ReservationWithPaymentResponse getReservationDetailWithPayment(Long reservationId, Long userId);
+
+    List<ReservationListResponse> getReservationList(Long userId);
+
+    void cancelReservation(Long userId, CancelRequest request);
 }
