@@ -42,16 +42,16 @@ public class StayBasedFindServiceImpl implements StayBasedFindService {
     private static final double EARTH_RADIUS_KM = 6371.0;
 
     @Override
-    public Map<Long, List<Object>> findRecommendations(List<Long> stayIds, int restaurantCount, int activityCount) {
-        Map<Long, List<Object>> result = new LinkedHashMap<>();
-        
+    public List<Object> findRecommendations(List<Long> stayIds, int restaurantCount, int activityCount) {
+        List<Object> result = new ArrayList<>();
+
         for (Long stayId : stayIds) {
             List<Object> stayData = findForStay(stayId, restaurantCount, activityCount);
             if (!stayData.isEmpty()) {
-                result.put(stayId, stayData);
+                result.addAll(stayData); // 전체 결과 리스트에 합치기
             }
         }
-        
+
         return result;
     }
 
@@ -93,6 +93,7 @@ public class StayBasedFindServiceImpl implements StayBasedFindService {
                 .id(stay.getId())
                 .latitude(stay.getLatitude())
                 .longitude(stay.getLongitude())
+                .rating(stay.getAverageRating())
                 .name(stay.getName())
                 .lowestPrice(stay.getMinPrice() != null ? stay.getMinPrice() : BigDecimal.ZERO)
                 .stayType(stay.getStayType())

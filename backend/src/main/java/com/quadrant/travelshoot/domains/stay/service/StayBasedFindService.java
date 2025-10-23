@@ -13,7 +13,7 @@ public interface StayBasedFindService {
      * @param activityCount 숙소당 관광지 개수
      * @return 숙소 ID별로 [숙소정보, 맛집1, 맛집2, 관광지1, 관광지2] 형태의 리스트
      */
-    Map<Long, List<Object>> findRecommendations(
+    List<Object> findRecommendations(
             List<Long> stayIds,
             int restaurantCount,
             int activityCount
