@@ -1,5 +1,3 @@
-const API_BASE_URL = 'http://localhost:8080/api';
-
 // API 클라이언트 생성
 const createApiClient = () => {
     const getHeaders = () => {
