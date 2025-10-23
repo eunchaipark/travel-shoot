@@ -12,7 +12,7 @@ const createApiClient = () => {
     return {
         get: async (url, params) => {
             const queryString = params ? '?' + new URLSearchParams(params).toString() : '';
-            const response = await fetch(`${API_BASE_URL}${url}${queryString}`, {
+            const response = await fetch(`${window.API_BASE_URL}${url}${queryString}`, {
                 method: 'GET',
                 headers: getHeaders(),
                 credentials: 'include',
@@ -27,7 +27,7 @@ const createApiClient = () => {
         },
 
         post: async (url, data) => {
-            const response = await fetch(`${API_BASE_URL}${url}`, {
+            const response = await fetch(`${window.API_BASE_URL}${url}`, {
                 method: 'POST',
                 headers: getHeaders(),
                 credentials: 'include',
@@ -49,7 +49,7 @@ const reservationApiService = {
     //예약 초기 데이터 조회
     getInitData: async (roomId, checkInDate, checkOutDate, guestCount) => {
         const api = createApiClient();
-        return await api.get(`/reservations/init/${roomId}`, {
+        return await api.get(`/api/reservations/init/${roomId}`, {
             checkInDate,
             checkOutDate,
             guestCount,
@@ -59,7 +59,7 @@ const reservationApiService = {
     //가격 계산
     calculatePrice: async (roomId, checkInDate, checkOutDate) => {
         const api = createApiClient();
-        return await api.post('/reservations/calculate-price', {
+        return await api.post('/api/reservations/calculate-price', {
             roomId,
             checkInDate,
             checkOutDate,
@@ -69,7 +69,7 @@ const reservationApiService = {
     //예약 가능 여부 확인
     validateAvailability: async (roomId, checkInDate, checkOutDate, guestCount) => {
         const api = createApiClient();
-        return await api.post('/reservations/validate-availability', {
+        return await api.post('/api/reservations/validate-availability', {
             roomId,
             checkInDate,
             checkOutDate,
@@ -80,7 +80,7 @@ const reservationApiService = {
     //예약 생성
     createReservation: async (reservationData) => {
         const api = createApiClient();
-        return await api.post('/reservations/create', reservationData);
+        return await api.post('/api/reservations/create', reservationData);
     },
 
     //예약 초기화 (5 + 6 통합)

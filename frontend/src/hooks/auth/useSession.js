@@ -38,7 +38,7 @@ export const useSession = () => {
         gcTime: 35 * 60 * 1000,
         retry: false,
         refetchOnWindowFocus: true,
-        refetchOnMount: 'always',
+        refetchOnMount: 'always',  // false → 'always' 변경 (새로고침 시 항상 체크)
         refetchInterval: 20 * 60 * 1000,
         initialData: null,
     });

@@ -1,7 +1,7 @@
 async function fetchAPI(url, options = {}) {
     try {
-        const response = await fetch(`${window.API_BASE_URL}/api${url}`, {
-            credentials: 'include',
+        const response = await fetch(`${window.API_BASE_URL}${url}`, {
+            credentials: 'include', // 세션 쿠키 전송
             headers: {
                 'Content-Type': 'application/json',
                 ...options.headers,
@@ -51,15 +51,17 @@ export async function fetchInfiniteSearch({
     }
 
     const queryString = buildQueryString(params)
-    console.log('API 호출:', `/stays/search?${queryString}`)
+    console.log('API 호출:', `/api/stays/search?${queryString}`)
 
-    return fetchAPI(`/stays/search?${queryString}`)
+    // /search/infinite → /stays/search 로 변경
+    return fetchAPI(`/api/stays/search?${queryString}`)
 }
 
-// 자동완성 API
+// 자동완성 API 수정
 export async function fetchAutocomplete(keyword) {
     if (!keyword || keyword.trim().length < 1) return []
 
     const queryString = buildQueryString({ keyword })
-    return fetchAPI(`/stays/autocomplete?${queryString}`)
+    // /search/autocomplete → /stays/autocomplete 로 변경
+    return fetchAPI(`/api/stays/autocomplete?${queryString}`)
 }
