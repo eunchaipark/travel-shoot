@@ -42,6 +42,9 @@ application-email.properties
 ### open-ai
 application-openai.properties
 
+### s3
+application-s3.properties
+
 ### Docker 관련 파일들
 .bash_profile
 .bashrc
