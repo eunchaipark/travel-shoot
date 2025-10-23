@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import SimpleHeader from '@/components/layout/SimpleHeader';
 import {useReservationDetail} from '@/hooks/useReservationDetail';
@@ -9,14 +9,19 @@ import SearchMapModal from '@/components/modals/SearchMapModal';
 import {getDayOfWeek} from '@/utils/formatters/dateFormatter';
 
 const ReservationDetailPage = () => {
+    const navigate = useNavigate();
+    const queryParams = new URLSearchParams(window.location.search);
+    const reservationId = queryParams.get('reservationId');
+    useEffect(() => {
+        if (isNaN(Number(reservationId)) || reservationId === '') {
+            alert('잘못된 경로입니다.');
+            navigate(-1);
+            return;
+        }
+    }, [reservationId, navigate]);
     const [activeDay, setActiveDay] = useState(1);
     const [showSearchMap, setShowSearchMap] = useState(false);
     const [editingSpotId, setEditingSpotId] = useState(null);
-
-    // URL에서 reservationId 가져오기
-    const queryParams = new URLSearchParams(window.location.search);
-    const reservationId = queryParams.get('reservationId');
-    const navigate = useNavigate();
 
     // 커스텀 훅으로 데이터 관리
     const { reservationData, courseData, loading, error, refetchCourseData } = useReservationDetail(reservationId);
