@@ -167,19 +167,6 @@
     min-height: 140px;
 }
 
-.main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper .map-container {
-    flex: 1;
-    height: 900px;
-    background: #f8f9fa;
-    border-radius: 16px;
-    border: 2px dashed #dee2e6;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-width: 0;
-}
-
 .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper .accommodation-list-container .accommodation-list .accommodation-item:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
@@ -355,6 +342,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
+    overflow: hidden;
 }
 
 .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper .map-container .w-full.h-full{
@@ -447,8 +435,7 @@
         margin-top: -9px;
     }
     .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper .map-container {
-        display: flex;
-        min-height: 380px;
+        max-height: 380px;
     }
     
     .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .section-title {
@@ -498,7 +485,7 @@
     }
     
     .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper .map-container {
-        display: flex;
+        max-height: 380px;
     }
     
     .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper .accommodation-list-container .accommodation-list .accommodation-item {

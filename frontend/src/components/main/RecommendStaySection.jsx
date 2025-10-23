@@ -186,50 +186,6 @@ const RecommendStaySection = () => {
     }
   }, [isAuthenticated, user]);
 
-  // AI 추천 숙소 로드
-  useEffect(() => {
-    const loadAIRecommendations = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        // ✅ user 객체에서 userId 가져오기
-        if (!user || !user.userId) {
-          console.error('로그인이 필요합니다');
-          setError('로그인이 필요합니다');
-          return;
-        }
-
-        console.log('AI 추천 숙소 로딩 시작 - userId:', user.userId);
-        console.log('사용자 정보:', user);
-
-        // ✅ user.userId 직접 전달
-        const stays = await fetchAIRecommendedStays(user.userId);
-
-        console.log('AI 추천 숙소 로딩 완료:', stays);
-        setAccommodations(stays);
-
-        // ✅ 첫 번째 숙소에서 도/시 단위 추출
-        if (stays.length > 0) {
-          const province = extractProvince(stays[0].location);
-          setPreferredProvince(province);
-          console.log('추출된 도/시:', province);
-        }
-
-      } catch (err) {
-        console.error('AI 추천 로딩 실패:', err);
-        setError(err.message || '추천 숙소를 불러오는데 실패했습니다');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    // ✅ isAuthenticated와 user 확인 후 실행
-    if (isAuthenticated && user) {
-      loadAIRecommendations();
-    }
-  }, [isAuthenticated, user]);
-
   // 비로그인 시 섹션 숨김
   if (!isAuthenticated) {
     return null;
