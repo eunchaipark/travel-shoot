@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import {useState, useEffect, useRef} from 'react';
 
 const KAKAO_JS_KEY = '3868e95750c9e60a60b89ae4b9455d38';
 
-export const useKakaoMap = (isOpen, locationData = [], stayData = null) => {
+export const useKakaoMap = (isOpen, locationData = [], stayData = null, isStayDetailPage = false) => {
     const [kakaoLoaded, setKakaoLoaded] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState(null);
     const [activeIndex, setActiveIndex] = useState(null);
@@ -219,8 +219,10 @@ export const useKakaoMap = (isOpen, locationData = [], stayData = null) => {
             overlaysRef.current.push(polyline); // cleanup 시 함께 제거되도록
         }
         // 클릭 이벤트 등록 (한 번만)
-        clickHandlerRef.current = handleMarkerClick;
-        mapRef.current.addEventListener('click', clickHandlerRef.current);
+        if (isStayDetailPage === false) {
+            clickHandlerRef.current = handleMarkerClick;
+            mapRef.current.addEventListener('click', clickHandlerRef.current);
+        }
     };
 
     const handleMarkerClick = (e) => {
