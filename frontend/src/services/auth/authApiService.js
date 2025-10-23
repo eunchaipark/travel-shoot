@@ -14,11 +14,15 @@ export const sendVerificationCode = async (email) => {
             }
         );
 
+        // 서버 에러 시 message 추출
         if (!response.ok) {
             let errorMessage = `HTTP error! status: ${response.status}`;
 
             try {
                 const errorData = await response.json();
+                // if (errorData.message) {
+                //     errorMessage = errorData.message;
+                // }
                 if (errorData.error?.message) {
                     errorMessage = errorData.error.message;
                 }
@@ -30,6 +34,7 @@ export const sendVerificationCode = async (email) => {
             return { success: false, error: errorMessage };
         }
 
+        // 성공 시
         const data = await response.json();
         console.log("이메일 인증 코드 발송 성공:", data);
         return { success: true, data };
@@ -47,7 +52,7 @@ export const sendVerificationCode = async (email) => {
  */
 export const verifyCode = async (email, code) => {
     try {
-        const response = await fetch(`${window.API_BASE_URL}/api/auth/email/verify-code`, {
+        const response = await fetch(`/auth/email/verify-code`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -87,6 +92,7 @@ export const signup = async (signupData) => {
 
         if (!response.ok) {
             const errorData = await response.json();
+            // throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
             throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
         }
 
@@ -111,17 +117,20 @@ export const login = async (loginData) => {
             headers: {
                 "Content-Type": "application/json",
             },
-            credentials: 'include',
+            credentials: 'include', // 세션 쿠키 저장
             body: JSON.stringify(loginData),
         });
 
+        // 에러 응답 처리
         if (!response.ok) {
             let errorMessage = '로그인 실패.';
 
             try {
                 const errorData = await response.json();
+                // errorMessage = errorData.message || errorMessage;
                 errorMessage = errorData.error?.message || errorMessage;
             } catch {
+                // JSON 파싱 실패 시 상태 코드에 따른 메시지
                 if (response.status === 401) {
                     errorMessage = '이메일 또는 비밀번호가 올바르지 않습니다.';
                 } else if (response.status === 404) {
@@ -189,6 +198,7 @@ export const resetPassword = async (resetData) => {
 
         if (!response.ok) {
             const errorData = await response.json();
+            // throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
             throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
         }
 
@@ -203,6 +213,7 @@ export const resetPassword = async (resetData) => {
 
 //로그아웃
 // @returns {Promise<Object>} 응답 데이터
+
 export const logout = async () => {
     try {
         const response = await fetch(`${window.API_BASE_URL}/api/auth/logout`, {
@@ -242,6 +253,7 @@ const transformSignupResponse = (backendData) => {
 };
 
 //로그인 응답 데이터 변환
+
 const transformLoginResponse = (backendData) => {
     return {
         userId: backendData.userId,

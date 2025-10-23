@@ -257,7 +257,7 @@ export default function SearchResultPage() {
                 })
 
                 const response = await fetch(
-                    `http://localhost:8080/api/stays/filter?page=${pageParam}&size=10`,
+                    `${window.API_BASE_URL}/api/stays/filter?page=${pageParam}&size=10`,
                     {
                         method: 'POST',
                         headers: {
@@ -305,7 +305,7 @@ export default function SearchResultPage() {
             })
 
             const response = await fetch(
-                `http://localhost:8080/api/stays/search?${params.toString()}`
+                `${window.API_BASE_URL}/api/stays/search?${params.toString()}`
             )
 
             if (!response.ok) {

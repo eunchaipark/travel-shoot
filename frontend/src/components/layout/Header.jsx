@@ -110,7 +110,7 @@ const Header = () => {
 
         try {
             const response = await fetch(
-                `http://localhost:8080/api/stays/autocomplete?keyword=${encodeURIComponent(value)}`
+                `${window.API_BASE_URL}/api/stays/autocomplete?keyword=${encodeURIComponent(value)}`
             );
 
             if (!response.ok) {

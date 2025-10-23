@@ -43,7 +43,7 @@ const SimpleHeader = () => {
 
         try {
             const response = await fetch(
-                `http://localhost:8080/api/stays/autocomplete?keyword=${encodeURIComponent(value)}`
+                `${window.API_BASE_URL}/api/stays/autocomplete?keyword=${encodeURIComponent(value)}`
             );
             const data = await response.json();
             console.log('----------->>> 자동완성 결과:', data);
