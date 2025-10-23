@@ -191,6 +191,7 @@ export const useSearchKakaoMap = (isOpen, onModalClose, spotId, onUpdateSuccess)
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: 'include',
                 body: JSON.stringify({
                     spotId: spotId,
                     place: placeData

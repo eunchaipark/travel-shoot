@@ -4,6 +4,10 @@
   margin-top: 80px;
 }
 
+.reservation-detail-page .row > .content-section:last-child {
+  margin-bottom: 80px;
+}
+
 .reservation-detail-page .content-section .content-section-state-inner {
   padding: 75px;
 }
@@ -267,6 +271,11 @@
   padding: 2px 5px;
   border-radius: 10px;
   word-break: keep-all;
+}
+
+.reservation-detail-page .course-loading-con > div{
+  padding: 250px 0;
+  background-color: unset;
 }
 
 .reservation-detail-page .course-item .copy-btn-con .copy-btn {
