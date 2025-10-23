@@ -22,7 +22,7 @@ public class StayBasedFindResponse {
     private String stayType;
     private String placeType;  // "stay" 고정
     private String mainImageUrl;
-
+    private BigDecimal rating;
     // 추천 정보
     private List<FindRestaurantResponse> restaurants;
     private List<FindActivityResponse> activities;

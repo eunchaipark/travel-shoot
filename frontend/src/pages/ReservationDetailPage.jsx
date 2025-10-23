@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import SimpleHeader from '@/components/layout/SimpleHeader';
 import {useReservationDetail} from '@/hooks/useReservationDetail';
@@ -7,19 +7,25 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '@/assets/css/reservation.css';
 import SearchMapModal from '@/components/modals/SearchMapModal';
 import {getDayOfWeek} from '@/utils/formatters/dateFormatter';
+import CommonLoading from '@/components/loading/CommonLoading';
 
 const ReservationDetailPage = () => {
+    const navigate = useNavigate();
+    const queryParams = new URLSearchParams(window.location.search);
+    const reservationId = queryParams.get('reservationId');
+    useEffect(() => {
+        if (isNaN(Number(reservationId)) || reservationId === '') {
+            alert('잘못된 경로입니다.');
+            navigate(-1);
+            return;
+        }
+    }, [reservationId, navigate]);
     const [activeDay, setActiveDay] = useState(1);
     const [showSearchMap, setShowSearchMap] = useState(false);
     const [editingSpotId, setEditingSpotId] = useState(null);
 
-    // URL에서 reservationId 가져오기
-    const queryParams = new URLSearchParams(window.location.search);
-    const reservationId = queryParams.get('reservationId');
-    const navigate = useNavigate();
-
     // 커스텀 훅으로 데이터 관리
-    const { reservationData, courseData, loading, error, refetchCourseData } = useReservationDetail(reservationId);
+    const { reservationData, courseData, loading, courseLoading, isCourseGenerating, error, refetchCourseData } = useReservationDetail(reservationId);
     const pricePerNight = reservationData ? (reservationData.totalPrice / reservationData.totalNights).toLocaleString() : '0';
 
     const handleCopyAddress = (address) => {
@@ -346,9 +352,8 @@ const ReservationDetailPage = () => {
                         <div className="col-12 content-section">
                             <div className="content-section-inner">
                                 <div className="content-section-title mb-3">AI 여행 추천코스</div>
-
                                 {/* 코스 데이터 로딩 중일 때 스켈레톤 */}
-                                {!courseData ? (
+                                {courseLoading ? (
                                     <div>
                                         {/* Day Tabs Skeleton */}
                                         <ul className="nav nav-pills day-tabs mb-4">
@@ -401,7 +406,21 @@ const ReservationDetailPage = () => {
                                             ))}
                                         </div>
                                     </div>
-                                ) : (
+                                ) : isCourseGenerating ? (
+                                    // 3번: API 호출 실패 (404) → CommonLoading
+                                    <div className={`course-loading-con`}>
+                                        <CommonLoading
+                                            title="사용자에게 맞는 여행 코스 추천중..."
+                                            description={
+                                                <>
+                                                    AI가 장소 정보를 분석하고 있습니다.<br />
+                                                    최대 2분 정도 소요됩니다.
+                                                </>
+                                            }
+                                            isModal={false}
+                                        />
+                                    </div>
+                                ) : courseData ? (
                                     // 실제 코스 데이터
                                     <div>
                                         {/* Day Tabs */}
@@ -482,7 +501,7 @@ const ReservationDetailPage = () => {
                                                 ))}
                                         </div>
                                     </div>
-                                )}
+                                ) : null}
                             </div>
                         </div>
                     </div>

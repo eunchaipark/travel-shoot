@@ -6,7 +6,5 @@ import App from './App';
 window.API_BASE_URL = 'http://localhost:8080';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
     <App />
-  </React.StrictMode>
 );

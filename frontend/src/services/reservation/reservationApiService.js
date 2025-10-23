@@ -1,5 +1,3 @@
-const API_BASE_URL = 'http://localhost:8080/api';
-
 // API 클라이언트 생성
 const createApiClient = () => {
     const getHeaders = () => {
@@ -141,6 +139,17 @@ const reservationApiService = {
             console.error('예약 생성 실패:', error);
             throw error;
         }
+    },
+    //AI 여행 코스 생성 (비동기, 결과 기다리지 않음)
+    generateAiCourse: (reservationId, totalDays) => {
+        const api = createApiClient();
+        // await 없이 호출하여 비동기로 실행
+        api.post('/ai/course', {
+            reservationId,
+            totalDays: totalDays + 1
+        }).catch(error => {
+            console.error('AI 코스 생성 중 오류:', error);
+        });
     },
 };
 

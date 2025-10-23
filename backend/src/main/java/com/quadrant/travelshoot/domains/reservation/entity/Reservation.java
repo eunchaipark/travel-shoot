@@ -22,6 +22,7 @@ import java.util.Random;  //TODO : 1015 랜덤 아이디 규칙 적용
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@ToString
 public class Reservation {
 
     @Id

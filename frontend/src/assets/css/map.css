@@ -6,6 +6,11 @@
   overflow: hidden;
 }
 
+.map-page.main-map-page{
+  height: 100%;
+  width: 100%;
+}
+
 .map-page .title-icon {
   width: 18px;
   height: 18px;

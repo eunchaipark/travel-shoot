@@ -1,6 +1,3 @@
-// 환경 변수에서 API URL 가져오기 (없으면 기본값)
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
-
 //이메일 인증 코드 발송
 /**
  * @param {string} email - 사용자 이메일
@@ -9,7 +6,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api'
 export const sendVerificationCode = async (email) => {
     try {
         const response = await fetch(
-            `${API_BASE_URL}/auth/email/send-code?email=${encodeURIComponent(email)}`,
+            `${window.API_BASE_URL}/api/auth/email/send-code?email=${encodeURIComponent(email)}`,
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -17,15 +14,11 @@ export const sendVerificationCode = async (email) => {
             }
         );
 
-        // 서버 에러 시 message 추출
         if (!response.ok) {
             let errorMessage = `HTTP error! status: ${response.status}`;
 
             try {
                 const errorData = await response.json();
-                // if (errorData.message) {
-                //     errorMessage = errorData.message;
-                // }
                 if (errorData.error?.message) {
                     errorMessage = errorData.error.message;
                 }
@@ -37,7 +30,6 @@ export const sendVerificationCode = async (email) => {
             return { success: false, error: errorMessage };
         }
 
-        // 성공 시
         const data = await response.json();
         console.log("이메일 인증 코드 발송 성공:", data);
         return { success: true, data };
@@ -55,7 +47,7 @@ export const sendVerificationCode = async (email) => {
  */
 export const verifyCode = async (email, code) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/auth/email/verify-code`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/auth/email/verify-code`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -84,7 +76,7 @@ export const verifyCode = async (email, code) => {
  */
 export const signup = async (signupData) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/auth/signup`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -95,7 +87,6 @@ export const signup = async (signupData) => {
 
         if (!response.ok) {
             const errorData = await response.json();
-            // throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
             throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
         }
 
@@ -115,25 +106,22 @@ export const signup = async (signupData) => {
  */
 export const login = async (loginData) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/auth/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            credentials: 'include', // 세션 쿠키 저장
+            credentials: 'include',
             body: JSON.stringify(loginData),
         });
 
-        // 에러 응답 처리
         if (!response.ok) {
             let errorMessage = '로그인 실패.';
 
             try {
                 const errorData = await response.json();
-                // errorMessage = errorData.message || errorMessage;
                 errorMessage = errorData.error?.message || errorMessage;
             } catch {
-                // JSON 파싱 실패 시 상태 코드에 따른 메시지
                 if (response.status === 401) {
                     errorMessage = '이메일 또는 비밀번호가 올바르지 않습니다.';
                 } else if (response.status === 404) {
@@ -162,7 +150,7 @@ export const login = async (loginData) => {
  */
 export const requestPasswordReset = async (email) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/auth/password/reset-request?email=${encodeURIComponent(email)}`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/auth/password/reset-request?email=${encodeURIComponent(email)}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -190,7 +178,7 @@ export const requestPasswordReset = async (email) => {
  */
 export const resetPassword = async (resetData) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/auth/password/reset`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/auth/password/reset`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -201,7 +189,6 @@ export const resetPassword = async (resetData) => {
 
         if (!response.ok) {
             const errorData = await response.json();
-            // throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
             throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
         }
 
@@ -216,10 +203,9 @@ export const resetPassword = async (resetData) => {
 
 //로그아웃
 // @returns {Promise<Object>} 응답 데이터
-
 export const logout = async () => {
     try {
-        const response = await fetch(`${API_BASE_URL}/auth/logout`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/auth/logout`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -256,7 +242,6 @@ const transformSignupResponse = (backendData) => {
 };
 
 //로그인 응답 데이터 변환
-
 const transformLoginResponse = (backendData) => {
     return {
         userId: backendData.userId,

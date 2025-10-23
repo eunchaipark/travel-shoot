@@ -57,6 +57,7 @@ public class ReviewMapper {
                 .checkOutDate(reservation.getCheckOutDate())
                 .totalNights(reservation.getTotalNights())
                 .reservationStatus(reservation.getReservationStatus())
+                .guestCount(reservation.getGuestCount())
                 .stayId(stay.getId())
                 .stayName(stay.getName())
                 .checkInTime(stay.getCheckInTime())
