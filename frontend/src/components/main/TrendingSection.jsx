@@ -1,5 +1,5 @@
 /**
- * Trending Section - 통합 컴포넌트 (API 연동)
+ * Trending Section - Bootstrap Skeleton 버전
  * 경로: C:\ITStudy\dev\travel-shoot\frontend\src\components\TrendingSection.jsx
  */
 
@@ -7,6 +7,69 @@ import React, { useEffect, useRef, useState } from "react";
 import { useTrendingSlider } from "@/hooks/main/useTrendingSlider";
 import { fetchAllTrendingData } from "@/services/main/trendingApiService";
 import { TRENDING_DATA, getSlideData } from "@/utils/main/trendingUtils";
+import { useNavigate } from 'react-router-dom';
+
+// ============================================================================
+// Bootstrap Skeleton Card 컴포넌트
+// ============================================================================
+const SkeletonTrendingCard = () => {
+  return (
+    <div className="trending-card">
+      <div className="card-image-container">
+        <div className="placeholder-glow">
+          <span className="placeholder col-12" style={{ height: '250px', display: 'block' }}></span>
+        </div>
+      </div>
+      <div className="card-info">
+        <div className="placeholder-glow mb-2">
+          <span className="placeholder col-8"></span>
+        </div>
+        <div className="card-details">
+          <div className="rating-info">
+            <div className="placeholder-glow">
+              <span className="placeholder col-6"></span>
+            </div>
+          </div>
+          <div className="placeholder-glow">
+            <span className="placeholder col-5"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================================
+// Bootstrap Skeleton Slider 컴포넌트
+// ============================================================================
+const SkeletonTrendingSlider = () => {
+  const getSkeletonCount = () => {
+    const width = window.innerWidth;
+    if (width >= 1200) return 4;
+    if (width >= 768) return 3;
+    if (width >= 480) return 2;
+    return 1;
+  };
+
+  const skeletonCount = getSkeletonCount();
+
+  return (
+    <div className="content-wrapper">
+      <div className="slider-container">
+        <div className="trending-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(${skeletonCount}, 1fr)`,
+          gap: '20px',
+          width: '100%'
+        }}>
+          {Array.from({ length: skeletonCount }).map((_, index) => (
+            <SkeletonTrendingCard key={index} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // ============================================================================
 // Trending Card 컴포넌트
@@ -46,7 +109,7 @@ const TrendingCard = ({ item, currentTab, onClick }) => {
 // ============================================================================
 // Trending Slider 컴포넌트
 // ============================================================================
-const TrendingSlider = ({ currentTab, trendingData, onCardClick }) => {
+const TrendingSlider = ({ currentTab, trendingData, onCardClick, isLoading }) => {
   const sliderRef = useRef(null);
   const containerRef = useRef(null);
 
@@ -112,6 +175,11 @@ const TrendingSlider = ({ currentTab, trendingData, onCardClick }) => {
       container.removeEventListener("touchmove", preventScroll);
     };
   }, []);
+
+  // 로딩 중일 때 Bootstrap 스켈레톤 표시
+  if (isLoading) {
+    return <SkeletonTrendingSlider />;
+  }
 
   // 각 슬라이드 렌더링 (API 데이터 사용)
   const renderSlides = () => {
@@ -225,7 +293,7 @@ const TrendingSlider = ({ currentTab, trendingData, onCardClick }) => {
 // ============================================================================
 const TrendingSection = () => {
   const sliderRef = useRef(null);
-  const [trendingData, setTrendingData] = useState(TRENDING_DATA); // 기본값 설정
+  const [trendingData, setTrendingData] = useState(TRENDING_DATA);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -246,7 +314,6 @@ const TrendingSection = () => {
       } catch (err) {
         console.error("Trending 데이터 로딩 실패:", err);
         setError(err.message);
-        // 에러 시 기본 데이터 유지 (TRENDING_DATA)
         console.log("기본 데이터 사용");
       } finally {
         setLoading(false);
@@ -254,22 +321,21 @@ const TrendingSection = () => {
     };
 
     loadTrendingData();
-  }, []); // 컴포넌트 마운트 시 한번만 실행
+  }, []);
 
-  // 카드 클릭 핸들러
+  const navigate = useNavigate();
   const handleCardClick = (item, tabType) => {
     console.log("Trending 카드 클릭:", tabType, item.id);
-    // 여기에 카드 클릭 시 동작 구현
-    // 예: 상세 페이지 이동, 모달 표시 등
 
-    // 예시: 상세 페이지로 이동
-    // if (tabType === 'stay') {
-    //   window.location.href = `/stays/${item.id}`;
-    // } else if (tabType === 'restaurants') {
-    //   window.location.href = `/restaurants/${item.id}`;
-    // } else if (tabType === 'attractions') {
-    //   window.location.href = `/activities/${item.id}`;
-    // }
+    if (tabType === 'stay') {
+      navigate(`/stays/${item.id}`);
+    } else if (tabType === 'restaurants' && item.latitude && item.longitude) {
+      const url = `https://map.kakao.com/link/map/${encodeURIComponent(item.title)},${item.latitude},${item.longitude}`;
+      window.open(url, '_blank');
+    } else if (tabType === 'attractions' && item.latitude && item.longitude) {
+      const url = `https://map.kakao.com/link/map/${encodeURIComponent(item.title)},${item.latitude},${item.longitude}`;
+      window.open(url, '_blank');
+    }
   };
 
   // 전역 API 제공
@@ -295,25 +361,6 @@ const TrendingSection = () => {
       delete window.TrendingSection;
     };
   }, [switchTab]);
-
-  // 로딩 상태 표시
-  if (loading) {
-    return (
-      <section className="trending-section">
-        <div className="trending-container">
-          <div className="section-header">
-            <h2 className="section-title">
-              <span className="trending-highlight">인기 급상승</span>
-            </h2>
-            <p className="section-subtitle">(최근 7일 예약률 급상승)</p>
-          </div>
-          <div className="loading-message">
-            <p>인기 급상승 데이터를 불러오는 중입니다...</p>
-          </div>
-        </div>
-      </section>
-    );
-  }
 
   // 에러 상태 표시 (기본 데이터는 계속 표시)
   if (error) {
@@ -374,6 +421,7 @@ const TrendingSection = () => {
             currentTab={currentTab}
             trendingData={trendingData}
             onCardClick={handleCardClick}
+            isLoading={loading}
           />
         </div>
       </div>

@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
@@ -161,4 +162,11 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
             @Param("longitude") BigDecimal longitude,
             @Param("maxDistanceKm") double maxDistanceKm
     );
+
+    @Query("SELECT a FROM Activity a WHERE a.activityName = :name " +
+            "AND ABS(a.latitude - :latitude) < 0.0001 " +
+            "AND ABS(a.longitude - :longitude) < 0.0001")
+    Optional<Activity> findByNameAndCoordinates(@Param("name") String name,
+                                                @Param("latitude") BigDecimal latitude,
+                                                @Param("longitude") BigDecimal longitude);
 }

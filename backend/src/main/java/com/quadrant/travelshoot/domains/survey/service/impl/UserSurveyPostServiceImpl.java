@@ -1,8 +1,11 @@
 package com.quadrant.travelshoot.domains.survey.service.impl;
 
+import com.quadrant.travelshoot.domains.stay.service.StayAIRecommendationService;
 import com.quadrant.travelshoot.domains.survey.dto.request.SurveySubmitRequest;
 import com.quadrant.travelshoot.domains.survey.dto.response.SurveySubmitResponse;
 import com.quadrant.travelshoot.domains.survey.entity.*;
+import com.quadrant.travelshoot.domains.survey.enums.ActivityCategory;
+import com.quadrant.travelshoot.domains.survey.enums.FoodCategory;
 import com.quadrant.travelshoot.domains.survey.repository.UserSurveyRepository;
 import com.quadrant.travelshoot.domains.survey.service.UserSurveyPostService;
 import com.quadrant.travelshoot.shared.exception.CustomExceptions;
@@ -20,6 +23,7 @@ import java.util.Optional;
 public class UserSurveyPostServiceImpl implements UserSurveyPostService {
     
     private final UserSurveyRepository userSurveyRepository;
+    private final StayAIRecommendationService stayAIRecommendationService;
     
     @Override
     @Transactional
@@ -59,7 +63,7 @@ public class UserSurveyPostServiceImpl implements UserSurveyPostService {
         for (SurveySubmitRequest.FoodPreference pref : request.getFoodPreferences()) {
             try {
                 UserSurveyFood food = UserSurveyFood.builder()
-                        .foodCategory(UserSurveyFood.FoodCategory.valueOf(pref.getCategory()))
+                        .foodCategory(FoodCategory.valueOf(pref.getCategory()))
                         .preferenceOrder(pref.getOrder())
                         .weight(BigDecimal.valueOf(pref.getWeight()))
                         .build();
@@ -79,7 +83,7 @@ public class UserSurveyPostServiceImpl implements UserSurveyPostService {
             log.info("    액티비티 변환 시도 - 받은 값: '{}'", pref.getActivity());
             try {
                 UserSurveyActivity activity = UserSurveyActivity.builder()
-                        .activityCategory(UserSurveyActivity.ActivityCategory.valueOf(pref.getActivity()))
+                        .activityCategory(ActivityCategory.valueOf(pref.getActivity()))
                         .preferenceOrder(pref.getOrder())
                         .weight(BigDecimal.valueOf(pref.getWeight()))
                         .build();
@@ -99,6 +103,16 @@ public class UserSurveyPostServiceImpl implements UserSurveyPostService {
         
         // 7. 저장
         UserSurvey savedSurvey = userSurveyRepository.save(survey);
+        
+        // 8.  백그라운드 캐시 생성 (비동기) - 추가된 부분
+        try {
+            stayAIRecommendationService.createCacheOnSurveyComplete(userId);
+            log.info("설문조사 완료 - 백그라운드 캐시 생성 시작됨: userId={}", userId);
+        } catch (Exception e) {
+            log.error("설문조사 완료 - 캐시 생성 실패 (무시): userId={}", userId, e);
+            // 캐시 생성 실패해도 설문조사 제출은 성공 처리
+        }
+        
         return SurveySubmitResponse.builder()
                 .surveyId(savedSurvey.getSurveyId())
                 .userId(userId)

@@ -32,8 +32,8 @@ public class CreateReservationRequest {
     @DecimalMin(value = "0.0", inclusive = false, message = "금액은 0보다 커야 합니다")
     private BigDecimal totalPrice;
 
-    @NotBlank(message = "방문 수단을 선택해주세요")
-    private String TransportationMethod;
+    @NotNull(message = "방문 수단을 선택해주세요")
+    private TransportationMethod transportationMethod;
 
     @NotBlank(message = "이용자 이름은 필수입니다")
     @Size(max = 100, message = "이름은 100자 이내여야 합니다")

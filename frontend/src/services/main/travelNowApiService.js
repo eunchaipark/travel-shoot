@@ -1,9 +1,6 @@
-// 환경 변수에서 API URL 가져오기 (없으면 기본값)
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
-
 export const fetchTravelNow = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/travel-now/destinations`, {
+    const response = await fetch(`${window.API_BASE_URL}/api/stays/travel-now`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

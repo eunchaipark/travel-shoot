@@ -174,4 +174,37 @@ public class ReservationController {
         List<ReservationResponse> response = reservationService.getReviewTargetReservations(userId);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/detail/{reservationId}")
+    public ResponseEntity<ReservationWithPaymentResponse> getReservationDetailWithPayment(
+            @PathVariable Long reservationId
+            , Authentication authentication
+    ) {
+        Long userId = Long.valueOf(authentication.getName());
+        log.info("예약 및 결제 상세 조회 - reservationId: {}, userId: {}", reservationId, userId);
+
+        ReservationWithPaymentResponse response = reservationService.getReservationDetailWithPayment(reservationId, userId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<ReservationListResponse>> getReservationList(
+            Authentication authentication
+    ) {
+        Long userId = Long.valueOf(authentication.getName());
+        log.info("예약 리스트 조회 - userId: {}", userId);
+
+        List<ReservationListResponse> response = reservationService.getReservationList(userId);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/cancel")
+    public ResponseEntity<Void> cancelReservation(
+            @Valid @RequestBody CancelRequest request,
+            Authentication authentication) {
+        Long userId = Long.valueOf(authentication.getName());
+        log.info("비밀번호 변경 API: userId: {}", userId);
+        reservationService.cancelReservation(userId, request);
+        return ResponseEntity.ok().build();
+    }
 }

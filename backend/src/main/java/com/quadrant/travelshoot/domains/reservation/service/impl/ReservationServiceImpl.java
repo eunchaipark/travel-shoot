@@ -1,12 +1,16 @@
-package com.quadrant.travelshoot.domains.reservation.service;
+package com.quadrant.travelshoot.domains.reservation.service.impl;
 
+import com.quadrant.travelshoot.domains.payment.enums.PaymentStatus;
+import com.quadrant.travelshoot.domains.payment.service.PaymentService;
 import com.quadrant.travelshoot.domains.reservation.dto.request.*;
 import com.quadrant.travelshoot.domains.reservation.dto.response.*;
 import com.quadrant.travelshoot.domains.reservation.entity.Reservation;
 import com.quadrant.travelshoot.domains.reservation.enums.ReservationStatus;
 import com.quadrant.travelshoot.domains.reservation.enums.TransportationMethod;
 import com.quadrant.travelshoot.domains.reservation.repository.ReservationRepository;
+import com.quadrant.travelshoot.domains.reservation.service.ReservationService;
 import com.quadrant.travelshoot.domains.stay.entity.Room;
+import com.quadrant.travelshoot.domains.stay.entity.Stay;
 import com.quadrant.travelshoot.domains.stay.repository.RoomRepository;
 import com.quadrant.travelshoot.domains.stay.service.StayService;
 import com.quadrant.travelshoot.domains.stay.dto.response.StayDetailResponse;
@@ -17,9 +21,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.quadrant.travelshoot.domains.payment.entity.Payment;
 
+import java.time.LocalDateTime;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -35,8 +40,9 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
     private final RoomRepository roomRepository;
     private final StayService stayService;
+    private final PaymentService paymentService;
 
-      //TODO : 가격 계산 추후에 추가할 가능성 염두
+    //TODO : 가격 계산 추후에 추가할 가능성 염두
 //    private static final BigDecimal TAX_RATE = new BigDecimal("0.10"); //TODO : 세금 10% 청구
 //    private static final BigDecimal SERVICE_FEE_RATE = new BigDecimal("0.05"); //TODO :수수료 5% 청구
 
@@ -166,11 +172,28 @@ public class ReservationServiceImpl implements ReservationService {
 
         Reservation saved = reservationRepository.save(reservation);
 
+        Reservation savedReservation = reservationRepository.save(reservation);
+        log.info("예약 저장 완료 - reservationId: {}", savedReservation.getId());
+
         if (Boolean.TRUE.equals(request.getMarketingAgreed())) {
             log.info("마케팅 수신 동의 - userId: {}", userId);
         }
+        String paymentCode = "PAY" + System.currentTimeMillis() + new Random().nextInt(1000);
 
-        return toDetailResponse(saved);
+        Payment payment = Payment.builder()
+                .paymentCode(paymentCode)
+                .reservationId(savedReservation.getId())
+                .paymentMethod(request.getPaymentMethod())
+                .paymentAmount(request.getTotalPrice())
+                .paymentStatus(PaymentStatus.결제완료)
+                .completedAt(LocalDateTime.now())
+                .build();
+
+        paymentService.save(payment);
+        log.info("결제 정보 저장 완료 - paymentCode: {} / reservationId: {}, paymentMethod: {}, amount: {}",
+                payment.getPaymentCode(), savedReservation.getId(), payment.getPaymentMethod(), payment.getPaymentAmount());
+
+        return toDetailResponse(savedReservation);
     }
 
     @Override
@@ -403,7 +426,8 @@ public class ReservationServiceImpl implements ReservationService {
                 .totalNights(reservation.getTotalNights())
                 .totalPrice(reservation.getTotalPrice())
                 .reservationStatus(reservation.getReservationStatus())
-                .transportationMethod(reservation.getTransportationMethod())
+//                .transportationMethod(reservation.getTransportationMethod())
+                .transportationMethod(reservation.getTransportationMethod().getDisplayName())
                 .cancelReason(reservation.getCancelReason())
                 .cancelDetail(reservation.getCancelDetail())
                 .cancelledAt(reservation.getCancelledAt())
@@ -416,5 +440,108 @@ public class ReservationServiceImpl implements ReservationService {
     public Reservation getById(Long reservationId) {
         return reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("예약 정보를 찾을 수 없습니다."));
+    }
+
+
+    @Override
+    public List<Reservation> getRecentCompletedReservations(Long userId, int limit) {
+        log.info("완료된 예약 조회 - userId: {}, limit: {}", userId, limit);
+
+        // Repository 메서드 호출
+        return reservationRepository.findRecentCompletedReservations(userId, limit);
+    }
+
+    @Override
+    public int getCompletedReservationCount(Long userId) {
+        log.info("완료된 예약 건수 조회 - userId: {}", userId);
+
+        // Repository 메서드 호출
+        return reservationRepository.countCompletedReservations(userId);
+    }
+
+    @Override
+    public ReservationWithPaymentResponse getReservationDetailWithPayment(Long reservationId, Long userId){
+        Reservation reservation = reservationRepository.findByIdAndUserIdWithStay(reservationId, userId) .orElseThrow(() -> new IllegalArgumentException("조회할 수 없는 예약 정보입니다."));;
+        Stay stay = reservation.getRoom().getStay();
+        Payment payment = paymentService.getByReservationId(reservation.getId());
+
+        return ReservationWithPaymentResponse
+                .builder()
+                .reservationCode(reservation.getReservationCode())
+                .stayId(stay.getId())
+                .stayName(stay.getName())
+                .mainImageUrl(stay.getMainImageUrl())
+                .latitude(stay.getLatitude())
+                .longitude(stay.getLongitude())
+                .checkInDate(reservation.getCheckInDate())
+                .checkOutDate(reservation.getCheckOutDate())
+                .checkInTime(stay.getCheckInTime())
+                .checkOutTime(stay.getCheckOutTime())
+                .totalNights(reservation.getTotalNights())
+                .totalPrice(reservation.getTotalPrice())
+                .reservationStatus(reservation.getReservationStatus())
+                .transportationMethod(reservation.getTransportationMethod().getDisplayName())
+                .cancelReason(reservation.getCancelReason())
+                .cancelDetail(reservation.getCancelDetail())
+                .cancelledAt(reservation.getCancelledAt())
+                .createdAt(reservation.getCreatedAt())
+                .paymentMethod(payment.getPaymentMethod())
+                .address(stay.getAddress())
+                .build();
+    }
+
+    public List<ReservationListResponse> getReservationList(Long userId){
+        List<Reservation> reservations = reservationRepository.findByUserIdWithRoomAndStay(userId);
+
+        // N+1 방지를 위해 한 번에 reviewId, createdAt 조회
+        List<Long> reservationIds = reservations.stream()
+                .map(Reservation::getId)
+                .toList();
+
+        // reservationId -> ReviewInfo 매핑
+        Map<Long, ReviewInfo> reviewInfoMap = reservationRepository.findReviewIdsByReservationIds(reservationIds)
+                .stream()
+                .collect(Collectors.toMap(
+                        arr -> (Long) arr[0],  // reservationId
+                        arr -> new ReviewInfo((Long) arr[1], (LocalDateTime) arr[2])  // reviewId, createdAt
+                ));
+
+        return reservations.stream()
+                .map(reservation -> {
+                    ReviewInfo reviewInfo = reviewInfoMap.get(reservation.getId());
+                    return ReservationListResponse.builder()
+                            .reservationId(reservation.getId())
+                            .reservationCode(reservation.getReservationCode())
+                            .stayId(reservation.getRoom().getStay().getId())
+                            .stayName(reservation.getRoom().getStay().getName())
+                            .mainImageUrl(reservation.getRoom().getStay().getMainImageUrl())
+                            .checkInDate(reservation.getCheckInDate())
+                            .checkOutDate(reservation.getCheckOutDate())
+                            .checkInTime(reservation.getRoom().getStay().getCheckInTime())
+                            .checkOutTime(reservation.getRoom().getStay().getCheckOutTime())
+                            .reservationStatus(reservation.getReservationStatus())
+                            .createdAt(reservation.getCreatedAt())
+                            .totalNights(reservation.getTotalNights())
+                            .totalPrice(reservation.getTotalPrice())
+                            .reviewId(reviewInfo != null ? reviewInfo.reviewId() : null)
+                            .reviewCreatedAt(reviewInfo != null ? reviewInfo.createdAt() : null)
+                            .build();
+                })
+                .toList();
+    }
+
+    // 내부 레코드 클래스
+    private record ReviewInfo(Long reviewId, LocalDateTime createdAt) {}
+
+    public void cancelReservation(Long userId, CancelRequest request){
+        Reservation reservation = reservationRepository.findByIdAndUserIdAndReservationStatus(request.getReservationId(), userId, ReservationStatus.예약확정 )
+                .orElseThrow(() -> new IllegalArgumentException("취소할 예약을 찾을 수 없습니다"));
+
+        paymentService.cancelPayment(userId, request.getReservationId(), reservation.getCheckInDate());
+        reservation.setCancelReason(request.getCancelReason());
+        reservation.setCancelDetail(request.getCancelDetail());
+        reservation.setCancelledAt(LocalDateTime.now());
+        reservationRepository.save(reservation);
+        log.info("예약 취소 완료: {}", reservation.getId());;
     }
 }

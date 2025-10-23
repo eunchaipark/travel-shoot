@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Map;
 
@@ -157,5 +158,31 @@ public class AuthController {
         PasswordResetResponse response = authService.resetPassword(request);
 
         return ResponseEntity.ok(response);
+    }
+
+    //TODO : 로그아웃 메서드 추가하라고 했던거
+    @PostMapping("/logout")
+    public ResponseEntity<Map<String, String>> logout(HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+
+        if (userId != null) {
+            log.info("로그아웃: userId={}", userId);
+        } else {
+            log.info("로그아웃: 세션 없음 (이미 만료됨)");
+        }
+
+        try {
+            // 세션 무효화
+            session.invalidate();
+
+            // Spring Security 컨텍스트 정리
+            SecurityContextHolder.clearContext();
+
+            return ResponseEntity.ok(Map.of("message", "로그아웃 성공"));
+        } catch (IllegalStateException e) {
+            // 이미 무효화된 세션
+            log.warn("이미 무효화된 세션");
+            return ResponseEntity.ok(Map.of("message", "이미 로그아웃됨"));
+        }
     }
 }

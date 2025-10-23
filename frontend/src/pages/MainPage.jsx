@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import koLocale from "@fullcalendar/core/locales/ko";
+import { useNavigate } from "react-router-dom";
 
-// API Service 추가
+// API Service
 import { fetchCalendarCourses } from "@/services/main/calendarApiService";
 
 // Layout Components
-import Header from "@/components/layout/Header";
+import SimpleHeader from "@/components/layout/SimpleHeader";
 
 // Hooks
 import {
@@ -44,18 +45,18 @@ import "@/assets/css/travel-now.css";
 
 const MainPage = () => {
   const calendarRef = useRef(null);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [locationValue, setLocationValue] = useState("");
-
-  // 캘린더 이벤트 상태 추가
   const [calendarEvents, setCalendarEvents] = useState([]);
   const [isLoadingEvents, setIsLoadingEvents] = useState(false);
 
-  // 드롭다운 상태
-  const [showDateDropdown, setShowDateDropdown] = useState(false);
-  const [showGuestDropdown, setShowGuestDropdown] = useState(false);
+  //  핵심 수정: 지역은 따로, 날짜/인원은 하나로 통합
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
-  // const [showHeaderDropdown, setShowHeaderDropdown] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null); // 'date' | 'guest' | null
+
+  const [suggestions, setSuggestions] = useState([]);
+  const locationInputRef = useRef(null);
+  const locationDropdownRef = useRef(null);
 
   // 커스텀 훅
   const {
@@ -72,31 +73,26 @@ const MainPage = () => {
 
   // 드롭다운 위치 관리
   const locationCardRef = useDropdownPosition(showLocationDropdown, "location");
-  const dateCardRef = useDropdownPosition(showDateDropdown, "date");
-  const guestCardRef = useDropdownPosition(showGuestDropdown, "guest");
+  const dateCardRef = useDropdownPosition(activeDropdown === 'date', "date");
+  const guestCardRef = useDropdownPosition(activeDropdown === 'guest', "guest");
 
-  // API에서 캘린더 데이터 가져오기
+  // API에서 캘린더 데이터 가져오기 
   useEffect(() => {
     const loadCalendarEvents = async () => {
-      if (!isAuthenticated) {
+      if (!isAuthenticated || !user) {
         setCalendarEvents([]);
         return;
       }
 
       try {
         setIsLoadingEvents(true);
-
-        // TODO: 실제 로그인한 사용자 ID로 변경
-        const userId = 1;
-
+        const userId = user.userId;
         const reservationData = await fetchCalendarCourses(userId);
         const events = convertToCalendarEvents(reservationData);
         setCalendarEvents(events);
-
         console.log("캘린더 이벤트 로드 성공:", events);
       } catch (error) {
         console.error("캘린더 데이터 로딩 실패, fallback 데이터 사용:", error);
-
         const fallbackEvents = convertToCalendarEvents(RAW_RESERVATION_DATA);
         setCalendarEvents(fallbackEvents);
       } finally {
@@ -105,9 +101,9 @@ const MainPage = () => {
     };
 
     loadCalendarEvents();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user]);
 
-  // 날짜 표시 텍스트
+  // 날짜 표시 텍스트 
   const getDateDisplayText = () => {
     if (selectedDates.checkin && selectedDates.checkout) {
       const checkinText = formatDateKorean(selectedDates.checkin);
@@ -122,14 +118,14 @@ const MainPage = () => {
     return "날짜를 선택해주세요";
   };
 
-  // 달력 날짜 클릭
+  // 달력 날짜 클릭 
   const handleDateClick = (info) => {
     if (dateSelectionMode) {
       handleMainCalendarDateSelection(info.dateStr);
     }
   };
 
-  // 이벤트 클릭
+  // 이벤트 클릭 
   const handleEventClick = (info) => {
     info.jsEvent.preventDefault();
     info.jsEvent.stopPropagation();
@@ -151,7 +147,7 @@ const MainPage = () => {
     }
   };
 
-  // 이벤트 렌더링
+  // 이벤트 렌더링 
   const renderEventContent = (eventInfo) => {
     const event = eventInfo.event;
     const props = event.extendedProps;
@@ -178,7 +174,8 @@ const MainPage = () => {
     return { html: event.title };
   };
 
-  // 검색 처리
+  const navigate = useNavigate();
+  // 검색 처리 
   const handleSearch = () => {
     if (!selectedDates.checkin || !selectedDates.checkout) {
       alert("체크인/체크아웃 날짜를 선택해주세요.");
@@ -197,68 +194,100 @@ const MainPage = () => {
     };
 
     console.log("검색 조건:", searchData);
+
+    const params = new URLSearchParams({
+      region: locationValue,
+      checkin: selectedDates.checkin,
+      checkout: selectedDates.checkout,
+      adults: guestCounts.adult,
+      children: guestCounts.child,
+    });
+
+    const searchUrl = `/search?${params.toString()}`;
     alert(
-      `검색 실행:\n지역: ${locationValue}\n체크인: ${
-        selectedDates.checkin
-      }\n체크아웃: ${selectedDates.checkout}\n${nights}박 ${
-        nights + 1
-      }일\n성인: ${guestCounts.adult}명\n어린이: ${guestCounts.child}명`
+      `검색 실행:
+      지역: ${locationValue}
+      체크인: ${selectedDates.checkin}
+      체크아웃: ${selectedDates.checkout}
+      ${nights}박 ${nights + 1}일
+      성인: ${guestCounts.adult}명
+      어린이: ${guestCounts.child}명
+      이동URL:${searchUrl}`
     );
+    navigate(searchUrl);
+
   };
 
-  // 모든 드롭다운 닫기
-  const closeAllDropdowns = () => {
-    setShowDateDropdown(false);
-    setShowGuestDropdown(false);
+  //  수정: 모든 드롭다운 닫기 - useCallback 추가
+  const closeAllDropdowns = useCallback(() => {
     setShowLocationDropdown(false);
-  };
+    setActiveDropdown(null);
+  }, []);
 
-  // 날짜 입력 클릭
+  //  수정: 날짜 입력 클릭 - activeDropdown 사용
   const handleDateInputClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    setShowLocationDropdown(false);
-    setShowGuestDropdown(false);
+    setShowLocationDropdown(false); // 지역 닫기
 
-    if (!dateSelectionMode) {
+    if (!dateSelectionMode && activeDropdown !== 'date') {
       activateSelectionMode();
     }
 
-    setShowDateDropdown((prev) => !prev);
+    setActiveDropdown(prev => prev === 'date' ? null : 'date'); // 토글
   };
 
-  // 인원 입력 클릭
+  //  수정: 인원 입력 클릭 - activeDropdown 사용
   const handleGuestInputClick = (e) => {
     e.stopPropagation();
 
-    setShowLocationDropdown(false);
-    setShowDateDropdown(false);
-
-    setShowGuestDropdown((prev) => !prev);
+    setShowLocationDropdown(false); // 지역 닫기
+    setActiveDropdown(prev => prev === 'guest' ? null : 'guest'); // 토글
   };
 
-  // 지역 입력 포커스/입력
+  // 지역 입력 포커스 (원본 로직 유지, 다른 드롭다운 닫기만 추가)
   const handleLocationFocus = () => {
-    setShowDateDropdown(false);
-    setShowGuestDropdown(false);
-    setShowLocationDropdown(true);
-  };
-
-  const handleLocationInput = (e) => {
-    setLocationValue(e.target.value);
-    if (e.target.value.length > 0) {
+    setActiveDropdown(null); // 날짜/인원 닫기
+    if (suggestions.length > 0) {
       setShowLocationDropdown(true);
     }
   };
 
-  // 지역 선택
-  const handleLocationSelect = (location) => {
-    setLocationValue(location);
+  // 원본 로직 100% 유지: 실제 API 호출
+  const handleLocationInput = async (e) => {
+    const value = e.target.value;
+    setLocationValue(value);
+    
+    setActiveDropdown(null); // 날짜/인원 닫기
+    
+    if (value.trim().length < 1) {
+      setSuggestions([]);
+      setShowLocationDropdown(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/stays/autocomplete?keyword=${encodeURIComponent(value)}`
+      );
+      const data = await response.json();
+      console.log('자동완성 결과:', data);
+      setSuggestions(data || []);
+      setShowLocationDropdown(true);
+    } catch (error) {
+      console.error('자동완성 에러:', error);
+      setSuggestions([]);
+    }
+  };
+
+  // 지역 선택 (원본 로직 유지)
+  const handleSuggestionSelect = (suggestion) => {
+    setLocationValue(suggestion.keyword);
     setShowLocationDropdown(false);
   };
 
-  // TravelNow 카드 클릭 핸들러
+  // TravelNow 카드 클릭 핸들러 (원본 로직 유지)
   const handleTravelNowCardClick = (destination) => {
     setLocationValue(destination.name);
     setShowLocationDropdown(false);
@@ -269,7 +298,7 @@ const MainPage = () => {
     }
   };
 
-  // 외부 클릭 감지
+  // 외부 클릭 핸들러 - 의존성 최소화
   useEffect(() => {
     const handleClickOutside = (e) => {
       const isDateCard = e.target
@@ -286,17 +315,20 @@ const MainPage = () => {
       const isLocationDropdown = e.target.closest(".dropdown-suggestions");
       const isCalendar = e.target.closest("#calendar");
 
-      if (!isDateCard && !isDateDropdown && !isCalendar && showDateDropdown) {
-        setShowDateDropdown(false);
+      // 날짜 드롭다운 닫기
+      if (!isDateCard && !isDateDropdown && !isCalendar && activeDropdown === 'date') {
+        setActiveDropdown(null);
         if (!selectedDates.checkin || !selectedDates.checkout) {
           deactivateSelectionMode();
         }
       }
 
-      if (!isGuestCard && !isGuestDropdown && showGuestDropdown) {
-        setShowGuestDropdown(false);
+      // 인원 드롭다운 닫기
+      if (!isGuestCard && !isGuestDropdown && activeDropdown === 'guest') {
+        setActiveDropdown(null);
       }
 
+      // 지역 드롭다운 닫기
       if (!isLocationCard && !isLocationDropdown && showLocationDropdown) {
         setShowLocationDropdown(false);
       }
@@ -305,13 +337,13 @@ const MainPage = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [
-    showDateDropdown,
-    showGuestDropdown,
+    activeDropdown,
     showLocationDropdown,
     selectedDates,
+    deactivateSelectionMode,
   ]);
 
-  // ESC 키 및 Enter 키 처리
+  // ESC 키 및 Enter 키 처리 
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
@@ -319,33 +351,56 @@ const MainPage = () => {
         deactivateSelectionMode();
       }
 
-      if (
-        e.key === "Enter" &&
-        selectedDates.checkin &&
-        selectedDates.checkout
-      ) {
+      if (e.key === "Enter" && selectedDates.checkin && selectedDates.checkout) {
         handleSearch();
       }
     };
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [selectedDates]);
+  }, [selectedDates, closeAllDropdowns, deactivateSelectionMode, handleSearch]);
 
-  // 체크아웃 선택 완료시 드롭다운 자동 닫기
+  // 체크아웃 선택 완료시 드롭다운 자동 닫기 
   useEffect(() => {
     if (selectedDates.checkin && selectedDates.checkout) {
       setTimeout(() => {
-        setShowDateDropdown(false);
+        setActiveDropdown(null);
         deactivateSelectionMode();
       }, 500);
     }
-  }, [selectedDates]);
+  }, [selectedDates, deactivateSelectionMode]);
+
+  //지역 드롭다운 높이에 따라 다음 카드 밀어내기
+  useEffect(() => {
+    if (showLocationDropdown && locationDropdownRef.current && suggestions.length > 0) {
+      const dropdown = locationDropdownRef.current;
+      const nextCard = locationCardRef.current?.nextElementSibling;
+      
+      if (nextCard && nextCard.classList.contains('search-card')) {
+        // requestAnimationFrame으로 DOM 렌더링 완료 대기
+        requestAnimationFrame(() => {
+          const dropdownHeight = dropdown.offsetHeight;
+          console.log('드롭다운 높이:', dropdownHeight); // 디버깅용
+          
+          if (dropdownHeight > 0) {
+            nextCard.style.marginTop = `${dropdownHeight + 16}px`;
+            nextCard.style.transition = 'margin-top 0.3s ease';
+          }
+        });
+      }
+    } else {
+      // 드롭다운 닫힐 때 margin 제거
+      const nextCard = locationCardRef.current?.nextElementSibling;
+      if (nextCard && nextCard.classList.contains('search-card')) {
+        nextCard.style.marginTop = '';
+      }
+    }
+  }, [showLocationDropdown, suggestions]);
 
   return (
     <>
       {/* 헤더 컴포넌트 사용 */}
-      <Header />
+      <SimpleHeader />
 
       {/* 메인 컨테이너 */}
       <main className="main-wrapper main-page">
@@ -417,6 +472,7 @@ const MainPage = () => {
                     />
                   </div>
                   <input
+                    ref={locationInputRef}
                     type="text"
                     className="search-input main-calendar-location-input"
                     placeholder="어디로 떠나시나요?"
@@ -425,44 +481,25 @@ const MainPage = () => {
                     onFocus={handleLocationFocus}
                   />
 
-                  {showLocationDropdown && (
-                    <div className="dropdown-suggestions">
-                      <button
-                        className="suggestion-item"
-                        onClick={() => handleLocationSelect("SL 호텔 강릉")}
-                      >
-                        <i className="fas fa-building"></i>
-                        <div>
-                          <div className="fw-bold">SL 호텔 강릉</div>
-                          <small className="text-muted">
-                            강릉특별자치도 강릉시 OO----
-                          </small>
-                        </div>
-                      </button>
-                      <button
-                        className="suggestion-item"
-                        onClick={() => handleLocationSelect("유담리솜펜션")}
-                      >
-                        <i className="fas fa-home"></i>
-                        <div>
-                          <div className="fw-bold">유담리솜펜션</div>
-                          <small className="text-muted">
-                            강릉특별자치도 강릉시 OO----
-                          </small>
-                        </div>
-                      </button>
-                      <button
-                        className="suggestion-item"
-                        onClick={() => handleLocationSelect("강릉씨고호텔")}
-                      >
-                        <i className="fas fa-building"></i>
-                        <div>
-                          <div className="fw-bold">강릉씨고호텔</div>
-                          <small className="text-muted">
-                            강릉특별자치도 강릉시 OO----
-                          </small>
-                        </div>
-                      </button>
+                  {showLocationDropdown && suggestions.length > 0 && (
+                    <div ref={locationDropdownRef} className="dropdown-suggestions">
+                      {suggestions.map((suggestion, index) => (
+                        <button
+                          key={index}
+                          className="suggestion-item"
+                          onClick={() => handleSuggestionSelect(suggestion)}
+                        >
+                          <i className={
+                            suggestion.type === 'REGION' 
+                              ? 'fas fa-map-marker-alt' 
+                              : 'fas fa-building'
+                          }></i>
+                          <div>
+                            <div className="fw-bold">{suggestion.keyword}</div>
+                            <small className="text-muted">{suggestion.type}</small>
+                          </div>
+                        </button>
+                      ))}
                     </div>
                   )}
                 </div>
@@ -485,28 +522,20 @@ const MainPage = () => {
                   />
                 </div>
 
-                {showDateDropdown && (
-                  <div
-                    className="date-dropdown-container"
-                    style={{
-                      maxHeight: "400px",
-                      opacity: 1,
-                      transition: "all 0.3s ease",
-                    }}
-                  >
-                    <div style={{ padding: "15px" }}>
-                      <div
-                        className="mini-calendar-container"
-                        style={{ justifyContent: "center", width: "100%" }}
-                      >
-                        <MiniCalendar
-                          selectedDates={selectedDates}
-                          onDateSelect={handleMiniCalendarDateSelection}
-                        />
-                      </div>
+                {/*  activeDropdown 기반 */}
+                <div className={`date-dropdown-container ${activeDropdown === 'date' ? 'open' : ''}`}>
+                  <div style={{ padding: "15px" }}>
+                    <div
+                      className="mini-calendar-container"
+                      style={{ justifyContent: "center", width: "100%" }}
+                    >
+                      <MiniCalendar
+                        selectedDates={selectedDates}
+                        onDateSelect={handleMiniCalendarDateSelection}
+                      />
                     </div>
                   </div>
-                )}
+                </div>
 
                 {/* 인원 선택 */}
                 <div
@@ -529,107 +558,99 @@ const MainPage = () => {
                   />
                 </div>
 
-                {showGuestDropdown && (
-                  <div
-                    className="guest-dropdown-container"
-                    style={{
-                      maxHeight: "160px",
-                      opacity: 1,
-                      transition: "all 0.3s ease",
-                    }}
-                  >
-                    <div style={{ padding: "20px" }}>
-                      {/* 성인 */}
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          marginBottom: "20px",
-                        }}
-                      >
-                        <div>
-                          <div style={{ fontWeight: 600, marginBottom: "4px" }}>
-                            성인
-                          </div>
-                          <small style={{ color: "#6c757d" }}>18세 이상</small>
+                {/*  수정: activeDropdown 기반 */}
+                <div className={`guest-dropdown-container ${activeDropdown === 'guest' ? 'open' : ''}`}>
+                  <div style={{ padding: "20px" }}>
+                    {/* 성인 */}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      <div>
+                        <div style={{ fontWeight: 600, marginBottom: "4px" }}>
+                          성인
                         </div>
-                        <div
-                          className="counter-controls"
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "15px",
-                          }}
-                        >
-                          <button
-                            type="button"
-                            className="counter-btn guest-btn guest-btn-minus"
-                            onClick={() => handleGuestChange("adult", "minus")}
-                            disabled={guestCounts.adult <= 1}
-                          >
-                            -
-                          </button>
-                          <span className="guest-count" data-type="adult">
-                            {guestCounts.adult}
-                          </span>
-                          <button
-                            type="button"
-                            className="counter-btn guest-btn guest-btn-plus"
-                            onClick={() => handleGuestChange("adult", "plus")}
-                            disabled={guestCounts.adult >= 32}
-                          >
-                            +
-                          </button>
-                        </div>
+                        <small style={{ color: "#6c757d" }}>18세 이상</small>
                       </div>
-
-                      {/* 어린이 */}
                       <div
+                        className="counter-controls"
                         style={{
                           display: "flex",
-                          justifyContent: "space-between",
                           alignItems: "center",
+                          gap: "15px",
                         }}
                       >
-                        <div>
-                          <div style={{ fontWeight: 600, marginBottom: "4px" }}>
-                            어린이
-                          </div>
-                          <small style={{ color: "#6c757d" }}>0-17세</small>
-                        </div>
-                        <div
-                          className="counter-controls"
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "15px",
-                          }}
+                        <button
+                          type="button"
+                          className="counter-btn guest-btn guest-btn-minus"
+                          onClick={() => handleGuestChange("adult", "minus")}
+                          disabled={guestCounts.adult <= 1}
                         >
-                          <button
-                            type="button"
-                            className="counter-btn guest-btn guest-btn-minus"
-                            onClick={() => handleGuestChange("child", "minus")}
-                            disabled={guestCounts.child <= 0}
-                          >
-                            -
-                          </button>
-                          <span className="guest-count" data-type="child">
-                            {guestCounts.child}
-                          </span>
-                          <button
-                            type="button"
-                            className="counter-btn guest-btn guest-btn-plus"
-                            onClick={() => handleGuestChange("child", "plus")}
-                            disabled={guestCounts.child >= 4}
-                          >
-                            +
-                          </button>
+                          -
+                        </button>
+                        <span className="guest-count" data-type="adult">
+                          {guestCounts.adult}
+                        </span>
+                        <button
+                          type="button"
+                          className="counter-btn guest-btn guest-btn-plus"
+                          onClick={() => handleGuestChange("adult", "plus")}
+                          disabled={guestCounts.adult >= 32}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* 어린이 */}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div>
+                        <div style={{ fontWeight: 600, marginBottom: "4px" }}>
+                          어린이
                         </div>
+                        <small style={{ color: "#6c757d" }}>0-17세</small>
+                      </div>
+                      <div
+                        className="counter-controls"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "15px",
+                        }}
+                      >
+                        <button
+                          type="button"
+                          className="counter-btn guest-btn guest-btn-minus"
+                          onClick={() => handleGuestChange("child", "minus")}
+                          disabled={guestCounts.child <= 0}
+                        >
+                          -
+                        </button>
+                        <span className="guest-count" data-type="child">
+                          {guestCounts.child}
+                        </span>
+                        <button
+                          type="button"
+                          className="counter-btn guest-btn guest-btn-plus"
+                          onClick={() => handleGuestChange("child", "plus")}
+                          disabled={guestCounts.child >= 4}
+                        >
+                          +
+                        </button>
                       </div>
                     </div>
                   </div>
-                )}
+                </div>
 
                 {/* 검색 버튼 */}
                 <button

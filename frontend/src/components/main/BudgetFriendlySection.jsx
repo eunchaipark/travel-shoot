@@ -1,9 +1,9 @@
 /**
- * Budget Friendly Section - API 연동 버전
+ * Budget Friendly Section - Bootstrap Skeleton 버전
  * 경로: frontend/src/components/BudgetFriendlySection.jsx
  */
-// import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useBudgetSlider } from "@/hooks/main/useBudgetSlider";
 import {
   formatNumber,
@@ -14,6 +14,71 @@ import {
   getSlideWidth,
 } from "../../utils/main/budgetUtils";
 import { fetchBudgetFriendlyStays } from "@/services/main/budgetApiService";
+
+// ============================================================================
+// Bootstrap Skeleton Card 컴포넌트
+// ============================================================================
+const SkeletonCard = () => {
+  return (
+    <div className="budget-item-card">
+      <div className="budget-card-image">
+        <div className="placeholder-glow">
+          <span className="placeholder col-12" style={{ height: '200px', display: 'block' }}></span>
+        </div>
+      </div>
+      <div className="budget-card-content">
+        <div className="placeholder-glow">
+          <span className="placeholder col-8 mb-2"></span>
+        </div>
+        <div className="placeholder-glow">
+          <span className="placeholder col-6 mb-2"></span>
+        </div>
+        <div className="budget-rating mb-2">
+          <div className="placeholder-glow">
+            <span className="placeholder col-5"></span>
+          </div>
+        </div>
+        <div className="budget-pricing">
+          <div className="placeholder-glow">
+            <span className="placeholder col-7"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================================
+// Bootstrap Skeleton Slider 컴포넌트
+// ============================================================================
+const SkeletonSlider = () => {
+  const getSkeletonCount = () => {
+    const width = window.innerWidth;
+    if (width >= 1200) return 4;
+    if (width >= 768) return 3;
+    if (width >= 480) return 2;
+    return 1;
+  };
+
+  const skeletonCount = getSkeletonCount();
+
+  return (
+    <div className="content-wrapper">
+      <div className="budget-slider-container">
+        <div className="budget-slide-grid" style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(${skeletonCount}, 1fr)`,
+          gap: '20px',
+          width: '100%'
+        }}>
+          {Array.from({ length: skeletonCount }).map((_, index) => (
+            <SkeletonCard key={index} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // ============================================================================
 // Budget Card 컴포넌트
@@ -93,26 +158,9 @@ const BudgetSlider = ({ data, onCardClick, isLoading, error }) => {
     }
   }, [currentSlide, totalSlides]);
 
-  // 로딩 상태
+  // 로딩 상태 - Bootstrap Skeleton UI
   if (isLoading) {
-    return (
-      <div className="content-wrapper">
-        <div
-          className="budget-slider-container"
-          style={{
-            minHeight: "400px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div style={{ textAlign: "center", color: "#666" }}>
-            <div style={{ fontSize: "24px", marginBottom: "10px" }}>⏳</div>
-            <div>가격착한 숙소를 불러오는 중...</div>
-          </div>
-        </div>
-      </div>
-    );
+    return <SkeletonSlider />;
   }
 
   // 에러 상태
@@ -277,7 +325,6 @@ const BudgetSlider = ({ data, onCardClick, isLoading, error }) => {
 // Budget Friendly Section 컴포넌트 (메인) - API 연동
 // ============================================================================
 const BudgetFriendlySection = () => {
-  // const navigate = useNavigate();  백엔드 구현시 주석 없애기
   const sliderRef = useRef(null);
   const [budgetData, setBudgetData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -291,7 +338,7 @@ const BudgetFriendlySection = () => {
         setError(null);
 
         const data = await fetchBudgetFriendlyStays();
-        console.log("변환된 데이터:", data); // 디버깅용
+        console.log("변환된 데이터:", data);
 
         setBudgetData(data);
       } catch (err) {
@@ -305,11 +352,11 @@ const BudgetFriendlySection = () => {
     loadBudgetData();
   }, []);
 
+  const navigate = useNavigate();
   const handleCardClick = (item) => {
     console.log("Budget 카드 클릭:", item);
     
-    // stayId 확인
-    const stayId = item.stayId || item.id; // stayId가 없으면 id 사용
+    const stayId = item.stayId || item.id;
     
     if (!stayId) {
       console.error('stayId가 없습니다:', item);
@@ -319,20 +366,15 @@ const BudgetFriendlySection = () => {
     
     const detailUrl = `/stays/${stayId}`;
     
-    // 알림 표시 --> 차후 없애야함
     alert(
       `숙소 상세 페이지로 이동합니다.\n\n` +
-      `숙소: ${item.name}\n` +
+      `숙소: ${item.id}\n` +
       `위치: ${item.location}\n` +
       `가격: ${formatNumber(item.price)}원\n\n` +
       `이동 URL:\n${detailUrl}`
     );
     
-    // TODO: 백엔드 구현 후 주석 해제
-    // navigate(detailUrl);
-    
-    // 또는 window.location 사용
-    // window.location.href = detailUrl;
+    navigate(detailUrl);
   };
 
   // 전역 API 제공

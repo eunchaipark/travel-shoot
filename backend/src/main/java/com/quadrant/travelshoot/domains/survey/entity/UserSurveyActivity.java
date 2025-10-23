@@ -1,4 +1,5 @@
 package com.quadrant.travelshoot.domains.survey.entity;
+import com.quadrant.travelshoot.domains.survey.enums.ActivityCategory;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -45,11 +46,6 @@ public class UserSurveyActivity {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    //TODO: 은채님 만약에 enum 쓴다면 common/enums로 따로 빼서 써야 함.
-    public enum ActivityCategory {
-        자연관광, 문화체험, 레포츠, 맛집탐방, 쇼핑, 사진, 휴양, 축제
-    }
 
     // 연관관계 편의 메서드
     public void setSurvey(UserSurvey survey) {
