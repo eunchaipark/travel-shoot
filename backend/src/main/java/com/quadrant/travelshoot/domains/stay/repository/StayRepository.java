@@ -353,10 +353,6 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
         @Query("SELECT s FROM Stay s WHERE s.id = :stayId")
         Optional<Stay> findByStayId(@Param("stayId") Long stayId);
 
-//        @Modifying
-//        @Query("UPDATE Stay s SET s.viewCount = s.viewCount + 1 WHERE s.id = :stayId")
-//        void incrementViewCount(Long stayId);
-
         Optional<Stay> findById(Long stayId);
 
 

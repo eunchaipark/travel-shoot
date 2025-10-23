@@ -65,7 +65,7 @@ export const TRAVEL_NOW_DATA = [
     name: "서울",
     location: "수도권",
     image:
-      "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=500&h=400&fit=crop",
+      "https://travelshoot-s3.s3.ap-southeast-2.amazonaws.com/images/6cde004e-5a5d-4b8e-877d-46719c677341_Ex_seoul.jpg",
     features: ["벚꽃", "도심", "쇼핑"],
     accommodationCount: 5945,
   },

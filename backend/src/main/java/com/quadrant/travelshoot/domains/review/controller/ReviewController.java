@@ -7,13 +7,17 @@ import com.quadrant.travelshoot.domains.review.dto.response.ReviewPageResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewRegistResponse;
 import com.quadrant.travelshoot.domains.review.service.impl.ReviewServiceImpl;
 import com.quadrant.travelshoot.shared.response.ApiResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -33,12 +37,15 @@ public class ReviewController {
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<ReviewRegistResponse>> createReview(
-//            @AuthenticationPrincipal UserDetails user,
+            HttpSession session,
             @Valid @ModelAttribute ReviewRegistRequest reviewRegistRequest) {
 
-//        log.info("리뷰 등록 요청 - userId: {}", user.userId);
+        Long userId = (Long) session.getAttribute("userId");
+
+
+        log.info("리뷰 등록 요청 - userId: {}", userId);
         log.info("리뷰 등록 요청!!! - reservationId: {}", reviewRegistRequest.getReservationId());
-        Long userId = 1L;
+//        Long userId = 1L;
         ReviewRegistResponse resultResponse = reviewService.createReview(userId, reviewRegistRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("리뷰 등록 성공", resultResponse));
@@ -55,19 +62,17 @@ public class ReviewController {
      */
     @PutMapping(value = "/{reviewId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<ReviewRegistResponse>> updateReview(
-            //  @AuthenticationPrincipal UserDetails user,
+            HttpSession session,
             @PathVariable Long reviewId,
             @Valid @ModelAttribute ReviewRegistRequest reviewUpdateRequest) {
 
-        Long userId = 1L;
+        Long userId = (Long) session.getAttribute("userId");
+
         log.info("리뷰 수정 요청 - userId: {}, reviewId: {}", userId, reviewId);
         ReviewRegistResponse response = reviewService.updateReview(userId, reviewId, reviewUpdateRequest);
 
         return ResponseEntity.ok(ApiResponse.success("리뷰 수정 성공", response));
     }
-
-
-
 
     /**
      * 리뷰 삭제
@@ -92,11 +97,17 @@ public class ReviewController {
      * 리뷰 상세 조회
      * 수정할 때 사용
      */
-    @GetMapping("/{reviewId}")
+    @GetMapping("/reservations/{reservationId}")
     public ResponseEntity<ApiResponse<ReviewDetailResponse>> getReviewDetail(
-            @PathVariable Long reviewId){
+            @PathVariable Long reservationId,
+            HttpSession session
+    ){
+        log.info("리뷰 상세 조회 - reservationId: {}", reservationId);
+        Long userId = (Long) session.getAttribute("userId");
+        log.info("현재 사용자 - userId: {}", userId);
 
-        ReviewDetailResponse reviewDetailResponse = reviewService.getReviewDetail(reviewId);
+
+        ReviewDetailResponse reviewDetailResponse = reviewService.getReviewDetail(reservationId);
         return ResponseEntity.ok().body(ApiResponse.success("리뷰 상세 조회 성공", reviewDetailResponse));
     }
 
@@ -111,7 +122,7 @@ public class ReviewController {
      * @param sortBy 정렬 기준 (latest: 최신순, rating_desc: 별점높은순, rating_asc: 별점낮은순, 기본값: latest)
      * @return 페이징된 리뷰 목록
      */
-    @GetMapping("/stay/{stayId}/paging")
+    @GetMapping("/stays/{stayId}/paging")
     public ResponseEntity<ReviewPageResponse<?>> getReviewsWithPaging(
             @PathVariable Long stayId,
             @RequestParam(required = false) Long roomId,
@@ -126,11 +137,19 @@ public class ReviewController {
         return ResponseEntity.ok().body(reviewsPage);
     }
 
+    /**
+     * 리뷰 이미지 목록 조회
+     */
+    @GetMapping("/{stayId}/review-images")
+    public ResponseEntity<List<String>> getReviewImages(@PathVariable Long stayId) {
+        List<String> imageUrls = reviewService.getReviewImagesUrl(stayId);
+        return ResponseEntity.ok(imageUrls);
+    }
+
 
     /**
      * ai 리뷰 요약
      * 최근 10개 이상 리뷰 요약 or 최대 50개 이내 리뷰 요약
      */
-
 
 }

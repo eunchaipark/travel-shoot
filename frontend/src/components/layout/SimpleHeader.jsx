@@ -61,6 +61,12 @@ const SimpleHeader = () => {
         }
     };
 
+    const handleSearchClick = () => {
+        if (suggestions.length > 0) {
+            setShowSuggestions(true);
+        }
+    };
+
     // 자동완성 항목 선택 → /search로 이동
     const handleSuggestionClick = (suggestion) => {
         // 기본 날짜 설정 (내일 ~ 모레)
@@ -99,6 +105,32 @@ const SimpleHeader = () => {
         }
     };
 
+    const handleSearchSubmit = () => {
+        if (!searchValue.trim()) {
+            alert('검색어를 입력해주세요.');
+            return;
+        }
+
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const checkIn = tomorrow.toISOString().split('T')[0];
+
+        const dayAfter = new Date();
+        dayAfter.setDate(dayAfter.getDate() + 3);
+        const checkOut = dayAfter.toISOString().split('T')[0];
+
+        const params = new URLSearchParams({
+            checkIn,
+            checkOut,
+            adults: 2,
+            children: 0,
+            region: searchValue
+        });
+
+        navigate(`/search?${params.toString()}`);
+    };
+
+
     return (
         <>
             {/* Font Awesome CSS */}
@@ -127,12 +159,14 @@ const SimpleHeader = () => {
                                         value={searchValue}
                                         onChange={handleSearchChange}
                                         onFocus={handleSearchFocus}
+                                        onClick={handleSearchClick}
                                     />
 
                                     {/* 드롭다운 suggestions */}
                                     <div
                                         ref={suggestionsRef}
-                                        className={`dropdown-suggestions ${showSuggestions && suggestions.length > 0 ? 'show' : ''}`}
+                                        // className={`dropdown-suggestions ${showSuggestions && suggestions.length > 0 ? 'show' : ''}`}
+                                        className={`dropdown-suggestions ${showSuggestions && suggestions.length > 0 ? '' : 'd-none'}`}
                                     >
                                         {suggestions.map((suggestion, index) => (
                                             <button
@@ -152,7 +186,7 @@ const SimpleHeader = () => {
                                 </div>
                             </div>
                             <div className="col-md-3 d-flex justify-content-between col-3 px-0">
-                                <button className="icon-button">
+                                <button className="icon-button" onClick={handleSearchSubmit}>
                                     <div className="search-icon"></div>
                                 </button>
                                 <div className="col-auto h-100 d-flex">
