@@ -1,14 +1,27 @@
 import React from 'react';
 import { getStayType } from '@/utils/formatters';
+import { useNavigate } from "react-router-dom";
 
 const MapContent = ({ mapRef, kakaoLoaded, selectedLocation }) => {
+    const navigate = useNavigate();
+    console.log(selectedLocation);
     return (
         <div className="flex-1 relative">
             <div ref={mapRef} className="w-full h-full" style={{minHeight: '400px'}} />
 
             {/* 선택된 위치 카드 */}
             {selectedLocation && (
-                <div className="map-card-overlay">
+                <div
+                    className="map-card-overlay"
+                    onClick={() => {
+                        if (selectedLocation.placeType === "stay") {
+                            navigate(`/stays/${selectedLocation?.id}`);
+                        }
+                    }}
+                    style={{
+                        cursor: selectedLocation.placeType === "stay" ? "pointer" : "default"
+                    }}
+                >
                     <div className={`${selectedLocation.placeType}-card card card-custom`}>
                         <div className="d-flex align-items-center h-100">
                             {selectedLocation.placeType === "stay" ? (
