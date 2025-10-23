@@ -5,6 +5,7 @@ import com.quadrant.travelshoot.domains.stay.dto.response.RoomFilterDto;
 import com.quadrant.travelshoot.domains.stay.dto.response.StayRatingResponse;
 import com.quadrant.travelshoot.domains.stay.service.BudgetFriendlyService;
 import com.quadrant.travelshoot.domains.stay.dto.response.StayDetailResponse;
+import com.quadrant.travelshoot.domains.stay.service.StayService;
 import com.quadrant.travelshoot.domains.stay.service.impl.StayServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ import java.util.List;
 public class StayBudgetController {
 
     private final BudgetFriendlyService budgetFriendlyService;
-
+    private final StayService stayService;
     /**
      * 숙소 상세 조회
      */

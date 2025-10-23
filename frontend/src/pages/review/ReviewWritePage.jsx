@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import "../../assets/css/review-regist.css";
+import "@/assets/css/review-regist.css";
 import ReviewWriteHeader from "@/components/review/ReviewWriteHeader";
 import ReviewRatingSection from "@/components/review/ReviewRatingSection";
-import PhotoUploadSection from '../../components/review/PhotoUploadSection';
-import { useParams } from 'react-router-dom';
-import ReviewReservationSection from '../../components/review/ReviewReservationSection';
-import { createReview, updateReview } from '../../services/review/reviewApiService';
+import PhotoUploadSection from '@/components/review/PhotoUploadSection';
+import { useNavigate, useParams } from 'react-router-dom';
+import ReviewReservationSection from '@/components/review/ReviewReservationSection';
+import { createReview, updateReview } from '@/services/review/reviewApiService';
 
 // 세부 평점 카테고리
 const detailCategories = [
@@ -17,8 +17,10 @@ const detailCategories = [
     { key: 'valueRating', label: '가성비' },
 ];
 
+
 const ReviewWritePage = () => {
 
+    const navigate = useNavigate();
     const {reservationId} = useParams();
 
     const initialRatings = detailCategories.reduce((acc, cat) => ({ ...acc, [cat.key]: 0 }), { totalRating: 0 });
@@ -83,19 +85,24 @@ const ReviewWritePage = () => {
         const fetchReviewData = async () => {
             try {
                 // 예약번호를 기반으로 리뷰 조회 API 호출
+                const API_BASE_URL = "http://localhost:8080/api";
                 const response = await fetch(`${API_BASE_URL}/reviews/reservations/${reservationId}`);
                 
                 if (response.ok) {
                     const result = await response.json();
+                    console.log("response ok 예약내역 조회");
+                    
                     
                     if (result.success && result.data) {
                         const data = result.data;
 
-                        console.log("예약 + 리뷰 데이터: ", data);
+                        console.log("예약 데이터: ", data);
                         // 예약 정보 설정
                         setReservationInfo(data.reservationInfoDto);
 
                         if(data.reviewId){
+                        console.log("예약 + 리뷰 데이터: ", data);
+
                             setIsEditMode(true);
                             setReviewId(data.reviewId);
 
@@ -173,15 +180,15 @@ const ReviewWritePage = () => {
                 if(isEditMode){
                     const res = await updateReview(reviewId, formData);
                     console.log('리뷰 수정 성공:', res?.data);
-                    alert('리뷰가 수정되었습니다. 🥰');
+                    alert('리뷰가 수정되었습니다.');
                 }else{
                     const res = await createReview(formData);
                     console.log('리뷰 등록 성공:', res?.data);
-                    alert('리뷰가 등록되었습니다. 🥰');
+                    alert('리뷰가 등록되었습니다.');
                 }
 
-                 // 성공 후 페이지 이동 : 리뷰 목록 페이지 or 나의 리뷰 페이지
-                // navigate('/reviews'); 
+                 // 성공 후 페이지 이동
+                navigate('/'); 
                 
             } catch (error) {
                 console.error(`리뷰 ${isEditMode ? '수정' : '등록'} 실패:`, error);
@@ -195,7 +202,7 @@ const ReviewWritePage = () => {
 
      // 취소 버튼 핸들러
     const handleCancel = () => {
-        if (window.confirm('작성 중인 내용이 사라집니다. 정말 취소하시겠습니까?')) {
+        if (window.confirm('정말 취소하시겠습니까?')) {
             navigate(-1);
         }
     };

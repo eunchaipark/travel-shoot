@@ -1,5 +1,4 @@
 import React from "react";
-import "../../assets/css/review-list.css"; 
 
 
 const ReviewFilter = ({ selected, onSelect }) => {

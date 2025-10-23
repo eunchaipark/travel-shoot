@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { formatNumber } from "../../../utils/stay/StayDetailUtils";
+import { formatNumber } from "@/utils/stay/StayDetailUtils";
 import { useNavigate } from "react-router-dom";
 
 const RoomSelectionCard = ({ searchParams, rooms }) => {
@@ -16,12 +16,16 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
 
     const handleReservation = (roomId) => {
         console.log(`예약 페이지로 이동: roomId:${roomId}`);
-        navigate(`/reservation/payment?stayId=${stayId}&checkIn=${checkIn}&checkOut=${checkOut}&adults=${adults}&children=${children}`);
+        const totalCount = Number(adults) + Number(children);
+        console.log(totalCount);
+        
+        navigate(`/reservation/payment?roomId=${roomId}&checkInDate=${checkIn}&checkOutDate=${checkOut}&guestCount=${totalCount}`);
     };
 
 
     return (
         <div className="col-lg-8 col-sm-12 mb-4">
+            {rooms ? 
             <div className="card card-section-border">
                 <div className="card-body px-4 py-4">
                     <h5 className="card-title ms-2 mt-1 mb-4 fw-bold">객실 선택</h5>
@@ -31,7 +35,7 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
                             <div className="row align-items-stretch">
                                 <div className="col-lg-4 col-md-4 mb-3 mb-md-0">
                                     <img
-                                        src="../../../public/images/product/placeholder-room.png"
+                                        src="@/../public/images/product/placeholder-room.png"
                                         alt="슈페리어 더블룸"
                                         className="img-fluid rounded room-image w-100 align-self-stretch" />
                                 </div>
@@ -43,20 +47,20 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
                                         </div>
                                         {room.singleBedCount!==0&&
                                         <div className="mb-1">
-                                            <i class="fa-solid fa-bed me-1"></i> 싱글 {room.singleBedCount}개
+                                            <i className="fa-solid fa-bed me-1"></i> 싱글 {room.singleBedCount}개
                                         </div>}
                                         {room.doubleBedCount!==0&&
                                         <div className="mb-1">
-                                            <i class="fa-solid fa-bed me-1"></i> 더블 {room.doubleBedCount}개
+                                            <i className="fa-solid fa-bed me-1"></i> 더블 {room.doubleBedCount}개
                                         </div>}
                                         {room.queenBedCount!==0&&
                                         <div className="mb-1">
-                                            <i class="fa-solid fa-bed me-1"></i> 퀸 {room.queenBedCount}개
+                                            <i className="fa-solid fa-bed me-1"></i> 퀸 {room.queenBedCount}개
                                         </div>}
                                         {room.kingBedCount!==0&&
                                         <div className="mb-1">
                                             {/* <img src="../img/product/icon-queen-bed.svg" className="me-1" /> 퀸 {room.kingBedCount}개 */}
-                                            <i class="fa-solid fa-bed me-1"></i> 킹 {room.kingBedCount}개
+                                            <i className="fa-solid fa-bed me-1"></i> 킹 {room.kingBedCount}개
                                         </div>}
 
 
@@ -71,7 +75,7 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
 
                                 <div className="col-lg-4 col-md-5 text-md-end text-sm-end mt-md-5">
                                     <div className="room-details text-muted font-12 fw-bold mb-2 dark-gray d-flex justify-content-end">
-                                        체크인 {room.checkInTime.substring(-5, 5)} ~ 체크아웃 {room.checkOutTime.substring(-5, 5)}
+                                        체크인 {room.checkInTime.slice(0, 5)} ~ 체크아웃 {room.checkOutTime.slice(0, 5)}
                                     </div>
                                     <div className="text-muted small d-flex justify-content-end">
                                         <div className="me-2">
@@ -102,9 +106,9 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
                         </div>
                     ))}
                 </div>
-            </div>
+            </div> : <div>객실 정보를 불러오는 중...</div> }
         </div>
-    )
+    );
 }
 
 export default RoomSelectionCard;

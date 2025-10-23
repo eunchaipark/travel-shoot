@@ -20,7 +20,7 @@ const handleResponse = async (response) => {
  */
 export const getStayDetail = async (stayId) => {
     try {
-        const response = await fetch(`${window.API_BASE_URL}/stays/${stayId}`, {
+        const response = await fetch(`${API_BASE_URL}/stays/${stayId}`, {
             method: 'GET',
         });
         return await handleResponse(response);

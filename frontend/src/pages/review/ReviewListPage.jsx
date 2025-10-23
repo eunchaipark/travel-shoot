@@ -4,14 +4,14 @@ import ReviewFilter from "@/components/review/ReviewFilter";
 import ReviewHeader from "@/components/review/ReviewHeader";
 import ReviewPhotoList from "@/components/review/ReviewPhotoList";
 import ReviewAvgRating from "@/components/review/ReviewAvgRating";
-import "../../assets/css/review-list.css";
+import "@/assets/css/review-list.css";
 import { useParams } from "react-router-dom";
 import {
     getRoomFilters,
     getStayRating,
     getReviews,
     getReviewImages,
-} from "../../services/review/reviewApiService";
+} from "@/services/review/reviewApiService";
 
 const sortOptions = [
     { option: "최신 순", value: "latest" },
@@ -34,17 +34,36 @@ const ReviewListPage = () => {
     const [roomFilter, setRoomFilter] = useState("객실 전체");
     const selectedRoomId = rooms.find(room => room.roomName === roomFilter)?.roomId;
 
+    const fetchReviews = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const reviewData = await getReviews(stayId, {
+                roomId: selectedRoomId,
+                page: 0,
+                size: 100,
+                sortBy: sortFilter,
+            });
+
+            // API 응답 구조
+            const reviewList = reviewData.content || reviewData;
+            setReviews(Array.isArray(reviewList) ? reviewList : []);
+            
+        } catch (err) {
+            console.error("리뷰 로드 실패:", err);
+            setError(err.message);
+            setReviews([]);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     // 숙박시설 평점 및 객실 목록 조회
     useEffect(() => {
         const fetchInitialData = async () => {
             setLoading(true);
             setError(null);
             try {
-                // 병렬로 두 API 호출
-                // const [ratingData, roomsData] = await Promise.all([
-                //     getStayRating(stayId),
-                //     getRoomFilters(stayId),
-                // ]);
 
                 const [ratingData, roomsData, imagesData] = await Promise.all([
                     getStayRating(stayId),
@@ -64,36 +83,13 @@ const ReviewListPage = () => {
         };
         if (stayId) {
             fetchInitialData();
+            // fetchReviews();
         }
     }, [stayId]);
 
 
     // 리뷰 목록 조회 (정렬 필터 변경시)
     useEffect(() => {
-        const fetchReviews = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const reviewData = await getReviews(stayId, {
-                    roomId: selectedRoomId,
-                    page: 0,
-                    size: 10,
-                    sortBy: sortFilter,
-                });
-
-                // API 응답 구조
-                const reviewList = reviewData.content || reviewData;
-                setReviews(Array.isArray(reviewList) ? reviewList : []);
-                
-            } catch (err) {
-                console.error("리뷰 로드 실패:", err);
-                setError(err.message);
-                setReviews([]);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         if (stayId) {
             fetchReviews();
         }

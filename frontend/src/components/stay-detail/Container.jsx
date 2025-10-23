@@ -32,7 +32,7 @@ const Container = ({data, searchParams}) => {
                     <InformationCard information={data.description} />
                 </div>
                 <div className="col-lg-4">
-                    <AIReviewSummaryCard stayId={data.stayId} score={data.averageRating} review={data.overallSummary} totalReview={data.reviewCount}/>
+                    <AIReviewSummaryCard stayId={data.stayId} score={data.averageRating} reviewCount={data.reviewCount}/>
                     <HotelMapCard longitude={data.longitude} latitude={data.latitude} address={data.address}/>
                 </div>
                 <RoomSelectionCard searchParams={searchParams} rooms={data.rooms} />

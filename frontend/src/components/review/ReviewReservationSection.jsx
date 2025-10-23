@@ -10,7 +10,8 @@ const ReviewReservationSection = ({reservationInfo}) => {
         totalNights,
         guestCount,
         checkInTime,
-        checkOutTime
+        checkOutTime,
+        roomName
     } = reservationInfo;
 
     return (
@@ -34,7 +35,7 @@ const ReviewReservationSection = ({reservationInfo}) => {
                             </div>
                             <div className="booking-item">
                                 <i className="fas fa-users booking-icon users-icon"></i>
-                                <span className="booking-text">성인 {guestCount}명 · 객실 1개</span>
+                                <span className="booking-text">성인 {guestCount}명 · {roomName}</span>
                             </div>
                             <div className="booking-item">
                                 <i className="fas fa-clock booking-icon clock-icon"></i>

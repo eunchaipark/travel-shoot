@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import Header from "../../components/stay-detail/Header";
-import MainContent from "../../components/stay-detail/MainContent";
-import PhotoModal from '../../components/stay-detail/modal/PhotoModal';
-import "../../assets/css/stay-detail.css";
+import MainContent from "@/components/stay-detail/MainContent";
+import PhotoModal from '@/components/stay-detail/modal/PhotoModal';
+import "@/assets/css/stay-detail.css";
 import { useParams, useSearchParams } from "react-router-dom";
-import { getStayDetail } from "../../services/stay-detail/stayDetailApiService";
+import { getStayDetail } from "@/services/stay-detail/stayDetailApiService";
+import Header from '@/components/layout/Header';
 
 const StayDetailPage = () => {
 

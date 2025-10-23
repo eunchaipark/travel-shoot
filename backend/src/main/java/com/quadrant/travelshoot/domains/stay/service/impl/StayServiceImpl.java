@@ -59,9 +59,6 @@ public class StayServiceImpl implements StayService {
         // 리뷰 개수 reviewCount
         stay.setReviewCount(reviewService.countReview(stayId));
 
-        // 숙소 평균평점 averageRating 저장
-        stay.updateAverageRating(reviewService.getStayAverageRating(stayId)); // 엔티티 갱신
-
         // 편의시설 조회
         List<StayAmenity> stayAmenities = stayAmenityService.findByStayId(stayId);
         // 모든 이미지 조회

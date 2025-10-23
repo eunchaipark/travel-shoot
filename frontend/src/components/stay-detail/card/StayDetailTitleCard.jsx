@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { formatNumber } from "../../../utils/stay/StayDetailUtils";
+import { formatNumber } from "@/utils/stay/StayDetailUtils";
 // import Lottie from "lottie-react";
-import animation from "../../../utils/stay/effect/ClickEffect.json";
+import animation from "@/utils/stay/effect/ClickEffect.json";
 
 const StayDetailTitleCard = ({ hotelName, address, price, like }) => {
     const [isLike, setIsLike] = useState(false);
@@ -34,7 +34,6 @@ const StayDetailTitleCard = ({ hotelName, address, price, like }) => {
                     </div>
                     <div className="price-section">
                         <div className="price-label">1박 평균</div>
-                        {/* formatNumber 함수는 src/common/function.js에 정의되어있음 3자리마다 , 찍어주는 함수임 */}
                         <div className="price-amount">₩ {formatNumber(price)}</div>
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import "../../assets/css/review-list.css";
+import "@/assets/css/review-list.css";
 
 const ReviewAvgRating = ({stayRating}) => {
   const categories = stayRating ? [

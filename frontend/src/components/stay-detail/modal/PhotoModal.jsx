@@ -26,7 +26,7 @@ const PhotoModal = ({imgs}) => {
                   <div className="modal-thumbnails-flex-wrapper">
                     {
                       imgs.map((img, i) => (
-                        <img src={img}
+                        <img key={i} src={img}
                           alt={`썸네일${i}`} className={"modal-gallery-thumbnail-image"+(mainImg===img?" active":"")}
                           onClick={()=>changeMainImage(i)} />
                       ))

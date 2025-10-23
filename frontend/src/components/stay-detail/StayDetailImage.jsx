@@ -15,7 +15,7 @@ const HotelGallery = ({ imgs }) => {
                             }
                             if (i === 3) {
                                 return (
-                                    <div className="col-6 position-relative gallery-trigger" data-bs-toggle="modal"
+                                    <div key={i} className="col-6 position-relative gallery-trigger" data-bs-toggle="modal"
                                         data-bs-target="#galleryModal" data-index="4">
                                         <img src={imgs[i+1]} alt={'img'+i+1}
                                             className="img-fluid rounded w-100" style={{ height: 145, objectFit: 'cover' }} />

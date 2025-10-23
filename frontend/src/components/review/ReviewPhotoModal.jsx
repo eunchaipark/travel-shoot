@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../../assets/css/review-list.css"; // 기존 스타일 유지
+import "@/assets/css/review-list.css"; // 기존 스타일 유지
 
 const ReviewPhotoModal = ({images, selectedIndex}) => {
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { formatDateTime } from "../../utils/review/reviewUtils";
+import { formatDateTime } from "@/utils/review/reviewUtils";
 
 
 
