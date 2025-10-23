@@ -10,6 +10,7 @@ import { fetchCalendarCourses } from "@/services/main/calendarApiService";
 
 // Layout Components
 import SimpleHeader from "@/components/layout/SimpleHeader";
+import Footer from "@/components/layout/Footer";
 
 // Hooks
 import {
@@ -42,7 +43,7 @@ import "@/assets/css/recommend-stay.css";
 import "@/assets/css/trending-section.css";
 import "@/assets/css/budget-friendly.css";
 import "@/assets/css/travel-now.css";
-import "@/assets/css/map.css";
+// import "@/assets/css/map.css";
 
 const MainPage = () => {
   const calendarRef = useRef(null);
@@ -683,6 +684,7 @@ const MainPage = () => {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 };

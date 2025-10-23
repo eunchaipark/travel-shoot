@@ -143,6 +143,10 @@
     font-size: 1.25rem;
 }
 
+.product-detail-container  .map-card.card .map-container .w-full.h-full {
+    min-height: 257px !important;
+}
+
 @media (min-width: 768px) {
     .product-detail-container .room-card .col-md-4 { flex: 0 0 33%; max-width: 33%; }
     .product-detail-container .room-card .col-md-3 { flex: 0 0 25%; max-width: 25%; }
