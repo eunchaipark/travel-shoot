@@ -2,10 +2,6 @@
    메인 페이지 기본 레이아웃
    ========================================================================== */
 
-.main-page {
-  padding-top: 0px;
-}
-
 .main-page .calendar-section-wrapper {
   background: linear-gradient(90deg, #02b8eb 0%, #3ea3f0 100%);
   min-height: 715px;
