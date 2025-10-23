@@ -13,7 +13,7 @@ function PaymentCompletePage() {
     return(
         <>
             <CompleteHeader />
-            <div>
+            <main>
                 <div className="complete-page">
                     <div className="complete-card">
                         <div className="complete-text">
@@ -31,7 +31,7 @@ function PaymentCompletePage() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </main>
 
         </>
     );

@@ -412,7 +412,7 @@ export default function SearchResultPage() {
     return (
         <>
             <Header />
-        <div className="container staylist-page">
+        <main className="container staylist-page">
             <div className="staylist-layout">
                 {/* ========== 왼쪽 필터 사이드바 ========== */}
                 <div className="filter-sidebar">
@@ -875,7 +875,7 @@ export default function SearchResultPage() {
                     </button>
                 </div>
             </div>
-        </div>
+        </main>
 
 
         {/* 지도 모달 */}

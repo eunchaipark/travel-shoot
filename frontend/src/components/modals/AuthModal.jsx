@@ -115,6 +115,21 @@ const AuthModal = ({ isOpen, onClose }) => {
         return () => clearInterval(interval);
     }, [isResetTimerActive, resetTimer]);
 
+    // 모달이 열릴 때 body 스크롤 방지
+        useEffect(() => {
+            if (isLoginModalOpen) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+
+            // 컴포넌트 언마운트 시 원래대로 복구
+            return () => {
+                document.body.style.overflow = '';
+            };
+        }, [isLoginModalOpen]);
+
+
     const formatTimer = (seconds) => {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
@@ -376,7 +391,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     if (!isLoginModalOpen) return null;
 
     return (
-        <div className={`login-page ${isLoginModalOpen ? 'show' : ''}`} onClick={handleClose}>
+        <div className={`login-page ${isLoginModalOpen ? 'show' : ''}`}>
             <div className="login-box" onClick={(e) => e.stopPropagation()}>
                 <button className="close-btn" onClick={handleClose}>
                     <img className="login-icons" src="/images/common/modal-close-icon.svg" alt="닫기" />

@@ -12,7 +12,7 @@ export const useSession = () => {
         queryFn: async () => {
             console.log('세션 체크 API 호출 시작');
 
-            const response = await fetch('http://localhost:8080/api/auth/session', {
+            const response = await fetch(`${window.API_BASE_URL}/api/auth/session`, {
                 credentials: 'include',
                 cache: 'no-store'
             });
@@ -38,7 +38,7 @@ export const useSession = () => {
         gcTime: 35 * 60 * 1000,
         retry: false,
         refetchOnWindowFocus: true,
-        refetchOnMount: 'always',  // false → 'always' 변경 (새로고침 시 항상 체크)
+        refetchOnMount: 'always',
         refetchInterval: 20 * 60 * 1000,
         initialData: null,
     });
@@ -65,7 +65,7 @@ export const useSession = () => {
                 console.log('세션 만료 감지 → 백엔드 cleanup');
 
                 try {
-                    await fetch('http://localhost:8080/api/auth/logout', {
+                    await fetch(`${window.API_BASE_URL}/api/auth/logout`, {
                         method: 'POST',
                         credentials: 'include'
                     });
