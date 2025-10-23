@@ -10,6 +10,13 @@ export const useKakaoMap = (isOpen, locationData = [], stayData = null) => {
     const kakaoMapRef = useRef(null);
     const overlaysRef = useRef([]); // 오버레이 관리
     const clickHandlerRef = useRef(null); // 이벤트 핸들러 관리
+    const activeIndexRef = useRef(null);
+    const zoomListenerRef = useRef(null); // zoom 이벤트 리스너 관리
+    const dragEndListenerRef = useRef(null);
+    const centerChangedListenerRef = useRef(null);
+    useEffect(() => {
+        activeIndexRef.current = activeIndex;
+    }, [activeIndex]);
 
     // Kakao Maps SDK 동적 로드
     useEffect(() => {
@@ -59,7 +66,47 @@ export const useKakaoMap = (isOpen, locationData = [], stayData = null) => {
         };
     }, [kakaoLoaded, isOpen, locationData, stayData]);
 
+    useEffect(() => {
+        if (!kakaoLoaded) return;
+        updateActiveMarker();
+    }, [activeIndex, kakaoLoaded]);
+
+    // active 마커 업데이트 함수 (중복 제거)
+    const updateActiveMarker = () => {
+        // 모든 active 제거
+        document.querySelectorAll('.tag-content').forEach(el => {
+            el.classList.remove('active');
+        });
+
+        // activeIndexRef.current에 해당하는 마커만 active 추가
+        if (activeIndexRef.current !== null) {
+            const markerContainer = document.querySelector(`[data-location-index="${activeIndexRef.current}"]`);
+            if (markerContainer) {
+                const targetMarker = markerContainer.querySelector('.tag-content');
+                if (targetMarker) {
+                    targetMarker.classList.add('active');
+                }
+            }
+        }
+    };
+
     const cleanup = () => {
+        // Kakao zoom 이벤트 리스너 제거
+        if (zoomListenerRef.current && kakaoMapRef.current) {
+            window.kakao.maps.event.removeListener(kakaoMapRef.current, 'zoom_changed', zoomListenerRef.current);
+            zoomListenerRef.current = null;
+        }
+
+        if (dragEndListenerRef.current) {
+            window.kakao.maps.event.removeListener(kakaoMapRef.current, 'dragend', dragEndListenerRef.current);
+            dragEndListenerRef.current = null;
+        }
+
+        if (centerChangedListenerRef.current) {
+            window.kakao.maps.event.removeListener(kakaoMapRef.current, 'center_changed', centerChangedListenerRef.current);
+            centerChangedListenerRef.current = null;
+        }
+
         // 기존 오버레이 제거
         overlaysRef.current.forEach(overlay => {
             if (overlay && overlay.setMap) {
@@ -98,6 +145,16 @@ export const useKakaoMap = (isOpen, locationData = [], stayData = null) => {
         };
 
         kakaoMapRef.current = new kakao.maps.Map(mapRef.current, mapOption);
+
+        // zoom 이벤트 리스너 등록
+        zoomListenerRef.current = updateActiveMarker;
+        kakao.maps.event.addListener(kakaoMapRef.current, 'zoom_changed', zoomListenerRef.current);
+        // 드래그 종료 이벤트 (지도 이동 후)
+        dragEndListenerRef.current = updateActiveMarker;
+        kakao.maps.event.addListener(kakaoMapRef.current, 'dragend', dragEndListenerRef.current);
+        // 중심 좌표 변경 이벤트 (모든 이동 감지)
+        centerChangedListenerRef.current = updateActiveMarker;
+        kakao.maps.event.addListener(kakaoMapRef.current, 'center_changed', centerChangedListenerRef.current);
 
         // 숙소 마커 먼저 생성 (있으면)
         if (stayData && stayData.latitude && stayData.longitude) {
@@ -183,14 +240,6 @@ export const useKakaoMap = (isOpen, locationData = [], stayData = null) => {
             location = locationData[index];
         }
 
-        // 모든 active 제거
-        document.querySelectorAll('.tag-content').forEach(el =>
-            el.classList.remove('active')
-        );
-
-        // 클릭된 요소에만 active 추가
-        tagContent.classList.add('active');
-
         setActiveIndex(index);
         setSelectedLocation(location);
 
@@ -199,6 +248,29 @@ export const useKakaoMap = (isOpen, locationData = [], stayData = null) => {
             location.longitude || location.lng
         );
         kakaoMapRef.current.panTo(moveLatLon);
+    };
+
+    const focusMarker = (stayId) => {
+        if (!kakaoMapRef.current) return;
+
+        console.log('focusMarker 호출 - stayId:', stayId);
+
+        const targetLocation = locationData.find(loc => loc.placeType === 'stay' && loc.id === stayId);
+        if (!targetLocation) {
+            console.error('targetLocation을 못 찾음!');
+            return;
+        }
+
+        const index = locationData.findIndex(loc => loc.id === stayId);
+
+        const moveLatLon = new window.kakao.maps.LatLng(
+            targetLocation.latitude,
+            targetLocation.longitude
+        );
+        kakaoMapRef.current.panTo(moveLatLon);
+
+        setActiveIndex(index);
+        setSelectedLocation(targetLocation);
     };
 
     const setContent = (location, index) => {
@@ -239,6 +311,7 @@ export const useKakaoMap = (isOpen, locationData = [], stayData = null) => {
         kakaoLoaded,
         selectedLocation,
         activeIndex,
-        setSelectedLocation
+        setSelectedLocation,
+        focusMarker
     };
 };

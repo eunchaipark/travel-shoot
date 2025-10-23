@@ -42,6 +42,7 @@ import "@/assets/css/recommend-stay.css";
 import "@/assets/css/trending-section.css";
 import "@/assets/css/budget-friendly.css";
 import "@/assets/css/travel-now.css";
+import "@/assets/css/map.css";
 
 const MainPage = () => {
   const calendarRef = useRef(null);

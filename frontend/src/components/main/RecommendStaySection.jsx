@@ -3,12 +3,13 @@
  * 경로: frontend/src/components/main/RecommendStaySection.jsx
  */
 
-import React, { useEffect, useState } from 'react';
-import { useRecommendStay } from '@/hooks/main/useRecommendStay';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@/components/context/AuthContext';
-import { fetchAIRecommendedStays } from '@/services/main/recommendationApiService';
+import { fetchAIRecommendedStays,fetchRecommendationDetails } from '@/services/main/recommendationApiService';
 import CommonLoading from '@/components/loading/CommonLoading';
 import SurveyModal from "@/components/survey/SurveyModal";
+import MapContent from '@/components/map/MapContent';
+import { useKakaoMap } from '@/hooks/useKakaoMap';
 import {
   formatPrice,
   generateStarRating
@@ -106,26 +107,84 @@ const AccommodationCard = ({ accommodation, onClick }) => {
 // Recommend Stay Section 컴포넌트 (메인)
 // ============================================================================
 const RecommendStaySection = () => {
-  const { handleAccommodationClick } = useRecommendStay();
   const { user, isAuthenticated } = useAuth();
   const [modalOpen, setModalOpen] = useState(false);
   // 상태 관리
   const [accommodations, setAccommodations] = useState([]);
+  const [mapLocations, setMapLocations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [preferredProvince, setPreferredProvince] = useState('제주특별자치도');
+  const { mapRef, kakaoLoaded, selectedLocation, focusMarker } = useKakaoMap(true, mapLocations);
+  const handleAccommodationClick = useCallback((accommodation) => {
+    const stayId = accommodation.id;
+    focusMarker(stayId);
+    document.querySelectorAll('.accommodation-item[data-id]').forEach(card => { card.classList.remove('active'); });
+    const targetCard = document.querySelector(`.accommodation-item[data-id="${stayId}"]`);
+    if (targetCard) { targetCard.classList.add('active');}
+  }, [focusMarker])
 
   // 도/시 단위 추출 함수
   const extractProvince = (location) => {
     if (!location) return '제주특별자치도';
-    
+
     // "제주시 • 제주특별자치도 제주시 노연로 12" → "제주특별자치도 제주시 노연로 12"
     const detailPart = location.split('•')[1]?.trim() || location;
-    
+
     // "제주특별자치도", "강원특별자치도", "서울특별시" 등 추출
     const provinceMatch = detailPart.match(/(.*?특별자치도|.*?특별시|.*?광역시|.*?도)/);
     return provinceMatch ? provinceMatch[1] : detailPart.split(' ')[0];
   };
+
+
+  useEffect(() => {
+    const loadAIRecommendations = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        if (!user || !user.userId) {
+          console.error('로그인이 필요합니다');
+          setError('로그인이 필요합니다');
+          return;
+        }
+
+        console.log('AI 추천 숙소 로딩 시작 - userId:', user.userId);
+
+        // 1️⃣ AI 추천 숙소 가져오기
+        const stays = await fetchAIRecommendedStays(user.userId);
+        console.log('AI 추천 숙소:', stays);
+        setAccommodations(stays);
+
+        // 2️⃣ 숙소 ID 추출
+        const stayIds = stays.map(stay => stay.id);
+        console.log('추출된 숙소 IDs:', stayIds);
+
+        // 3️⃣ 지도용 상세 데이터 가져오기 (stay + 주변 맛집/관광지)
+        if (stayIds.length > 0) {
+          const mapData = await fetchRecommendationDetails(stayIds);
+          console.log('지도용 상세 데이터:', mapData);
+          setMapLocations(mapData);
+        }
+
+        // 4️⃣ 첫 번째 숙소에서 도/시 단위 추출
+        if (stays.length > 0) {
+          const province = extractProvince(stays[0].location);
+          setPreferredProvince(province);
+        }
+
+      } catch (err) {
+        console.error('AI 추천 로딩 실패:', err);
+        setError(err.message || '추천 숙소를 불러오는데 실패했습니다');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (isAuthenticated && user) {
+      loadAIRecommendations();
+    }
+  }, [isAuthenticated, user]);
 
   // AI 추천 숙소 로드
   useEffect(() => {
@@ -133,7 +192,7 @@ const RecommendStaySection = () => {
       try {
         setLoading(true);
         setError(null);
-        
+
         // ✅ user 객체에서 userId 가져오기
         if (!user || !user.userId) {
           console.error('로그인이 필요합니다');
@@ -146,17 +205,17 @@ const RecommendStaySection = () => {
 
         // ✅ user.userId 직접 전달
         const stays = await fetchAIRecommendedStays(user.userId);
-        
+
         console.log('AI 추천 숙소 로딩 완료:', stays);
         setAccommodations(stays);
-        
+
         // ✅ 첫 번째 숙소에서 도/시 단위 추출
         if (stays.length > 0) {
           const province = extractProvince(stays[0].location);
           setPreferredProvince(province);
           console.log('추출된 도/시:', province);
         }
-        
+
       } catch (err) {
         console.error('AI 추천 로딩 실패:', err);
         setError(err.message || '추천 숙소를 불러오는데 실패했습니다');
@@ -203,7 +262,6 @@ const RecommendStaySection = () => {
       <section className="recommend-stay-section">
         <div className="recommend-stay-container">
           <div className="recommend-survey-container">
-            
             <p className='recommend-survey-title'>추천 숙소가 없습니다</p>
             <p className='recommmend-survey-write'>설문조사를 완료하시면 맞춤 숙소를 추천해드립니다</p>
             <button
@@ -254,7 +312,7 @@ const RecommendStaySection = () => {
           <h2 className="section-title">
             <span className="username">{user?.userName || '김여행'}</span>님 스타일의 숙소
           </h2>
-          
+
         </div>
 
         {/* 콘텐츠 래퍼 */}
@@ -273,14 +331,23 @@ const RecommendStaySection = () => {
           </div>
 
           {/* 지도 영역 */}
-          <div className="map-container">
-            <div className="map-placeholder">
-              <i className="fas fa-map-marker-alt map-icon"></i>
-              <p className="map-text">카카오맵 영역</p>
-              <small className="map-subtext">
-                {accommodations.length}개의 추천 숙소 위치가 표시됩니다
-              </small>
-            </div>
+
+
+          <div className="map-page main-map-page">
+              <div className="map-container">
+                {kakaoLoaded ? (
+                    <MapContent
+                        mapRef={mapRef}
+                        kakaoLoaded={kakaoLoaded}
+                        selectedLocation={selectedLocation}
+                    />
+                ) : (
+                    <div className="map-placeholder">
+                      <i className="fas fa-map-marker-alt map-icon"></i>
+                      <p className="map-text">지도 로딩 중...</p>
+                    </div>
+                )}
+              </div>
           </div>
         </div>
       </div>
