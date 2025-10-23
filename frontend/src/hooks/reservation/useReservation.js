@@ -111,6 +111,9 @@ export const useReservation = (roomId, checkInDate, checkOutDate, guestCount, sk
             // 예약 처리
             const result = await reservationApiService.processReservation(reservationData);
 
+            console.log(result.reservationId);
+            // AI 코스 생성 비동기 호출 (결과를 기다리지 않음)
+            reservationApiService.generateAiCourse(result.reservationId, priceData?.totalNights);
             // alert('예약이 완료되었습니다!');
             // navigate(`/reservation/complete/${result.reservationId}`);
 

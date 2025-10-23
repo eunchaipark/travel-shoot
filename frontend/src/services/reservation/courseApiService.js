@@ -13,7 +13,7 @@ export const fetchCourseData = async (reservationId) => {
     );
 
     if (!response.ok) {
-        throw new Error('코스 정보를 불러오는데 실패했습니다.');
+        return null;
     }
 
     return await response.json();
