@@ -52,7 +52,7 @@ export const sendVerificationCode = async (email) => {
  */
 export const verifyCode = async (email, code) => {
     try {
-        const response = await fetch(`/auth/email/verify-code`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/auth/email/verify-code`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
