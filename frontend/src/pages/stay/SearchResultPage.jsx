@@ -2,11 +2,14 @@ import React, { useEffect, useRef, useCallback, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import Header from '@/components/layout/Header';
-import PaymentLoading from "@/components/loading/PaymentLoading";
+import StayListSkeleton from '@/components/loading/StayListSkeleton';
+// import PaymentLoading from "@/components/loading/PaymentLoading";
+import ScrollToTopButton from '@/components/common/ScrollToTopButton';
 import MapModal from '@/components/modals/MapModal';
 
 import '@/assets/css/stay-search.css'
-import '@/assets/css/payment-loading.css'
+import '@/assets/css/stayskeleton-loading.css';
+// import '@/assets/css/payment-loading.css'
 import '@/assets/css/header-calendar.css'
 import '@/assets/css/common.css'
 
@@ -102,7 +105,9 @@ function StayCard({ stay, searchParams  }) {
                         </div>
                         <div className="stay_location">
                             <img className="location_icon" src="/images/common/gray-location-icon.svg" alt="위치" />
-                            {stay.address}
+                            {/*{stay.address}*/}
+                            <span className="stay_location-full">{stay.address}</span>
+                            <span className="stay_location-mobile">{stay.region}</span>
                         </div>
                     </div>
                     <div className="card_options">이용가능한 서비스 / 옵션</div>
@@ -148,6 +153,8 @@ export default function SearchResultPage() {
             name: stay.name,
             lowestPrice: stay.lowestPrice,
             stayType: stay.stayType,
+            address: stay.address,
+            rating: stay.rating || 0,
             placeType: stay.placeType?.toLowerCase() || "stay",
             image: stay.thumbnailImage || ""
         }));
@@ -364,6 +371,11 @@ export default function SearchResultPage() {
         }))
     }
 
+    const handleMobileFilterApply = () => {
+        refetch(); // 필터 변경사항 즉시 반영
+        closeMobileFilter();
+    };
+
     // Intersection Observer
     const handleObserver = useCallback(
         (entries) => {
@@ -429,7 +441,7 @@ export default function SearchResultPage() {
                                 onChange={(e) => handlePriceChange('minPrice', e.target.value)}
                             />
                             <span className="form-guest-range_separator">
-                                <img src="/images/stay/stayslist-line.svg" alt="-" />
+                                <img src="/images/stay/staylist-line.svg" alt="-" />
                             </span>
                             <span className="won-icon">₩</span>
                             <input
@@ -552,7 +564,7 @@ export default function SearchResultPage() {
                                     onChange={(e) => handleGuestChange('minGuests', e.target.value)}
                                 />
                                 <span className="form-guest-range_separator">
-                                    <img src="/images/stay/stayslist-line.svg" alt="-" />
+                                    <img src="/images/stay/staylist-line.svg" alt="-" />
                                 </span>
                                 <img className="filter-person-icon" src="/images/stay/filter-person-icon.svg" alt="인원" />
                                 <input
@@ -612,28 +624,39 @@ export default function SearchResultPage() {
 
                 {/*오른쪽 검색 결과*/}
                 <div className="search-results-section" style={{ position: 'relative', overflow: 'hidden' }}>
-                    {isLoading && (
-                        <PaymentLoading message="숙소 리스트 검색 중..." mode="section" />
-                    )}
+                    {/*{isLoading && (*/}
+                    {/*    <PaymentLoading message="숙소 리스트 검색 중..." mode="section" />*/}
+                    {/*)}*/}
 
-                    {!isLoading && allStays.length === 0 ? (
+                    {isLoading && <StayListSkeleton count={5} />}
+
+                    {!isLoading && allStays.length === 0 && (
                         <div style={{ padding: '40px', textAlign: 'center', background: '#f8f9fa', borderRadius: '8px' }}>
                             검색 조건에 맞는 숙소가 없습니다.
                         </div>
-                    ) : (
-                        <>
-                            {allStays.map((stay) => (
-                                <StayCard key={stay.stayId} stay={stay} searchParams={baseSearchParams} />
-                            ))}
-                        </>
                     )}
 
+                    {!isLoading && allStays.length > 0 && (
+                        <>
+                            {allStays.map((stay) => (
+                                <StayCard
+                                    key={stay.stayId}
+                                    stay={stay}
+                                    searchParams={baseSearchParams}
+                                />
+                            ))}
+
+                            {/* 무한 스크롤 추가 로딩: 스켈레톤 2개 */}
+                            {isFetchingNextPage && <StayListSkeleton count={2} />}
+
+                            <div ref={observerTarget} style={{ height: '20px' }} />
+                        </>
+                    )}
 
                     <div ref={observerTarget} style={{ padding: '40px', textAlign: 'center' }}>
                         {isFetchingNextPage && (
                             <div>
-                                <div>숙소 검색결과</div>
-                                <p>더 불러오는 중...</p>
+                                <div>숙소 불러오는중 ... </div>
                             </div>
                         )}
                         {!hasNextPage && allStays.length > 0 && (
@@ -661,12 +684,12 @@ export default function SearchResultPage() {
             <div className={`mobile-filter-modal ${isMobileFilterOpen ? 'show' : ''}`}>
                 <div className="mobile-filter-header">
                     <button className="mobile-filter-close" onClick={closeMobileFilter}>
-                        <img src="/images/stay/stayfilter-modal-close.svg" alt="닫기" />
+                        <img src="/images/common/modal-close-icon.svg" alt="닫기" />
                     </button>
                     <div className="mobile-filter-title">조건검색</div>
-                    <button className="mobile-filter-home">
-                        <img src="/images/common/payment_home_icon.svg" alt="홈" />
-                    </button>
+                    {/*<button className="mobile-filter-home">*/}
+                    {/*    <img src="/images/common/payment_home_icon.svg" alt="홈" />*/}
+                    {/*</button>*/}
                 </div>
 
                 <div className="mobile-filter-content">
@@ -674,31 +697,27 @@ export default function SearchResultPage() {
                     <div className="filter-section">
                         <div className="mfilter-section_title">1박당 요금</div>
                         <div className="mform-price-range">
-                            <div>
-                                <span className="won-icon">₩</span>
-                                <input
-                                    type="number"
-                                    className="mform-input mform-input--price"
-                                    placeholder="최소금액"
-                                    min="0"
-                                    value={filters.minPrice}
-                                    onChange={(e) => handlePriceChange('minPrice', e.target.value)}
-                                />
-                            </div>
+                            <span className="won-icon">₩</span>
+                            <input
+                                type="number"
+                                className="mform-input mform-input--price"
+                                placeholder="최소금액"
+                                min="0"
+                                value={filters.minPrice}
+                                onChange={(e) => handlePriceChange('minPrice', e.target.value)}
+                            />
                             <span className="mform-guest-range_separator">
-                    <img src="/images/stay/stayslist-line.svg" alt="-" />
-                </span>
-                            <div>
-                                <span className="won-icon">₩</span>
-                                <input
-                                    type="number"
-                                    className="mform-input mform-input--price"
-                                    placeholder="최대금액"
-                                    min="0"
-                                    value={filters.maxPrice}
-                                    onChange={(e) => handlePriceChange('maxPrice', e.target.value)}
-                                />
-                            </div>
+                                <img src="/images/stay/staylist-line.svg" alt="-" />
+                            </span>
+                            <span className="won-icon">₩</span>
+                            <input
+                                type="number"
+                                className="mform-input mform-input--price"
+                                placeholder="최대금액"
+                                min="0"
+                                value={filters.maxPrice}
+                                onChange={(e) => handlePriceChange('maxPrice', e.target.value)}
+                            />
                         </div>
                     </div>
 
@@ -778,33 +797,29 @@ export default function SearchResultPage() {
                         <div className="filter-subsection">
                             <div className="mfilter-subsection_title">수용 인원</div>
                             <div className="mform-guest-range">
-                                <div>
-                                    <img className="mfilter-person-icon" src="/images/stay/filter-person-icon.svg" alt="인원" />
-                                    <input
-                                        type="number"
-                                        className="mform-input mform-input--guest"
-                                        placeholder="최소인원"
-                                        min="1"
-                                        max="20"
-                                        value={filters.minGuests}
-                                        onChange={(e) => handleGuestChange('minGuests', e.target.value)}
-                                    />
-                                </div>
+                                <img className="mfilter-person-icon" src="/images/stay/filter-person-icon.svg" alt="인원" />
+                                <input
+                                    type="number"
+                                    className="mform-input mform-input--guest"
+                                    placeholder="최소인원"
+                                    min="1"
+                                    max="20"
+                                    value={filters.minGuests}
+                                    onChange={(e) => handleGuestChange('minGuests', e.target.value)}
+                                />
                                 <span className="mform-guest-range_separator">
-                        <img src="/images/stay/stayslist-line.svg" alt="-" />
-                    </span>
-                                <div>
-                                    <img className="mfilter-person-icon" src="/images/stay/filter-person-icon.svg" alt="인원" />
-                                    <input
-                                        type="number"
-                                        className="mform-input mform-input--guest"
-                                        placeholder="최대인원"
-                                        min="1"
-                                        max="30"
-                                        value={filters.maxGuests}
-                                        onChange={(e) => handleGuestChange('maxGuests', e.target.value)}
-                                    />
-                                </div>
+                                    <img src="/images/stay/staylist-line.svg" alt="-" />
+                                </span>
+                                <img className="mfilter-person-icon" src="/images/stay/filter-person-icon.svg" alt="인원" />
+                                <input
+                                    type="number"
+                                    className="mform-input mform-input--guest"
+                                    placeholder="최대인원"
+                                    min="1"
+                                    max="30"
+                                    value={filters.maxGuests}
+                                    onChange={(e) => handleGuestChange('maxGuests', e.target.value)}
+                                />
                             </div>
                         </div>
                     </div>
@@ -854,7 +869,8 @@ export default function SearchResultPage() {
                 </div>
 
                 <div className="mobile-filter-bottom">
-                    <button className="mobile-apply-btn" onClick={closeMobileFilter}>
+                    {/*<button className="mobile-apply-btn" onClick={closeMobileFilter}>*/}
+                    <button className="mobile-apply-btn" onClick={handleMobileFilterApply}>
                         필터 적용
                     </button>
                 </div>
@@ -875,7 +891,7 @@ export default function SearchResultPage() {
                 children: baseSearchParams.children
             }}
         />
-
+            <ScrollToTopButton />
         </>
     )
 }

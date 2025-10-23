@@ -115,7 +115,7 @@
 }
 
 .staylist-page .form-guest-range .form-input-guest {
-    width: 90px;
+    width: 55px;
     text-align: center;
 }
 
@@ -221,6 +221,7 @@
     transition: all 0.2s ease;
     min-width: 50px;
     text-align: center;
+    margin-right: 3px;
 }
 
 .staylist-page .filter-sidebar .filter-section .filter-cnt-btn:hover{
@@ -440,6 +441,7 @@
     color: #495057;
     font-weight: 500;
     white-space: nowrap;
+    margin-right: 2px;
 }
 
 .staylist-page .search-results-section .hotel-card .stay_content .card_bottom .check-in-time {
@@ -547,6 +549,14 @@
     display: none;
 }
 
+.staylist-page .stay_location-full {
+    display: inline;
+}
+
+.staylist-page .stay_location-mobile {
+    display: none;
+}
+
 /* 모바일 반응형 추가함 px별로 구분해서 ============================== 반드시 필요한 부분은 아닙니도 !! 0924*/
 @media (max-width: 945px) {
     .staylist-page {
@@ -592,6 +602,15 @@
     .staylist-page .card_bottom .stay_price .price-period {
         font-size: 10px;
     }
+
+    .staylist-page .stay_location-full {
+        display: none;
+    }
+
+    .staylist-page .stay_location-mobile {
+        display: inline;
+    }
+
 }
 
 @media (max-width: 850px) {
@@ -689,6 +708,15 @@
         width: 12px;
         height: 12px;
     }
+
+    .staylist-page .stay_location-full {
+        display: none;
+    }
+
+    .staylist-page .stay_location-mobile {
+        display: inline;
+    }
+
 }
 
 @media (max-width: 750px) {
@@ -742,6 +770,15 @@
     .mobile-floating-buttons {
         display: flex;
     }
+
+    .staylist-page .stay_location-full {
+        display: none;
+    }
+
+    .staylist-page .stay_location-mobile {
+        display: inline;
+    }
+
 }
 
 /* 모바일 버전 ========== 이 아래부터는 반드시 필요한 부분 */
@@ -1021,7 +1058,7 @@
     }
 
     .mobile-filter-modal .mform-input--price {
-        width: 120px;
+        width: 108px;
         text-align: center;
     }
 
@@ -1113,6 +1150,7 @@
         justify-content: space-between;
         gap: 8px;
         margin-bottom: 40px;
+        align-items: center;
     }
 
     .mobile-filter-modal .mform-price-range .won-icon{
@@ -1125,6 +1163,7 @@
         justify-content: space-between;
         gap: 8px;
         margin-bottom: 40px;
+        align-items: center;
     }
     .mobile-filter-modal .mobile-apply-btn {
         width: 50%;
@@ -1147,12 +1186,12 @@
 
     .mobile-filter-modal .mform-guest-range_separator {
         color: #666;
-        padding-top: 5px;
+        padding-top: -2px;
     }
 
     .mobile-filter-modal .mform-guest-range_separator {
         color: #666;
-        padding-top: 5px;
+        padding-top: -2px;
     }
 
     .mobile-filter-modal .filter-section .form-checkbox_input {
@@ -1207,4 +1246,13 @@
         align-items: center;
         font-size: 13px;
     }
+
+    .staylist-page .stay_location-full {
+        display: none;
+    }
+
+    .staylist-page .stay_location-mobile {
+        display: inline;
+    }
+
 }
