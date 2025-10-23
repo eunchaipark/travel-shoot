@@ -80,7 +80,7 @@ const MapContent = ({ mapRef, kakaoLoaded, selectedLocation }) => {
                 <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
                     <div className="text-center">
                         <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent mx-auto mb-4"></div>
-                        <p className="text-gray-600 font-medium">지도를 불러오는 중...</p>
+                        {/*<p className="text-gray-600 font-medium">지도를 불러오는 중...</p>*/}
                     </div>
                 </div>
             )}
