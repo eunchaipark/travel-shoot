@@ -10,7 +10,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: cente
+    justify-content: center;
     z-index: 999;
     transition: all 0.3s ease;
     animation: fadeIn 0.3s ease-in-out;
