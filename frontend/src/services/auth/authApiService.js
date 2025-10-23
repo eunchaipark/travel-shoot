@@ -23,8 +23,11 @@ export const sendVerificationCode = async (email) => {
 
             try {
                 const errorData = await response.json();
-                if (errorData.message) {
-                    errorMessage = errorData.message;
+                // if (errorData.message) {
+                //     errorMessage = errorData.message;
+                // }
+                if (errorData.error?.message) {
+                    errorMessage = errorData.error.message;
                 }
             } catch {
                 const text = await response.text();
@@ -92,7 +95,8 @@ export const signup = async (signupData) => {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            // throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
@@ -126,7 +130,8 @@ export const login = async (loginData) => {
 
             try {
                 const errorData = await response.json();
-                errorMessage = errorData.message || errorMessage;
+                // errorMessage = errorData.message || errorMessage;
+                errorMessage = errorData.error?.message || errorMessage;
             } catch {
                 // JSON 파싱 실패 시 상태 코드에 따른 메시지
                 if (response.status === 401) {
@@ -196,7 +201,8 @@ export const resetPassword = async (resetData) => {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            // throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
