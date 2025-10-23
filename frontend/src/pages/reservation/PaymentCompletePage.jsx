@@ -7,6 +7,9 @@ function PaymentCompletePage() {
 
     const navigate = useNavigate();
 
+    const queryParams = new URLSearchParams(window.location.search);
+    const reservationId = queryParams.get("reservationId");
+
     return(
         <>
             <CompleteHeader />
@@ -21,9 +24,9 @@ function PaymentCompletePage() {
                         </div>
 
                         <div className="complete-page-btn">
-                            <label htmlFor="survey-modal" className="btn1">
+                            <button className="btn1" onClick={() => navigate(`/reservation/detail?reservationId=${reservationId}`)}>
                                예약 상세 조회
-                            </label>
+                            </button>
                             <button className="btn2" onClick={() => navigate("/")}>홈으로</button>
                         </div>
                     </div>

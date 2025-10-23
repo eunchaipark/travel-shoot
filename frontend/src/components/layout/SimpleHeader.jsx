@@ -61,6 +61,12 @@ const SimpleHeader = () => {
         }
     };
 
+    const handleSearchClick = () => {
+        if (suggestions.length > 0) {
+            setShowSuggestions(true);
+        }
+    };
+
     // 자동완성 항목 선택 → /search로 이동
     const handleSuggestionClick = (suggestion) => {
         // 기본 날짜 설정 (내일 ~ 모레)
@@ -127,12 +133,14 @@ const SimpleHeader = () => {
                                         value={searchValue}
                                         onChange={handleSearchChange}
                                         onFocus={handleSearchFocus}
+                                        onClick={handleSearchClick}
                                     />
 
                                     {/* 드롭다운 suggestions */}
                                     <div
                                         ref={suggestionsRef}
-                                        className={`dropdown-suggestions ${showSuggestions && suggestions.length > 0 ? 'show' : ''}`}
+                                        // className={`dropdown-suggestions ${showSuggestions && suggestions.length > 0 ? 'show' : ''}`}
+                                        className={`dropdown-suggestions ${showSuggestions && suggestions.length > 0 ? '' : 'd-none'}`}
                                     >
                                         {suggestions.map((suggestion, index) => (
                                             <button
