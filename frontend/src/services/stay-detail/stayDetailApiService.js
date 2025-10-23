@@ -18,7 +18,7 @@ const handleResponse = async (response) => {
  */
 export const getStayDetail = async (stayId) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/stays/${stayId}`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/stays/${stayId}`, {
             method: 'GET',
         });
         return await handleResponse(response);
@@ -36,7 +36,7 @@ export const getStayDetail = async (stayId) => {
  */
 export const getReviewSummary = async (stayId) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/reviews/ai-summary/${stayId}`, {
+        const response = await fetch(`${WINDOW.API_BASE_URL}/api/reviews/ai-summary/${stayId}`, {
             method: 'GET',
         });
         

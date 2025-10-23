@@ -18,7 +18,7 @@ const handleResponse = async (response) => {
  */
 export const createReview = async (formData) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/reviews`, {
+        const response = await fetch(`${WINDOW.API_BASE_URL}/api/reviews`, {
             method: 'POST',
             body: formData, // Content-Type은 자동으로 multipart/form-data로 설정
             credentials: 'include',
@@ -38,7 +38,7 @@ export const createReview = async (formData) => {
  */
 export const updateReview = async (reviewId, formData) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/reviews/${reviewId}`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/reviews/${reviewId}`, {
             method: 'PUT',
             body: formData,
             credentials: 'include',
@@ -57,7 +57,7 @@ export const updateReview = async (reviewId, formData) => {
  */
 export const deleteReview = async (reviewId) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/reviews/${reviewId}`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/reviews/${reviewId}`, {
             method: 'DELETE',
         });
         
@@ -78,7 +78,7 @@ export const deleteReview = async (reviewId) => {
  */
 export const getReviewDetail = async (reviewId) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/reviews/${reviewId}`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/reviews/${reviewId}`, {
             method: 'GET',
             credentials: 'include',
         });
@@ -118,7 +118,7 @@ export const getReviews = async (stayId, options = {}) => {
         }
 
         const response = await fetch(
-            `${API_BASE_URL}/api/reviews/stays/${stayId}/paging?${params.toString()}`,
+            `${window.API_BASE_URL}/api/reviews/stays/${stayId}/paging?${params.toString()}`,
             { method: 'GET' }
         );
         return await handleResponse(response);
@@ -136,7 +136,7 @@ export const getReviews = async (stayId, options = {}) => {
  */
 export const getRoomFilters = async (stayId) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/stays/${stayId}/rooms`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/stays/${stayId}/rooms`, {
             method: 'GET',
         });
         return await handleResponse(response);
@@ -154,7 +154,7 @@ export const getRoomFilters = async (stayId) => {
  */
 export const getStayRating = async (stayId) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/stays/${stayId}/average-rating`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/stays/${stayId}/average-rating`, {
             method: 'GET',
         });
         return await handleResponse(response);
@@ -171,7 +171,7 @@ export const getStayRating = async (stayId) => {
  */
 export const getReviewImages = async (stayId) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/reviews/${stayId}/review-images`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/reviews/${stayId}/review-images`, {
             method: 'GET',
         });
         return await handleResponse(response);
