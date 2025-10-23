@@ -9,10 +9,8 @@ import StayDetailTitleCard from "./card/StayDetailTitleCard";
 
 const Container = ({data, searchParams}) => {
 
-
     const like = () => {
-        console.log('좋아요 기능입니다.');
-        
+        console.log('좋아요 기능');
     }
 
     return (

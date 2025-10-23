@@ -1,5 +1,3 @@
-// API Base URL 설정
-const API_BASE_URL = "http://localhost:8080/api";
 
 // API 응답 타입 검사 및 에러 처리
 const handleResponse = async (response) => {
@@ -20,7 +18,7 @@ const handleResponse = async (response) => {
  */
 export const getStayDetail = async (stayId) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/stays/${stayId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/stays/${stayId}`, {
             method: 'GET',
         });
         return await handleResponse(response);
@@ -38,7 +36,7 @@ export const getStayDetail = async (stayId) => {
  */
 export const getReviewSummary = async (stayId) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/reviews/ai-summary/${stayId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/reviews/ai-summary/${stayId}`, {
             method: 'GET',
         });
         

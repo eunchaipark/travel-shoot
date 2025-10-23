@@ -69,7 +69,6 @@ function Router() {
         <Route path="/survey" element={<SignupCompletePage />} />
         <Route path="/signup-complete" element={<SignupCompletePage />} />
         <Route path="/search" element={<SearchResultPage />} />
-        {/* <Route path="/stay/:stayId" element={<StayDetailPage/>} /> */}
         <Route path="/reservation/payment" element={<ReservationPaymentPage />} />
         <Route path="/payment-complete" element={<PaymentCompletePage />} />
         <Route path="/mypage" element={<MyPage />} />
