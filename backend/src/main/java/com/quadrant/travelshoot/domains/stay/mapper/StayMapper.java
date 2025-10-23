@@ -2,9 +2,7 @@ package com.quadrant.travelshoot.domains.stay.mapper;
 
 import com.quadrant.travelshoot.domains.common.dto.response.FileUploadResponse;
 import com.quadrant.travelshoot.domains.common.entity.FileUpload;
-import com.quadrant.travelshoot.domains.stay.dto.response.AmenityDto;
-import com.quadrant.travelshoot.domains.stay.dto.response.RoomDto;
-import com.quadrant.travelshoot.domains.stay.dto.response.StayDetailResponse;
+import com.quadrant.travelshoot.domains.stay.dto.response.*;
 import com.quadrant.travelshoot.domains.stay.entity.Amenity;
 import com.quadrant.travelshoot.domains.stay.entity.Room;
 import com.quadrant.travelshoot.domains.stay.entity.Stay;
@@ -57,10 +55,7 @@ public class StayMapper {
         if(stay==null){
             return null;
         }
-
-
-
-        // 4. DTO 변환 및 반환
+        // DTO 변환 및 반환
         return StayDetailResponse.builder()
                 .stayId(stay.getId())
                 .stayName(stay.getName())
@@ -90,6 +85,6 @@ public class StayMapper {
                         .toList())
                 .overallSummary("ai 요약 내용")
                 .build();
-
     }
+
 }

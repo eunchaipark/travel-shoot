@@ -39,11 +39,10 @@ public class StayDetailResponse {
     private Long regionId;
     private BigDecimal minPrice;
 
-    private List<FileUploadResponse> stayImages; // 5장
+    private List<FileUploadResponse> stayImages;
     private List<AmenityDto> amenities;
     private List<RoomDto> rooms;
 
-    // ai 요약 리뷰
     private String overallSummary;
 
 }

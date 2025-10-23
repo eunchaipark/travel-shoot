@@ -16,6 +16,7 @@
     "@fullcalendar/interaction": "^6.1.19",
     "@fullcalendar/react": "^6.1.19",
     "apexcharts": "^4.0.0",
+    "axios": "^1.12.2",
     "bootstrap": "^5.3.7",
     "html2pdf.js": "^0.10.2",
     "qrcode": "^1.5.3",

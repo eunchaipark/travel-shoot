@@ -16,7 +16,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     private final FileUploadRepository fileUploadRepository;
 
-    public List<FileUpload> findAllByReferenceTypeAndReferenceId(String stayType, Long stayId) {
-        return fileUploadRepository.findAllByReferenceTypeAndReferenceId(stayType, stayId);
+    public List<FileUpload> findAllByReferenceTypeAndReferenceId(String referenceType, Long referenceId) {
+        return fileUploadRepository.findAllByReferenceTypeAndReferenceId(referenceType, referenceId);
     }
 }
