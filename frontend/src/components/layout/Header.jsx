@@ -91,6 +91,12 @@ const Header = () => {
         }
     };
 
+    const handleSearchClick = () => {
+        if (suggestions.length > 0) {
+            setShowSuggestions(true);
+        }
+    };
+
     // 자동완성 API 호출
     const handleSearchChange = async (e) => {
         const value = e.target.value;
@@ -255,6 +261,7 @@ const Header = () => {
                                                 value={searchValue}
                                                 onChange={handleSearchChange}
                                                 onFocus={handleSearchFocus}
+                                                onClick={handleSearchClick}
                                             />
                                             {/* 드롭다운 suggestions */}
                                             <div

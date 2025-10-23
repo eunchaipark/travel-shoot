@@ -359,20 +359,49 @@
     font-size: 15px;
 }
 
+.payment-page .section-card .final-payment-info .col-1 {
+    padding-left: 10px;
+}
+
+.payment-page .section-card .final-payment-info .col-1 span {
+    font-size: 14px;
+    color: #666;
+}
+
+.payment-page .section-card .final-payment-info .col-11 {
+    padding-left: 5px;
+}
+
+.payment-page .section-card .final-payment-info .col-11 span {
+    font-size: 14px;
+    color: #666;
+}
+
+.payment-page .section-card .payment-info-dotted-line {
+    border-bottom: 2px dotted #ccc;
+    margin: 16px 0;
+}
+
 /*.payment-page .section-card .payment-line-img{*/
 /*    height: 50px;*/
 /*    margin-left: 5px;*/
 /*    margin-top: 2px;*/
 /*}*/
 
+.payment-page .price-section {
+    padding-top: 0 !important;
+}
+
 .payment-page .price-section .final-price-label {
     font-size: 15px;
     color: #333;
+    font-weight: 600;
 }
 
 .payment-page .price-section .final-price-won {
     font-size: 22.4px;
     color: #F56770;
+    font-weight: 700;
 }
 
 .payment-page .section-card.final-payment-section .payment-btn {

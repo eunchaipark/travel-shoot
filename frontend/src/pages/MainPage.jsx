@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import koLocale from "@fullcalendar/core/locales/ko";
 import { useNavigate } from "react-router-dom";
-// API Service 추가
+
+// API Service
 import { fetchCalendarCourses } from "@/services/main/calendarApiService";
 
 // Layout Components
@@ -45,18 +46,14 @@ import "@/assets/css/map.css";
 
 const MainPage = () => {
   const calendarRef = useRef(null);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [locationValue, setLocationValue] = useState("");
-
-  // 캘린더 이벤트 상태 추가
   const [calendarEvents, setCalendarEvents] = useState([]);
   const [isLoadingEvents, setIsLoadingEvents] = useState(false);
 
-  // 드롭다운 상태
-  const [showDateDropdown, setShowDateDropdown] = useState(false);
-  const [showGuestDropdown, setShowGuestDropdown] = useState(false);
+  //  핵심 수정: 지역은 따로, 날짜/인원은 하나로 통합
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
-  // const [showHeaderDropdown, setShowHeaderDropdown] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null); // 'date' | 'guest' | null
 
   const [suggestions, setSuggestions] = useState([]);
   const locationInputRef = useRef(null);
@@ -77,31 +74,26 @@ const MainPage = () => {
 
   // 드롭다운 위치 관리
   const locationCardRef = useDropdownPosition(showLocationDropdown, "location");
-  const dateCardRef = useDropdownPosition(showDateDropdown, "date");
-  const guestCardRef = useDropdownPosition(showGuestDropdown, "guest");
+  const dateCardRef = useDropdownPosition(activeDropdown === 'date', "date");
+  const guestCardRef = useDropdownPosition(activeDropdown === 'guest', "guest");
 
-  // API에서 캘린더 데이터 가져오기
+  // API에서 캘린더 데이터 가져오기 
   useEffect(() => {
     const loadCalendarEvents = async () => {
-      if (!isAuthenticated) {
+      if (!isAuthenticated || !user) {
         setCalendarEvents([]);
         return;
       }
 
       try {
         setIsLoadingEvents(true);
-
-        // TODO: 실제 로그인한 사용자 ID로 변경
-        const userId = 1;
-
+        const userId = user.userId;
         const reservationData = await fetchCalendarCourses(userId);
         const events = convertToCalendarEvents(reservationData);
         setCalendarEvents(events);
-
         console.log("캘린더 이벤트 로드 성공:", events);
       } catch (error) {
         console.error("캘린더 데이터 로딩 실패, fallback 데이터 사용:", error);
-
         const fallbackEvents = convertToCalendarEvents(RAW_RESERVATION_DATA);
         setCalendarEvents(fallbackEvents);
       } finally {
@@ -110,9 +102,9 @@ const MainPage = () => {
     };
 
     loadCalendarEvents();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user]);
 
-  // 날짜 표시 텍스트
+  // 날짜 표시 텍스트 
   const getDateDisplayText = () => {
     if (selectedDates.checkin && selectedDates.checkout) {
       const checkinText = formatDateKorean(selectedDates.checkin);
@@ -127,14 +119,14 @@ const MainPage = () => {
     return "날짜를 선택해주세요";
   };
 
-  // 달력 날짜 클릭
+  // 달력 날짜 클릭 
   const handleDateClick = (info) => {
     if (dateSelectionMode) {
       handleMainCalendarDateSelection(info.dateStr);
     }
   };
 
-  // 이벤트 클릭
+  // 이벤트 클릭 
   const handleEventClick = (info) => {
     info.jsEvent.preventDefault();
     info.jsEvent.stopPropagation();
@@ -156,7 +148,7 @@ const MainPage = () => {
     }
   };
 
-  // 이벤트 렌더링
+  // 이벤트 렌더링 
   const renderEventContent = (eventInfo) => {
     const event = eventInfo.event;
     const props = event.extendedProps;
@@ -184,7 +176,7 @@ const MainPage = () => {
   };
 
   const navigate = useNavigate();
-  // 검색 처리
+  // 검색 처리 
   const handleSearch = () => {
     if (!selectedDates.checkin || !selectedDates.checkout) {
       alert("체크인/체크아웃 날짜를 선택해주세요.");
@@ -205,7 +197,7 @@ const MainPage = () => {
     console.log("검색 조건:", searchData);
 
     const params = new URLSearchParams({
-      location: locationValue,
+      region: locationValue,
       checkin: selectedDates.checkin,
       checkout: selectedDates.checkout,
       adults: guestCounts.adult,
@@ -227,53 +219,48 @@ const MainPage = () => {
 
   };
 
-  // 모든 드롭다운 닫기
-  const closeAllDropdowns = () => {
-    setShowDateDropdown(false);
-    setShowGuestDropdown(false);
+  //  수정: 모든 드롭다운 닫기 - useCallback 추가
+  const closeAllDropdowns = useCallback(() => {
     setShowLocationDropdown(false);
-  };
+    setActiveDropdown(null);
+  }, []);
 
-  // 날짜 입력 클릭
+  //  수정: 날짜 입력 클릭 - activeDropdown 사용
   const handleDateInputClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    setShowLocationDropdown(false);
-    setShowGuestDropdown(false);
+    setShowLocationDropdown(false); // 지역 닫기
 
-    if (!dateSelectionMode) {
+    if (!dateSelectionMode && activeDropdown !== 'date') {
       activateSelectionMode();
     }
 
-    setShowDateDropdown((prev) => !prev);
+    setActiveDropdown(prev => prev === 'date' ? null : 'date'); // 토글
   };
 
-  // 인원 입력 클릭
+  //  수정: 인원 입력 클릭 - activeDropdown 사용
   const handleGuestInputClick = (e) => {
     e.stopPropagation();
 
-    setShowLocationDropdown(false);
-    setShowDateDropdown(false);
-
-    setShowGuestDropdown((prev) => !prev);
+    setShowLocationDropdown(false); // 지역 닫기
+    setActiveDropdown(prev => prev === 'guest' ? null : 'guest'); // 토글
   };
 
-  // 지역 입력 포커스/입력
+  // 지역 입력 포커스 (원본 로직 유지, 다른 드롭다운 닫기만 추가)
   const handleLocationFocus = () => {
-    setShowDateDropdown(false);
-    setShowGuestDropdown(false);
+    setActiveDropdown(null); // 날짜/인원 닫기
     if (suggestions.length > 0) {
       setShowLocationDropdown(true);
     }
   };
 
+  // 원본 로직 100% 유지: 실제 API 호출
   const handleLocationInput = async (e) => {
     const value = e.target.value;
     setLocationValue(value);
     
-    setShowDateDropdown(false);
-    setShowGuestDropdown(false);
+    setActiveDropdown(null); // 날짜/인원 닫기
     
     if (value.trim().length < 1) {
       setSuggestions([]);
@@ -295,13 +282,13 @@ const MainPage = () => {
     }
   };
 
-  // 지역 선택
+  // 지역 선택 (원본 로직 유지)
   const handleSuggestionSelect = (suggestion) => {
     setLocationValue(suggestion.keyword);
     setShowLocationDropdown(false);
   };
 
-  // TravelNow 카드 클릭 핸들러
+  // TravelNow 카드 클릭 핸들러 (원본 로직 유지)
   const handleTravelNowCardClick = (destination) => {
     setLocationValue(destination.name);
     setShowLocationDropdown(false);
@@ -312,7 +299,7 @@ const MainPage = () => {
     }
   };
 
-  // 외부 클릭 감지
+  // 외부 클릭 핸들러 - 의존성 최소화
   useEffect(() => {
     const handleClickOutside = (e) => {
       const isDateCard = e.target
@@ -329,17 +316,20 @@ const MainPage = () => {
       const isLocationDropdown = e.target.closest(".dropdown-suggestions");
       const isCalendar = e.target.closest("#calendar");
 
-      if (!isDateCard && !isDateDropdown && !isCalendar && showDateDropdown) {
-        setShowDateDropdown(false);
+      // 날짜 드롭다운 닫기
+      if (!isDateCard && !isDateDropdown && !isCalendar && activeDropdown === 'date') {
+        setActiveDropdown(null);
         if (!selectedDates.checkin || !selectedDates.checkout) {
           deactivateSelectionMode();
         }
       }
 
-      if (!isGuestCard && !isGuestDropdown && showGuestDropdown) {
-        setShowGuestDropdown(false);
+      // 인원 드롭다운 닫기
+      if (!isGuestCard && !isGuestDropdown && activeDropdown === 'guest') {
+        setActiveDropdown(null);
       }
 
+      // 지역 드롭다운 닫기
       if (!isLocationCard && !isLocationDropdown && showLocationDropdown) {
         setShowLocationDropdown(false);
       }
@@ -348,13 +338,13 @@ const MainPage = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [
-    showDateDropdown,
-    showGuestDropdown,
+    activeDropdown,
     showLocationDropdown,
     selectedDates,
+    deactivateSelectionMode,
   ]);
 
-  // ESC 키 및 Enter 키 처리
+  // ESC 키 및 Enter 키 처리 
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
@@ -362,28 +352,51 @@ const MainPage = () => {
         deactivateSelectionMode();
       }
 
-      if (
-        e.key === "Enter" &&
-        selectedDates.checkin &&
-        selectedDates.checkout
-      ) {
+      if (e.key === "Enter" && selectedDates.checkin && selectedDates.checkout) {
         handleSearch();
       }
     };
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [selectedDates]);
+  }, [selectedDates, closeAllDropdowns, deactivateSelectionMode, handleSearch]);
 
-  // 체크아웃 선택 완료시 드롭다운 자동 닫기
+  // 체크아웃 선택 완료시 드롭다운 자동 닫기 
   useEffect(() => {
     if (selectedDates.checkin && selectedDates.checkout) {
       setTimeout(() => {
-        setShowDateDropdown(false);
+        setActiveDropdown(null);
         deactivateSelectionMode();
       }, 500);
     }
-  }, [selectedDates]);
+  }, [selectedDates, deactivateSelectionMode]);
+
+  //지역 드롭다운 높이에 따라 다음 카드 밀어내기
+  useEffect(() => {
+    if (showLocationDropdown && locationDropdownRef.current && suggestions.length > 0) {
+      const dropdown = locationDropdownRef.current;
+      const nextCard = locationCardRef.current?.nextElementSibling;
+      
+      if (nextCard && nextCard.classList.contains('search-card')) {
+        // requestAnimationFrame으로 DOM 렌더링 완료 대기
+        requestAnimationFrame(() => {
+          const dropdownHeight = dropdown.offsetHeight;
+          console.log('드롭다운 높이:', dropdownHeight); // 디버깅용
+          
+          if (dropdownHeight > 0) {
+            nextCard.style.marginTop = `${dropdownHeight + 16}px`;
+            nextCard.style.transition = 'margin-top 0.3s ease';
+          }
+        });
+      }
+    } else {
+      // 드롭다운 닫힐 때 margin 제거
+      const nextCard = locationCardRef.current?.nextElementSibling;
+      if (nextCard && nextCard.classList.contains('search-card')) {
+        nextCard.style.marginTop = '';
+      }
+    }
+  }, [showLocationDropdown, suggestions]);
 
   return (
     <>
@@ -510,7 +523,8 @@ const MainPage = () => {
                   />
                 </div>
 
-                <div className={`date-dropdown-container ${showDateDropdown ? 'open' : ''}`}>
+                {/*  activeDropdown 기반 */}
+                <div className={`date-dropdown-container ${activeDropdown === 'date' ? 'open' : ''}`}>
                   <div style={{ padding: "15px" }}>
                     <div
                       className="mini-calendar-container"
@@ -545,7 +559,8 @@ const MainPage = () => {
                   />
                 </div>
 
-                <div className={`guest-dropdown-container ${showGuestDropdown ? 'open' : ''}`}>
+                {/*  수정: activeDropdown 기반 */}
+                <div className={`guest-dropdown-container ${activeDropdown === 'guest' ? 'open' : ''}`}>
                   <div style={{ padding: "20px" }}>
                     {/* 성인 */}
                     <div

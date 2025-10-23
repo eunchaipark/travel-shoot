@@ -7,3 +7,4 @@ tatus
 **/data/
 .env
 /frontend/.vite/
+/node_modules

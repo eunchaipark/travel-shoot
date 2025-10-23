@@ -12,7 +12,7 @@ public interface ReviewService {
     ReviewRegistResponse createReview(Long userId, @Valid ReviewRegistRequest request);
     void deleteReview(Long userId, Long reviewId);
     ReviewRegistResponse updateReview(Long userId, Long reviewId, @Valid ReviewRegistRequest reviewUpdateRequest);
-    ReviewDetailResponse getReviewDetail(Long reviewId);
+    ReviewDetailResponse getReviewDetail(Long reservationId);
     ReviewPageResponse<ReviewListResponse> getReviewsWithPaging(Long stayId, Long roomId, int page, int size, String sortBy);
 
 

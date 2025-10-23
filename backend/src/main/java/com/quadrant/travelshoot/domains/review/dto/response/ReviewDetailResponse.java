@@ -1,5 +1,6 @@
 package com.quadrant.travelshoot.domains.review.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL) // null값 필드는 응답에서 제외
 public class ReviewDetailResponse {
 
     private Long reviewId;

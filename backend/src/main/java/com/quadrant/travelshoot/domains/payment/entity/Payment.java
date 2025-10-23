@@ -25,6 +25,7 @@ public class Payment {
     @Column(name = "reservation_id", nullable = false)
     private Long reservationId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "payment_method", nullable = false)
     private PaymentMethod paymentMethod;
 

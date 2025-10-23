@@ -1,3 +1,4 @@
+// components/modals/MapModal.jsx
 import React from 'react';
 import { useKakaoMap } from '@/hooks/useKakaoMap';
 import MapContent from '@/components/map/MapContent';
