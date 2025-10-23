@@ -16,6 +16,11 @@ body {
 .app-header {
     background: linear-gradient(135deg, #02b8eb 0%, #3ea3f0 100%);
     padding: 7px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000; /* 다른 요소 위에 표시 */
 }
 
 .app-header .location-icon {
@@ -241,7 +246,7 @@ body {
 
 /* 푸터 스타일 */
 .app-footer {
-    background: linear-gradient(135deg, #0e1e61 0%, #0f0044 100%);
+    background-color: #8b8b8b;
     color: white;
     padding: 60px 0;
     margin-top: auto;
@@ -256,12 +261,11 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
 .app-footer .copyright-section {
     text-align: center;
-    padding: 20px 0;
+    padding: 10px 0 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     margin-bottom: 40px;
     font-size: 14px;
@@ -287,7 +291,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -303,7 +306,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -629,6 +631,11 @@ body {
     color: #666;
 }
 
+main {
+    padding-top: 80px;
+    overflow-x: hidden;
+}
+
 main .pay-line-con {
     padding-left: 10px;
 }
@@ -809,7 +816,7 @@ main .pay-line-con .pay-line {
 
     .app-header .container {
         margin: 0 0;
-        width: 100vw; /* 뷰포트 전체 너비 */
+        width: 100%; /* 뷰포트 전체 너비 */
         overflow-x: visible; /* 숨겨진 내용 보이게 */
         max-width: 100%;
     }
