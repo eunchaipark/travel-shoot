@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/components/context/AuthContext';
 import { useReservation } from '@/hooks/reservation/useReservation';
@@ -12,11 +12,8 @@ import PaymentLoading from "@/components/loading/PaymentLoading";
 const ReservationPaymentPage = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const { isAuthenticated, openLoginModal, isLoginModalOpen } = useAuth();
+    const { isAuthenticated } = useAuth();
 
-    const hasCheckedAuth = useRef(false); // 로그인 체크 완료 여부
-    const wasModalOpen = useRef(false);
-    const userCancelled = useRef(false); // confirm 취소 선택
 
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState({ title: '', content: '' });
@@ -27,61 +24,6 @@ const ReservationPaymentPage = () => {
     const checkInDate = searchParams.get('checkInDate') || '2025-10-20';
     const checkOutDate = searchParams.get('checkOutDate') || '2025-10-23';
     const guestCount = parseInt(searchParams.get('guestCount') || '2');
-
-    useEffect(() => {
-        // 이미 한 번 이 페이지에 정상 진입했다면 체크 스킵
-        const hasEnteredPage = sessionStorage.getItem('reservationPageEntered');
-
-        if (hasEnteredPage === 'true') {
-            return; // 새로고침이므로 아무것도 안 함
-        }
-
-        // 이미 체크했으면 스킵
-        if (hasCheckedAuth.current) {
-            return;
-        }
-
-        hasCheckedAuth.current = true; // 체크 완료 표시
-
-        // 로그인이 되어 있으면 페이지 진입 완료 표시하고 리턴
-        if (isAuthenticated) {
-            sessionStorage.setItem('reservationPageEntered', 'true');
-            return;
-        }
-
-        //로그인이 안되어 있으면 confirm 뜨게 하고
-        const goToLogin = window.confirm(
-            '로그인이 필요한 서비스입니다.\n로그인하시겠습니까?'
-        );
-
-        if (goToLogin) {
-            console.log('로그인 모달 열기');
-            const currentUrl = window.location.pathname + window.location.search;
-            sessionStorage.setItem('redirectUrl', currentUrl);
-            openLoginModal();
-            wasModalOpen.current = true;
-        } else {
-            userCancelled.current = true; // confirm  취소 선택함
-            navigate('/stay/1'); //TODO : 숙소 취소하면 이전 페이지로 윤하님
-        }
-    }, [isAuthenticated, openLoginModal, navigate]);
-
-    useEffect(() => {
-        if (userCancelled.current) { //confirm 에서 취소 선택함
-            return;
-        }
-
-        // wasModalOpen이 false면 아예 체크 안 함
-        if (!wasModalOpen.current) {
-            return;
-        }
-
-        // 모달이 닫혔는지만 체크
-        if (!isLoginModalOpen && !isAuthenticated) {
-            console.log('모달 닫힘 + 비로그인 → 숙소 페이지로');
-            navigate('/stay/1'); //TODO : 숙소 상세 페이지 경로 임시 - 윤하님
-        }
-    }, [isLoginModalOpen, isAuthenticated, navigate]);
 
     const { initData, priceData, loading, error, createReservation } = useReservation(
         roomId,
