@@ -18,7 +18,7 @@ const handleResponse = async (response) => {
  */
 export const createReview = async (formData) => {
     try {
-        const response = await fetch(`${WINDOW.API_BASE_URL}/api/reviews`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/reviews`, {
             method: 'POST',
             body: formData, // Content-Type은 자동으로 multipart/form-data로 설정
             credentials: 'include',
