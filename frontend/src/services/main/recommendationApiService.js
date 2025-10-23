@@ -39,6 +39,41 @@ export const fetchAIRecommendedStays = async (userId) => {
   }
 };
 
+// 지도용 상세 데이터 조회 (stay + 주변 맛집/관광지)
+export const fetchRecommendationDetails = async (stayIds) => {
+  try {
+    if (!stayIds || stayIds.length === 0) {
+      throw new Error('숙소 ID가 필요합니다');
+    }
+
+    // 배열을 쉼표로 구분된 문자열로 변환
+    const stayIdsParam = stayIds.join(',');
+    console.log('지도 상세 정보 요청 - stayIds:', stayIdsParam);
+
+    const response = await fetch(
+        `${window.API_BASE_URL}/api/stays/find-recommendations?stayIds=${stayIdsParam}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('지도 상세 정보 백엔드 원본:', data);
+
+    return data; // 이미 placeType이 포함된 형태로 올 거야
+  } catch (error) {
+    console.error('지도 상세 정보 조회 실패:', error);
+    throw error;
+  }
+};
+
 /**
  * 백엔드 데이터를 프론트엔드 형식으로 변환
  */

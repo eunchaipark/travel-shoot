@@ -142,7 +142,7 @@ public class StayAIRecommendationServiceImpl implements StayAIRecommendationServ
                 .collect(Collectors.toList());
             
             log.info("숙소 기반 추천 조회 시작 - 숙소: {}개", selectedIds.size());
-            Map<Long, List<Object>> stayRecommendations = 
+            List<Object> stayRecommendations =
                 stayBasedFindService.findRecommendations(selectedIds, 2, 2);
             log.info("숙소 기반 추천 조회 완료 - 결과: {}개", stayRecommendations.size());
 
