@@ -1,5 +1,6 @@
 package com.quadrant.travelshoot.domains.review.service.impl;
 
+import com.quadrant.travelshoot.domains.ai.service.ReviewAiSummaryService;
 import com.quadrant.travelshoot.domains.common.entity.FileUpload;
 import com.quadrant.travelshoot.domains.common.repository.FileUploadRepository;
 import com.quadrant.travelshoot.domains.reservation.entity.Reservation;
@@ -9,7 +10,9 @@ import com.quadrant.travelshoot.domains.review.dto.response.ReviewListResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewPageResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewRegistResponse;
 import com.quadrant.travelshoot.domains.review.entity.Review;
+import com.quadrant.travelshoot.domains.review.entity.ReviewAiSummary;
 import com.quadrant.travelshoot.domains.review.mapper.ReviewMapper;
+import com.quadrant.travelshoot.domains.review.repository.ReviewAiSummaryRepository;
 import com.quadrant.travelshoot.domains.review.repository.ReviewRepository;
 import com.quadrant.travelshoot.domains.reservation.repository.ReservationRepository;
 import com.quadrant.travelshoot.domains.review.service.ReviewService;
@@ -37,16 +40,40 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
+    private final ReviewAiSummaryRepository reviewAiSummaryRepository;
+    private final ReviewAiSummaryService reviewAiSummaryService;
 
-    /* 이미지 업로드 */
 
-    /* 예약 검증 메서드 - 리뷰 등록, 수정, 삭제 전 검증 */
-    // 예약이 존재하는지
-    // 예약 상태가 '이용완료'인지
-    // 예약자와 사용자가 일치하는지
+    /**
+     * 기존 ai요약 검증
+     */
+    @Transactional
+    public String getReviewSummary(Long stayId) {
+        // 현재 리뷰 개수 조회
+        int currentReviewCount = reviewRepository.countByStayId(stayId);
+        if (currentReviewCount == 0) {
+            return "아직 숙소의 리뷰가 없습니다.";
+        }
+
+        // 기존 AI 요약 조회
+        ReviewAiSummary existingSummary = reviewAiSummaryRepository.findByStayId(stayId)
+                .orElse(null);
+
+        // 기존 요약이 없거나, 리뷰가 5개 이상 증가했으면 새로 생성
+        if (existingSummary == null || currentReviewCount >= existingSummary.getReviewCount() + 5) {
+            log.info("AI 요약 새로 생성 - stayId: {}, 현재 리뷰: {}, 이전 리뷰: {}",
+                    stayId, currentReviewCount, existingSummary != null ? existingSummary.getReviewCount() : 0);
+            return reviewAiSummaryService.generateAiSummary(stayId, currentReviewCount, existingSummary);
+        }
+
+        // 기존 요약 반환
+        log.info("기존 AI 요약 반환 - stayId: {}", stayId);
+        return existingSummary.getOverallSummary();
+    }
+
+
     /**
      * 리뷰 등록
-     *
      * @param userId
      * @param request
      * @return

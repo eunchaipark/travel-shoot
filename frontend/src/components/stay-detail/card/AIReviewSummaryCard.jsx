@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { formatNumber } from "@/utils/stay/StayDetailUtils";
+import { getReviewSummary } from "@/services/stay-detail/stayDetailApiService";
 
 const AIReviewSummaryCard = ({stayId, score, reviewCount}) => {
 
@@ -10,20 +11,23 @@ const AIReviewSummaryCard = ({stayId, score, reviewCount}) => {
 
         setLoading(true);
 
-        const res = await fetch(`http://localhost:8000/api/reviews/ai-summary/${stayId}`);
-         if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
+        try{
+            const summary = await getReviewSummary(stayId);
+            console.log(summary); // AI 요약 텍스트
+            setAiSummary(summary);
+        }catch(error){
+            console.error('요약 조회 실패:', error);
         }
-        const data = await res.json();
-        console.log("AI 요약 결과:", data);
-        setAiSummary(data.summary);
         setLoading(false);
 
     }
 
     useEffect(() => {
-        // getAISummary();
-    }, [])
+        if(stayId){
+            getAISummary();
+
+        }
+    }, [stayId])
 
     return (
         <div className="card mb-4 card-section-border">
@@ -35,9 +39,9 @@ const AIReviewSummaryCard = ({stayId, score, reviewCount}) => {
                             <span className="score-number">{score}</span>
                         </div>
                         <div className="ai-review-title">AI 요약 리뷰</div>
-                        {/* <div className="ai-review-text room-content">
+                        <div className="ai-review-text room-content">
                             {loading ? "로딩중 ..." : aiSummary}
-                        </div> */}
+                        </div>
                         <a href={`/reviews/stays/${stayId}`} className="view-more-btn">
                             전체 {formatNumber(reviewCount)}건 리뷰
                             <i className="bi bi-chevron-right"></i>
@@ -46,12 +50,12 @@ const AIReviewSummaryCard = ({stayId, score, reviewCount}) => {
                     <>
                         <div className="rating-score">
                             <i className="bi bi-star-fill star-icon"></i>
-                            <span className="score-number">리뷰</span>
+                            <span className="score-number"></span>
                         </div>
                         <div className="ai-review-title">작성된 리뷰가 없습니다.</div>
-                        {/* <div className="ai-review-text room-content">
+                        <div className="ai-review-text room-content">
                             {loading ? "로딩중 ..." : aiSummary}
-                        </div> */}
+                        </div>
                     </>
                     
                 }
