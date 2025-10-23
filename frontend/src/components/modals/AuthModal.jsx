@@ -267,6 +267,7 @@ const AuthModal = ({ isOpen, onClose }) => {
             const result = await auth.login({ email, password });
 
             if (result.success) {
+                alert(`${result.data.userName}님, 환영합니다.`);
 
                 const redirectUrl = sessionStorage.getItem('redirectUrl');
 

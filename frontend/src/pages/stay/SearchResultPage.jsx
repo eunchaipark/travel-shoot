@@ -4,6 +4,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import Header from '@/components/layout/Header';
 import StayListSkeleton from '@/components/loading/StayListSkeleton';
 // import PaymentLoading from "@/components/loading/PaymentLoading";
+import ScrollToTopButton from '@/components/common/ScrollToTopButton';
 import MapModal from '@/components/modals/MapModal';
 
 import '@/assets/css/stay-search.css'
@@ -153,6 +154,7 @@ export default function SearchResultPage() {
             lowestPrice: stay.lowestPrice,
             stayType: stay.stayType,
             address: stay.address,
+            rating: stay.rating || 0,
             placeType: stay.placeType?.toLowerCase() || "stay",
             image: stay.thumbnailImage || ""
         }));
@@ -628,6 +630,12 @@ export default function SearchResultPage() {
 
                     {isLoading && <StayListSkeleton count={5} />}
 
+                    {!isLoading && allStays.length === 0 && (
+                        <div style={{ padding: '40px', textAlign: 'center', background: '#f8f9fa', borderRadius: '8px' }}>
+                            검색 조건에 맞는 숙소가 없습니다.
+                        </div>
+                    )}
+
                     {!isLoading && allStays.length > 0 && (
                         <>
                             {allStays.map((stay) => (
@@ -644,19 +652,6 @@ export default function SearchResultPage() {
                             <div ref={observerTarget} style={{ height: '20px' }} />
                         </>
                     )}
-
-                    {!isLoading && allStays.length === 0 ? (
-                        <div style={{ padding: '40px', textAlign: 'center', background: '#f8f9fa', borderRadius: '8px' }}>
-                            검색 조건에 맞는 숙소가 없습니다.
-                        </div>
-                    ) : (
-                        <>
-                            {allStays.map((stay) => (
-                                <StayCard key={stay.stayId} stay={stay} searchParams={baseSearchParams} />
-                            ))}
-                        </>
-                    )}
-
 
                     <div ref={observerTarget} style={{ padding: '40px', textAlign: 'center' }}>
                         {isFetchingNextPage && (
@@ -896,7 +891,7 @@ export default function SearchResultPage() {
                 children: baseSearchParams.children
             }}
         />
-
+            <ScrollToTopButton />
         </>
     )
 }
