@@ -57,27 +57,18 @@ public class TravelCourseServiceImpl implements TravelCourseService {
         log.info("여행 코스 생성 시작 - userId: {}, totalDays: {}",
                 userId, request.getTotalDays());
 
-        // TODO:가라 데이터 아래 데이터 변경해야 함.
-        //  초기 코스 생성 (생성중 상태)
-//        TravelCourse travelCourse = TravelCourse.builder()
-//                .reservationId(request.getReservationId())
-//                .userId(userId)
-//                .totalDays(request.getTotalDays())
-//                .generationStatus(GenerationStatus.생성중)
-//                .build();
-
         TravelCourse travelCourse = TravelCourse.builder()
-                .reservationId(1L)
+                .reservationId(request.getReservationId())
                 .userId(userId)
-                .totalDays(3)
+                .totalDays(request.getTotalDays())
                 .generationStatus(GenerationStatus.생성중)
                 .build();
+
 
         TravelCourse savedCourse = travelCourseRepository.save(travelCourse);
 
         // 비동기로 AI 코스 생성
-//        generateCourseAsync(savedCourse.getId(), request.getReservationId(), request.getTotalDays(), userId);
-        generateCourseAsync(savedCourse.getId(), 1L, 3, userId);
+        generateCourseAsync(savedCourse.getId(), request.getReservationId(), request.getTotalDays(), userId);
 
         log.info("여행 코스 생성 요청 완료 - courseId: {}", savedCourse.getId());
     }

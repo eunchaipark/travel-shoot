@@ -31,7 +31,7 @@ const Container = ({data, searchParams}) => {
                 </div>
                 <div className="col-lg-4">
                     <AIReviewSummaryCard stayId={data.stayId} score={data.averageRating} reviewCount={data.reviewCount}/>
-                    <HotelMapCard longitude={data.longitude} latitude={data.latitude} address={data.address}/>
+                    <HotelMapCard stay={data}/>
                 </div>
                 <RoomSelectionCard searchParams={searchParams} rooms={data.rooms} />
                 <ReservationNoticeCard notice={data.reservationNotice}/>

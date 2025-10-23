@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { formatNumber } from "@/utils/stay/StayDetailUtils";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from '@/components/context/AuthContext'; //TODO : 1023 김이슬 코드 추가
 
 const RoomSelectionCard = ({ searchParams, rooms }) => {
 
     const navigate = useNavigate();
+    const { isAuthenticated, openLoginModal } = useAuth(); //TODO : 1023 김이슬 코드 추가
     const { stayId, checkIn, checkOut, adults, children } = searchParams;
 
     // searchParams 에서 LocalDate로 받아온다고 가정
@@ -14,11 +16,41 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
     const nights = Number((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
     // const nights = (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24);
 
+    // TODO : 윤하님 원래 코드 일단 주석처리
+    // const handleReservation = (roomId) => {
+    //     console.log(`예약 페이지로 이동: roomId:${roomId}`);
+    //     const totalCount = Number(adults) + Number(children);
+    //     console.log(totalCount);
+    //
+    //     navigate(`/reservation/payment?roomId=${roomId}&checkInDate=${checkIn}&checkOutDate=${checkOut}&guestCount=${totalCount}`);
+    // };
+
+    // TODO : 1023 김이슬 코드 추가  - confirm 로그인 유무에 따라서 보이기
     const handleReservation = (roomId) => {
         console.log(`예약 페이지로 이동: roomId:${roomId}`);
         const totalCount = Number(adults) + Number(children);
         console.log(totalCount);
-        
+        // 로그인 체크
+        if (!isAuthenticated) {
+            const goToLogin = window.confirm(
+                '로그인 후 예약 가능합니다. \n 로그인하시겠습니까?'
+            );
+
+            if (goToLogin) {
+                // 예약 페이지 URL 저장
+                const reservationUrl = `/reservation/payment?roomId=${roomId}&checkInDate=${checkIn}&checkOutDate=${checkOut}&guestCount=${totalCount}`;
+                sessionStorage.setItem('redirectUrl', reservationUrl);
+
+                // 로그인 모달 열기
+                console.log('객실 선택에서 로그인 모달 열기');
+                openLoginModal();
+            }
+            // confirm 취소하면 아무것도 안 함
+            return;
+        }
+
+        // 로그인 되어있으면 바로 이동
+        console.log(`예약 페이지로 이동: roomId:${roomId}`);
         navigate(`/reservation/payment?roomId=${roomId}&checkInDate=${checkIn}&checkOutDate=${checkOut}&guestCount=${totalCount}`);
     };
 

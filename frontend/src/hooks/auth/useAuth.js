@@ -156,7 +156,7 @@ export const useAuth = () => {
     const logout = useCallback(async () => {
         setError(null);
         try {
-            await fetch('http://localhost:8080/api/auth/logout', {
+            await fetch(`${window.API_BASE_URL}/api/auth/logout`, {
                 method: 'POST',
                 credentials: 'include'
             });

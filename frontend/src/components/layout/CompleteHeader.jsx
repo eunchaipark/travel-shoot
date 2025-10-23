@@ -12,7 +12,9 @@ const CompleteHeader = () => {
                     <div className="row">
                         <div className="col-12 d-flex align-items-center justify-content-evenly">
                             <div className="col-sm-1 col-lg-1 col-2">
-                                <div className="logo" role="img" aria-label="트래블샷 아이콘"></div>
+                                <a href="/">
+                                    <div className="logo" role="img" aria-label="트래블샷 아이콘"></div>
+                                </a>
                             </div>
                         </div>
                     </div>

@@ -15,7 +15,7 @@ import StayDetailPage from '@/pages/stay-detail/StayDetailPage';
 import SignupCompletePage from '@/pages/SignupCompletePage';
 import SearchResultPage from '@/pages/stay/SearchResultPage';
 import ReservationPaymentPage from '@/pages/reservation/ReservationPaymentPage';
-import AuthModal from '@/components/modals/AuthModal'; // 로그인 모달창 띄워야함...
+import AuthModal from '@/components/modals/AuthModal';
 import PaymentCompletePage from "@/pages/reservation/PaymentCompletePage.jsx";
 import MyPage from '@/pages/MyPage';
 
@@ -75,7 +75,7 @@ function Router() {
       </Routes>
     </BrowserRouter>
     </AuthProvider>
-    <ReactQueryDevtools initialIsOpen={false} />
+    {/*<ReactQueryDevtools initialIsOpen={false} />*/}
     </QueryClientProvider>
   );
 }
