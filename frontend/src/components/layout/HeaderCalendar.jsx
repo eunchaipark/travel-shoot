@@ -25,8 +25,8 @@ export default function HeaderCalendar({ selectedDates, onDateSelect }) {
         // 둘 다 선택되면 부모로 전달
         if (start && end) {
             onDateSelect({
-                checkin: start.toISOString().split("T")[0],
-                checkout: end.toISOString().split("T")[0],
+                checkIn: start.toISOString().split("T")[0],
+                checkOut: end.toISOString().split("T")[0],
             });
         }
     };
