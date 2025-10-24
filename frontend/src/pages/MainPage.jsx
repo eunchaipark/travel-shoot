@@ -179,8 +179,19 @@ const MainPage = () => {
   const navigate = useNavigate();
   // 검색 처리 
   const handleSearch = () => {
+    if(!locationValue & (!selectedDates.checkin || !selectedDates.checkout)){
+      alert("여행가실 지역과 여행가실 날짜를 선택해주세요");
+      return;
+    }
+
+
     if (!selectedDates.checkin || !selectedDates.checkout) {
       alert("체크인/체크아웃 날짜를 선택해주세요.");
+      return;
+    }
+
+    if(!locationValue){
+      alert("여행가실 지역을 정해주세요");
       return;
     }
 
@@ -193,7 +204,7 @@ const MainPage = () => {
       nights: nights,
       adults: guestCounts.adult,
       children: guestCounts.child,
-    };
+    };locationValue
 
     console.log("검색 조건:", searchData);
 
