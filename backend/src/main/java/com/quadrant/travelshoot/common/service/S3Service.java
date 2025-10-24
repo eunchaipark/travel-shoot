@@ -48,15 +48,14 @@ public class S3Service {
 
             String s3Url = getFileUrl(s3Key);
 
-            return null;
-//            return FileUploadDto.builder()
-//                    .originalFilename(file.getOriginalFilename())
-//                    .s3Key(s3Key)
-//                    .s3Url(s3Url)
-//                    .bucketName(bucket)
-//                    .fileSize(file.getSize())
-//                    .contentType(file.getContentType())
-//                    .build();
+            return FileUploadResponse.builder()
+                    .originalFilename(file.getOriginalFilename())
+                    .s3Key(s3Key)
+                    .s3Url(s3Url)
+                    .bucketName(bucket)
+                    .fileSize(file.getSize())
+                    .contentType(file.getContentType())
+                    .build();
 
         } catch (IOException e) {
             log.error("S3 파일 업로드 실패", e);

@@ -8,13 +8,12 @@ import com.quadrant.travelshoot.domains.review.dto.response.ReviewReservationInf
 import com.quadrant.travelshoot.domains.review.entity.Review;
 import com.quadrant.travelshoot.domains.stay.entity.Room;
 import com.quadrant.travelshoot.domains.stay.entity.Stay;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ReviewMapper {
 
-    public ReviewRegistResponse toReviewRegistResponse(Review review, String imageUrl){
+    public ReviewRegistResponse toReviewRegistResponse(Review review){
         if(review == null){
             return null;
         }
@@ -33,7 +32,6 @@ public class ReviewMapper {
                 .locationRating(review.getLocationRating())
                 .valueRating(review.getValueRating())
                 .reviewContent(review.getReviewContent())
-                .reviewImageUrl(imageUrl)
                 .isRecommended(review.getIsRecommended())
                 .createdAt(review.getCreatedAt())
                 .updatedAt(review.getUpdatedAt())

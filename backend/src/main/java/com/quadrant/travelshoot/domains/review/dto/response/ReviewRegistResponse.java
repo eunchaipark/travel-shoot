@@ -33,5 +33,6 @@ public class ReviewRegistResponse {
     private Boolean isRecommended;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String imageUrl;
 
 }
