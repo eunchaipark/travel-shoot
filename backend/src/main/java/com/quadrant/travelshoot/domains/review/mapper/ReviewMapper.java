@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ReviewMapper {
 
-    public ReviewRegistResponse toReviewRegistResponse(Review review){
+    public ReviewRegistResponse toReviewRegistResponse(Review review, String imageUrl){
         if(review == null){
             return null;
         }
@@ -33,7 +33,7 @@ public class ReviewMapper {
                 .locationRating(review.getLocationRating())
                 .valueRating(review.getValueRating())
                 .reviewContent(review.getReviewContent())
-//                .reviewImageUrl(review.getReviewImageUrl())
+                .reviewImageUrl(imageUrl)
                 .isRecommended(review.getIsRecommended())
                 .createdAt(review.getCreatedAt())
                 .updatedAt(review.getUpdatedAt())

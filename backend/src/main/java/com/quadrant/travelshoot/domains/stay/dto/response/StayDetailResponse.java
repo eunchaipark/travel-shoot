@@ -40,6 +40,7 @@ public class StayDetailResponse {
     private BigDecimal minPrice;
 
     private List<FileUploadResponse> stayImages;
+//    private List<String> stayImagesUrl;
     private List<AmenityDto> amenities;
     private List<RoomDto> rooms;
 

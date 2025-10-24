@@ -29,7 +29,7 @@ public class ReviewRegistResponse {
     private BigDecimal locationRating;
     private BigDecimal valueRating;
     private String reviewContent;
-//    private String reviewImageUrl;
+    private String reviewImageUrl;
     private Boolean isRecommended;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

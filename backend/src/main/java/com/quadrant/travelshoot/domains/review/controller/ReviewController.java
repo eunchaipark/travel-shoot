@@ -53,12 +53,11 @@ public class ReviewController {
 
         Long userId = (Long) session.getAttribute("userId");
 
-
         log.info("리뷰 등록 요청 - userId: {}", userId);
-        log.info("리뷰 등록 요청!!! - reservationId: {}", reviewRegistRequest.getReservationId());
-//        Long userId = 1L;
-        ReviewRegistResponse resultResponse = reviewService.createReview(userId, reviewRegistRequest);
+        log.info("리뷰 등록 요청 - reservationId: {}", reviewRegistRequest.getReservationId());
+        log.info("리뷰 등록 요청!!! -  {}", reviewRegistRequest);
 
+        ReviewRegistResponse resultResponse = reviewService.createReview(userId, reviewRegistRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("리뷰 등록 성공", resultResponse));
     }
 
