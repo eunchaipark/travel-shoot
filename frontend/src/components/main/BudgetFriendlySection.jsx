@@ -366,13 +366,13 @@ const BudgetFriendlySection = () => {
     
     const detailUrl = `/stays/${stayId}`;
     
-    alert(
-      `숙소 상세 페이지로 이동합니다.\n\n` +
-      `숙소: ${item.id}\n` +
-      `위치: ${item.location}\n` +
-      `가격: ${formatNumber(item.price)}원\n\n` +
-      `이동 URL:\n${detailUrl}`
-    );
+    // alert(
+    //   `숙소 상세 페이지로 이동합니다.\n\n` +
+    //   `숙소: ${item.id}\n` +
+    //   `위치: ${item.location}\n` +
+    //   `가격: ${formatNumber(item.price)}원\n\n` +
+    //   `이동 URL:\n${detailUrl}`
+    // );
     
     navigate(detailUrl);
   };
