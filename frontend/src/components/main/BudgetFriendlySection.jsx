@@ -358,7 +358,7 @@ const BudgetFriendlySection = () => {
     loadBudgetData();
   }, []);
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const handleCardClick = (item) => {
     console.log("Budget 카드 클릭:", item);
     
@@ -370,17 +370,21 @@ const BudgetFriendlySection = () => {
       return;
     }
     
-    const detailUrl = `/stays/${stayId}`;
+  //1024 추가변경 사항
+  setDefaultParams(); // 기본값(내일부터 2박, 성인2, 어린이0) 세팅
+
+  const currentParams = new URLSearchParams(window.location.search);
+  const { checkIn, checkOut } = getDefaultDates({ nights: 2, startFromTomorrow: true });
+  const { adults, children } = getDefaultGuests();
+
+  currentParams.set("checkIn", checkIn);
+  currentParams.set("checkOut", checkOut);
+  currentParams.set("adults", adults);
+  currentParams.set("children", children);
+  currentParams.set("stayName", item.name || "");
+
+  navigate(`/stays/${stayId}?${currentParams.toString()}`);
     
-    // alert(
-    //   `숙소 상세 페이지로 이동합니다.\n\n` +
-    //   `숙소: ${item.id}\n` +
-    //   `위치: ${item.location}\n` +
-    //   `가격: ${formatNumber(item.price)}원\n\n` +
-    //   `이동 URL:\n${detailUrl}`
-    // );
-    
-    navigate(detailUrl);
   };
 
   // 전역 API 제공
