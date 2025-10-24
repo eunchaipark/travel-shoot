@@ -298,7 +298,16 @@
     flex: 1;
     padding: 20px;
 }
+.staylist-page .search-results-section .no-search-result{
+    padding: 235px 185px;
+    text-align: center;
+}
 
+.staylist-page .search-results-section .no-search-result .no-search-result-sub{
+    font-size: 13px;
+    margin-top: 5px;
+    color: grey;
+}
 .staylist-page .search-results-section .hotel-card {
     width: 100%;
     max-width: 750px;
