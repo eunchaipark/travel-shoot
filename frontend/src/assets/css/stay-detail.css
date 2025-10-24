@@ -22,7 +22,7 @@
 .product-detail-container .hotel-location .location-icon{
     width: 20px;
     height: 20px;
-    background-image: url(@/../public/images/common/gray-location-icon.svg);
+    background-image: url(/images/common/gray-location-icon.svg);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;

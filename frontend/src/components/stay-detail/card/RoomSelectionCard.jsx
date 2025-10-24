@@ -77,7 +77,7 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
                             <div className="row align-items-stretch">
                                 <div className="col-lg-4 col-md-4 mb-3 mb-md-0">
                                     <img
-                                        src="@/../public/images/product/placeholder-room.png"
+                                        src="/images/product/placeholder-room.png"
                                         alt="슈페리어 더블룸"
                                         className="img-fluid rounded room-image w-100 align-self-stretch" />
                                 </div>
@@ -110,7 +110,7 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
                                             <i className="bi bi-door-open me-1"></i> 침실 {room.bedroomCount}개
                                         </div>
                                         <div className="mb-1">
-                                            <img src="../../../../public/images/product/icon-bathroom.svg" className="me-1" /> 욕실 {room.bathroomCount}개
+                                            <img src="/images/product/icon-bathroom.svg" className="me-1" /> 욕실 {room.bathroomCount}개
                                         </div>
                                     </div>
                                 </div>

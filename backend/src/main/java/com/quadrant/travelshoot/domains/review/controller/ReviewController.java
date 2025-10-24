@@ -1,5 +1,7 @@
 package com.quadrant.travelshoot.domains.review.controller;
 
+import com.quadrant.travelshoot.domains.ai.dto.response.ReviewAiSummaryResponse;
+import com.quadrant.travelshoot.domains.ai.service.ReviewAiSummaryService;
 import com.quadrant.travelshoot.domains.review.dto.request.ReviewRegistRequest;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewDetailResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewListResponse;
@@ -26,6 +28,15 @@ import java.util.List;
 public class ReviewController {
 
     private final ReviewServiceImpl reviewService;
+    private final ReviewAiSummaryService reviewAiSummaryService;
+
+    @GetMapping("/ai-summary/{stayId}")
+    public ResponseEntity<String> getReviewSummary(@PathVariable Long stayId) {
+        log.info("리뷰 AI 요약 요청 - stayId: {}", stayId);
+
+        String response = reviewService.getReviewSummary(stayId);
+        return ResponseEntity.ok(response);
+    }
 
     /**
      * 리뷰 등록

@@ -24,9 +24,9 @@ const StayDetailTitleCard = ({ hotelName, address, price, like }) => {
                     <div className="action-buttons mb-2 mt-1">
                         <button style={{position:'relative'}} onClick={() => setIsLike(!isLike)} className="heart-btn">
                             <i className={"bi bi-heart" + (isLike ? "-fill" : "")}></i>
-                            {isLike&&
+                            {/* {isLike&&
                             <Lottie style={{position:'absolute', top:-5,left:-1, scale:4.5}} animationData={animation} loop={false} />
-                            }
+                            } */}
                         </button>
                         <button className="share-btn">
                             <i className="bi bi-share"></i>
