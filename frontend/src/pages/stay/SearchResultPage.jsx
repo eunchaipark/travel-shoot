@@ -636,8 +636,11 @@ export default function SearchResultPage() {
                         {isLoading && <StayListSkeleton count={5} />}
 
                         {!isLoading && allStays.length === 0 && (
-                            <div style={{ padding: '40px', textAlign: 'center', background: '#f8f9fa', borderRadius: '8px' }}>
+                            <div className="no-search-result">
                                 검색 조건에 맞는 숙소가 없습니다.
+                                <div className="no-search-result-sub">
+                                    지역/숙소 검색어 및 상세 필터를 변경해보세요.
+                                </div>
                             </div>
                         )}
 
