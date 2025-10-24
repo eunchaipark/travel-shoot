@@ -358,7 +358,7 @@ const BudgetFriendlySection = () => {
     loadBudgetData();
   }, []);
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const handleCardClick = (item) => {
     console.log("Budget 카드 클릭:", item);
     
@@ -370,23 +370,21 @@ const BudgetFriendlySection = () => {
       return;
     }
     
-    // const detailUrl = `/stays/${stayId}`;
+  //1024 추가변경 사항
+  setDefaultParams(); // 기본값(내일부터 2박, 성인2, 어린이0) 세팅
 
-     //1024 추가변경 사항
-     setDefaultParams(); // 기본값(내일부터 2박, 성인2, 어린이0) 세팅
+  const currentParams = new URLSearchParams(window.location.search);
+  const { checkIn, checkOut } = getDefaultDates({ nights: 2, startFromTomorrow: true });
+  const { adults, children } = getDefaultGuests();
 
-     const currentParams = new URLSearchParams(window.location.search);
-     const { checkIn, checkOut } = getDefaultDates({ nights: 2, startFromTomorrow: true });
-     const { adults, children } = getDefaultGuests();
+  currentParams.set("checkIn", checkIn);
+  currentParams.set("checkOut", checkOut);
+  currentParams.set("adults", adults);
+  currentParams.set("children", children);
+  currentParams.set("stayName", item.name || "");
 
-     currentParams.set("checkIn", checkIn);
-    currentParams.set("checkOut", checkOut);
-    currentParams.set("adults", adults);
-    currentParams.set("children", children);
-    currentParams.set("stayName", item.name || "");
-
-    navigate(`/stays/${stayId}?${currentParams.toString()}`);
-
+  navigate(`/stays/${stayId}?${currentParams.toString()}`);
+    
   };
 
   // 전역 API 제공
