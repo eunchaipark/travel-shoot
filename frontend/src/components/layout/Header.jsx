@@ -1,9 +1,10 @@
 import React, {useState, useRef, useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useNavigate,useSearchParams } from 'react-router-dom';
-// import { useAuth } from '@/hooks/auth/useAuth'
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/components/context/AuthContext'
 import HeaderCalendar from "@/components/layout/HeaderCalendar";
+import useSearchParamsSync from '@/hooks/search/useSearchParamsSync';
+import { useDefaultStayParams } from '@/hooks/search/useDefaultStayParams';
 
 const Header = () => {
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -12,43 +13,53 @@ const Header = () => {
 
     const { isAuthenticated, openLoginModal } = useAuth();
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
 
+    // Hook 사용 - URL에서 파라미터 가져오기
+    const {
+        checkIn,
+        checkOut,
+        adults,
+        children,
+        region,
+        stayName,
+        setCheckIn,
+        setCheckOut,
+        setAdults,
+        setChildren,
+        setRegion,
+        setStayName
+    } = useSearchParamsSync();
+    const { getDefaultDates, getDefaultGuests } = useDefaultStayParams();
 
-    //region 또는 stayName 중 있는 값을 가져옴
-    const [searchValue, setSearchValue] = useState(
-        searchParams.get('region') || searchParams.get('stayName') || ''
-    );
+    // 검색창 초기값: URL에서 가져온 값 사용
+    // region 또는 stayName 중 있는 값 표시
+    const [searchValue, setSearchValue] = useState(stayName || region || '');
     const [suggestions, setSuggestions] = useState([]);
 
     // stayName이 있으면 STAY, 없으면 REGION
     const [selectedType, setSelectedType] = useState(
-        searchParams.get('stayName') ? "STAY" : "REGION"
+        stayName ? "STAY" : "REGION"
     );
 
+    // URL 파라미터 변경 시 검색창 업데이트
+    useEffect(() => {
+        setSearchValue(stayName || region || '');
+        setSelectedType(stayName ? "STAY" : "REGION");
+    }, [stayName, region]);
 
-    // URL에서 날짜/인원 초기값 설정
-    const [selectedDates, setSelectedDates] = useState({
-        checkin: searchParams.get('checkIn') || (() => {
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            return tomorrow.toISOString().split('T')[0];
-        })(),
-        checkout: searchParams.get('checkOut') || (() => {
-            const dayAfter = new Date();
-            dayAfter.setDate(dayAfter.getDate() + 3);
-            return dayAfter.toISOString().split('T')[0];
-        })()
+    // 날짜 초기값: URL에서 가져온 값 사용 (기본값 설정)
+    const [selectedDates, setSelectedDates] = useState(() => {
+        const { checkIn: defIn, checkOut: defOut } = getDefaultDates({ nights: 2, startFromTomorrow: true });
+        return {
+            checkin: checkIn || defIn,
+            checkout: checkOut || defOut
+        };
     });
 
-    const [adultCount, setAdultCount] = useState(
-        searchParams.get('adults') ? Number(searchParams.get('adults')) : 2
-    );
-    const [childCount, setChildCount] = useState(
-        searchParams.get('children') ? Number(searchParams.get('children')) : 0
-    );
+    // 인원 초기값: URL에서 가져온 값 사용
+    const [adultCount, setAdultCount] = useState(adults || getDefaultGuests().adults);
+    const [childCount, setChildCount] = useState(children || getDefaultGuests().children);
 
-    // TODO : 디버깅할라고 추가함( 개발 완료 후 지워도 됨 )
     console.log('Header - isAuthenticated:', isAuthenticated);
 
     const searchInputRef = useRef(null);
@@ -136,59 +147,72 @@ const Header = () => {
         }
     };
 
-    // 자동완성 항목 선택
-        const handleSuggestionClick = (suggestion) => {
-            setSearchValue(suggestion.keyword);
-            setSelectedType(suggestion.type);
-            setShowSuggestions(false);
-        };
+    // 자동완성 항목 선택 (URL 업데이트)
+    const handleSuggestionClick = (suggestion) => {
+        setSearchValue(suggestion.keyword);
+        setSelectedType(suggestion.type);
+        setShowSuggestions(false);
 
-    // 날짜 선택 핸들러
-        const handleDateSelect = (newDates) => {
-            // newDates = { checkin: "2025-10-22", checkout: "2025-10-25" } 형태로 들어옴
-            console.log("선택된 날짜:", newDates);
-            setSelectedDates(newDates);
-        };
+        // URL 업데이트
+        if (suggestion.type === "STAY") {
+            setStayName(suggestion.keyword);
+            setRegion(''); // 지역 초기화
+        } else {
+            setRegion(suggestion.keyword);
+            setStayName(''); // 숙소명 초기화
+        }
+    };
+
+    // 날짜 선택 핸들러 (URL 업데이트)
+    const handleDateSelect = (newDates) => {
+        console.log("선택된 날짜:", newDates);
+        setSelectedDates({
+            checkin: newDates.checkIn,
+            checkout: newDates.checkOut,
+        });
+        setCheckIn(newDates.checkIn);
+        setCheckOut(newDates.checkOut);
+    };
 
     // 날짜 포맷팅
-        const formatDisplayDate = (dateStr) => {
-            if (!dateStr) return '';
-            const date = new Date(dateStr);
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
-            const weekday = weekdays[date.getDay()];
-            return `${month}.${day}(${weekday})`;
-        };
+    const formatDisplayDate = (dateStr) => {
+        if (!dateStr) return '';
+        const date = new Date(dateStr);
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+        const weekday = weekdays[date.getDay()];
+        return `${month}.${day}(${weekday})`;
+    };
 
-    // 검색 실행
-        const handleSearchSubmit = () => {
-            if (!searchValue.trim()) {
-                alert('검색어를 입력해주세요');
-                return;
-            }
+    // 검색 실행 (URL 파라미터 사용)
+    const handleSearchSubmit = () => {
+        if (!searchValue.trim()) {
+            alert('검색어를 입력해주세요');
+            return;
+        }
 
-            if (!selectedDates.checkin || !selectedDates.checkout) {
-                alert('날짜를 선택해주세요');
-                return;
-            }
+        if (!selectedDates.checkin || !selectedDates.checkout) {
+            alert('날짜를 선택해주세요');
+            return;
+        }
 
-            const params = new URLSearchParams({
-                checkIn: selectedDates.checkin,
-                checkOut: selectedDates.checkout,
-                adults: adultCount,
-                children: childCount
-            });
+        const params = new URLSearchParams({
+            checkIn: selectedDates.checkin,
+            checkOut: selectedDates.checkout,
+            adults: adultCount,
+            children: childCount
+        });
 
-            // 숙소 / 지역 선택 각각 다르게 전달해야함.
-            if (selectedType === "STAY") {
-                params.append("stayName", searchValue);
-            } else {
-                params.append("region", searchValue);
-            }
+        // 숙소 / 지역 선택 각각 다르게 전달
+        if (selectedType === "STAY") {
+            params.append("stayName", searchValue);
+        } else {
+            params.append("region", searchValue);
+        }
 
-            navigate(`/search?${params.toString()}`);
-        };
+        navigate(`/search?${params.toString()}`);
+    };
 
     const handleDateClick = (e) => {
         e.stopPropagation();
@@ -202,11 +226,16 @@ const Header = () => {
         setShowCalendarDropdown(false);
     };
 
+    // 인원 변경 핸들러 (URL 업데이트)
     const changeGuestCount = (type, change) => {
         if (type === 'adult') {
-            setAdultCount(prev => Math.max(1, prev + change));
+            const newCount = Math.max(1, adultCount + change);
+            setAdultCount(newCount);
+            setAdults(newCount);
         } else if (type === 'child') {
-            setChildCount(prev => Math.max(0, prev + change));
+            const newCount = Math.max(0, childCount + change);
+            setChildCount(newCount);
+            setChildren(newCount);
         }
     };
 
@@ -218,7 +247,6 @@ const Header = () => {
         return displayText;
     };
 
-    //TODO : 로그인 완료 상태면 마이페이지로
     const handleUserIconClick = () => {
         if (isAuthenticated) {
             navigate('/mypage');
@@ -229,13 +257,11 @@ const Header = () => {
 
     return (
         <>
-            {/* Font Awesome CSS */}
             <link
                 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
                 rel="stylesheet"
             />
 
-            {/* Version 1 헤더 (검색창이 있는 상세한 헤더) */}
             <header className="app-header">
                 <div className="container">
                     <div className="row">
@@ -253,16 +279,41 @@ const Header = () => {
                                                 className="col-2 position-relative search-input-icon location-icon"
                                                 role="img"
                                             ></div>
+
+                                            {/*검색창 - 숙소명 우선 표시 */}
                                             <input
                                                 ref={searchInputRef}
                                                 type="text"
                                                 className="search-input position-relative flex-grow-1 ms-1"
-                                                placeholder="지역 또는 숙소명 검색"
+                                                placeholder={stayName ? stayName : "지역 또는 숙소명 검색"}
                                                 value={searchValue}
                                                 onChange={handleSearchChange}
                                                 onFocus={handleSearchFocus}
                                                 onClick={handleSearchClick}
                                             />
+
+                                            {/* 숙소명 지우기 버튼 */}
+                                            {stayName && (
+                                                <button
+                                                    onClick={() => {
+                                                        setSearchValue('');
+                                                        setStayName('');
+                                                        setSelectedType('REGION');
+                                                    }}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        right: '8px',
+                                                        background: 'none',
+                                                        border: 'none',
+                                                        cursor: 'pointer',
+                                                        fontSize: '16px',
+                                                        color: '#999'
+                                                    }}
+                                                >
+                                                    ✕
+                                                </button>
+                                            )}
+
                                             {/* 드롭다운 suggestions */}
                                             <div
                                                 ref={suggestionsRef}
@@ -277,9 +328,6 @@ const Header = () => {
                                                         <i className={suggestion.type === 'REGION' ? 'fas fa-map-marker-alt' : 'fas fa-building'}></i>
                                                         <div>
                                                             <div className="fw-bold">{suggestion.keyword}</div>
-
-                                                            {/*<small className="text-muted">{suggestion.type}</small>*/}
-
                                                         </div>
                                                     </button>
                                                 ))}
@@ -301,11 +349,9 @@ const Header = () => {
                                                 ref={calendarRef}
                                                 id="dateDisplay"
                                             >
+                                                {formatDisplayDate(selectedDates.checkin)} ~ {formatDisplayDate(selectedDates.checkout)}
+                                            </span>
 
-                         {formatDisplayDate(selectedDates.checkin)} ~ {formatDisplayDate(selectedDates.checkout)}
-                        {/*09.08(월) ~ 09.10(수)*/}
-                      </span>
-                                            {/* 달력 UI 드롭다운 추가함 */}
                                             {showCalendarDropdown && (
                                                 <div
                                                     style={{
@@ -322,14 +368,12 @@ const Header = () => {
                                                         selectedDates={selectedDates}
                                                         onDateSelect={(newDates) => {
                                                             console.log("날짜 선택됨:", newDates);
-                                                            setSelectedDates(newDates);
-                                                            // 선택 완료되면 드롭다운 닫기
+                                                            handleDateSelect(newDates);
                                                             setTimeout(() => setShowCalendarDropdown(false), 300);
                                                         }}
                                                     />
                                                 </div>
                                             )}
-
                                         </div>
                                         <div className="col-auto search-divider-con">
                                             <div className="search-divider mx-3"></div>
@@ -345,8 +389,9 @@ const Header = () => {
                                                 onClick={handleGuestClick}
                                                 id="guestDisplay"
                                             >
-                        {getGuestDisplayText()}
-                      </span>
+                                                {getGuestDisplayText()}
+                                            </span>
+
                                             {/* 인원 선택 드롭다운 */}
                                             <div
                                                 ref={guestRef}
