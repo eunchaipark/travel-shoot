@@ -335,16 +335,6 @@ const TravelNowSection = () => {
     });
     
     const searchUrl = `/search?${params.toString()}`;
-
-    alert(
-      `검색 페이지로 이동합니다.\n\n` +
-      `지역: ${destination.name}\n` +
-      `체크인: ${checkIn}\n` +
-      `체크아웃: ${checkOut} (1박 2일)\n` +
-      `성인: 2명\n` +
-      `어린이: 0명\n\n` +
-      `이동 URL:\n${searchUrl}`
-    );
     
     navigate(searchUrl);
   };
