@@ -5,6 +5,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useBudgetSlider } from "@/hooks/main/useBudgetSlider";
+import { useDefaultStayParams } from "@/hooks/search/useDefaultStayParams"; //1024 추가
+import useSearchParamsSync from "@/hooks/search/useSearchParamsSync"; //1024 추가
+
 import {
   formatNumber,
   getSlideData,
@@ -330,6 +333,9 @@ const BudgetFriendlySection = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const { getDefaultDates, getDefaultGuests } = useDefaultStayParams(); //1024 추가
+  const { setDefaultParams } = useSearchParamsSync(); //1024 추가
+
   // 데이터 로드
   useEffect(() => {
     const loadBudgetData = async () => {
@@ -352,7 +358,7 @@ const BudgetFriendlySection = () => {
     loadBudgetData();
   }, []);
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
   const handleCardClick = (item) => {
     console.log("Budget 카드 클릭:", item);
     

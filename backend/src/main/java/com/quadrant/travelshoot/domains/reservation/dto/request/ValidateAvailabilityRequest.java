@@ -16,7 +16,7 @@ public class ValidateAvailabilityRequest {
     private Long roomId;
 
     @NotNull(message = "체크인 날짜는 필수입니다")
-    @Future(message = "체크인 날짜는 과거일 수 없습니다")
+    @FutureOrPresent(message = "체크인 날짜는 오늘 이후여야 합니다")
     private LocalDate checkInDate;
 
     @NotNull(message = "체크아웃 날짜는 필수입니다")
