@@ -5,10 +5,11 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
+RUN npm install esbuild@0.25.11 --save-dev
 RUN npm install @fullcalendar/react @fullcalendar/core @fullcalendar/daygrid @fullcalendar/interaction
 RUN npm install @tanstack/react-query @tanstack/react-query-devtools
 RUN npm install react-datepicker date-fns
-RUN npm install esbuild@0.25.11 --save-dev
+
 COPY . .
 
 EXPOSE 3000
