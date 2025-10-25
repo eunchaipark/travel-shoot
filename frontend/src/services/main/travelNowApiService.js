@@ -12,10 +12,10 @@ export const fetchTravelNow = async () => {
     }
 
     const data = await response.json();
-    console.log("TravelNow 백엔드 원본 데이터:", data); // 디버깅용
+    // console.log("TravelNow 백엔드 원본 데이터:", data); // 디버깅용
 
     const transformed = transformTravelNowData(data);
-    console.log("TravelNow 변환된 데이터:", transformed); // 디버깅용
+    // console.log("TravelNow 변환된 데이터:", transformed); // 디버깅용
 
     return transformed;
   } catch (error) {

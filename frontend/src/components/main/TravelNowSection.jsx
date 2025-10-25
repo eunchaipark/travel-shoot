@@ -191,7 +191,6 @@ const TravelNowSlider = ({ onCardClick, destinations, isLoading }) => {
     for (let i = 0; i < totalSlides; i++) {
       const slideData = getSlideData(destinations, i, cardsPerSlide);
       
-      console.log(`슬라이드 ${i + 1}: ${i * cardsPerSlide + 1}번부터 ${Math.min((i + 1) * cardsPerSlide, destinations.length)}번까지`, slideData.map(d => d.name));
       
       slides.push(
         <div key={i} className="travel-now-grid">
@@ -292,9 +291,9 @@ const TravelNowSection = () => {
         setLoading(true);
         const data = await fetchTravelNow();
         setDestinations(data);
-        console.log('Travel Now 데이터 로드 완료:', data);
+        // console.log('Travel Now 데이터 로드 완료:', data);
       } catch (err) {
-        console.error('Travel Now 데이터 로드 실패:', err);
+        // console.error('Travel Now 데이터 로드 실패:', err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -308,7 +307,7 @@ const TravelNowSection = () => {
   
   // 카드 클릭 핸들러
   const handleCardClick = (destination) => {
-    console.log('선택된 여행지:', destination);
+    // console.log('선택된 여행지:', destination);
     
     const today = new Date();
     const tomorrow = new Date(today);
