@@ -9,4 +9,12 @@ public interface FileUploadService {
 
     List<FileUpload> findAllByReferenceTypeAndReferenceId(String stayType, Long stayId);
 
+    FileUpload uploadAndSave(
+            MultipartFile file,
+            String referenceType,
+            Long referenceId,
+            Long creatorId,
+            Integer sortOrder,
+            Boolean isRepresentative
+    );
 }

@@ -66,7 +66,7 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
 
 
     return (
-        <div className="col-lg-8 col-sm-12 mb-4">
+        <div className="col-lg-8 col-sm-12 mb-4 room-card-container" >
             {rooms ? 
             <div className="card card-section-border">
                 <div className="card-body px-4 py-4">
@@ -74,16 +74,18 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
 
                     {rooms.map((room, i) => room.isAvailable&&(
                         <div key={i} className="border rounded p-4 mb-3 room-card">
-                            <div className="row align-items-stretch">
-                                <div className="col-lg-4 col-md-4 mb-3 mb-md-0">
+                            <div className="row ">
+                                <div className="col-lg-4 col-md-4 mb-3 mb-md-0 stay-img-container">
                                     <img
                                         src="/images/product/placeholder-room.png"
                                         alt="슈페리어 더블룸"
-                                        className="img-fluid rounded room-image w-100 align-self-stretch" />
+                                        className="img-fluid rounded room-image w-100 h-100 "
+                                        style={{objectFit: "cover"}}
+                                        />
                                 </div>
-                                <div className="col-lg-4 col-md-3 mb-lg-0">
+                                <div className="col-lg-4 col-md-3 mb-lg-0 room-amenities-section d-flex flex-column gap-1">
                                     <div className="mb-2 fw-bold font-15">{room.roomName}</div>
-                                    <div className="room-details text-muted">
+                                    <div className="room-details text-muted gap-1">
                                         <div className="mb-1">
                                             <i className="bi bi-people me-1"></i> 최대 {room.maximumCapacity}인
                                         </div>
@@ -115,7 +117,7 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
                                     </div>
                                 </div>
 
-                                <div className="col-lg-4 col-md-5 text-md-end text-sm-end mt-md-5">
+                                <div className="col-lg-4 col-md-5 text-md-end text-sm-end mt-md-5 room-details-container ">
                                     <div className="room-details text-muted font-12 fw-bold mb-2 dark-gray d-flex justify-content-end">
                                         체크인 {room.checkInTime.slice(0, 5)} ~ 체크아웃 {room.checkOutTime.slice(0, 5)}
                                     </div>

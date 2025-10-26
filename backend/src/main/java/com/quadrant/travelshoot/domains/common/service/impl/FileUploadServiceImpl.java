@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.util.List;
 
@@ -22,9 +21,8 @@ public class FileUploadServiceImpl implements FileUploadService {
     private final S3Service s3Service;
 
     public List<FileUpload> findAllByReferenceTypeAndReferenceId(String referenceType, Long referenceId) {
-        return fileUploadRepository.findAllByReferenceTypeAndReferenceId(referenceType, referenceId);
+        return fileUploadRepository.findAllByReferenceTypeAndReferenceIdAndIsDeletedFalse(referenceType, referenceId);
     }
-
 
     public FileUpload uploadAndSave(
             MultipartFile file,
@@ -34,10 +32,25 @@ public class FileUploadServiceImpl implements FileUploadService {
             Integer sortOrder,
             Boolean isRepresentative
     ){
-        // s3 업로드
-        String s3Url = s3Service.uploadFile(file);
+        // aws s3에 업로드 후 업로드값 가져오기
+        FileUploadResponse fileUploadResponse = s3Service.saveFileUpload(file);
 
-        return null;
+        // DB 저장
+        FileUpload fileUpload = FileUpload.builder()
+                .originalFilename(fileUploadResponse.getOriginalFilename())
+                .s3Key(fileUploadResponse.getS3Key())
+                .s3Url(fileUploadResponse.getS3Url())
+                .bucketName(fileUploadResponse.getBucketName())
+                .fileSize(fileUploadResponse.getFileSize())
+                .contentType(fileUploadResponse.getContentType())
+                .referenceType(referenceType)
+                .referenceId(referenceId)
+                .creatorId(creatorId)
+                .sortOrder(sortOrder != null ? sortOrder : 0)
+                .isRepresentative(isRepresentative != null ? isRepresentative : false)
+                .build();
+
+        return fileUploadRepository.save(fileUpload);
 
     }
 }

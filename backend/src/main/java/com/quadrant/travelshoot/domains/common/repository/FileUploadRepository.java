@@ -23,4 +23,6 @@ public interface FileUploadRepository extends JpaRepository<FileUpload, Long> {
         @Param("referenceType") String referenceType,
         @Param("referenceId") Long referenceId
     );
+
+    List<FileUpload> findAllByReferenceTypeAndReferenceIdAndIsDeletedFalse(String referenceType, Long referenceId);
 }

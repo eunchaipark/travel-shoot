@@ -31,7 +31,7 @@ public class S3Service {
 
     /**
      * 파일 업로드 + File 저장
-     * s3와 따로 만든 이유는 Files 테이블에 File 엔티티 저장하기 위함
+     * uploadFile과 따로 만든 이유는 File 엔티티 저장하기 위함
      */
     public FileUploadResponse saveFileUpload(MultipartFile file) {
         String s3Key = createFileName(file.getOriginalFilename());
