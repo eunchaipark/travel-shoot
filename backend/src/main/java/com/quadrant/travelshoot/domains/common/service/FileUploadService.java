@@ -7,6 +7,14 @@ import java.util.List;
 
 public interface FileUploadService {
 
-    List<FileUpload> findAllByReferenceTypeAndReferenceId(String stayType, Long stayId);
+    List<FileUpload> findAllByReferenceTypeAndReferenceId(String tableType, Long tableId);
 
+    FileUpload uploadAndSave(
+            MultipartFile file,
+            String referenceType,
+            Long referenceId,
+            Long creatorId,
+            Integer sortOrder,
+            Boolean isRepresentative
+    );
 }

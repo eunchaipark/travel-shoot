@@ -11,8 +11,6 @@ import java.util.Optional;
 
 public interface FileUploadRepository extends JpaRepository<FileUpload, Long> {
 
-    List<FileUpload> findAllByReferenceTypeAndReferenceId(String stayType, Long stayId);
-
     @Query("SELECT f FROM FileUpload f " +
            "WHERE f.referenceType = :referenceType " +
            "AND f.referenceId = :referenceId " +
@@ -23,4 +21,13 @@ public interface FileUploadRepository extends JpaRepository<FileUpload, Long> {
         @Param("referenceType") String referenceType,
         @Param("referenceId") Long referenceId
     );
+
+    List<FileUpload> findAllByReferenceTypeAndReferenceIdAndIsDeletedFalse(String referenceType, Long referenceId);
+
+    // 숙소 썸네일 이미지 5개
+    List<FileUpload> findTop5ByReferenceTypeAndReferenceIdOrderBySortOrderAsc(String referenceType, Long referenceId);
+    // 전체 이미지
+//    List<FileUpload> findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc(String referenceType, Long referenceId);
+    // 숙소 이미지 개수
+//    Integer countByReferenceTypeAndReferenceIdAndIsDeletedFalse(String stay, Long stayId);
 }

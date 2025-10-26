@@ -1,6 +1,8 @@
 package com.quadrant.travelshoot.common.controller;
 
+import com.quadrant.travelshoot.domains.common.dto.response.FileUploadResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,6 +12,7 @@ import com.quadrant.travelshoot.common.service.S3Service;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/images")
 @RequiredArgsConstructor

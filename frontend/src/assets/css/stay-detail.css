@@ -1,6 +1,85 @@
+/* 구현 중 UI */
+
+.product-detail-container .room-card-container .stay-img-container{
+   min-height: 100px;
+   max-height: 150px;
+}
+
+.product-detail-container .room-card-container .room-details-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.product-detail-container .room-card-container .room-amenities-section{
+    /* max-height: 150px; */
+    justify-content: space-between;
+}
+
+.product-detail-container .card-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+
+.product-detail-container .card-top .card-title-container{
+    display: flex;
+    align-items: center;
+}
+
+.product-detail-container .card-top .ai-badge {
+    margin-top: 1px;
+    color: white;
+    padding: 3px 9px;
+    padding-right: 11px;
+    border-radius: 12px;
+    font-size: 10px;
+    gap: 7px;
+    background: #fcf0f0;
+    color: #f56770;
+    border-radius: 20px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    max-width: 242px;
+    max-height: 25px;
+    align-items: center;
+    margin-left: 3px;
+
+}
+
+.product-detail-container .card-top .ai-icon {
+    width: 13px;
+    height: 13px;
+}
+
+.product-detail-container .rating-score {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    gap: 8px;
+}
+
+.product-detail-container .rating-score .star-icon {
+    color: #ff8888;
+    font-size: 25px;
+    
+}
+
+.product-detail-container .rating-score .score-number {
+    font-size: 25px;
+    font-weight: 600;
+    color: #333;
+    gap: 8px;
+}
+
+
 
 /* CSS from product-detail-page.css */
 .product-detail-container{
+    min-width: 400px;
     margin-bottom: 4rem;
 }
 
@@ -111,7 +190,8 @@
 }
 
 .product-detail-container .room-image {
-    height: 120px;
+    /* height: 120px; */
+    /* height: 100%; */
     object-fit: cover;
 }
 
@@ -141,6 +221,7 @@
 
 .product-detail-container .card-title{
     font-size: 1.25rem;
+    /* display: flex; */
 }
 
 .product-detail-container  .map-card.card .map-container .w-full.h-full {
@@ -160,18 +241,21 @@
         font-size: 15px;
         min-width: 100px;
     }
+
+
 }
 
 @media(max-width:978px){
-    .product-detail-container .map-card{
-        top: 20px;
-        margin-bottom: 1rem;
-    }
+
 }
 
 @media (max-width: 768px) {
     .product-detail-container .room-details {
         font-size: 0.8rem;
+    }
+
+    .product-detail-container .room-card-container{
+        /* margin-top: 0px; */
     }
 }
 
@@ -187,28 +271,67 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
-}
 
-.product-detail-container .rating-score {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-}
+    .product-detail-container .price-amount {
+        color: #f56770;
+        font-size: 18.5px;
+        font-weight: 700;
+        margin-bottom: 2px;
+    }
 
-.product-detail-container .star-icon {
-    color: #ff8888;
-    font-size: 16px;
-}
 
-.product-detail-container .score-number {
-    font-size: 18px;
-    font-weight: 600;
-    color: #333;
+    /* 구현 중 UI */
+    .product-detail-container .card-top{
+        justify-content: space-between;
+        align-items: center;
+        
+    }
+
+    .product-detail-container .card-top .card-title-container{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .product-detail-container .card-top .ai-badge {
+        margin-top: 1px;
+        color: white;
+        padding: 3px 9px;
+        padding-right: 11px;
+        border-radius: 12px;
+        font-size: 10px;
+        gap: 7px;
+        background: #fcf0f0;
+        color: #f56770;
+        border-radius: 20px;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+        display: flex;
+        align-items: center;
+        max-width: 242px;
+        max-height: 25px;
+        align-items: center;
+        margin-left: 3px;
+
+    }
+
+    .product-detail-container .card-top .ai-icon {
+        width: 13px;
+        height: 13px;
+    }
+
+    .product-detail-container .card-top .rating-score{
+        display: flex;
+        align-items: flex-end;
+        font-size: 20px;
+        gap: 8px;
+        flex-direction: column;
+    }
+
 }
 
 .product-detail-container .ai-review-title {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     color: #333;
     margin-bottom: 8px;
@@ -308,3 +431,5 @@
 .modal-gallery-thumbnail-image.active {
     border-color: #ff8888;
 }
+
+

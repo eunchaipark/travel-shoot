@@ -15,7 +15,7 @@ const Container = ({data, searchParams}) => {
 
     return (
         <div className="container">
-            <div className="row">
+            <div className="row align-items-start">
                 <div className="col-lg-8">
                     <div className="card mb-4 card-section-border">
                         <StayDetailTitleCard
@@ -27,12 +27,15 @@ const Container = ({data, searchParams}) => {
                     <div className="card mb-4 card-section-border">
                         <FacilitiesCard services={data.amenities} />
                     </div>
+
                     <InformationCard information={data.description} />
-                </div>
-                <div className="col-lg-4">
                     <AIReviewSummaryCard stayId={data.stayId} score={data.averageRating} reviewCount={data.reviewCount}/>
+                </div>
+                <div className="col-lg-4" style={{ position: 'sticky', top: '100px' }}>
+                    {/* <AIReviewSummaryCard stayId={data.stayId} score={data.averageRating} reviewCount={data.reviewCount}/> */}
                     <HotelMapCard stay={data}/>
                 </div>
+                
                 <RoomSelectionCard searchParams={searchParams} rooms={data.rooms} />
                 <ReservationNoticeCard notice={data.reservationNotice}/>
             </div>

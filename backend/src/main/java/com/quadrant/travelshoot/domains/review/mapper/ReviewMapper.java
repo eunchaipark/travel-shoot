@@ -1,5 +1,6 @@
 package com.quadrant.travelshoot.domains.review.mapper;
 
+import com.quadrant.travelshoot.domains.common.entity.FileUpload;
 import com.quadrant.travelshoot.domains.reservation.entity.Reservation;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewDetailResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewListResponse;
@@ -10,10 +11,27 @@ import com.quadrant.travelshoot.domains.stay.entity.Room;
 import com.quadrant.travelshoot.domains.stay.entity.Stay;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class ReviewMapper {
 
-    public ReviewRegistResponse toReviewRegistResponse(Review review){
+    public ReviewListResponse toListResponse(Review review, String representativeUrl, List<String> imageUrls) {
+        return ReviewListResponse.builder()
+                .reviewId(review.getReviewId())
+                .userId(review.getUser().getId())
+                .userName(review.getUser().getUserName())
+                .roomId(review.getReservation().getRoom().getId())
+                .roomName(review.getReservation().getRoom().getRoomName())
+                .totalRating(review.getTotalRating())
+                .reviewContent(review.getReviewContent())
+                .reviewImageUrls(imageUrls)
+                .createdAt(review.getCreatedAt())
+                .updatedAt(review.getUpdatedAt())
+                .build();
+    }
+
+    public ReviewRegistResponse toReviewRegistResponse(Review review, String imageUrl){
         if(review == null){
             return null;
         }
@@ -35,8 +53,12 @@ public class ReviewMapper {
                 .isRecommended(review.getIsRecommended())
                 .createdAt(review.getCreatedAt())
                 .updatedAt(review.getUpdatedAt())
+                .imageUrl(imageUrl)
                 .build();
     }
+
+
+
 
 
     /* 리뷰의 예약 내역 */
@@ -96,7 +118,7 @@ public class ReviewMapper {
     }
 
 
-    public ReviewListResponse toReviewListResponse(Review review){
+    public ReviewListResponse toReviewListResponse(Review review, String imageUrl){
         if (review == null) {
             return null;
         }
@@ -109,7 +131,7 @@ public class ReviewMapper {
                 .roomName(review.getReservation().getRoom().getRoomName())
                 .totalRating(review.getTotalRating())
                 .reviewContent(review.getReviewContent())
-                .reviewImageUrl(null)
+                .reviewImageUrl(imageUrl)
                 .createdAt(review.getCreatedAt())
                 .updatedAt(review.getUpdatedAt())
                 .build();
