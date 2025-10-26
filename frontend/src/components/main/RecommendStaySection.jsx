@@ -12,8 +12,8 @@ import SurveyModal from "@/components/survey/SurveyModal";
 import MapContent from '@/components/map/MapContent';
 import { useKakaoMap } from '@/hooks/useKakaoMap';
 import {
-    formatPrice,
-    generateStarRating
+  formatPrice,
+  generateStarRating
 } from '@/utils/main/recommendationUtils';
 import { useDefaultStayParams } from '@/hooks/search/useDefaultStayParams'; //1024 추가
 
@@ -21,372 +21,372 @@ import { useDefaultStayParams } from '@/hooks/search/useDefaultStayParams'; //10
 // Skeleton Loader 컴포넌트
 // ============================================================================
 const SkeletonCard = () => {
-    return (
-        <div className="accommodation-item">
-            <div className="accommodation-image-container">
-                <div className="placeholder-glow">
-                    <div className="placeholder col-12" style={{ height: '250px', borderRadius: '12px' }}></div>
-                </div>
-            </div>
-            <div className="accommodation-info">
-                <div className="accommodation-header">
-                    <div className="placeholder-glow mb-2">
-                        <span className="placeholder col-8"></span>
-                    </div>
-                    <div className="placeholder-glow mb-2">
-                        <span className="placeholder col-6"></span>
-                    </div>
-                    <div className="placeholder-glow">
-                        <span className="placeholder col-10"></span>
-                    </div>
-                </div>
-                <div className="accommodation-price mt-3">
-                    <div className="placeholder-glow">
-                        <span className="placeholder col-5"></span>
-                    </div>
-                    <div className="placeholder-glow mt-2">
-                        <span className="placeholder col-7"></span>
-                    </div>
-                </div>
-            </div>
+  return (
+    <div className="accommodation-item">
+      <div className="accommodation-image-container">
+        <div className="placeholder-glow">
+          <div className="placeholder col-12" style={{ height: '250px', borderRadius: '12px' }}></div>
         </div>
-    );
+      </div>
+      <div className="accommodation-info">
+        <div className="accommodation-header">
+          <div className="placeholder-glow mb-2">
+            <span className="placeholder col-8"></span>
+          </div>
+          <div className="placeholder-glow mb-2">
+            <span className="placeholder col-6"></span>
+          </div>
+          <div className="placeholder-glow">
+            <span className="placeholder col-10"></span>
+          </div>
+        </div>
+        <div className="accommodation-price mt-3">
+          <div className="placeholder-glow">
+            <span className="placeholder col-5"></span>
+          </div>
+          <div className="placeholder-glow mt-2">
+            <span className="placeholder col-7"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 const SkeletonLoader = () => {
-    return (
-        <section className="recommend-stay-section">
-            <div className="recommend-stay-container">
-                {/* 섹션 헤더 스켈레톤 */}
-                <div className="section-header">
-                    <div className="placeholder-glow mb-2">
-                        <span className="placeholder col-6 col-md-4"></span>
-                    </div>
-                    <div className="placeholder-glow">
-                        <span className="placeholder col-8 col-md-5"></span>
-                    </div>
-                </div>
+  return (
+    <section className="recommend-stay-section">
+      <div className="recommend-stay-container">
+        {/* 섹션 헤더 스켈레톤 */}
+        <div className="section-header">
+          <div className="placeholder-glow mb-2">
+            <span className="placeholder col-6 col-md-4"></span>
+          </div>
+          <div className="placeholder-glow">
+            <span className="placeholder col-8 col-md-5"></span>
+          </div>
+        </div>
 
-                {/* 콘텐츠 래퍼 */}
-                <div className="content-wrapper">
-                    {/* 숙소 리스트 스켈레톤 */}
-                    <div className="accommodation-list-container">
-                        <div className="accommodation-list">
-                            {[1, 2, 3, 4].map((index) => (
-                                <SkeletonCard key={index} />
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* 지도 영역 스켈레톤 */}
-                    <div className="map-page main-map-page">
-                        <div className="map-container">
-                            <div className="placeholder-glow w-100 h-100">
-                                <div className="placeholder col-12 h-100" style={{ minHeight: '600px', borderRadius: '12px' }}></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        {/* 콘텐츠 래퍼 */}
+        <div className="content-wrapper">
+          {/* 숙소 리스트 스켈레톤 */}
+          <div className="accommodation-list-container">
+            <div className="accommodation-list">
+              {[1, 2, 3, 4].map((index) => (
+                <SkeletonCard key={index} />
+              ))}
             </div>
-        </section>
-    );
+          </div>
+
+          {/* 지도 영역 스켈레톤 */}
+          <div className="map-page main-map-page">
+            <div className="map-container">
+              <div className="placeholder-glow w-100 h-100">
+                <div className="placeholder col-12 h-100" style={{ minHeight: '600px', borderRadius: '12px' }}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 // ============================================================================
 // Accommodation Card 컴포넌트 (개별 숙소 카드)
 // ============================================================================
 const AccommodationCard = ({ accommodation, onClick }) => {
-    const formattedPrice = formatPrice(accommodation.price);
-    const stars = generateStarRating(accommodation.rating);
+  const formattedPrice = formatPrice(accommodation.price);
+  const stars = generateStarRating(accommodation.rating);
 
-    // location에서 뒷부분 추출 ("제주시 • 제주특별자치도..." → "제주특별자치도...")
-    const getDetailAddress = (location) => {
-        if (!location) return '';
-        const parts = location.split('•');
-        return parts[1] ? parts[1].trim() : location;
-    };
+  // location에서 뒷부분 추출 ("제주시 • 제주특별자치도..." → "제주특별자치도...")
+  const getDetailAddress = (location) => {
+    if (!location) return '';
+    const parts = location.split('•');
+    return parts[1] ? parts[1].trim() : location;
+  };
 
-    const handleClick = () => {
-        if (onClick) {
-            onClick(accommodation);
-        }
-    };
+  const handleClick = () => {
+    if (onClick) {
+      onClick(accommodation);
+    }
+  };
 
-    const handleImageError = (e) => {
-        e.target.src = 'https://via.placeholder.com/300x300/f0f0f0/666?text=No+Image';
-    };
+  const handleImageError = (e) => {
+    e.target.src = 'https://via.placeholder.com/300x300/f0f0f0/666?text=No+Image';
+  };
 
-    return (
-        <div
-            className="accommodation-item"
-            data-id={accommodation.id}
-            data-lat={accommodation.latitude}
-            data-lng={accommodation.longitude}
-            onClick={handleClick}
-        >
-            {/* 이미지 영역 */}
-            <div className="accommodation-image-container">
-                {/* 배지 - AI 추천 점수 표시 */}
-                {accommodation.badge && (
-                    <span className="accommodation-badge">{accommodation.badge}</span>
-                )}
-                <img
-                    src={accommodation.image}
-                    alt={accommodation.title}
-                    className="accommodation-image"
-                    onError={handleImageError}
-                />
+  return (
+    <div
+      className="accommodation-item"
+      data-id={accommodation.id}
+      data-lat={accommodation.latitude}
+      data-lng={accommodation.longitude}
+      onClick={handleClick}
+    >
+      {/* 이미지 영역 */}
+      <div className="accommodation-image-container">
+        {/* 배지 - AI 추천 점수 표시 */}
+        {accommodation.badge && (
+          <span className="accommodation-badge">{accommodation.badge}</span>
+        )}
+        <img
+          src={accommodation.image}
+          alt={accommodation.title}
+          className="accommodation-image"
+          onError={handleImageError}
+        />
+      </div>
+
+      {/* 정보 영역 */}
+      <div className="accommodation-info">
+        <div className="accommodation-header">
+          {/* 제목 */}
+          <h3 className="accommodation-title">{accommodation.title}</h3>
+
+          {/* 평점 (5점 만점) */}
+          <div className="accommodation-rating">
+            <div className="star-rating">
+              {stars.map((star) => {
+                if (star.type === 'full') {
+                  return <i key={star.key} className="fas fa-star star"></i>;
+                } else if (star.type === 'half') {
+                  return <i key={star.key} className="fas fa-star-half-alt star"></i>;
+                } else {
+                  return <i key={star.key} className="far fa-star star empty"></i>;
+                }
+              })}
             </div>
+            <span className="rating-text">({accommodation.rating}/5)</span>
+          </div>
 
-            {/* 정보 영역 */}
-            <div className="accommodation-info">
-                <div className="accommodation-header">
-                    {/* 제목 */}
-                    <h3 className="accommodation-title">{accommodation.title}</h3>
-
-                    {/* 평점 (5점 만점) */}
-                    <div className="accommodation-rating">
-                        <div className="star-rating">
-                            {stars.map((star) => {
-                                if (star.type === 'full') {
-                                    return <i key={star.key} className="fas fa-star star"></i>;
-                                } else if (star.type === 'half') {
-                                    return <i key={star.key} className="fas fa-star-half-alt star"></i>;
-                                } else {
-                                    return <i key={star.key} className="far fa-star star empty"></i>;
-                                }
-                            })}
-                        </div>
-                        <span className="rating-text">({accommodation.rating}/5)</span>
-                    </div>
-
-                    {/* ✅ 상세 주소 표시 (뒷부분) */}
-                    <div className="accommodation-location">
-                        <i className="fas fa-map-marker-alt location-icon"></i>
-                        <span className="location-text">{getDetailAddress(accommodation.location)}</span>
-                    </div>
-                </div>
-
-                {/* 가격 정보 */}
-                <div className="accommodation-price">
-                    <span className="checkin-time">체크인 {accommodation.checkinTime}</span>
-                    <div className="price-info">
-                        <span className="price-text">₩ {formattedPrice}</span>
-                        <span className="price-unit"> (1박당 요금)</span>
-                    </div>
-                </div>
-            </div>
+          {/* ✅ 상세 주소 표시 (뒷부분) */}
+          <div className="accommodation-location">
+            <i className="fas fa-map-marker-alt location-icon"></i>
+            <span className="location-text">{getDetailAddress(accommodation.location)}</span>
+          </div>
         </div>
-    );
+
+        {/* 가격 정보 */}
+        <div className="accommodation-price">
+          <span className="checkin-time">체크인 {accommodation.checkinTime}</span>
+          <div className="price-info">
+            <span className="price-text">₩ {formattedPrice}</span>
+            <span className="price-unit"> (1박당 요금)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 // ============================================================================
 // Recommend Stay Section 컴포넌트 (메인)
 // ============================================================================
 const RecommendStaySection = () => {
-    const navigate = useNavigate(); //1024 추가
-    const { setDefaultParams } = useSearchParamsSync(); //1024 추가
-    const { user, isAuthenticated } = useAuth();
-    const { getDefaultDates, getDefaultGuests } = useDefaultStayParams(); //1024 추가
-    const [modalOpen, setModalOpen] = useState(false);
-    // 상태 관리
-    const [accommodations, setAccommodations] = useState([]);
-    const [mapLocations, setMapLocations] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [preferredProvince, setPreferredProvince] = useState('제주특별자치도');
-    const { mapRef, kakaoLoaded, selectedLocation, focusMarker } = useKakaoMap(true, mapLocations);
-    const handleAccommodationClick = useCallback((accommodation) => {
-        const stayId = accommodation.id;
-        const stayName = accommodation.title || accommodation.name;  //1024 추가
-        focusMarker(stayId);
-        document.querySelectorAll('.accommodation-item[data-id]').forEach(card => { card.classList.remove('active'); });
-        const targetCard = document.querySelector(`.accommodation-item[data-id="${stayId}"]`);
-        if (targetCard) { targetCard.classList.add('active');}
-        //1024 추가
-        const { checkIn, checkOut } = getDefaultDates({ nights: 2, startFromTomorrow: true });
-        const { adults, children } = getDefaultGuests();
+  const navigate = useNavigate(); //1024 추가
+  const { setDefaultParams } = useSearchParamsSync(); //1024 추가
+  const { user, isAuthenticated } = useAuth();
+  const { getDefaultDates, getDefaultGuests } = useDefaultStayParams(); //1024 추가
+  const [modalOpen, setModalOpen] = useState(false);
+  // 상태 관리
+  const [accommodations, setAccommodations] = useState([]);
+  const [mapLocations, setMapLocations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [preferredProvince, setPreferredProvince] = useState('제주특별자치도');
+  const { mapRef, kakaoLoaded, selectedLocation, focusMarker } = useKakaoMap(true, mapLocations);
+  const handleAccommodationClick = useCallback((accommodation) => {
+    const stayId = accommodation.id;
+    const stayName = accommodation.title || accommodation.name;  //1024 추가
+    focusMarker(stayId);
+    document.querySelectorAll('.accommodation-item[data-id]').forEach(card => { card.classList.remove('active'); });
+    const targetCard = document.querySelector(`.accommodation-item[data-id="${stayId}"]`);
+    if (targetCard) { targetCard.classList.add('active');}
+      //1024 추가
+    const { checkIn, checkOut } = getDefaultDates({ nights: 2, startFromTomorrow: true });
+    const { adults, children } = getDefaultGuests();
 
         const params = new URLSearchParams({
-            checkIn,
-            checkOut,
-            adults,
-            children,
-            stayName
-        });
-        navigate(`/stays/${stayId}?${params.toString()}`);
-    }, [focusMarker, navigate, getDefaultDates, getDefaultGuests]);
+          checkIn,
+          checkOut,
+          adults,
+          children,
+          stayName
+          });
+      navigate(`/stays/${stayId}?${params.toString()}`);
+  }, [focusMarker, navigate, getDefaultDates, getDefaultGuests]);
 
-    // 도/시 단위 추출 함수
-    const extractProvince = (location) => {
-        if (!location) return '제주특별자치도';
+  // 도/시 단위 추출 함수
+  const extractProvince = (location) => {
+    if (!location) return '제주특별자치도';
 
-        // "제주시 • 제주특별자치도 제주시 노연로 12" → "제주특별자치도 제주시 노연로 12"
-        const detailPart = location.split('•')[1]?.trim() || location;
+    // "제주시 • 제주특별자치도 제주시 노연로 12" → "제주특별자치도 제주시 노연로 12"
+    const detailPart = location.split('•')[1]?.trim() || location;
 
-        // "제주특별자치도", "강원특별자치도", "서울특별시" 등 추출
-        const provinceMatch = detailPart.match(/(.*?특별자치도|.*?특별시|.*?광역시|.*?도)/);
-        return provinceMatch ? provinceMatch[1] : detailPart.split(' ')[0];
+    // "제주특별자치도", "강원특별자치도", "서울특별시" 등 추출
+    const provinceMatch = detailPart.match(/(.*?특별자치도|.*?특별시|.*?광역시|.*?도)/);
+    return provinceMatch ? provinceMatch[1] : detailPart.split(' ')[0];
+  };
+
+
+  useEffect(() => {
+    const loadAIRecommendations = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        if (!user || !user.userId) {
+          console.error('로그인이 필요합니다');
+          setError('로그인이 필요합니다');
+          return;
+        }
+
+        console.log('AI 추천 숙소 로딩 시작 - userId:', user.userId);
+
+        // 1️⃣ AI 추천 숙소 가져오기
+        const stays = await fetchAIRecommendedStays(user.userId);
+        console.log('AI 추천 숙소:', stays);
+        setAccommodations(stays);
+
+        // 2️⃣ 숙소 ID 추출
+        const stayIds = stays.map(stay => stay.id);
+        console.log('추출된 숙소 IDs:', stayIds);
+
+        // 3️⃣ 지도용 상세 데이터 가져오기 (stay + 주변 맛집/관광지)
+        if (stayIds.length > 0) {
+          const mapData = await fetchRecommendationDetails(stayIds);
+          console.log('지도용 상세 데이터:', mapData);
+          setMapLocations(mapData);
+        }
+
+        // 4️⃣ 첫 번째 숙소에서 도/시 단위 추출
+        if (stays.length > 0) {
+          const province = extractProvince(stays[0].location);
+          setPreferredProvince(province);
+        }
+
+      } catch (err) {
+        console.error('AI 추천 로딩 실패:', err);
+        setError(err.message || '추천 숙소를 불러오는데 실패했습니다');
+      } finally {
+        setLoading(false);
+      }
     };
 
-
-    useEffect(() => {
-        const loadAIRecommendations = async () => {
-            try {
-                setLoading(true);
-                setError(null);
-
-                if (!user || !user.userId) {
-                    console.error('로그인이 필요합니다');
-                    setError('로그인이 필요합니다');
-                    return;
-                }
-
-                console.log('AI 추천 숙소 로딩 시작 - userId:', user.userId);
-
-                // 1️⃣ AI 추천 숙소 가져오기
-                const stays = await fetchAIRecommendedStays(user.userId);
-                console.log('AI 추천 숙소:', stays);
-                setAccommodations(stays);
-
-                // 2️⃣ 숙소 ID 추출
-                const stayIds = stays.map(stay => stay.id);
-                console.log('추출된 숙소 IDs:', stayIds);
-
-                // 3️⃣ 지도용 상세 데이터 가져오기 (stay + 주변 맛집/관광지)
-                if (stayIds.length > 0) {
-                    const mapData = await fetchRecommendationDetails(stayIds);
-                    console.log('지도용 상세 데이터:', mapData);
-                    setMapLocations(mapData);
-                }
-
-                // 4️⃣ 첫 번째 숙소에서 도/시 단위 추출
-                if (stays.length > 0) {
-                    const province = extractProvince(stays[0].location);
-                    setPreferredProvince(province);
-                }
-
-            } catch (err) {
-                console.error('AI 추천 로딩 실패:', err);
-                setError(err.message || '추천 숙소를 불러오는데 실패했습니다');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (isAuthenticated && user) {
-            loadAIRecommendations();
-        }
-    }, [isAuthenticated, user]);
-
-    // 비로그인 시 섹션 숨김
-    if (!isAuthenticated) {
-        return null;
+    if (isAuthenticated && user) {
+      loadAIRecommendations();
     }
+  }, [isAuthenticated, user]);
 
-    //  로딩 상태 - 스켈레톤 UI로 변경
-    if (loading) {
-        return <SkeletonLoader />;
-    }
+  // 비로그인 시 섹션 숨김
+  if (!isAuthenticated) {
+    return null;
+  }
 
-
-    //  로그인은 했는데 설문조사는 안함
-    if (error)
-        return (
-            <section className="recommend-stay-section">
-                <div className="recommend-stay-container">
-                    <div className="recommend-survey-container">
-                        <p className='recommend-survey-title'>추천 숙소가 없습니다</p>
-                        <p className='recommmend-survey-write'>설문조사를 완료하시면 맞춤 숙소를 추천해드립니다</p>
-                        <button
-                            className="recommend-survey-button"
-                            onClick={() => setModalOpen(true)} // 버튼 클릭 시 모달 열기
-                        >
-                            설문조사 참여하기
-                        </button>
-                    </div>
-                </div>
-
-                {modalOpen && (
-                    <SurveyModal
-                        onClose={() => setModalOpen(false)} // 모달 닫기
-                        onComplete={() => setModalOpen(false)} // 완료 후 모달 닫기
-                    />
-                )}
-            </section>
-        );
+  //  로딩 상태 - 스켈레톤 UI로 변경
+  if (loading) {
+    return <SkeletonLoader />;
+  }
 
 
+  //  로그인은 했는데 설문조사는 안함
+  if (error)
+  return (
+      <section className="recommend-stay-section">
+        <div className="recommend-stay-container">
+          <div className="recommend-survey-container">
+            <p className='recommend-survey-title'>추천 숙소가 없습니다</p>
+            <p className='recommmend-survey-write'>설문조사를 완료하시면 맞춤 숙소를 추천해드립니다</p>
+            <button
+              className="recommend-survey-button"
+              onClick={() => setModalOpen(true)} // 버튼 클릭 시 모달 열기
+            >
+              설문조사 참여하기
+            </button>
+          </div>
+        </div>
 
-    //  데이터 없음
-    if (!accommodations || accommodations.length === 0) {
-        return (
-            <section className="recommend-stay-section">
-                <div className="recommend-stay-container">
-                    <div className="empty-container">
-                        <i className="fas fa-home"></i>
-                        <p>추천 숙소가 없습니다</p>
-                        <small>설문조사를 완료하시면 맞춤 숙소를 추천해드립니다</small>
-                    </div>
-                </div>
-            </section>
-        );
-    }
-
-    return (
-        <section className="recommend-stay-section">
-            <div className="recommend-stay-container">
-                {/* 섹션 헤더 */}
-                <div className="section-header">
-                    <p className="section-subtitle">
-                        {/* ✅ 도/시 단위만 표시 */}
-                        <span className="location-name">{preferredProvince}</span>를 좋아하시는
-                        {/* <span className="username-sub">{user?.userName || '김여행'}</span>님! */}
-                    </p>
-                    <h2 className="section-title">
-                        <span className="username">{user?.userName || '김여행'}</span>님 스타일의 숙소
-                    </h2>
-
-                </div>
-
-                {/* 콘텐츠 래퍼 */}
-                <div className="content-wrapper">
-                    {/* 숙소 리스트 */}
-                    <div className="accommodation-list-container">
-                        <div className="accommodation-list" id="accommodationList">
-                            {accommodations.map((accommodation) => (
-                                <AccommodationCard
-                                    key={accommodation.id}
-                                    accommodation={accommodation}
-                                    onClick={handleAccommodationClick}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* 지도 영역 */}
-
-
-                    <div className="map-page main-map-page">
-                        <div className="map-container">
-                            {kakaoLoaded ? (
-                                <MapContent
-                                    mapRef={mapRef}
-                                    kakaoLoaded={kakaoLoaded}
-                                    selectedLocation={selectedLocation}
-                                />
-                            ) : (
-                                <div className="map-placeholder">
-                                    <i className="fas fa-map-marker-alt map-icon"></i>
-                                    <p className="map-text">지도 로딩 중...</p>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        {modalOpen && (
+          <SurveyModal
+            onClose={() => setModalOpen(false)} // 모달 닫기
+            onComplete={() => setModalOpen(false)} // 완료 후 모달 닫기
+          />
+        )}
+      </section>
     );
+
+
+
+  //  데이터 없음
+  if (!accommodations || accommodations.length === 0) {
+    return (
+      <section className="recommend-stay-section">
+        <div className="recommend-stay-container">
+          <div className="empty-container">
+            <i className="fas fa-home"></i>
+            <p>추천 숙소가 없습니다</p>
+            <small>설문조사를 완료하시면 맞춤 숙소를 추천해드립니다</small>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="recommend-stay-section">
+      <div className="recommend-stay-container">
+        {/* 섹션 헤더 */}
+        <div className="section-header">
+          <p className="section-subtitle">
+            {/* ✅ 도/시 단위만 표시 */}
+            <span className="location-name">{preferredProvince}</span>를 좋아하시는
+            {/* <span className="username-sub">{user?.userName || '김여행'}</span>님! */}
+          </p>
+          <h2 className="section-title">
+            <span className="username">{user?.userName || '김여행'}</span>님 스타일의 숙소
+          </h2>
+
+        </div>
+
+        {/* 콘텐츠 래퍼 */}
+        <div className="content-wrapper">
+          {/* 숙소 리스트 */}
+          <div className="accommodation-list-container">
+            <div className="accommodation-list" id="accommodationList">
+              {accommodations.map((accommodation) => (
+                <AccommodationCard
+                  key={accommodation.id}
+                  accommodation={accommodation}
+                  onClick={handleAccommodationClick}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* 지도 영역 */}
+
+
+          <div className="map-page main-map-page">
+              <div className="map-container">
+                {kakaoLoaded ? (
+                    <MapContent
+                        mapRef={mapRef}
+                        kakaoLoaded={kakaoLoaded}
+                        selectedLocation={selectedLocation}
+                    />
+                ) : (
+                    <div className="map-placeholder">
+                      <i className="fas fa-map-marker-alt map-icon"></i>
+                      <p className="map-text">지도 로딩 중...</p>
+                    </div>
+                )}
+              </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default RecommendStaySection;
