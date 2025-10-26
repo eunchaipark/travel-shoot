@@ -18,10 +18,13 @@ public class FileUploadResponse {
 
     private Long fileId;
     private String originalFilename;
+    private String s3Key;
     private String s3Url;
+    private String bucketName;
+    private Long fileSize;
     private String contentType;
     private Integer sortOrder;
-//    private Boolean isRepresentative;
+    private Boolean isRepresentative;
 
     public static FileUploadResponse toFileUploadResponse(FileUpload fileUpload) {
         return FileUploadResponse.builder()

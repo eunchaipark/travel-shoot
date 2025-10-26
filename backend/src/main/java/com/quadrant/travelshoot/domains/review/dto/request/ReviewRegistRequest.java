@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class ReviewRegistRequest {
 
     @NotNull(message = "예약 ID는 필수입니다.")

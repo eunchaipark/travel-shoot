@@ -1,8 +1,10 @@
 package com.quadrant.travelshoot.domains.review.service.impl;
 
+import com.quadrant.travelshoot.common.service.S3Service;
 import com.quadrant.travelshoot.domains.ai.service.ReviewAiSummaryService;
 import com.quadrant.travelshoot.domains.common.entity.FileUpload;
 import com.quadrant.travelshoot.domains.common.repository.FileUploadRepository;
+import com.quadrant.travelshoot.domains.common.service.FileUploadService;
 import com.quadrant.travelshoot.domains.reservation.entity.Reservation;
 import com.quadrant.travelshoot.domains.review.dto.request.ReviewRegistRequest;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewDetailResponse;
@@ -42,6 +44,8 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewMapper reviewMapper;
     private final ReviewAiSummaryRepository reviewAiSummaryRepository;
     private final ReviewAiSummaryService reviewAiSummaryService;
+    private final FileUploadService fileUploadService;
+    private final S3Service s3Service;
 
 
     /**
@@ -89,7 +93,7 @@ public class ReviewServiceImpl implements ReviewService {
             throw new IllegalStateException("이미 해당 예약에 대한 리뷰가 존재합니다.");
         }
 
-        // 저장
+        // 1. 리뷰 생성하고 저장
         Review review = Review.builder()
                 .reservation(reservationRepository.getReferenceById(request.getReservationId()))
                 .user(userRepository.getReferenceById(userId))
@@ -103,13 +107,33 @@ public class ReviewServiceImpl implements ReviewService {
                 .valueRating(request.getValueRating())
                 .reviewContent(request.getReviewContent())
                 .isRecommended(request.getIsRecommended())
-//                .reviewImageUrl(imageUrl)
                 .build();
 
-        Review newReview = reviewRepository.save(review);
-        log.info("리뷰 등록 완료 - reviewId: {}", newReview.getReviewId());
+        Review savedReview = reviewRepository.save(review);
 
-        return reviewMapper.toReviewRegistResponse(newReview);
+        // 2. 이미지 업로드 처리
+        String imageUrl = null;
+        if (request.getReviewImage() != null && !request.getReviewImage().isEmpty()) {
+//            try {
+//                FileUpload fileUpload = fileUploadService.uploadAndSave(
+//                        request.getReviewImage(),
+//                        "REVIEW",
+//                        savedReview.getReviewId(),
+//                        userId,
+//                        0,
+//                        true
+//                );
+//                imageUrl = fileUpload.getS3Url();
+//                log.info("리뷰 이미지 업로드 성공 - fileId: {}, s3Url: {}",
+//                        fileUpload.getId(), fileUpload.getS3Url());
+//            } catch (Exception e) {
+//                log.error("리뷰 이미지 업로드 실패", e);
+//                throw new RuntimeException("이미지 업로드 실패", e);
+//            }
+        }
+
+        return null;
+//        return reviewMapper.toReviewRegistResponse(savedReview, imageUrl);
     }
 
 

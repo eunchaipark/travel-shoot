@@ -92,8 +92,4 @@ public class Review {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // 추가: 리뷰 이미지
-
-
-
 }
