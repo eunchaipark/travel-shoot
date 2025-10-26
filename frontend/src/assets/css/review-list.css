@@ -412,7 +412,8 @@ body {
 
 @media (min-width: 576px) {
     .review-list-container .reviews-list-section .review-item-card .review-photo-container {
-        width: 200px;
+        width: 15rem;
+        height: 9rem;
     }
 }
 

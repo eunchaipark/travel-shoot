@@ -50,7 +50,7 @@ public class StayMapper {
                 .build();
     }
 
-    public StayDetailResponse toStayDetailResponse(Stay stay, List<FileUpload> images, List<StayAmenity> stayAmenities){
+    public StayDetailResponse toStayDetailResponse(Stay stay, List<StayImageDto> images, List<StayAmenity> stayAmenities){
 
         if(stay==null){
             return null;
@@ -75,15 +75,12 @@ public class StayMapper {
                 .isActive(stay.getIsActive())
                 .regionId(stay.getRegionId())
                 .minPrice(stay.getMinPrice())
-                .stayImages(images.stream()
-                        .map(FileUploadResponse::toFileUploadResponse)
-                        .toList())
+                .stayImages(images)
                 .amenities(stayAmenities.stream()
                            .map(a -> toAmenityDto(a.getAmenity())).toList())
                 .rooms(stay.getRooms().stream()
                         .map(this::toRoomDto)
                         .toList())
-                .overallSummary("ai 요약 내용")
                 .build();
     }
 

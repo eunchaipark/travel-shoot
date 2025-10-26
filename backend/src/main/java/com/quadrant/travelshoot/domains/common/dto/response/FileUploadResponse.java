@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 /**
  * 파일 이미지 응답 DTO
+ * 저장할 때도 사용 dto -> entity 저장
  */
 @Getter
 @NoArgsConstructor
@@ -24,7 +25,7 @@ public class FileUploadResponse {
     private Long fileSize;
     private String contentType;
     private Integer sortOrder;
-    private Boolean isRepresentative;
+//    private Boolean isRepresentative;
 
     public static FileUploadResponse toFileUploadResponse(FileUpload fileUpload) {
         return FileUploadResponse.builder()
