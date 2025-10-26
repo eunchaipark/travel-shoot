@@ -16,14 +16,14 @@ export const fetchCalendarCourses = async (userId) => {
     }
 
     const data = await response.json();
-    console.log("백엔드 원본 데이터:", data);
+    //console.log("백엔드 원본 데이터:", data);
 
     const transformed = transformCalendarData(data);
-    console.log("변환된 데이터:", transformed);
+    //console.log("변환된 데이터:", transformed);
 
     return transformed;
   } catch (error) {
-    console.error("캘린더 코스 조회 실패:", error);
+    //console.error("캘린더 코스 조회 실패:", error);
     throw error;
   }
 };

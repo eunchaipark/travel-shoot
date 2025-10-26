@@ -158,8 +158,42 @@ public class BudgetFriendlyServiceImpl implements BudgetFriendlyService {
             selectedIds.add(candidate.getStay().getId());
             typeCounts.put(type, typeCount + 1);
 
-            log.info("추가 선택: {} - {} ({}원)", type, candidate.getStay().getName(),
+            log.info("추가 선택 (제약 준수): {} - {} ({}원)", type, candidate.getStay().getName(),
                     candidate.getAveragePrice());
+        }
+
+        // 2단계: 6개 미만이면 제약 완화하여 추가
+        if (selected.size() < 6) {
+            log.warn("6개 미만 감지 ({}개), 제약 조건 완화하여 채우기 시작", selected.size());
+            
+            for (StayWithPrice candidate : candidates) {
+                if (selected.size() >= 6) {
+                    break;
+                }
+
+                if (selectedIds.contains(candidate.getStay().getId())) {
+                    continue;
+                }
+
+                // 제약 없이 추가 (같은 타입, 같은 도시 제한 무시)
+                selected.add(candidate);
+                selectedIds.add(candidate.getStay().getId());
+
+                String type = candidate.getStay().getStayType();
+                typeCounts.put(type, typeCounts.getOrDefault(type, 0L) + 1);
+
+                log.info("추가 선택 (제약 완화): {} - {} ({}원)", 
+                        type, 
+                        candidate.getStay().getName(),
+                        candidate.getAveragePrice());
+            }
+        }
+
+        log.info("최종 선택된 숙소 개수: {} / 6", selected.size());
+        
+        // 최종 검증: 여전히 6개 미만이면 경고
+        if (selected.size() < 6) {
+            log.error("⚠️ 경고: 후보 숙소가 부족하여 6개를 채우지 못했습니다. (현재: {}개)", selected.size());
         }
     }
 
@@ -184,9 +218,9 @@ public class BudgetFriendlyServiceImpl implements BudgetFriendlyService {
 
         BigDecimal weekdayPrice = (BigDecimal) result.get(0)[0];
         BigDecimal weekendPrice = (BigDecimal) result.get(0)[1];
-
-        return weekdayPrice.add(weekendPrice)
-                .divide(new BigDecimal("2"), 0, RoundingMode.HALF_UP);
+        return weekdayPrice;
+        // return weekdayPrice.add(weekendPrice)
+        //         .divide(new BigDecimal("2"), 0, RoundingMode.HALF_UP);
     }
 
     /**
