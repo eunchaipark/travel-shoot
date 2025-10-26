@@ -24,6 +24,10 @@ public class FileUploadServiceImpl implements FileUploadService {
         return fileUploadRepository.findAllByReferenceTypeAndReferenceIdAndIsDeletedFalse(referenceType, referenceId);
     }
 
+    /**
+     * 파일 업로드 + File 저장
+     * uploadFile과 따로 만든 이유는 File 엔티티 저장하기 위함
+     */
     public FileUpload uploadAndSave(
             MultipartFile file,
             String referenceType,

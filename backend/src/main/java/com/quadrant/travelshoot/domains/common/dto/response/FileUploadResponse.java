@@ -1,10 +1,8 @@
 package com.quadrant.travelshoot.domains.common.dto.response;
 
 import com.quadrant.travelshoot.domains.common.entity.FileUpload;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
 /**
@@ -15,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class FileUploadResponse {
 
     private Long fileId;
