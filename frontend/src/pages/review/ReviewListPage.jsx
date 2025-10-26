@@ -47,6 +47,9 @@ const ReviewListPage = () => {
 
             // API 응답 구조
             const reviewList = reviewData.content || reviewData;
+            console.log(reviewList.map(r => r));
+            
+
             setReviews(Array.isArray(reviewList) ? reviewList : []);
             
         } catch (err) {

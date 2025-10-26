@@ -11,7 +11,9 @@ const ReviewCard = ({ review }) => {
     <div className="review-item-card">
       <div className="row">
         <div className="col-auto review-photo-container">
-          <div className="review-photo-background"></div>
+          <div className="review-photo-background"
+               style={{backgroundImage: `url(${review?.reviewImageUrl})`}}
+          ></div>
         </div>
         <div className="col review-content-area">
           <div className="review-header-section">
@@ -19,7 +21,7 @@ const ReviewCard = ({ review }) => {
               <div>
                 <div className="star-rating-icons mb-1">
                   {stars}
-                  <span className="ms-1 text-muted">({review.totalRating}/5)</span>
+                  <span className="ms-1 text-muted">({review.totalRating.toFixed(1)}/5.0)</span>
                 </div>
                 <div className="fw-bold reviewer-info-text">{review.userName} | {review.roomName}</div>
               </div>
@@ -29,7 +31,7 @@ const ReviewCard = ({ review }) => {
             <div className="d-block d-sm-none">
               <div className="star-rating-icons">
                 {stars}
-                <span className="ms-1 text-muted">({review.totalRating}/5)</span>
+                <span className="ms-1 text-muted">({review.totalRating.toFixed(1)}/5.0)</span>
               </div>
               <div className="fw-bold reviewer-info-text">{review.userName} | {review.roomName}</div>
               <div className="review-date-text">{formatDateTime(review.createdAt)}</div>

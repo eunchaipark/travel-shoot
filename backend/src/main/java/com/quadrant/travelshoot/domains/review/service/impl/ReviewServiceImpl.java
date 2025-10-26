@@ -45,7 +45,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewAiSummaryRepository reviewAiSummaryRepository;
     private final ReviewAiSummaryService reviewAiSummaryService;
     private final FileUploadService fileUploadService;
-    private final S3Service s3Service;
+
 
 
     /**
@@ -254,7 +254,6 @@ public class ReviewServiceImpl implements ReviewService {
 
         // pageable
         Pageable pageable = createPageable(page, size, sortBy);
-
         // roomId 필터링 & 페이징
         Page<Review> reviewPage;
         if(roomId != null){
@@ -263,8 +262,44 @@ public class ReviewServiceImpl implements ReviewService {
             reviewPage = reviewRepository.findPageByStayId(stayId, pageable);
         }
 
+
+
+        // 단일 파일 버전
+        Page<ReviewListResponse> responsePage = reviewPage.map(
+                review -> {
+                    List<FileUpload> fileUploads = fileUploadService.findAllByReferenceTypeAndReferenceId("REVIEW", review.getReviewId());
+
+                    String imageUrl;
+                    if(!fileUploads.isEmpty()){
+                        imageUrl = fileUploads.get(0).getS3Url();
+                    }else{ // 이미지가 없는 경우(등록할 때 강제할거임)
+                        imageUrl = "/images/product/hotel-room-city-view.png";
+                    }
+                    return reviewMapper.toReviewListResponse(review, imageUrl);
+                });
+
+        // 파일 여러 개 버전
+//        return reviewPage.map(
+//            review -> {
+//                List<FileUpload> fileUploads = fileUploadService.findByReferenceTypeAndReferenceId("REVIEW", review.getReviewId());
+//                List<String> imageUrls = fileUploads.stream()
+//                        .map(FileUpload::getS3Url)
+//                        .toList();
+//
+//                String representativeUrl = fileUploads.stream()
+//                        .filter(FileUpload::getIsRepresentative)
+//                        .findFirst()
+//                        .map(FileUpload::getS3Url)
+//                        .orElseGet(() -> imageUrls.isEmpty() ? null : imageUrls.get(0));
+//
+//                // Mapper에 이미지 URL 전달
+//                return reviewMapper.toListResponse(review, representativeUrl, imageUrls);
+//            }
+//        ).toList();
+
         // Review -> ReviewResponse 변환
-        Page<ReviewListResponse> responsePage = reviewPage.map(reviewMapper::toReviewListResponse);
+//        Page<ReviewListResponse> responsePage = reviewPage.map(reviewMapper::toReviewListResponse);
+//        Page<ReviewListResponse> responsePage = reviewPage.map(r -> reviewMapper.toReviewListResponse(r));
         return ReviewPageResponse.of(responsePage);
     }
 
@@ -337,7 +372,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         // 각 review마다 이미지 조회
         return reviewIds.stream()
-            .flatMap(reviewId -> fileUploadRepository
+            .flatMap(reviewId -> fileUploadService
                     .findAllByReferenceTypeAndReferenceId("REVIEW", reviewId)
                     .stream()
                     .map(FileUpload::getS3Url))

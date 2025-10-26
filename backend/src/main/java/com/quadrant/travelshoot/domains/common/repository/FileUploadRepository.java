@@ -11,8 +11,6 @@ import java.util.Optional;
 
 public interface FileUploadRepository extends JpaRepository<FileUpload, Long> {
 
-    List<FileUpload> findAllByReferenceTypeAndReferenceId(String stayType, Long stayId);
-
     @Query("SELECT f FROM FileUpload f " +
            "WHERE f.referenceType = :referenceType " +
            "AND f.referenceId = :referenceId " +

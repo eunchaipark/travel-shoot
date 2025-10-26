@@ -3,6 +3,7 @@ package com.quadrant.travelshoot.domains.review.dto.response;
 import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 숙소에 대한 리뷰 목록 조회 응답 DTO
@@ -25,7 +26,8 @@ public class ReviewListResponse {
 
     private BigDecimal totalRating; // 리뷰 평균평점
     private String reviewContent;   // 리뷰 내용
-    private String reviewImageUrl;  // 리뷰 이미지
+    private String reviewImageUrl;  // 리뷰 대표 이미지
+    private List<String> reviewImageUrls;  // 모든 이미지 URL 목록
 
     private LocalDateTime createdAt;    // 리뷰 작성일
     private LocalDateTime updatedAt;    // 리뷰 작성일
