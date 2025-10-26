@@ -179,8 +179,19 @@ const MainPage = () => {
   const navigate = useNavigate();
   // 검색 처리 
   const handleSearch = () => {
+    if(!locationValue & (!selectedDates.checkin || !selectedDates.checkout)){
+      alert("여행가실 지역과 여행가실 날짜를 선택해주세요");
+      return;
+    }
+
+
     if (!selectedDates.checkin || !selectedDates.checkout) {
       alert("체크인/체크아웃 날짜를 선택해주세요.");
+      return;
+    }
+
+    if(!locationValue){
+      alert("여행가실 지역을 정해주세요");
       return;
     }
 
@@ -193,7 +204,7 @@ const MainPage = () => {
       nights: nights,
       adults: guestCounts.adult,
       children: guestCounts.child,
-    };
+    };locationValue
 
     console.log("검색 조건:", searchData);
 
@@ -210,7 +221,7 @@ const MainPage = () => {
       `검색 실행:
       지역: ${locationValue}
       체크인: ${selectedDates.checkin}
-      체크아웃: ${selectedDates.checkout}
+      체크아웃: ${selectedDates.checkout} 
       ${nights}박 ${nights + 1}일
       성인: ${guestCounts.adult}명
       어린이: ${guestCounts.child}명
@@ -226,27 +237,28 @@ const MainPage = () => {
     setActiveDropdown(null);
   }, []);
 
-  //  수정: 날짜 입력 클릭 - activeDropdown 사용
-  const handleDateInputClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    setShowLocationDropdown(false); // 지역 닫기
-
-    if (!dateSelectionMode && activeDropdown !== 'date') {
+  // 날짜 입력 클릭 핸들러
+  const handleDateInputClick = () => {
+    if (activeDropdown === 'date') {
+      setActiveDropdown(null);
+      deactivateSelectionMode();
+    } else {
+      setActiveDropdown('date');
       activateSelectionMode();
     }
-
-    setActiveDropdown(prev => prev === 'date' ? null : 'date'); // 토글
+    setShowLocationDropdown(false);
   };
 
-  //  수정: 인원 입력 클릭 - activeDropdown 사용
-  const handleGuestInputClick = (e) => {
-    e.stopPropagation();
-
-    setShowLocationDropdown(false); // 지역 닫기
-    setActiveDropdown(prev => prev === 'guest' ? null : 'guest'); // 토글
-  };
+  // 인원 입력 클릭 핸들러
+  const handleGuestInputClick = () => {
+    if (activeDropdown === 'guest') {
+      setActiveDropdown(null);
+    } else {
+      setActiveDropdown('guest');
+    }
+    setShowLocationDropdown(false);
+    deactivateSelectionMode();
+};
 
   // 지역 입력 포커스 (원본 로직 유지, 다른 드롭다운 닫기만 추가)
   const handleLocationFocus = () => {

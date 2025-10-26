@@ -4,13 +4,13 @@ import HotelGallery from "./StayDetailImage";
 
 // 임시 이미지
 const imageData = [
-"../../../public/images/product/ocean-view-hotel-room-with-balcony.jpg",
-    "../../../public/images/product/modern-hotel-lobby-interior.jpg",
-    "../../../public/images/product/hotel-room-city-view.png",
-    "../../../public/images/product/hotel-bathroom-modern-design.jpg",
-    "../../../public/images/product/hotel-dining-area.jpg",
-    "../../../public/images/product/ocean-view-hotel-room-with-balcony.jpg",
-    "../../../public/images/product/modern-hotel-lobby-interior.jpg"
+    "/images/product/ocean-view-hotel-room-with-balcony.jpg",
+    "/images/product/modern-hotel-lobby-interior.jpg",
+    "/images/product/hotel-room-city-view.png",
+    "/images/product/hotel-bathroom-modern-design.jpg",
+    "/images/product/hotel-dining-area.jpg",
+    "/images/product/ocean-view-hotel-room-with-balcony.jpg",
+    "/images/product/modern-hotel-lobby-interior.jpg"
 ];
 
 const MainContent = ({data, searchParams}) => {

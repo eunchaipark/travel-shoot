@@ -1,5 +1,7 @@
 package com.quadrant.travelshoot.domains.review.controller;
 
+import com.quadrant.travelshoot.domains.ai.dto.response.ReviewAiSummaryResponse;
+import com.quadrant.travelshoot.domains.ai.service.ReviewAiSummaryService;
 import com.quadrant.travelshoot.domains.review.dto.request.ReviewRegistRequest;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewDetailResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewListResponse;
@@ -26,6 +28,15 @@ import java.util.List;
 public class ReviewController {
 
     private final ReviewServiceImpl reviewService;
+    private final ReviewAiSummaryService reviewAiSummaryService;
+
+    @GetMapping("/ai-summary/{stayId}")
+    public ResponseEntity<String> getReviewSummary(@PathVariable Long stayId) {
+        log.info("리뷰 AI 요약 요청 - stayId: {}", stayId);
+
+        String response = reviewService.getReviewSummary(stayId);
+        return ResponseEntity.ok(response);
+    }
 
     /**
      * 리뷰 등록
@@ -42,12 +53,11 @@ public class ReviewController {
 
         Long userId = (Long) session.getAttribute("userId");
 
-
         log.info("리뷰 등록 요청 - userId: {}", userId);
-        log.info("리뷰 등록 요청!!! - reservationId: {}", reviewRegistRequest.getReservationId());
-//        Long userId = 1L;
-        ReviewRegistResponse resultResponse = reviewService.createReview(userId, reviewRegistRequest);
+        log.info("리뷰 등록 요청 - reservationId: {}", reviewRegistRequest.getReservationId());
+        log.info("리뷰 등록 요청!!! -  {}", reviewRegistRequest);
 
+        ReviewRegistResponse resultResponse = reviewService.createReview(userId, reviewRegistRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("리뷰 등록 성공", resultResponse));
     }
 

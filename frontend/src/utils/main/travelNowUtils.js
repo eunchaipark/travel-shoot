@@ -46,7 +46,7 @@ const API_BASE_URL =
 
 export const fetchTravelNowData = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/travel-now/destinations`);
+    const response = await fetch(`${window.API_BASE_URL}/api/travel-now/destinations`);
     if (!response.ok) {
       throw new Error("Failed to fetch destinations");
     }

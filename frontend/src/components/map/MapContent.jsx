@@ -1,21 +1,44 @@
 import React from 'react';
 import { getStayType } from '@/utils/formatters';
 import { useNavigate } from "react-router-dom";
+import { useDefaultStayParams } from "@/hooks/search/useDefaultStayParams"; //1024 추가
+import useSearchParamsSync from "@/hooks/search/useSearchParamsSync"; //1024 추가
 
 const MapContent = ({ mapRef, kakaoLoaded, selectedLocation }) => {
     const navigate = useNavigate();
+    const { getDefaultDates, getDefaultGuests } = useDefaultStayParams();  //1024 추가
+    const { setDefaultParams } = useSearchParamsSync();  //1024 추가
     console.log(selectedLocation);
     return (
         <div className="flex-1 relative">
             <div ref={mapRef} className="w-full h-full" style={{minHeight: '400px'}} />
 
-            {/* 선택된 위치 카드 */}
+            {/* 선택된 위치 카드*/}
             {selectedLocation && (
                 <div
                     className="map-card-overlay"
+                    // onClick={() => {
+                    //     if (selectedLocation.placeType === "stay") {
+                    //         navigate(`/stays/${selectedLocation?.id}`);
+                    //     }
+                    // }}
+                    //1024 추가
                     onClick={() => {
                         if (selectedLocation.placeType === "stay") {
-                            navigate(`/stays/${selectedLocation?.id}`);
+                            setDefaultParams();
+
+                            const { checkIn, checkOut } = getDefaultDates({ nights: 2, startFromTomorrow: true });
+                            const { adults, children } = getDefaultGuests();
+
+                            const params = new URLSearchParams({
+                                checkIn,
+                                checkOut,
+                                adults,
+                                children,
+                                stayName: selectedLocation.name || ""
+                            });
+
+                            navigate(`/stays/${selectedLocation.id}?${params.toString()}`);
                         }
                     }}
                     style={{

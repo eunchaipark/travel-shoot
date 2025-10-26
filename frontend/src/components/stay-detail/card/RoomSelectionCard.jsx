@@ -2,12 +2,22 @@ import { useEffect } from "react";
 import { formatNumber } from "@/utils/stay/StayDetailUtils";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '@/components/context/AuthContext'; //TODO : 1023 김이슬 코드 추가
+import useSearchParamsSync from '@/hooks/search/useSearchParamsSync'; //1024 추가
 
 const RoomSelectionCard = ({ searchParams, rooms }) => {
 
     const navigate = useNavigate();
     const { isAuthenticated, openLoginModal } = useAuth(); //TODO : 1023 김이슬 코드 추가
-    const { stayId, checkIn, checkOut, adults, children } = searchParams;
+    const urlParams = useSearchParamsSync(); //1024추가
+
+    // const { stayId, checkIn, checkOut, adults, children } = searchParams; //1024 주석
+
+    // 1024 위에 주석 처리 후 아래 5줄 코드 추가
+    const { stayId } = searchParams;
+    const checkIn = searchParams.checkIn || urlParams.checkIn;
+    const checkOut = searchParams.checkOut || urlParams.checkOut;
+    const adults = searchParams.adults || urlParams.adults || 2;
+    const children = searchParams.children || urlParams.children || 0;
 
     // searchParams 에서 LocalDate로 받아온다고 가정
     const checkInDate = new Date("2025-10-27");
@@ -67,7 +77,7 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
                             <div className="row align-items-stretch">
                                 <div className="col-lg-4 col-md-4 mb-3 mb-md-0">
                                     <img
-                                        src="@/../public/images/product/placeholder-room.png"
+                                        src="/images/product/placeholder-room.png"
                                         alt="슈페리어 더블룸"
                                         className="img-fluid rounded room-image w-100 align-self-stretch" />
                                 </div>
@@ -100,7 +110,7 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
                                             <i className="bi bi-door-open me-1"></i> 침실 {room.bedroomCount}개
                                         </div>
                                         <div className="mb-1">
-                                            <img src="../../../../public/images/product/icon-bathroom.svg" className="me-1" /> 욕실 {room.bathroomCount}개
+                                            <img src="/images/product/icon-bathroom.svg" className="me-1" /> 욕실 {room.bathroomCount}개
                                         </div>
                                     </div>
                                 </div>

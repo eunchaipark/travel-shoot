@@ -1,10 +1,10 @@
 import React from 'react';
 import useReservation from '@/hooks/mypage/useReservation';
 import {formatDate, formatDateWithDay, formatTime} from "@/utils/formatters/dateFormatter.js";
-
+import { useNavigate } from "react-router-dom";
 const ReviewManagement = () => {
     const { reviews } = useReservation();
-
+    const navigate = useNavigate();
     return (
         <div className="profile-form">
             <h2 className="form-title">이용 후기</h2>
@@ -44,7 +44,7 @@ const ReviewManagement = () => {
                         </div>
 
                         <div className="booking-actions">
-                            <button className="btn-cancel" onClick={() => navigate(`/reviews/reservations/${reservation?.reservationId}`)}>자세히 보기</button>
+                            <button className="btn-cancel" onClick={() => navigate(`/reviews/reservations/${review?.reservationId}`)}>자세히 보기</button>
                         </div>
                     </div>
                 )))}
