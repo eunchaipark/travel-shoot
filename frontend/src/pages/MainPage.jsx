@@ -92,9 +92,9 @@ const MainPage = () => {
         const reservationData = await fetchCalendarCourses(userId);
         const events = convertToCalendarEvents(reservationData);
         setCalendarEvents(events);
-        console.log("캘린더 이벤트 로드 성공:", events);
+        //console.log("캘린더 이벤트 로드 성공:", events);
       } catch (error) {
-        console.error("캘린더 데이터 로딩 실패, fallback 데이터 사용:", error);
+        //console.error("캘린더 데이터 로딩 실패, fallback 데이터 사용:", error);
         const fallbackEvents = convertToCalendarEvents(RAW_RESERVATION_DATA);
         setCalendarEvents(fallbackEvents);
       } finally {
@@ -206,7 +206,7 @@ const MainPage = () => {
       children: guestCounts.child,
     };locationValue
 
-    console.log("검색 조건:", searchData);
+    //console.log("검색 조건:", searchData);
 
     const params = new URLSearchParams({
       region: locationValue,
@@ -286,7 +286,7 @@ const MainPage = () => {
         `${window.API_BASE_URL}/api/stays/autocomplete?keyword=${encodeURIComponent(value)}`
       );
       const data = await response.json();
-      console.log('자동완성 결과:', data);
+      //console.log('자동완성 결과:', data);
       setSuggestions(data || []);
       setShowLocationDropdown(true);
     } catch (error) {
@@ -394,7 +394,7 @@ const MainPage = () => {
         // requestAnimationFrame으로 DOM 렌더링 완료 대기
         requestAnimationFrame(() => {
           const dropdownHeight = dropdown.offsetHeight;
-          console.log('드롭다운 높이:', dropdownHeight); // 디버깅용
+          //console.log('드롭다운 높이:', dropdownHeight); // 디버깅용
           
           if (dropdownHeight > 0) {
             nextCard.style.marginTop = `${dropdownHeight + 16}px`;
