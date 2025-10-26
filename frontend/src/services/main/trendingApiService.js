@@ -13,14 +13,14 @@ export const fetchTrendingStays = async () => {
     }
 
     const data = await response.json();
-    console.log("Trending 숙소 백엔드 원본 데이터:", data); // 디버깅용
+    //console.log("Trending 숙소 백엔드 원본 데이터:", data); // 디버깅용
 
     const transformed = transformStayData(data);
-    console.log("Trending 숙소 변환된 데이터:", transformed); // 디버깅용
+    //console.log("Trending 숙소 변환된 데이터:", transformed); // 디버깅용
 
     return transformed;
   } catch (error) {
-    console.error("Trending 숙소 조회 실패:", error);
+    //console.error("Trending 숙소 조회 실패:", error);
     throw error;
   }
 };
@@ -41,14 +41,14 @@ export const fetchTrendingRestaurants = async () => {
     }
 
     const data = await response.json();
-    console.log("Trending 맛집 백엔드 원본 데이터:", data); // 디버깅용
+    //console.log("Trending 맛집 백엔드 원본 데이터:", data); // 디버깅용
 
     const transformed = transformRestaurantData(data);
-    console.log("Trending 맛집 변환된 데이터:", transformed); // 디버깅용
+    //console.log("Trending 맛집 변환된 데이터:", transformed); // 디버깅용
 
     return transformed;
   } catch (error) {
-    console.error("Trending 맛집 조회 실패:", error);
+    //console.error("Trending 맛집 조회 실패:", error);
     throw error;
   }
 };
@@ -69,14 +69,14 @@ export const fetchTrendingActivities = async () => {
     }
 
     const data = await response.json();
-    console.log("Trending 관광지 백엔드 원본 데이터:", data); // 디버깅용
+    //console.log("Trending 관광지 백엔드 원본 데이터:", data); // 디버깅용
 
     const transformed = transformActivityData(data);
-    console.log("Trending 관광지 변환된 데이터:", transformed); // 디버깅용
+    //console.log("Trending 관광지 변환된 데이터:", transformed); // 디버깅용
 
     return transformed;
   } catch (error) {
-    console.error("Trending 관광지 조회 실패:", error);
+    //console.error("Trending 관광지 조회 실패:", error);
     throw error;
   }
 };
@@ -96,7 +96,7 @@ export const fetchAllTrendingData = async () => {
       attractions: activities,
     };
   } catch (error) {
-    console.error("전체 Trending 데이터 조회 실패:", error);
+    //console.error("전체 Trending 데이터 조회 실패:", error);
     throw error;
   }
 };
