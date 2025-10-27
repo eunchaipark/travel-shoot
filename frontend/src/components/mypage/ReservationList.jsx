@@ -97,11 +97,14 @@ const ReservationList = () => {
                                             예약 취소
                                         </button>
                                     )}
-                                    {reservation?.reviewId === null && reservation?.reservationStatus === '이용완료' && (
+                                    {(reservation?.reviewId === null || !reservation?.reviewId) && reservation?.reservationStatus === '이용완료' && (
                                         <button className="btn-review" onClick={() => navigate(`/reviews/reservations/${reservation?.reservationId}`)}>후기 작성하기</button>
                                     )}
                                     {reservation?.reviewId && (
-                                        <button className="btn-review" style={{cursor:"default"}}>후기 작성 완료</button>
+                                        <button className="btn-review review-complete">후기 작성 완료</button>
+                                    )}
+                                    {reservation?.reservationStatus === '예약취소' && (
+                                        <button className="btn-cancel-reason">취소 사유 : {reservation?.cancelReason}</button>
                                     )}
                                 </div>
                             </div>

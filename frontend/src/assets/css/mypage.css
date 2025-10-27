@@ -294,7 +294,7 @@
 }
 
 .mypage .booking-list .booking-status.cancelled {
-  background: #956b6f;
+  background: #8d8788;
   color: white;
 }
 
@@ -362,6 +362,22 @@
   font-weight: 500;
   height: fit-content;
   cursor: pointer;
+}
+
+.mypage .booking-list .btn-review.review-complete{
+  cursor: default;
+}
+
+.mypage .booking-list .btn-cancel-reason {
+  background: #eeeeee;
+  color: #666;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 7px 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  height: fit-content;
+  cursor: default;
 }
 
 .mypage .booking-list .write-date {
@@ -478,7 +494,8 @@
   }
 
   .mypage .booking-list .btn-cancel,
-  .mypage .booking-list .btn-review {
+  .mypage .booking-list .btn-review,
+  .mypage .booking-list .btn-cancel-reason {
     width: 100%;
     padding: 12px;
   }
