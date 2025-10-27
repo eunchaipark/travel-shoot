@@ -135,17 +135,21 @@ const MainPage = () => {
     const props = info.event.extendedProps;
 
     if (props.isMainReservation) {
-      alert(
-        `"${
-          props.originalTitle || info.event.title
-        }" 예약 상세 페이지로 이동합니다.\n숙소: ${
-          props.accommodationName
-        }\n상태: ${props.status}\n예약 ID: ${props.reservationId}`
-      );
+      // alert(
+      //   `"${
+      //     props.originalTitle || info.event.title
+      //   }" 예약 상세 페이지로 이동합니다.\n숙소: ${
+      //     props.accommodationName
+      //   }\n상태: ${props.status}\n예약 ID: ${props.reservationId}`
+      // );
+      const moveUrl = `/reservation/detail?reservationId=${props.reservationId}`;
+      navigate(moveUrl);
     } else if (props.isSchedule) {
-      alert(
-        `"${props.originalScheduleTitle}" 일정에서 예약 상세 페이지로 이동합니다.\n소속 여행: ${props.parentTitle}\n시간: ${props.time}\n예약 ID: ${props.parentReservationId}`
-      );
+      // alert(
+      //   `"${props.originalScheduleTitle}" 일정에서 예약 상세 페이지로 이동합니다.\n소속 여행: ${props.parentTitle}\n시간: ${props.time}\n예약 ID: ${props.parentReservationId}`
+      // );
+      const moveUrl = `/reservation/detail?reservationId=${props.parentReservationId}`;
+      navigate(moveUrl);
     }
   };
 
