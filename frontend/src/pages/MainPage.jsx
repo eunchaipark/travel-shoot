@@ -184,7 +184,7 @@ const MainPage = () => {
   // 검색 처리 
   const handleSearch = () => {
     if(!locationValue & (!selectedDates.checkin || !selectedDates.checkout)){
-      alert("여행가실 지역과 여행가실 날짜를 선택해주세요");
+      alert("여행 가실 지역과 여행가실 날짜를 선택해주세요");
       return;
     }
 
@@ -195,7 +195,7 @@ const MainPage = () => {
     }
 
     if(!locationValue){
-      alert("여행가실 지역을 정해주세요");
+      alert("여행 가실 지역을 정해주세요");
       return;
     }
 
@@ -221,16 +221,7 @@ const MainPage = () => {
     });
 
     const searchUrl = `/search?${params.toString()}`;
-    alert(
-      `검색 실행:
-      지역: ${locationValue}
-      체크인: ${selectedDates.checkin}
-      체크아웃: ${selectedDates.checkout} 
-      ${nights}박 ${nights + 1}일
-      성인: ${guestCounts.adult}명
-      어린이: ${guestCounts.child}명
-      이동URL:${searchUrl}`
-    );
+
     navigate(searchUrl);
 
   };
