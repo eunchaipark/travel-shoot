@@ -151,6 +151,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    cursor: pointer;
 }
 
 .product-detail-container .star-rating {
@@ -359,7 +360,8 @@
 }
 
 .gallery-trigger {
-    cursor: pointer;
+    /* cursor: pointer; */
+
 }
 
 /* 첫 번째 코드의 모달 스타일 적용 */

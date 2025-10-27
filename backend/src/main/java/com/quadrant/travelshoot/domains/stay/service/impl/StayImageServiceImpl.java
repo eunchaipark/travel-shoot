@@ -22,6 +22,11 @@ public class StayImageServiceImpl implements StayImageService {
 //        return fileUploadRepository.countByReferenceTypeAndReferenceIdAndIsDeletedFalse("STAY", stayId);
 //    }
 
+    /**
+     * 숙소 썸네일 이미지 최소 5개
+     * @param stayId
+     * @return List<StayImageDto>
+     */
     public List<StayImageDto> getThumbnailImages(Long stayId){
         List<FileUpload> images = fileUploadRepository.findTop5ByReferenceTypeAndReferenceIdOrderBySortOrderAsc("STAY", stayId);
 
@@ -29,6 +34,20 @@ public class StayImageServiceImpl implements StayImageService {
                 .map(this::toStayImageDto)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * 객실 조회용 이미지 1개
+     * @param roomId
+     * @return
+     */
+    public String getRoomImage(Long roomId){
+        String roomImageUrl = fileUploadRepository.findFirstByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("ROOM", roomId)
+                .map(FileUpload::getS3Url)
+                .orElse("/images/product/hotel-bathroom-modern-design.jpg");
+        return roomImageUrl;
+    }
+
+
 
     /**
      * FileUpload -> 간단한 StayImageDto 변환

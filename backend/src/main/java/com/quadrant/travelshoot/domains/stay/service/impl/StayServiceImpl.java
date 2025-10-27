@@ -61,7 +61,8 @@ public class StayServiceImpl implements StayService {
 
         // 썸네일 이미지 5개 조회
         List<StayImageDto> thumbnailImages = stayImageService.getThumbnailImages(stayId);
-//        List<FileUpload> images = fileUploadService.findAllByReferenceTypeAndReferenceId("STAY", stayId);
+        // 객실 이미지 조회
+
         return stayMapper.toStayDetailResponse(stay, thumbnailImages, stayAmenities);
     }
 

@@ -12,6 +12,8 @@ public interface StayImageService {
      */
     List<StayImageDto> getThumbnailImages(Long stayId);
 
+    String getRoomImage(Long roomId);
+
     /**
      * 전체 이미지 조회 (모달용)
      */

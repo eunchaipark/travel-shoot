@@ -77,7 +77,7 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
                             <div className="row ">
                                 <div className="col-lg-4 col-md-4 mb-3 mb-md-0 stay-img-container">
                                     <img
-                                        src="/images/product/placeholder-room.png"
+                                        src={room?.roomImageUrl}
                                         alt="슈페리어 더블룸"
                                         className="img-fluid rounded room-image w-100 h-100 "
                                         style={{objectFit: "cover"}}
@@ -150,7 +150,7 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
                         </div>
                     ))}
                 </div>
-            </div> : <div>객실 정보를 불러오는 중...</div> }
+            </div> : <div>객실 정보가 없습니다.</div> }
         </div>
     );
 }

@@ -47,6 +47,9 @@ public class RoomDto {
     private String roomDescription;
     private String reservationNotice;
 
+    // 객실 이미지 1개
+    private String roomImageUrl;
+
     // 상태
     private Boolean isAvailable;
     private Boolean isActive;
