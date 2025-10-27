@@ -32,6 +32,7 @@ public class Payment {
     @Column(name = "payment_amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal paymentAmount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "payment_status", nullable = false)
     private PaymentStatus paymentStatus = PaymentStatus.결제대기;
 
