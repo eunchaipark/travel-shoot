@@ -1,19 +1,19 @@
 package com.quadrant.travelshoot.domains.common.dto.response;
 
 import com.quadrant.travelshoot.domains.common.entity.FileUpload;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
 /**
  * 파일 이미지 응답 DTO
+ * 저장할 때도 사용 dto -> entity 저장
  */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class FileUploadResponse {
 
     private Long fileId;
@@ -24,7 +24,7 @@ public class FileUploadResponse {
     private Long fileSize;
     private String contentType;
     private Integer sortOrder;
-    private Boolean isRepresentative;
+//    private Boolean isRepresentative;
 
     public static FileUploadResponse toFileUploadResponse(FileUpload fileUpload) {
         return FileUploadResponse.builder()

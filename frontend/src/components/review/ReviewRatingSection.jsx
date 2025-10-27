@@ -4,7 +4,7 @@
  * @param {object} props.ratings - 현재 평점 상태
  * @param {function} props.onRatingChange - 평점 변경 핸들러
  */
-const ReviewRatingSection = ({ ratings, onRatingChange, detailCategories }) => {
+const ReviewRatingSection = ({ stayName, ratings, onRatingChange, detailCategories }) => {
     
     /**
      * 특정 카테고리의 별점 클릭 핸들러
@@ -52,7 +52,7 @@ const ReviewRatingSection = ({ ratings, onRatingChange, detailCategories }) => {
         <section className="rating-section">
             {/* 전체 만족도 */}
             <div className="overall-rating">
-                <div className="rating-question">부산 더스카이 이용에 만족하셨나요?</div>
+                <div className="rating-question"><span style={{color: "#ff8888"}}>{stayName}</span> 이용에 만족하셨나요?</div>
                 {renderStarRatingContainer('totalRating')}
             </div>
             

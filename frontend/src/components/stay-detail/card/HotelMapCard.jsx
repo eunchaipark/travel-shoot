@@ -10,8 +10,11 @@ const HotelMapCard = ({stay}) => {
     }]
     const { mapRef, kakaoLoaded, selectedLocation } = useKakaoMap(true, locationData, null, true);
     return (
-        <div className="map-card card mb-4 card-section-border position-sticky">
+        <div className="map-card card card-section-border mb-4 position-sticky">
             <div className="card-body">
+                <div className="card-title mb-3 fw-bold">
+                    위치·주소
+                </div>
                 <div className="position-relative">
                     <div className="map-page main-map-page">
                         <div className="map-container">

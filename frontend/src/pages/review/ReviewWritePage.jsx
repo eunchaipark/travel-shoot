@@ -217,7 +217,7 @@ const ReviewWritePage = () => {
                 {reservationInfo && <ReviewReservationSection reservationInfo={reservationInfo}/> }
 
                 {/* 평점 섹션 (전체 + 세부) */}
-                <ReviewRatingSection ratings={ratings} onRatingChange={handleRatingChange} detailCategories={detailCategories}/>
+                {reservationInfo && <ReviewRatingSection stayName={reservationInfo.stayName} ratings={ratings} onRatingChange={handleRatingChange} detailCategories={detailCategories}/> }
                 {/* 텍스트 후기 */}
                 <section className="text-review-section">
                     <h3 className="section-title">텍스트 후기 작성</h3>

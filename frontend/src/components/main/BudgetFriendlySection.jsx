@@ -344,7 +344,7 @@ const BudgetFriendlySection = () => {
         setError(null);
 
         const data = await fetchBudgetFriendlyStays();
-        console.log("변환된 데이터:", data);
+        //console.log("변환된 데이터:", data);
 
         setBudgetData(data);
       } catch (err) {
@@ -360,12 +360,12 @@ const BudgetFriendlySection = () => {
 
   const navigate = useNavigate();
   const handleCardClick = (item) => {
-    console.log("Budget 카드 클릭:", item);
+    //console.log("Budget 카드 클릭:", item);
     
     const stayId = item.stayId || item.id;
     
     if (!stayId) {
-      console.error('stayId가 없습니다:', item);
+      //console.error('stayId가 없습니다:', item);
       alert('숙소 정보를 찾을 수 없습니다.');
       return;
     }
@@ -398,7 +398,7 @@ const BudgetFriendlySection = () => {
       },
     };
 
-    console.log("Budget Slider 초기화 완료");
+    //console.log("Budget Slider 초기화 완료");
 
     return () => {
       delete window.BudgetSliderAPI;

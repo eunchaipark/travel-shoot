@@ -6,6 +6,7 @@ import com.quadrant.travelshoot.domains.review.repository.ReviewRepository;
 import com.quadrant.travelshoot.domains.review.service.impl.ReviewServiceImpl;
 import com.quadrant.travelshoot.domains.stay.dto.response.RoomFilterDto;
 import com.quadrant.travelshoot.domains.stay.dto.response.StayDetailResponse;
+import com.quadrant.travelshoot.domains.stay.dto.response.StayImageDto;
 import com.quadrant.travelshoot.domains.stay.dto.response.StayRatingResponse;
 import com.quadrant.travelshoot.domains.stay.entity.Room;
 import com.quadrant.travelshoot.domains.stay.entity.Stay;
@@ -13,6 +14,7 @@ import com.quadrant.travelshoot.domains.stay.entity.StayAmenity;
 import com.quadrant.travelshoot.domains.stay.mapper.StayMapper;
 import com.quadrant.travelshoot.domains.stay.repository.RoomRepository;
 import com.quadrant.travelshoot.domains.stay.repository.StayRepository;
+import com.quadrant.travelshoot.domains.stay.service.StayImageService;
 import com.quadrant.travelshoot.domains.stay.service.StayService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +33,7 @@ public class StayServiceImpl implements StayService {
 
     private final StayRepository stayRepository;
     private final RoomRepository roomRepository;
+    private final StayImageService stayImageService;
     private final FileUploadServiceImpl fileUploadService;
     private final StayAmenityServiceImpl stayAmenityService;
     private final ReviewServiceImpl reviewService;
@@ -46,24 +49,20 @@ public class StayServiceImpl implements StayService {
     @Transactional
     public StayDetailResponse getStayDetail(Long stayId) {
         Stay stay = stayRepository.findByStayId(stayId)
-                .orElseThrow(() -> new IllegalArgumentException("이용할 수 없는 숙소입니다."));
-
-        // 조회수 증가 - 조회수 테이블 따로 있어서
-//        stayRepository.incrementViewCount(stayId);
-        String referenceType = "STAY";
+                .orElseThrow(() -> new IllegalArgumentException("해당 숙소를 찾을 수 없습니다."));
 
         // 최저가 minPrice 조회
         BigDecimal minPrice = findRoomMinPrice(stay.getRooms());
         stay.setMinPrice(minPrice);
-
         // 리뷰 개수 reviewCount
         stay.setReviewCount(reviewService.countReview(stayId));
-
         // 편의시설 조회
         List<StayAmenity> stayAmenities = stayAmenityService.findByStayId(stayId);
-        // 모든 이미지 조회
-        List<FileUpload> images = fileUploadService.findAllByReferenceTypeAndReferenceId(referenceType, stayId);
-        return stayMapper.toStayDetailResponse(stay, images, stayAmenities);
+
+        // 썸네일 이미지 5개 조회
+        List<StayImageDto> thumbnailImages = stayImageService.getThumbnailImages(stayId);
+//        List<FileUpload> images = fileUploadService.findAllByReferenceTypeAndReferenceId("STAY", stayId);
+        return stayMapper.toStayDetailResponse(stay, thumbnailImages, stayAmenities);
     }
 
     /**

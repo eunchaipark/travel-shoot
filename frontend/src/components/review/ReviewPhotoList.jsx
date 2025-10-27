@@ -13,14 +13,14 @@ const ReviewPhotoList = ({images}) => {
   return (
     <div className="photo-gallery-section">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h6 className="fw-bold mb-0">숙소 후기사진</h6>
+        <div className="fw-bold mb-0">숙소 후기사진</div>
         <button
-          className="photo-count-display-button"
+          className="photo-count-display-button d-flex align-items-center justify-content-between gap-1"
           data-bs-toggle="modal"
           data-bs-target="#galleryModal"
           onClick={() => handleImageClick(0)}
         >
-          전체 {images.length}개 후기 <i className="fas fa-chevron-right"></i>
+          전체 사진 보기 ({images.length}) <i className="fas fa-chevron-right mt-1"></i>
         </button>
       </div>
 

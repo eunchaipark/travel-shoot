@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -31,8 +32,9 @@ public class S3Service {
 
     /**
      * 파일 업로드 + File 저장
-     * s3와 따로 만든 이유는 Files 테이블에 File 엔티티 저장하기 위함
+     * uploadFile과 따로 만든 이유는 File 엔티티 저장하기 위함
      */
+    @Transactional
     public FileUploadResponse saveFileUpload(MultipartFile file) {
         String s3Key = createFileName(file.getOriginalFilename());
 

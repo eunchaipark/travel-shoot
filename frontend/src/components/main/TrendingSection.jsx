@@ -311,15 +311,15 @@ const TrendingSection = () => {
         setLoading(true);
         setError(null);
 
-        console.log("Trending 데이터 로딩 시작...");
+        //console.log("Trending 데이터 로딩 시작...");
         const data = await fetchAllTrendingData();
-        console.log("Trending 데이터 로딩 완료:", data);
+        //console.log("Trending 데이터 로딩 완료:", data);
 
         setTrendingData(data);
       } catch (err) {
-        console.error("Trending 데이터 로딩 실패:", err);
+        //console.error("Trending 데이터 로딩 실패:", err);
         setError(err.message);
-        console.log("기본 데이터 사용");
+        //console.log("기본 데이터 사용");
       } finally {
         setLoading(false);
       }
@@ -330,7 +330,7 @@ const TrendingSection = () => {
 
   const navigate = useNavigate();
   const handleCardClick = (item, tabType) => {
-    console.log("Trending 카드 클릭:", tabType, item.id);
+    //console.log("Trending 카드 클릭:", tabType, item.id);
 
     if (tabType === 'stay') {
 
@@ -365,7 +365,7 @@ const TrendingSection = () => {
       init: () => console.log("Trending Slider 이미 초기화됨"),
       switchTab: (tab) => switchTab(tab),
       reload: async () => {
-        console.log("Trending 데이터 재로딩...");
+        //console.log("Trending 데이터 재로딩...");
         try {
           const data = await fetchAllTrendingData();
           setTrendingData(data);
@@ -376,7 +376,7 @@ const TrendingSection = () => {
       },
     };
 
-    console.log("Trending Slider 초기화 완료");
+    //console.log("Trending Slider 초기화 완료");
 
     return () => {
       delete window.TrendingSection;
