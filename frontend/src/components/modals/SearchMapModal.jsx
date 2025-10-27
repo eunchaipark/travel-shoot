@@ -3,7 +3,7 @@ import { useSearchKakaoMap } from '@/hooks/useSearchKakaoMap';
 import CommonLoading from '@/components/loading/CommonLoading';
 import '@/assets/css/reservation.css';
 
-const SearchMapModal = ({ isOpen, onClose, spotId, searchText, onUpdateSuccess }) => {
+const SearchMapModal = ({ isOpen, onClose, spotId, searchText, onUpdateStart, onUpdateSuccess }) => {
     const [keyword, setKeyword] = useState("");
     const {
         mapRef,
@@ -15,7 +15,7 @@ const SearchMapModal = ({ isOpen, onClose, spotId, searchText, onUpdateSuccess }
         gotoPage,
         moveToPlace,
         isUpdating
-    } = useSearchKakaoMap(isOpen, onClose, spotId, onUpdateSuccess);
+    } = useSearchKakaoMap(isOpen, onClose, spotId, onUpdateStart, onUpdateSuccess );
 
     useEffect(() => { if (searchText) { setKeyword(searchText + ' 맛집');}
     }, [searchText]);

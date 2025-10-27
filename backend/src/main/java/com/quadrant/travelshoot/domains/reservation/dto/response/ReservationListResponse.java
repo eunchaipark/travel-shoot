@@ -31,4 +31,5 @@ public class ReservationListResponse {
     private Integer totalNights;
     private BigDecimal totalPrice;
     private Long reservationId;
+    private String cancelReason;
 }
