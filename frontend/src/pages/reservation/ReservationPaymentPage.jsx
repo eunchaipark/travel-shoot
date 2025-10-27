@@ -85,7 +85,8 @@ const ReservationPaymentPage = () => {
 
             if (result && result.success) {
                 // navigate("/payment-complete");
-                navigate(`/payment-complete?reservationId=${result.reservationId}`);
+                // navigate(`/payment-complete?reservationId=${result.reservationId}`);
+                navigate(`/payment-complete?reservationId=${result.reservationId}`, { replace: true }); // 뒤로가기 막기
 
             } else {
                 alert("결제 처리 중 오류가 발생했습니다.");
