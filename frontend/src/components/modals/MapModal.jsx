@@ -7,7 +7,7 @@ import '@/assets/css/map.css';
 const MapModal = ({ isOpen, onClose, locationData = [], filterParams = {} }) => {
     const { mapRef, kakaoLoaded, selectedLocation } = useKakaoMap(isOpen, locationData);
 
-    if (!isOpen) return null;
+    if (!isOpen || locationData.length === 0) return null;
 
     return (
         <>
