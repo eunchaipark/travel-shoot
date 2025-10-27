@@ -12,7 +12,7 @@ export const useReservationDetail = (reservationId) => {
     const pollingIntervalRef = useRef(null);
 
     const pollCourseData = async () => {
-        const maxAttempts = 12;
+        const maxAttempts = 30;
         let attempts = 0;
 
         const poll = async () => {
