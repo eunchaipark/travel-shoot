@@ -81,9 +81,9 @@ public class CalendarCourseServiceImpl implements CalendarCourseService {
 
     /**
      * Object[] row를 ScheduleItem으로 변환
-     * row 구조: [0]reservation_id, [1]reservation_code, [2]check_in_date, [3]check_out_date, 
-     *          [4]stay_name, [5]stay_type, [6]city_name, [7]reservation_status, [8]course_id, 
-     *          [9]day, [10]spot_order, [11]spot_type, [12]start_time, [13]end_time, [14]spot_name, [15]spot_address
+     * row 구조: [0]reservation_code, [1]check_in_date, [2]check_out_date, [3]stay_name, 
+     *          [4]stay_type, [5]city_name, [6]reservation_status, [7]course_id, [8]day, 
+     *          [9]spot_order, [10]spot_type, [11]start_time, [12]end_time, [13]spot_name, [14]spot_address
      */
     private CalendarCourseResponse.ScheduleItem mapToScheduleItem(Object[] row, LocalDate checkInDate) {
         Integer day = (Integer) row[9];  // [8] → [9]
