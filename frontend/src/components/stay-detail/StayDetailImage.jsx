@@ -5,7 +5,7 @@ const HotelGallery = ({ imgs }) => {
     return (
         <div className="row g-2 mb-4 mt-1">
             <div className="col-md-6">
-                <img src={imgs[0].s3Url} alt={`${imgs[0].fileId}`}
+                <img src={imgs[0]?.s3Url} alt={`${imgs[0]?.fileId}`}
                     className="img-fluid rounded w-100 gallery-trigger" style={{ height: 300, objectFit: 'cover' }}
                     data-bs-toggle="modal" data-bs-target="#galleryModal" data-index="0" />
             </div>
