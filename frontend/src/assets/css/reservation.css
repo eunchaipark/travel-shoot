@@ -459,6 +459,12 @@
   height: 120px !important;
 }
 
+@media (max-width: 992px) {
+  .reservation-detail-page .content-section.payment-section {
+    margin-left:0 !important;
+  }
+}
+
 @media (max-width: 768px) {
   .reservation-detail-page .content-section .content-section-state-inner {
     padding: 35px;
