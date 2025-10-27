@@ -19,10 +19,6 @@ public class StayImageServiceImpl implements StayImageService {
 
     private final FileUploadRepository fileUploadRepository;
 
-//    public Integer getImageCount(Long stayId){
-//        return fileUploadRepository.countByReferenceTypeAndReferenceIdAndIsDeletedFalse("STAY", stayId);
-//    }
-
     /**
      * 숙소 썸네일 이미지 최소 5개
      * @param stayId
@@ -42,7 +38,7 @@ public class StayImageServiceImpl implements StayImageService {
      */
     public List<StayImageDto> getAllStayImages(Long stayId){
 //        List<FileUpload> images = fileUploadRepository.findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderByUploadedAtDesc("STAY", stayId);
-        List<FileUpload> images = fileUploadRepository.findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderByUploadedAtDesc("STAY", stayId);
+        List<FileUpload> images = fileUploadRepository.findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("STAY", stayId);
         return images.stream().map(this::toStayImageDto).toList();
     }
 

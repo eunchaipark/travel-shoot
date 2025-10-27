@@ -1,30 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { getAllStayImages } from "@/services/stay-detail/stayDetailApiService";
 
-const PhotoModal = ({stayId}) => {
+const PhotoModal = ({stayImages, stayId}) => {
 
-  const [stayImages, setStayImages] = useState([]);
   const [mainImg, setMainImg] = useState(null);
 
   const changeMainImage = (i) => {
     setMainImg(stayImages[i])
   }
 
-  const fetchStayImages = async() => {
-    if(!stayId) return;
-
-    try{
-      const response = await getAllStayImages(stayId);
-      console.log(response);
-      setStayImages(response);
-      
-    }catch(error){
-        console.error("숙소 이미지 조회 실패");
-      }
-  }
-
   useEffect(()=>{
-    fetchStayImages();
+    // fetchStayImages();
   }, [stayId])
 
   useEffect(() => {
@@ -45,8 +31,10 @@ const PhotoModal = ({stayId}) => {
             <div className="row">
               <div className="col-12 mb-4 pt-2">
                 <div className="modal-main-image-container">
-                  <img src={mainImg.s3Url}
-                    alt="메인 사진" className="modal-main-display-image" id="mainImage" />
+                  <img src={mainImg?.s3Url}
+                    alt="메인 사진" className="modal-main-display-image" id="mainImage"
+                    loading="eager"
+                    />
                 </div>
               </div>
 
@@ -54,10 +42,12 @@ const PhotoModal = ({stayId}) => {
                 <div className="modal-thumbnails-scroll-container">
                   <div className="modal-thumbnails-flex-wrapper">
                     {
-                      stayImages.map((img, i) => (
+                      stayImages?.map((img, i) => (
                         <img key={i} src={img.s3Url}
                           alt={`썸네일${i}`} className={"modal-gallery-thumbnail-image"+(mainImg===img?" active":"")}
-                          onClick={()=>changeMainImage(i)} />
+                          onClick={()=>changeMainImage(i)}
+                          loading="lazy"
+                          />
                       ))
                     }
                   </div>

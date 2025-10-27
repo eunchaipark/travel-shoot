@@ -24,7 +24,6 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
     const checkOutDate = new Date("2025-10-29");
 
     const nights = Number((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
-    // const nights = (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24);
 
     // TODO : 윤하님 원래 코드 일단 주석처리
     // const handleReservation = (roomId) => {
@@ -43,7 +42,7 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
         // 로그인 체크
         if (!isAuthenticated) {
             const goToLogin = window.confirm(
-                '로그인 후 예약 가능합니다. \n 로그인하시겠습니까?'
+                '로그인 후 예약 가능합니다. \n로그인하시겠습니까?'
             );
 
             if (goToLogin) {

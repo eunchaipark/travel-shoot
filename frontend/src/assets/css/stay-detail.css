@@ -423,6 +423,8 @@
     border: 2px solid transparent;
     transition: all 0.3s ease;
     object-fit: cover;
+    /* 이미지 로딩 중 레이아웃 시프트 방지 */
+    aspect-ratio: 1 / 1;
 }
 
 .modal-gallery-thumbnail-image:hover {
