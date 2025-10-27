@@ -34,7 +34,7 @@ public class CalendarCourseServiceImpl implements CalendarCourseService {
 
         // 예약별로 그룹핑 (reservation_code 기준)
         Map<String, List<Object[]>> groupedByReservation = results.stream()
-                .collect(Collectors.groupingBy(row -> (String) row[0]));
+                .collect(Collectors.groupingBy(row -> (String) row[1])); // [0] → [1] reservation_code
 
         return groupedByReservation.entrySet().stream()
                 .map(entry -> mapToCalendarCourseResponse(entry.getKey(), entry.getValue()))
@@ -49,12 +49,13 @@ public class CalendarCourseServiceImpl implements CalendarCourseService {
             // 첫 번째 row에서 예약 기본 정보 추출 (모든 row가 같은 예약 정보)
             Object[] firstRow = rows.get(0);
             
-            LocalDate checkInDate = convertToLocalDate(firstRow[1]);
-            LocalDate checkOutDate = convertToLocalDate(firstRow[2]);
-            String stayName = (String) firstRow[3];
-            String stayType = (String) firstRow[4];  // stay_type 추가
-            String cityName = (String) firstRow[5];
-            String reservationStatus = (String) firstRow[6];
+            Long reservationId = ((Number) firstRow[0]).longValue(); // reservation_id 추출
+            LocalDate checkInDate = convertToLocalDate(firstRow[2]); // [1] → [2]
+            LocalDate checkOutDate = convertToLocalDate(firstRow[3]); // [2] → [3]
+            String stayName = (String) firstRow[4]; // [3] → [4]
+            String stayType = (String) firstRow[5]; // [4] → [5]
+            String cityName = (String) firstRow[6]; // [5] → [6]
+            String reservationStatus = (String) firstRow[7]; // [6] → [7]
 
             // 모든 row에서 스케줄 생성 (checkInDate 전달)
             List<CalendarCourseResponse.ScheduleItem> schedules = rows.stream()
@@ -62,7 +63,8 @@ public class CalendarCourseServiceImpl implements CalendarCourseService {
                     .collect(Collectors.toList());
 
             return CalendarCourseResponse.builder()
-                    .id(reservationCode)
+                    .id(String.valueOf(reservationId)) // reservation_id를 String으로
+                    .reservationCode(reservationCode) // reservation_code 추가
                     .title(cityName + " 여행")
                     .startDate(checkInDate)
                     .endDate(checkOutDate)
@@ -84,10 +86,10 @@ public class CalendarCourseServiceImpl implements CalendarCourseService {
      *          [9]spot_order, [10]spot_type, [11]start_time, [12]end_time, [13]spot_name, [14]spot_address
      */
     private CalendarCourseResponse.ScheduleItem mapToScheduleItem(Object[] row, LocalDate checkInDate) {
-        Integer day = (Integer) row[8];  // 7 → 8
-        String spotType = (String) row[10];  // 9 → 10
-        Time startTime = (Time) row[11];  // 10 → 11
-        String spotName = (String) row[13];  // 12 → 13
+        Integer day = (Integer) row[9];  // [8] → [9]
+        String spotType = (String) row[11];  // [10] → [11]
+        Time startTime = (Time) row[12];  // [11] → [12]
+        String spotName = (String) row[14];  // [13] → [14]
         
         // spotType 매핑
         String mappedType = mapSpotType(spotType);
