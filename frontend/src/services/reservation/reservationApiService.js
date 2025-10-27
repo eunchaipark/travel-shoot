@@ -144,7 +144,7 @@ const reservationApiService = {
     generateAiCourse: (reservationId, totalDays) => {
         const api = createApiClient();
         // await 없이 호출하여 비동기로 실행
-        api.post('/ai/course', {
+        api.post('/api/ai/course', {
             reservationId,
             totalDays: totalDays + 1
         }).catch(error => {
