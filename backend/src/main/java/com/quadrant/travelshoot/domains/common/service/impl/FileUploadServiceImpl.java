@@ -21,7 +21,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     private final S3Service s3Service;
 
     public List<FileUpload> findAllByReferenceTypeAndReferenceId(String referenceType, Long referenceId) {
-        return fileUploadRepository.findAllByReferenceTypeAndReferenceIdAndIsDeletedFalse(referenceType, referenceId);
+        return fileUploadRepository.findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc(referenceType, referenceId);
     }
 
     /**

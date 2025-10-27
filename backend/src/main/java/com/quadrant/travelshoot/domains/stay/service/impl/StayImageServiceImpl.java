@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,16 @@ public class StayImageServiceImpl implements StayImageService {
         return images.stream()
                 .map(this::toStayImageDto)
                 .collect(Collectors.toList());
+    }
+
+
+    /**
+     * 숙소 전체 이미지 조회
+     */
+    public List<StayImageDto> getAllStayImages(Long stayId){
+//        List<FileUpload> images = fileUploadRepository.findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderByUploadedAtDesc("STAY", stayId);
+        List<FileUpload> images = fileUploadRepository.findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderByUploadedAtDesc("STAY", stayId);
+        return images.stream().map(this::toStayImageDto).toList();
     }
 
     /**

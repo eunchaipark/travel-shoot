@@ -22,8 +22,8 @@ public interface FileUploadRepository extends JpaRepository<FileUpload, Long> {
         @Param("referenceId") Long referenceId
     );
 
-    List<FileUpload> findAllByReferenceTypeAndReferenceIdAndIsDeletedFalse(String referenceType, Long referenceId);
 
+    List<FileUpload> findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc(String referenceType, Long referenceId);
     // 이미지 1개만 조회
     Optional<FileUpload> findFirstByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc(
             String referenceType,
@@ -33,8 +33,9 @@ public interface FileUploadRepository extends JpaRepository<FileUpload, Long> {
     // 숙소 썸네일 이미지 5개
     List<FileUpload> findTop5ByReferenceTypeAndReferenceIdOrderBySortOrderAsc(String referenceType, Long referenceId);
 
-    // 전체 이미지
-//    List<FileUpload> findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc(String referenceType, Long referenceId);
+    // 숙소 전체 이미지 모달 - 최신순
+    List<FileUpload> findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderByUploadedAtDesc(String referenceType, Long referenceId);
+
     // 숙소 이미지 개수
 //    Integer countByReferenceTypeAndReferenceIdAndIsDeletedFalse(String stay, Long stayId);
 }

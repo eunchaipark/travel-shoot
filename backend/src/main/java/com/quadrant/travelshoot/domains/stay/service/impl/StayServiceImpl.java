@@ -58,10 +58,8 @@ public class StayServiceImpl implements StayService {
         stay.setReviewCount(reviewService.countReview(stayId));
         // 편의시설 조회
         List<StayAmenity> stayAmenities = stayAmenityService.findByStayId(stayId);
-
         // 썸네일 이미지 5개 조회
         List<StayImageDto> thumbnailImages = stayImageService.getThumbnailImages(stayId);
-        // 객실 이미지 조회
 
         return stayMapper.toStayDetailResponse(stay, thumbnailImages, stayAmenities);
     }

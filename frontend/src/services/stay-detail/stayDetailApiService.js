@@ -11,6 +11,25 @@ const handleResponse = async (response) => {
     return response.json();
 };
 
+
+/**
+ * 숙소 이미지 전체 조회
+ * @param {Long} stayId - 숙소 ID
+ * @returns {Promise<StayImageDto>} 
+ */
+export const getAllStayImages = async (stayId) => {
+    try {
+        const response = await fetch(`${window.API_BASE_URL}/api/stays/${stayId}/images`, {
+            method: 'GET',
+        });
+        return await handleResponse(response);
+    } catch (error) {
+        console.error('Error fetching stay images:', error);
+        throw error;
+    }
+};
+
+
 /**
  * 숙소 상세 조회
  * @param {Long} stayId - 숙소 ID

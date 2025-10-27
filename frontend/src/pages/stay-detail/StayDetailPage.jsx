@@ -17,6 +17,7 @@ const StayDetailPage = () => {
   const children = searchParams.get('children');
 
   const [stayData, setStayData] = useState(null);
+  
 
   // 임시 이미지
   const imageData = [
@@ -56,8 +57,7 @@ const StayDetailPage = () => {
       <main>
         <MainContent data={stayData} searchParams={{ checkIn, checkOut, adults, children, stayId }}/>
       </main>
-      {/* <PhotoModal imgs={stayData.stayImages} /> */}
-      <PhotoModal imgs={imageData} />
+      <PhotoModal stayId={stayId} />
     </>
   )
 

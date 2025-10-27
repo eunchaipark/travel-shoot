@@ -5,7 +5,10 @@ const HotelGallery = ({ imgs }) => {
         return null;
     }
 
+    // 일단은 머지 받고, 처리 안될 시 thumbnails 가 5개 이상일 때만 렌더링
+
     return (
+        
         <div className="row g-2 mb-4 mt-2">
             <div className="col-md-6">
                 <img src={imgs[0].s3Url} alt="호텔 객실 바다 전망"
@@ -63,44 +66,6 @@ const HotelGallery = ({ imgs }) => {
                     })}
                 </div>
             </div>
-
-            {/* <div className="col-md-6">
-                <div className="row g-2">
-                    {
-                        imgs.map((img, i) => {
-                            if(i > 3 ){
-                                return;
-                            }
-                            if (i === 3 && imgs.length > 4) {
-                                return (
-                                    <div className="col-6 position-relative gallery-trigger" data-bs-toggle="modal"
-                                        data-bs-target="#galleryModal" data-index="4">
-                                        <img src={imgs[i+1].s3Url} alt={'img '+ (i+1)}
-                                            className="img-fluid rounded w-100" style={{ height: 146, objectFit: 'cover' }} />
-                                        <div className="position-absolute top-50 start-50 translate-middle">
-                                            <div className="gallery-overlay">
-                                                <i className="bi bi-images"></i>
-                                                <span>사진 더보기</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )
-                            } else {
-                                return (
-                                    <div key={i} className="col-6">
-                                        <img src={imgs[i+1].s3Url} alt={'img '+ (i+1)}
-                                            className="img-fluid rounded w-100 gallery-trigger"
-                                            style={{ height: 146, objectFit: 'cover' }}
-                                            data-bs-toggle="modal" data-bs-target="#galleryModal" data-index={i+1} />
-                                    </div>
-                                )
-                            }
-                        }
-                        )
-                    }
-
-                </div>
-            </div> */}
         </div>
     )
 }

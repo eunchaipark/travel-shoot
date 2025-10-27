@@ -75,9 +75,7 @@ const AIReviewSummaryCard = ({stayId, score, reviewCount}) => {
                             <span className="score-number"></span>
                         </div> */}
                         <div className="ai-review-title">작성된 리뷰가 없습니다.</div>
-                        <div className="ai-review-text room-content">
-                            {loading ? "로딩중 ..." : aiSummary}
-                        </div>
+                        
                     </>
                     
                 }
