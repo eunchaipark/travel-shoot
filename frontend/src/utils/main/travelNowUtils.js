@@ -41,8 +41,8 @@ export const handleTouchGesture = (touchStart, touchEnd, threshold = 50) => {
 };
 
 // ===== API에서 데이터 가져오기 =====
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+// const API_BASE_URL =
+//   import.meta.env.VITE_API_URL || "http://localhost:8080/api";
 
 export const fetchTravelNowData = async () => {
   try {

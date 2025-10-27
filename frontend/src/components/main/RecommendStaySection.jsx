@@ -4,11 +4,8 @@
  */
 
 import React, { useEffect, useState, useCallback } from 'react';
-import useSearchParamsSync from '@/hooks/search/useSearchParamsSync';  //1024 추가
-import { useNavigate } from 'react-router-dom';  //1024 추가
 import { useAuth } from '@/components/context/AuthContext';
 import { fetchAIRecommendedStays,fetchRecommendationDetails } from '@/services/main/recommendationApiService';
-import CommonLoading from '@/components/loading/CommonLoading';
 import SurveyModal from "@/components/survey/SurveyModal";
 import MapContent from '@/components/map/MapContent';
 import { useKakaoMap } from '@/hooks/useKakaoMap';
@@ -16,7 +13,81 @@ import {
   formatPrice,
   generateStarRating
 } from '@/utils/main/recommendationUtils';
-import { useDefaultStayParams } from '@/hooks/search/useDefaultStayParams'; //1024 추가
+
+// ============================================================================
+// Skeleton Loader 컴포넌트
+// ============================================================================
+const SkeletonCard = () => {
+  return (
+    <div className="accommodation-item">
+      <div className="accommodation-image-container">
+        <div className="placeholder-glow">
+          <div className="placeholder col-12" style={{ height: '250px', borderRadius: '12px' }}></div>
+        </div>
+      </div>
+      <div className="accommodation-info">
+        <div className="accommodation-header">
+          <div className="placeholder-glow mb-2">
+            <span className="placeholder col-8"></span>
+          </div>
+          <div className="placeholder-glow mb-2">
+            <span className="placeholder col-6"></span>
+          </div>
+          <div className="placeholder-glow">
+            <span className="placeholder col-10"></span>
+          </div>
+        </div>
+        <div className="accommodation-price mt-3">
+          <div className="placeholder-glow">
+            <span className="placeholder col-5"></span>
+          </div>
+          <div className="placeholder-glow mt-2">
+            <span className="placeholder col-7"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const SkeletonLoader = () => {
+  return (
+    <section className="recommend-stay-section">
+      <div className="recommend-stay-container">
+        {/* 섹션 헤더 스켈레톤 */}
+        <div className="section-header">
+          <div className="placeholder-glow mb-2">
+            <span className="placeholder col-6 col-md-4"></span>
+          </div>
+          <div className="placeholder-glow">
+            <span className="placeholder col-8 col-md-5"></span>
+          </div>
+        </div>
+
+        {/* 콘텐츠 래퍼 */}
+        <div className="content-wrapper">
+          {/* 숙소 리스트 스켈레톤 */}
+          <div className="accommodation-list-container">
+            <div className="accommodation-list">
+              {[1, 2, 3, 4].map((index) => (
+                <SkeletonCard key={index} />
+              ))}
+            </div>
+          </div>
+
+          {/* 지도 영역 스켈레톤 */}
+          <div className="map-page main-map-page">
+            <div className="map-container">
+              <div className="placeholder-glow w-100 h-100">
+                <div className="placeholder col-12 h-100" style={{ minHeight: '600px', borderRadius: '12px' }}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 // ============================================================================
 // Accommodation Card 컴포넌트 (개별 숙소 카드)
@@ -110,10 +181,7 @@ const AccommodationCard = ({ accommodation, onClick }) => {
 // Recommend Stay Section 컴포넌트 (메인)
 // ============================================================================
 const RecommendStaySection = () => {
-  const navigate = useNavigate(); //1024 추가
-  const { setDefaultParams } = useSearchParamsSync(); //1024 추가
   const { user, isAuthenticated } = useAuth();
-  const { getDefaultDates, getDefaultGuests } = useDefaultStayParams(); //1024 추가
   const [modalOpen, setModalOpen] = useState(false);
   // 상태 관리
   const [accommodations, setAccommodations] = useState([]);
@@ -124,24 +192,11 @@ const RecommendStaySection = () => {
   const { mapRef, kakaoLoaded, selectedLocation, focusMarker } = useKakaoMap(true, mapLocations);
   const handleAccommodationClick = useCallback((accommodation) => {
     const stayId = accommodation.id;
-    const stayName = accommodation.title || accommodation.name;  //1024 추가
     focusMarker(stayId);
     document.querySelectorAll('.accommodation-item[data-id]').forEach(card => { card.classList.remove('active'); });
     const targetCard = document.querySelector(`.accommodation-item[data-id="${stayId}"]`);
     if (targetCard) { targetCard.classList.add('active');}
-      //1024 추가
-    const { checkIn, checkOut } = getDefaultDates({ nights: 2, startFromTomorrow: true });
-    const { adults, children } = getDefaultGuests();
-
-        const params = new URLSearchParams({
-          checkIn,
-          checkOut,
-          adults,
-          children,
-          stayName
-          });
-      navigate(`/stays/${stayId}?${params.toString()}`);
-  }, [focusMarker, navigate, getDefaultDates, getDefaultGuests]);
+  }, [focusMarker])
 
   // 도/시 단위 추출 함수
   const extractProvince = (location) => {
@@ -210,24 +265,9 @@ const RecommendStaySection = () => {
     return null;
   }
 
-  //  로딩 상태
+  //  로딩 상태 - 스켈레톤 UI로 변경
   if (loading) {
-    return (
-      <section className="recommend-stay-section">
-        <div className="recommend-stay-container">
-          <CommonLoading
-            title="사용자에게 맞는 숙소 추천중..."
-            description={
-              <>
-                AI가 장소 정보를 분석하고 있습니다.<br />
-                최대 20초 정도 소요됩니다.
-              </>
-            }
-            isModal={false}
-          />
-        </div>
-      </section>
-    );
+    return <SkeletonLoader />;
   }
 
 

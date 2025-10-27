@@ -59,7 +59,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
 
         //개인별 캘린더 일정 조회를 위한 쿼리
-    @Query(value = "SELECT r.reservation_code, r.check_in_date, r.check_out_date, " +
+    @Query(value = "SELECT r.reservation_id, r.reservation_code, r.check_in_date, r.check_out_date, " +
                "s.stay_name, s.stay_type, reg.city_name, r.reservation_status, " +  // stay_type 추가!
                "tc.course_id, cs.day, cs.spot_order, cs.spot_type, cs.start_time, cs.end_time, " +
                "CASE " +

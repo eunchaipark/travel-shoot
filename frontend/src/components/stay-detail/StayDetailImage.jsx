@@ -8,11 +8,11 @@ const HotelGallery = ({ imgs }) => {
     // 일단은 머지 받고, 처리 안될 시 thumbnails 가 5개 이상일 때만 렌더링
 
     return (
-        
+
         <div className="row g-2 mb-4 mt-2">
             <div className="col-md-6">
-                <img src={imgs[0].s3Url} alt="호텔 객실 바다 전망"
-                    className="img-fluid rounded w-100" style={{ height: 300, objectFit: 'cover' }}
+                <img src={imgs[0]?.s3Url} alt={`${imgs[0]?.fileId}`}
+                    className="img-fluid rounded w-100 gallery-trigger" style={{ height: 300, objectFit: 'cover' }}
                     data-index="0" />
             </div>
 
@@ -26,18 +26,18 @@ const HotelGallery = ({ imgs }) => {
                         // 마지막 슬롯 이미지 경우
                         if (isLastSlot) {
                             return (
-                                <div 
-                                    key={actualIndex} 
-                                    className="col-6 position-relative" 
+                                <div
+                                    key={actualIndex}
+                                    className="col-6 position-relative"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#galleryModal" 
+                                    data-bs-target="#galleryModal"
                                     data-index={actualIndex}
                                 >
-                                    <img 
-                                        src={img.s3Url} 
+                                    <img
+                                        src={img.s3Url}
                                         alt={`숙소 이미지 ${actualIndex + 1}`}
-                                        className="img-fluid rounded w-100" 
-                                        style={{ height: 146, objectFit: 'cover' }} 
+                                        className="img-fluid rounded w-100"
+                                        style={{ height: 146, objectFit: 'cover' }}
                                     />
                                     <div className="position-absolute top-50 start-50 translate-middle">
                                         <div className="gallery-overlay">
@@ -52,14 +52,14 @@ const HotelGallery = ({ imgs }) => {
                         // 일반 이미지
                         return (
                             <div key={actualIndex} className="col-6">
-                                <img 
-                                    src={img.s3Url} 
+                                <img
+                                    src={img.s3Url}
                                     alt={`숙소 이미지 ${actualIndex + 1}`}
                                     className="img-fluid rounded w-100"
                                     style={{ height: 146, objectFit: 'cover'}}
-                                    // data-bs-toggle="modal" 
-                                    // data-bs-target="#galleryModal" 
-                                    data-index={actualIndex} 
+                                    // data-bs-toggle="modal"
+                                    // data-bs-target="#galleryModal"
+                                    data-index={actualIndex}
                                 />
                             </div>
                         );

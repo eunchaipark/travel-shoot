@@ -12,7 +12,7 @@ export const fetchAIRecommendedStays = async (userId) => {
       throw new Error('사용자 ID가 필요합니다');
     }
 
-    console.log('AI 추천 요청 - userId:', userId);
+    //console.log('AI 추천 요청 - userId:', userId);
 
     const response = await fetch(`${window.API_BASE_URL}/api/stays/ai-recommendation?userId=${userId}`, {
       method: 'GET',
@@ -27,14 +27,14 @@ export const fetchAIRecommendedStays = async (userId) => {
     }
     
     const data = await response.json();
-    console.log('AI 추천 백엔드 원본 데이터:', data);
+    //console.log('AI 추천 백엔드 원본 데이터:', data);
     
     const transformed = transformAIRecommendationData(data);
-    console.log('AI 추천 변환된 데이터:', transformed);
+    //console.log('AI 추천 변환된 데이터:', transformed);
     
     return transformed;
   } catch (error) {
-    console.error('AI 추천 숙소 조회 실패:', error);
+    //console.error('AI 추천 숙소 조회 실패:', error);
     throw error;
   }
 };
@@ -48,7 +48,7 @@ export const fetchRecommendationDetails = async (stayIds) => {
 
     // 배열을 쉼표로 구분된 문자열로 변환
     const stayIdsParam = stayIds.join(',');
-    console.log('지도 상세 정보 요청 - stayIds:', stayIdsParam);
+    //console.log('지도 상세 정보 요청 - stayIds:', stayIdsParam);
 
     const response = await fetch(
         `${window.API_BASE_URL}/api/stays/find-recommendations?stayIds=${stayIdsParam}`,
@@ -65,11 +65,11 @@ export const fetchRecommendationDetails = async (stayIds) => {
     }
 
     const data = await response.json();
-    console.log('지도 상세 정보 백엔드 원본:', data);
+    //console.log('지도 상세 정보 백엔드 원본:', data);
 
     return data; // 이미 placeType이 포함된 형태로 올 거야
   } catch (error) {
-    console.error('지도 상세 정보 조회 실패:', error);
+    //console.error('지도 상세 정보 조회 실패:', error);
     throw error;
   }
 };
@@ -79,7 +79,7 @@ export const fetchRecommendationDetails = async (stayIds) => {
  */
 const transformAIRecommendationData = (backendData) => {
   if (!backendData || !backendData.stays) {
-    console.warn('AI 추천 데이터가 비어있습니다');
+    //console.warn('AI 추천 데이터가 비어있습니다');
     return [];
   }
 

@@ -38,7 +38,7 @@ export const useTravelNow = () => {
     }
     
     // 원본의 console.log
-    console.log(`화면 크기: ${width}px, 카드 개수: ${config.cardsPerSlide}개, 총 슬라이드: ${newTotalSlides}개`);
+    //console.log(`화면 크기: ${width}px, 카드 개수: ${config.cardsPerSlide}개, 총 슬라이드: ${newTotalSlides}개`);
     
     // 카드 개수가 변경되었으면 재렌더링 트리거
     return prevCards !== config.cardsPerSlide;

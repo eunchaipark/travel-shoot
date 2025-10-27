@@ -241,7 +241,27 @@ export default function SearchResultPage() {
         error,
         refetch
     } = useInfiniteQuery({
-        queryKey: ['stays', baseSearchParams, filters],
+        // queryKey: ['stays', baseSearchParams, filters], //1025 수정
+
+        queryKey: [ //1025 수정
+            'stays',
+            baseSearchParams.region,
+            baseSearchParams.stayName,
+            baseSearchParams.checkIn,
+            baseSearchParams.checkOut,
+            baseSearchParams.adults,
+            baseSearchParams.children,
+            filters.minPrice,
+            filters.maxPrice,
+            filters.stayTypes.join(','),
+            filters.bedroomCount,
+            filters.bathroomCount,
+            filters.minGuests,
+            filters.maxGuests,
+            filters.ratings.join(','),
+            filters.amenities.join(','),
+        ],
+
         queryFn: async ({ pageParam = 0 }) => {
             // 필터가 있으면 POST 요청
             if (hasActiveFilters()) {
@@ -400,7 +420,24 @@ export default function SearchResultPage() {
         return () => observer.disconnect()
     }, [handleObserver])
 
-    const allStays = data?.pages.flatMap((page) => page.stays) || []
+    // const allStays = data?.pages.flatMap((page) => page.stays) || [] //1025 수정
+    const allStays = React.useMemo(() => {
+        if (!data?.pages) return []
+
+        // 모든 페이지의 stays를 하나로 합침
+        const allItems = data.pages.flatMap((page) => page.stays || [])
+
+        // stayId 기준으로 중복 제거
+        const uniqueMap = new Map()
+        allItems.forEach(stay => {
+            if (stay?.stayId && !uniqueMap.has(stay.stayId)) {
+                uniqueMap.set(stay.stayId, stay)
+            }
+        })
+
+        return Array.from(uniqueMap.values())
+    }, [data])
+
     // totalCount는 나중에 사용할 예정 (페이지네이션 정보 표시 등)
     // eslint-disable-next-line no-unused-vars
     const totalCount = data?.pages[0]?.totalCount || 0
@@ -636,13 +673,17 @@ export default function SearchResultPage() {
                         {isLoading && <StayListSkeleton count={5} />}
 
                         {!isLoading && allStays.length === 0 && (
-                            <div style={{ padding: '40px', textAlign: 'center', background: '#f8f9fa', borderRadius: '8px' }}>
+                            <div className="no-search-result">
                                 검색 조건에 맞는 숙소가 없습니다.
+                                <div className="no-search-result-sub">
+                                    지역/숙소 검색어 및 상세 필터를 변경해보세요.
+                                </div>
                             </div>
                         )}
 
                         {!isLoading && allStays.length > 0 && (
                             <>
+                                {/*{allStays.map((stay) => (*/}
                                 {allStays.map((stay) => (
                                     // <StayCard
                                     //     key={stay.stayId}

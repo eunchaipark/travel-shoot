@@ -85,7 +85,8 @@ const ReservationPaymentPage = () => {
 
             if (result && result.success) {
                 // navigate("/payment-complete");
-                navigate(`/payment-complete?reservationId=${result.reservationId}`);
+                // navigate(`/payment-complete?reservationId=${result.reservationId}`);
+                navigate(`/payment-complete?reservationId=${result.reservationId}`, { replace: true }); // 뒤로가기 막기
 
             } else {
                 alert("결제 처리 중 오류가 발생했습니다.");
@@ -190,7 +191,7 @@ const ReservationPaymentPage = () => {
         <>
             <CompleteHeader />
 
-        <main>
+        <main className="payment-main">
             <div className="container payment-page">
                 <div className="row">
                     {/* 왼쪽: 예약 정보 */}
@@ -478,7 +479,7 @@ const ReservationPaymentPage = () => {
 
                     {/* 오른쪽: 결제 정보 요약 */}
                     <div className="col-lg-4">
-                        <div className="section-card final-payment-section sticky-top" style={{ top: '20px' }}>
+                        <div className="section-card final-payment-section">
                             <div className="section-header mb-4">결제 금액</div>
 
                             {priceData ? (
