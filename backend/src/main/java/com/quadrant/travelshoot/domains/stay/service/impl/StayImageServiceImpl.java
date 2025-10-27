@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,10 +19,11 @@ public class StayImageServiceImpl implements StayImageService {
 
     private final FileUploadRepository fileUploadRepository;
 
-//    public Integer getImageCount(Long stayId){
-//        return fileUploadRepository.countByReferenceTypeAndReferenceIdAndIsDeletedFalse("STAY", stayId);
-//    }
-
+    /**
+     * 숙소 썸네일 이미지 최소 5개
+     * @param stayId
+     * @return List<StayImageDto>
+     */
     public List<StayImageDto> getThumbnailImages(Long stayId){
         List<FileUpload> images = fileUploadRepository.findTop5ByReferenceTypeAndReferenceIdOrderBySortOrderAsc("STAY", stayId);
 
@@ -29,6 +31,30 @@ public class StayImageServiceImpl implements StayImageService {
                 .map(this::toStayImageDto)
                 .collect(Collectors.toList());
     }
+
+
+    /**
+     * 숙소 전체 이미지 조회
+     */
+    public List<StayImageDto> getAllStayImages(Long stayId){
+//        List<FileUpload> images = fileUploadRepository.findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderByUploadedAtDesc("STAY", stayId);
+        List<FileUpload> images = fileUploadRepository.findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("STAY", stayId);
+        return images.stream().map(this::toStayImageDto).toList();
+    }
+
+    /**
+     * 객실 조회용 이미지 1개
+     * @param roomId
+     * @return
+     */
+    public String getRoomImage(Long roomId){
+        String roomImageUrl = fileUploadRepository.findFirstByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("ROOM", roomId)
+                .map(FileUpload::getS3Url)
+                .orElse("/images/product/hotel-bathroom-modern-design.jpg");
+        return roomImageUrl;
+    }
+
+
 
     /**
      * FileUpload -> 간단한 StayImageDto 변환

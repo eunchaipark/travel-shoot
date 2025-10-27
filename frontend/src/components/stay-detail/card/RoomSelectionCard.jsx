@@ -24,7 +24,6 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
     const checkOutDate = new Date("2025-10-29");
 
     const nights = Number((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
-    // const nights = (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24);
 
     // TODO : 윤하님 원래 코드 일단 주석처리
     // const handleReservation = (roomId) => {
@@ -43,7 +42,7 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
         // 로그인 체크
         if (!isAuthenticated) {
             const goToLogin = window.confirm(
-                '로그인 후 예약 가능합니다. \n 로그인하시겠습니까?'
+                '로그인 후 예약 가능합니다. \n로그인하시겠습니까?'
             );
 
             if (goToLogin) {
@@ -77,7 +76,7 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
                             <div className="row ">
                                 <div className="col-lg-4 col-md-4 mb-3 mb-md-0 stay-img-container">
                                     <img
-                                        src="/images/product/placeholder-room.png"
+                                        src={room?.roomImageUrl}
                                         alt="슈페리어 더블룸"
                                         className="img-fluid rounded room-image w-100 h-100 "
                                         style={{objectFit: "cover"}}
@@ -150,7 +149,7 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
                         </div>
                     ))}
                 </div>
-            </div> : <div>객실 정보를 불러오는 중...</div> }
+            </div> : <div>객실 정보가 없습니다.</div> }
         </div>
     );
 }

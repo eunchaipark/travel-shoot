@@ -91,7 +91,7 @@ const ReviewListPage = () => {
     }, [stayId]);
 
 
-    // 리뷰 목록 조회 (정렬 필터 변경시)
+    // 리뷰 목록 조회 (정렬 필터 변경 시)
     useEffect(() => {
         if (stayId) {
             fetchReviews();

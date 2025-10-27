@@ -34,7 +34,7 @@ public class FileUploadController {
             @RequestParam(required = false) Integer sortOrder,
             @RequestParam(required = false) Boolean isRepresentative
     ) {
-        // 임시 userId (실제로는 인증에서 가져와야 함)
+        // 저장용 임시 userId
         if (userId == null) {
             userId = 17L;
         }
