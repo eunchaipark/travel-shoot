@@ -1,9 +1,22 @@
-/* paymentPage css 시작  */
+/* sticky가 안먹어서 확인하니까...
+sticky 요소가 제대로 작동하려면 부모 요소에 overflow: hidden이 없어야 함
+main 태그에 overflow 제한이 있을 경우 sticky가 동작하지 않아서 visible로 강제 설정했음 */
+main {
+    overflow: visible !important;
+}
+
 .payment-page {
     padding-top: 24px;
     padding-bottom: 40px;
 }
 
+.payment-page .section-card.final-payment-section {
+    position: sticky !important;
+    top: 100px !important;
+    width: 90% !important;
+    margin: 0 auto !important;
+    z-index: 10 !important;
+}
 .payment-page .section-card {
     background-color: white;
     border: 1px solid #DEDADA;

@@ -17,6 +17,29 @@
     padding: 20px;
     border-radius: 8px;
     height: fit-content;
+    position: sticky;
+    top: 90px;
+    align-self: flex-start;
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
+}
+.staylist-page .filter-sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.staylist-page .filter-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+.staylist-page .filter-sidebar::-webkit-scrollbar-thumb {
+    background: #ffffff; /* 스크롤바 색상 */
+    border-radius: 10px;
+    transition: background 0.2s ease;
+}
+
+.staylist-page .filter-sidebar::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
 }
 
 .staylist-page .filter-sidebar .filter-section {
