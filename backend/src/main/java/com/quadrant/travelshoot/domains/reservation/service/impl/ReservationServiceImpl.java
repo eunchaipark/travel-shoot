@@ -525,6 +525,7 @@ public class ReservationServiceImpl implements ReservationService {
                             .totalPrice(reservation.getTotalPrice())
                             .reviewId(reviewInfo != null ? reviewInfo.reviewId() : null)
                             .reviewCreatedAt(reviewInfo != null ? reviewInfo.createdAt() : null)
+                            .cancelReason(reservation.getCancelReason())
                             .build();
                 })
                 .toList();
@@ -533,6 +534,8 @@ public class ReservationServiceImpl implements ReservationService {
     // 내부 레코드 클래스
     private record ReviewInfo(Long reviewId, LocalDateTime createdAt) {}
 
+    @Override
+    @Transactional
     public void cancelReservation(Long userId, CancelRequest request){
         Reservation reservation = reservationRepository.findByIdAndUserIdAndReservationStatus(request.getReservationId(), userId, ReservationStatus.예약확정 )
                 .orElseThrow(() -> new IllegalArgumentException("취소할 예약을 찾을 수 없습니다"));
@@ -541,6 +544,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setCancelReason(request.getCancelReason());
         reservation.setCancelDetail(request.getCancelDetail());
         reservation.setCancelledAt(LocalDateTime.now());
+        reservation.setReservationStatus(ReservationStatus.예약취소);
         reservationRepository.save(reservation);
         log.info("예약 취소 완료: {}", reservation.getId());;
     }
