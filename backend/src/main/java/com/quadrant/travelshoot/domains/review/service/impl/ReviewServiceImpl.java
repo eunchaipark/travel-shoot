@@ -45,7 +45,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewAiSummaryRepository reviewAiSummaryRepository;
     private final ReviewAiSummaryService reviewAiSummaryService;
     private final FileUploadService fileUploadService;
-    private final S3Service s3Service;
+
 
 
     /**
@@ -88,6 +88,8 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewRegistResponse createReview(Long userId, @Valid ReviewRegistRequest request) {
         log.info("리뷰 등록 시작 - userId: {}, reservationId: {}", userId, request.getReservationId());
 
+        // + 예약 내역에서 예약 상태가 '이용 완료'여야 한다.
+
         // 리뷰 중복 검증
         if (reviewRepository.existsByReservationId(request.getReservationId())) {
             throw new IllegalStateException("이미 해당 예약에 대한 리뷰가 존재합니다.");
@@ -114,26 +116,25 @@ public class ReviewServiceImpl implements ReviewService {
         // 2. 이미지 업로드 처리
         String imageUrl = null;
         if (request.getReviewImage() != null && !request.getReviewImage().isEmpty()) {
-//            try {
-//                FileUpload fileUpload = fileUploadService.uploadAndSave(
-//                        request.getReviewImage(),
-//                        "REVIEW",
-//                        savedReview.getReviewId(),
-//                        userId,
-//                        0,
-//                        true
-//                );
-//                imageUrl = fileUpload.getS3Url();
-//                log.info("리뷰 이미지 업로드 성공 - fileId: {}, s3Url: {}",
-//                        fileUpload.getId(), fileUpload.getS3Url());
-//            } catch (Exception e) {
-//                log.error("리뷰 이미지 업로드 실패", e);
-//                throw new RuntimeException("이미지 업로드 실패", e);
-//            }
+            try {
+                FileUpload fileUpload = fileUploadService.uploadAndSave(
+                        request.getReviewImage(),
+                        "REVIEW",
+                        savedReview.getReviewId(),
+                        userId,
+                        0,
+                        true
+                );
+                imageUrl = fileUpload.getS3Url();
+                log.info("리뷰 이미지 업로드 성공 - fileId: {}, s3Url: {}",
+                        fileUpload.getId(), fileUpload.getS3Url());
+            } catch (Exception e) {
+                log.error("리뷰 이미지 업로드 실패", e);
+                throw new RuntimeException("이미지 업로드 실패", e);
+            }
         }
 
-        return null;
-//        return reviewMapper.toReviewRegistResponse(savedReview, imageUrl);
+        return reviewMapper.toReviewRegistResponse(savedReview, imageUrl);
     }
 
 
@@ -194,10 +195,11 @@ public class ReviewServiceImpl implements ReviewService {
         review.setIsRecommended(reviewUpdateRequest.getIsRecommended());
 
         // 이미지 수정
+        String imageUrl = null;
 
         Review updatedReview = reviewRepository.save(review);
 
-        return reviewMapper.toReviewRegistResponse(updatedReview);
+        return reviewMapper.toReviewRegistResponse(updatedReview, imageUrl);
     }
 
 
@@ -252,7 +254,6 @@ public class ReviewServiceImpl implements ReviewService {
 
         // pageable
         Pageable pageable = createPageable(page, size, sortBy);
-
         // roomId 필터링 & 페이징
         Page<Review> reviewPage;
         if(roomId != null){
@@ -261,8 +262,44 @@ public class ReviewServiceImpl implements ReviewService {
             reviewPage = reviewRepository.findPageByStayId(stayId, pageable);
         }
 
+
+
+        // 단일 파일 버전
+        Page<ReviewListResponse> responsePage = reviewPage.map(
+                review -> {
+                    List<FileUpload> fileUploads = fileUploadService.findAllByReferenceTypeAndReferenceId("REVIEW", review.getReviewId());
+
+                    String imageUrl;
+                    if(!fileUploads.isEmpty()){
+                        imageUrl = fileUploads.get(0).getS3Url();
+                    }else{ // 이미지가 없는 경우(등록할 때 강제할거임)
+                        imageUrl = "/images/product/hotel-room-city-view.png";
+                    }
+                    return reviewMapper.toReviewListResponse(review, imageUrl);
+                });
+
+        // 파일 여러 개 버전
+//        return reviewPage.map(
+//            review -> {
+//                List<FileUpload> fileUploads = fileUploadService.findByReferenceTypeAndReferenceId("REVIEW", review.getReviewId());
+//                List<String> imageUrls = fileUploads.stream()
+//                        .map(FileUpload::getS3Url)
+//                        .toList();
+//
+//                String representativeUrl = fileUploads.stream()
+//                        .filter(FileUpload::getIsRepresentative)
+//                        .findFirst()
+//                        .map(FileUpload::getS3Url)
+//                        .orElseGet(() -> imageUrls.isEmpty() ? null : imageUrls.get(0));
+//
+//                // Mapper에 이미지 URL 전달
+//                return reviewMapper.toListResponse(review, representativeUrl, imageUrls);
+//            }
+//        ).toList();
+
         // Review -> ReviewResponse 변환
-        Page<ReviewListResponse> responsePage = reviewPage.map(reviewMapper::toReviewListResponse);
+//        Page<ReviewListResponse> responsePage = reviewPage.map(reviewMapper::toReviewListResponse);
+//        Page<ReviewListResponse> responsePage = reviewPage.map(r -> reviewMapper.toReviewListResponse(r));
         return ReviewPageResponse.of(responsePage);
     }
 
@@ -335,7 +372,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         // 각 review마다 이미지 조회
         return reviewIds.stream()
-            .flatMap(reviewId -> fileUploadRepository
+            .flatMap(reviewId -> fileUploadService
                     .findAllByReferenceTypeAndReferenceId("REVIEW", reviewId)
                     .stream()
                     .map(FileUpload::getS3Url))

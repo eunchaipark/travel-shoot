@@ -4,8 +4,6 @@
  */
 
 import React, { useEffect, useState, useCallback } from 'react';
-import useSearchParamsSync from '@/hooks/search/useSearchParamsSync';  //1024 추가
-import { useNavigate } from 'react-router-dom';  //1024 추가
 import { useAuth } from '@/components/context/AuthContext';
 import { fetchAIRecommendedStays,fetchRecommendationDetails } from '@/services/main/recommendationApiService';
 import SurveyModal from "@/components/survey/SurveyModal";
@@ -15,7 +13,6 @@ import {
   formatPrice,
   generateStarRating
 } from '@/utils/main/recommendationUtils';
-import { useDefaultStayParams } from '@/hooks/search/useDefaultStayParams'; //1024 추가
 
 // ============================================================================
 // Skeleton Loader 컴포넌트
@@ -184,10 +181,7 @@ const AccommodationCard = ({ accommodation, onClick }) => {
 // Recommend Stay Section 컴포넌트 (메인)
 // ============================================================================
 const RecommendStaySection = () => {
-  const navigate = useNavigate(); //1024 추가
-  const { setDefaultParams } = useSearchParamsSync(); //1024 추가
   const { user, isAuthenticated } = useAuth();
-  const { getDefaultDates, getDefaultGuests } = useDefaultStayParams(); //1024 추가
   const [modalOpen, setModalOpen] = useState(false);
   // 상태 관리
   const [accommodations, setAccommodations] = useState([]);
@@ -198,24 +192,11 @@ const RecommendStaySection = () => {
   const { mapRef, kakaoLoaded, selectedLocation, focusMarker } = useKakaoMap(true, mapLocations);
   const handleAccommodationClick = useCallback((accommodation) => {
     const stayId = accommodation.id;
-    const stayName = accommodation.title || accommodation.name;  //1024 추가
     focusMarker(stayId);
     document.querySelectorAll('.accommodation-item[data-id]').forEach(card => { card.classList.remove('active'); });
     const targetCard = document.querySelector(`.accommodation-item[data-id="${stayId}"]`);
     if (targetCard) { targetCard.classList.add('active');}
-      //1024 추가
-    const { checkIn, checkOut } = getDefaultDates({ nights: 2, startFromTomorrow: true });
-    const { adults, children } = getDefaultGuests();
-
-        const params = new URLSearchParams({
-          checkIn,
-          checkOut,
-          adults,
-          children,
-          stayName
-          });
-      navigate(`/stays/${stayId}?${params.toString()}`);
-  }, [focusMarker, navigate, getDefaultDates, getDefaultGuests]);
+  }, [focusMarker])
 
   // 도/시 단위 추출 함수
   const extractProvince = (location) => {

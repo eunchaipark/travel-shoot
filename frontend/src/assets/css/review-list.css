@@ -236,7 +236,7 @@ body {
 .review-list-container .reviews-list-section .review-item-card .review-photo-container .review-photo-background {
     width: 100%;
     height: 100%;
-    background-image: url("https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-a1WFmEoMhiDZS9ne7Bn747Fu6iMNWH.png");
+    /* background-image: url("https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-a1WFmEoMhiDZS9ne7Bn747Fu6iMNWH.png"); */
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -412,7 +412,8 @@ body {
 
 @media (min-width: 576px) {
     .review-list-container .reviews-list-section .review-item-card .review-photo-container {
-        width: 200px;
+        width: 15rem;
+        height: 9rem;
     }
 }
 
