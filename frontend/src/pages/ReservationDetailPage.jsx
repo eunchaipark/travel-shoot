@@ -119,7 +119,7 @@ const ReservationDetailPage = () => {
                                                         type="button"
                                                         value="예약 목록 보기"
                                                         className="review-btn"
-                                                        onClick={() => navigate("/mypage/reservation")}
+                                                        onClick={() => navigate("/mypage?type=reservation")}
                                                     />
                                                 </div>
                                                 <div className="col-6 d-flex justify-content-end">
@@ -142,7 +142,7 @@ const ReservationDetailPage = () => {
                                                         type="button"
                                                         value="예약 목록 보기"
                                                         className="review-btn"
-                                                        onClick={() => navigate("/mypage/reservation")}
+                                                        onClick={() => navigate("/mypage?type=reservation")}
                                                     />
                                                 </div>
                                                 <div className="col-6 d-flex justify-content-end">
@@ -519,14 +519,18 @@ const ReservationDetailPage = () => {
                                                                                 {spot.spotType} | {spot.type}
                                                                             </span>
                                                                         </div>
-                                                                        <div>
-                                                                            <button onClick={() => {
-                                                                                setEditingSpotId(spot.spotId);
-                                                                                setShowSearchMap(true);
-                                                                            }} className="edit-btn">
-                                                                                수정하기
-                                                                            </button>
-                                                                        </div>
+                                                                        {reservationData?.reservationStatus !== '예약취소' && (
+                                                                            <>
+                                                                                <div>
+                                                                                    <button onClick={() => {
+                                                                                        setEditingSpotId(spot.spotId);
+                                                                                        setShowSearchMap(true);
+                                                                                    }} className="edit-btn">
+                                                                                        수정하기
+                                                                                    </button>
+                                                                                </div>
+                                                                            </>
+                                                                        )}
                                                                     </div>
 
                                                                     <div className="course-description">
