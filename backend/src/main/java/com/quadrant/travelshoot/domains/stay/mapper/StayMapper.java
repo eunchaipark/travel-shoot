@@ -7,11 +7,14 @@ import com.quadrant.travelshoot.domains.stay.entity.Amenity;
 import com.quadrant.travelshoot.domains.stay.entity.Room;
 import com.quadrant.travelshoot.domains.stay.entity.Stay;
 import com.quadrant.travelshoot.domains.stay.entity.StayAmenity;
+import com.quadrant.travelshoot.domains.stay.service.StayImageService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class StayMapper {
 
     public AmenityDto toAmenityDto(Amenity amenity) {
@@ -21,7 +24,11 @@ public class StayMapper {
                 .build();
     }
 
+    private final StayImageService stayImageService;
     public RoomDto toRoomDto(Room room) {
+
+        String roomImageUrl = stayImageService.getRoomImage(room.getId());
+
         return RoomDto.builder()
                 .roomId(room.getId())
                 .roomCode(room.getRoomCode())
@@ -47,6 +54,7 @@ public class StayMapper {
                 .isActive(room.getIsActive())
                 .viewCount(room.getViewCount())
                 .reservationCount(room.getReservationCount())
+                .roomImageUrl(roomImageUrl)
                 .build();
     }
 
