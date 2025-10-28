@@ -376,7 +376,7 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
          * 전체 숙소의 평균 가격 계산 
          */
         @Query("""
-                SELECT AVG((r.weekdayPrice + r.weekendPrice) / 2)
+                SELECT AVG(r.weekdayPrice)
                 FROM Room r
                 WHERE r.isAvailable = true
         """)
