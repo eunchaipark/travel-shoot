@@ -474,7 +474,7 @@ public class ReservationServiceImpl implements ReservationService {
                 .reservationCode(reservation.getReservationCode())
                 .stayId(stay.getId())
                 .stayName(stay.getName())
-                .mainImageUrl(stay.getMainImageUrl())
+                .mainImageUrl(fileUploadService.getMainImageUrl(stay.getId()))
                 .latitude(stay.getLatitude())
                 .longitude(stay.getLongitude())
                 .checkInDate(reservation.getCheckInDate())
