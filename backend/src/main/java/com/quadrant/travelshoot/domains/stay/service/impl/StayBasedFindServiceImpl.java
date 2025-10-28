@@ -72,7 +72,7 @@ public class StayBasedFindServiceImpl implements StayBasedFindService {
         stay.setMinPrice(minPrice);
 
         // 이미지 설정
-        List<FileUpload> images = fileUploadService.findAllByReferenceTypeAndReferenceId("숙소", stayId);
+        List<FileUpload> images = fileUploadService.findAllByReferenceTypeAndReferenceId("STAYS", stayId);
         String mainImageUrl = "";
         if (!images.isEmpty()) {
             mainImageUrl = images.stream()
