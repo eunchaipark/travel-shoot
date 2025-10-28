@@ -62,7 +62,7 @@ public class ReviewMapper {
 
 
     /* 리뷰의 예약 내역 */
-    public ReviewReservationInfoDto toReservationInfoDto(Reservation reservation){
+    public ReviewReservationInfoDto toReservationInfoDto(Reservation reservation, String reservationImageUrl){
         if (reservation == null) {
             return null;
         }
@@ -70,6 +70,7 @@ public class ReviewMapper {
         Stay stay = reservation.getRoom().getStay();
         Room room = reservation.getRoom();
 
+        // stay.getStayImages 안되면 fileUploadRepository에서 조회할 것
         return ReviewReservationInfoDto.builder()
                 .reservationId(reservation.getId())
                 .reservationCode(reservation.getReservationCode())
@@ -82,6 +83,8 @@ public class ReviewMapper {
                 .stayName(stay.getName())
                 .checkInTime(stay.getCheckInTime())
                 .checkOutTime(stay.getCheckOutTime())
+//                .stayImageUrl(stay.getStayImages().getFirst().getS3Url())
+                .stayImageUrl(reservationImageUrl)
                 .roomId(room.getId())
                 .roomName(room.getRoomName())
                 .standardCapacity(room.getStandardCapacity())
@@ -90,8 +93,7 @@ public class ReviewMapper {
     }
 
 
-
-    public ReviewDetailResponse toReviewDetailResponse(Review review){
+    public ReviewDetailResponse toReviewDetailResponse(Review review, String reservationImageUrl, String reviewImageUrl){
         if (review == null) {
             return null;
         }
@@ -100,7 +102,7 @@ public class ReviewMapper {
                 .reviewId(review.getReviewId())
                 .userId(review.getUser().getId())
                 .userName(review.getUser().getUserName())
-                .reservationInfoDto(toReservationInfoDto(review.getReservation()))
+                .reservationInfoDto(toReservationInfoDto(review.getReservation(), reservationImageUrl))
                 .totalRating(review.getTotalRating())
                 .cleanRating(review.getCleanRating())
                 .convenienceRating(review.getConvenienceRating())
@@ -110,7 +112,7 @@ public class ReviewMapper {
                 .valueRating(review.getValueRating())
                 .reviewContent(review.getReviewContent())
                 // 이미지 url 파일에서 가져오기
-                .reviewImageUrl(null)
+                .reviewImageUrl(reviewImageUrl)
                 .isRecommended(review.getIsRecommended())
                 .createdAt(review.getCreatedAt())
                 .updatedAt(review.getUpdatedAt())

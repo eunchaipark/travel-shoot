@@ -139,36 +139,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 
     /**
-     * 리뷰 삭제
-     *
-     * @param userId
-     * @param reviewId
-     */
-    @Transactional
-    public void deleteReview(Long userId, Long reviewId) {
-        // 존재하는 리뷰인지 확인
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다."));
-
-        // 작성자 본인 확인
-        if (!review.getUser().getId().equals(userId)) {
-            throw new IllegalStateException("본인이 작성한 리뷰만 삭제할 수 있습니다.");
-        }
-
-        // 이미지 삭제
-//        if (review.getReviewImageUrl() != null) {
-//            deleteReviewImage(review.getReviewImageUrl());
-//        }
-
-        reviewRepository.delete(review);
-        log.info("리뷰 삭제 완료 - reviewId: {}", reviewId);
-
-    }
-
-
-    /**
      * 리뷰 수정
-     *
      * @param userId 현재 로그인한 사용자 ID
      * @param reviewId 수정할 리뷰 ID
      * @param reviewUpdateRequest 수정 요청 데이터
@@ -193,11 +164,44 @@ public class ReviewServiceImpl implements ReviewService {
         review.setTotalRating(reviewUpdateRequest.getTotalRating());
         review.setReviewContent(reviewUpdateRequest.getReviewContent());
         review.setIsRecommended(reviewUpdateRequest.getIsRecommended());
+        Review updatedReview = reviewRepository.save(review);
 
-        // 이미지 수정
+        // 2. 이미지 업로드 처리
         String imageUrl = null;
 
-        Review updatedReview = reviewRepository.save(review);
+        // 기존 리뷰 이미지 조회
+        Optional<FileUpload> existedImage = fileUploadRepository.findFirstByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("REVIEW", reviewId);
+
+        // 새로운 이미지 등록
+        if (reviewUpdateRequest.getReviewImage() != null && !reviewUpdateRequest.getReviewImage().isEmpty()) {
+            try {
+                // 기존 파일 id가 있을 때만 실행
+                existedImage.ifPresent(image -> fileUploadRepository.deleteById(image.getId()));
+                log.info("기존 리뷰 이미지 삭제");
+
+                FileUpload fileUpload = fileUploadService.uploadAndSave(
+                        reviewUpdateRequest.getReviewImage(),
+                        "REVIEW",
+                        updatedReview.getReviewId(),
+                        userId,
+                        0,
+                        true
+                );
+                imageUrl = fileUpload.getS3Url();
+                log.info("리뷰 이미지 수정 성공 - fileId: {}, s3Url: {}",
+                        fileUpload.getId(), fileUpload.getS3Url());
+            } catch (Exception e) {
+                log.error("리뷰 이미지 수정 실패", e);
+                throw new RuntimeException("이미지 수정 실패", e);
+            }
+        }
+
+        // 기존 이미지 유지
+        else if(!existedImage.isEmpty()){
+            imageUrl = existedImage.map(FileUpload::getS3Url).orElse(null);
+            log.info("기존 리뷰 이미지 유지 - s3Url: {}", imageUrl);
+
+        }
 
         return reviewMapper.toReviewRegistResponse(updatedReview, imageUrl);
     }
@@ -209,31 +213,41 @@ public class ReviewServiceImpl implements ReviewService {
      * @param reservationId
      * @return
      */
+
     public ReviewDetailResponse getReviewDetail(Long reservationId) {
 
+        // 예약 내역있는지 확인
         Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new IllegalArgumentException("예약을 찾을 수 없습니다"));
-
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약 내역입니다."));
         log.info("예약 조회 - {}",  reservation);
 
         Optional<Review> reviewInfo = reviewRepository.findByReservation_Id(reservationId);
 //                .orElseThrow(() -> new EntityNotFoundException("해당 예약에 대한 리뷰가 없습니다. ID: " + reservationId));
-
         log.info("리뷰 조회 - {}", reviewInfo);
+
+        // 숙소 이미지 1개 조회
+        String reservationImageUrl = fileUploadRepository.findFirstByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("STAY", reservation.getRoom().getStay().getId())
+                .map(FileUpload::getS3Url).orElse("/images/product/hotel-bathroom-modern-design.jpg");
 
         ReviewDetailResponse response;
         if (reviewInfo.isPresent()) {
             // 리뷰가 있는 경우 - 전체 정보 반환
             Review review = reviewInfo.get();
-            response = reviewMapper.toReviewDetailResponse(review);
+            Optional<FileUpload> optionalFileUpload = fileUploadRepository.findFirstByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("REVIEW", review.getReviewId());
+
+            String reviewImageUrl = optionalFileUpload
+                    .map(FileUpload::getS3Url)
+                    .orElse("/images/product/hotel-room-city-view.png"); // 리뷰 목록 이미지 1개와 같은 이미지
+
+            response = reviewMapper.toReviewDetailResponse(review, reservationImageUrl, reviewImageUrl);
+
         } else {
             // 리뷰가 없는 경우 - 예약 정보만 반환
             response = ReviewDetailResponse.builder()
-                    .reservationInfoDto(reviewMapper.toReservationInfoDto(reservation))
+                    .reservationInfoDto(reviewMapper.toReservationInfoDto(reservation, reservationImageUrl))
                     .build();
             // @JsonInclude(NON_NULL) 덕분에 null 필드는 자동 제외됨
         }
-
         return response;
     }
 
@@ -263,7 +277,6 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
 
-
         // 단일 파일 버전
         Page<ReviewListResponse> responsePage = reviewPage.map(
                 review -> {
@@ -272,7 +285,7 @@ public class ReviewServiceImpl implements ReviewService {
                     String imageUrl;
                     if(!fileUploads.isEmpty()){
                         imageUrl = fileUploads.get(0).getS3Url();
-                    }else{ // 이미지가 없는 경우(등록할 때 강제할거임)
+                    }else{ // 이미지가 없는 경우 (등록할 때 강제할거임)
                         imageUrl = "/images/product/hotel-room-city-view.png";
                     }
                     return reviewMapper.toReviewListResponse(review, imageUrl);
@@ -377,6 +390,35 @@ public class ReviewServiceImpl implements ReviewService {
                     .stream()
                     .map(FileUpload::getS3Url))
             .collect(Collectors.toList());
+    }
+
+
+
+
+    /**
+     * 리뷰 삭제
+     * @param userId
+     * @param reviewId
+     */
+    @Transactional
+    public void deleteReview(Long userId, Long reviewId) {
+        // 존재하는 리뷰인지 확인
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다."));
+
+        // 작성자 본인 확인
+        if (!review.getUser().getId().equals(userId)) {
+            throw new IllegalStateException("본인이 작성한 리뷰만 삭제할 수 있습니다.");
+        }
+
+        // 이미지 삭제
+//        if (review.getReviewImageUrl() != null) {
+//            deleteReviewImage(review.getReviewImageUrl());
+//        }
+
+        reviewRepository.delete(review);
+        log.info("리뷰 삭제 완료 - reviewId: {}", reviewId);
+
     }
 
 }

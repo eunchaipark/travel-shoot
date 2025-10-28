@@ -11,7 +11,8 @@ const ReviewReservationSection = ({reservationInfo}) => {
         guestCount,
         checkInTime,
         checkOutTime,
-        roomName
+        roomName,
+        stayImageUrl
     } = reservationInfo;
 
     return (
@@ -20,7 +21,7 @@ const ReviewReservationSection = ({reservationInfo}) => {
                 <span className="reservation-value">숙소 예약번호: {reservationCode}</span>
                 <div className="accommodation-card">
                     <div className="accommodation-image-wrapper">
-                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-a1WFmEoMhiDZS9ne7Bn747Fu6iMNWH.png" alt={stayName} className="accommodation-image" />
+                        <img src={stayImageUrl} alt={stayName} className="accommodation-image" />
                     </div>
                     <div className="accommodation-details">
                         <div className="accommodation-header">

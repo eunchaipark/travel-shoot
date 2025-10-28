@@ -20,9 +20,8 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
     const children = searchParams.children || urlParams.children || 0;
 
     // searchParams 에서 LocalDate로 받아온다고 가정
-    const checkInDate = new Date("2025-10-27");
-    const checkOutDate = new Date("2025-10-29");
-
+    const checkInDate = new Date(checkIn);
+    const checkOutDate = new Date(checkOut);
     const nights = Number((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
 
     // TODO : 윤하님 원래 코드 일단 주석처리

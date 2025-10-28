@@ -30,7 +30,7 @@ const ReviewWritePage = () => {
     const [reviewText, setReviewText] = useState('');
     const [isEditMode, setIsEditMode] = useState(false);
     const [reviewId, setReviewId] = useState(null);
-    // const [existingImageUrl, setExistingImageUrl] = useState(null);
+    const [existedImageUrl, setExistedImageUrl] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [reservationInfo, setReservationInfo] = useState(null);
     const isUpdatingFromTotalRef = useRef(false);
@@ -100,7 +100,7 @@ const ReviewWritePage = () => {
                         setReservationInfo(data.reservationInfoDto);
 
                         if(data.reviewId){
-                        console.log("예약 + 리뷰 데이터: ", data);
+                            console.log("예약 + 리뷰 데이터: ", data);
 
                             setIsEditMode(true);
                             setReviewId(data.reviewId);
@@ -119,8 +119,8 @@ const ReviewWritePage = () => {
                             
                             // 텍스트 및 기타 데이터 설정
                             setReviewText(data.reviewContent || '');
+                            setExistedImageUrl(data.reviewImageUrl);
                             setIsRecommended(data.isRecommended);
-                            // setExistingImageUrl(data.reviewImageUrl);
                         } else {
                             // 리뷰가 없는 경우 - 등록 모드
                             setIsEditMode(false);
@@ -147,8 +147,10 @@ const ReviewWritePage = () => {
     
     // 파일 변경/제거 핸들러
     const handleFileChange = (file) => setUploadedFile(file);
+
     const handleFileRemove = () => {
         setUploadedFile(null);
+        setExistedImageUrl(null);
         if (photoInputRef.current) photoInputRef.current.value = ''; // input 초기화
     };
 
@@ -186,8 +188,8 @@ const ReviewWritePage = () => {
                     alert('리뷰가 등록되었습니다.');
                 }
 
-                 // 성공 후 페이지 이동
-                navigate('/'); 
+                 // 성공 후 마이페이지 후기 내역 이동
+                navigate('/mypage?type=review'); 
                 
             } catch (error) {
                 console.error(`리뷰 ${isEditMode ? '수정' : '등록'} 실패:`, error);
@@ -220,7 +222,7 @@ const ReviewWritePage = () => {
                 {reservationInfo && <ReviewRatingSection stayName={reservationInfo.stayName} ratings={ratings} onRatingChange={handleRatingChange} detailCategories={detailCategories}/> }
                 {/* 텍스트 후기 */}
                 <section className="text-review-section">
-                    <h3 className="section-title">텍스트 후기 작성</h3>
+                    <h3 className="section-title">텍스트 후기 작성 *</h3>
                     <textarea 
                         className="review-textarea" 
                         placeholder="이용한 경험을 자세히 알려주세요." 
@@ -232,7 +234,8 @@ const ReviewWritePage = () => {
 
                 {/* 사진 업로드 */}
                 <PhotoUploadSection
-                    uploadedFile={uploadedFile} 
+                    uploadedFile={uploadedFile}
+                    existedImageUrl={existedImageUrl}
                     onFileChange={handleFileChange} 
                     onFileRemove={handleFileRemove} 
                     photoInputRef={photoInputRef}

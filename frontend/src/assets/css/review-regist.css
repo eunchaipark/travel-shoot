@@ -1,3 +1,4 @@
+
 /* ========================================
    반응형 디자인 - 큰 모바일 (576px ~ 767px)
 ======================================== */
@@ -670,6 +671,8 @@
     margin-top: 4px;
 }
 
+
+/** 이미지 미리보기 **/
 .review-write-page .main-content .photo-upload-section .photo-preview {
     display: none;
     position: relative;
@@ -1120,4 +1123,41 @@
         padding: 16px 12px;
         
     }
+}
+
+
+/** css 테스트 중 **/
+/* 사진 변경 버튼 스타일 */
+.change-photo-button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    color: #495057;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+}
+
+.change-photo-button:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.change-photo-button i {
+    font-size: 14px;
+}
+
+/* 업로드 성공 메시지 개선 */
+.upload-success-message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 10px;
 }
