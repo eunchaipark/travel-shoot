@@ -262,7 +262,7 @@ public class StayAIRecommendationServiceImpl implements StayAIRecommendationServ
      * 대표 이미지 조회
      */
     private String getThumbnailImage(Long stayId) {
-        return fileUploadRepository.findRepresentativeImage("STAY", stayId)
+        return fileUploadRepository.findRepresentativeImage("STAYS", stayId)
             .map(FileUpload::getS3Url)
             .orElse("/images/main/main-example.svg"); // 기본 이미지
     }
