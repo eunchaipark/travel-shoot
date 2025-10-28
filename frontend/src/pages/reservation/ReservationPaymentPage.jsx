@@ -310,20 +310,20 @@ const ReservationPaymentPage = () => {
                         <div className="section-card mb-4">
                             <div className="section-header">결제 방법</div>
                             <div className="payment-options">
-                                <label className="payment-option d-flex align-items-center mb-3">
-                                    <input
-                                        type="radio"
-                                        name="payment"
-                                        value="카드결제"
-                                        checked={formData.paymentMethod === '카드결제'}
-                                        onChange={(e) => handleChange('paymentMethod', e.target.value)}
-                                    />
-                                    <span className="radio-custom"></span>
-                                    <div className="payment-info d-flex align-items-center ms-3">
-                                        <img className="payment_images" src="/images/reservation/payment-card.svg" alt="카드결제" />
-                                        <span className="payment-text">일반 카드 결제</span>
-                                    </div>
-                                </label>
+                                {/*<label className="payment-option d-flex align-items-center mb-3">*/}
+                                {/*    <input*/}
+                                {/*        type="radio"*/}
+                                {/*        name="payment"*/}
+                                {/*        value="카드결제"*/}
+                                {/*        checked={formData.paymentMethod === '카드결제'}*/}
+                                {/*        onChange={(e) => handleChange('paymentMethod', e.target.value)}*/}
+                                {/*    />*/}
+                                {/*    <span className="radio-custom"></span>*/}
+                                {/*    <div className="payment-info d-flex align-items-center ms-3">*/}
+                                {/*        <img className="payment_images" src="/images/reservation/payment-card.svg" alt="카드결제" />*/}
+                                {/*        <span className="payment-text">일반 카드 결제</span>*/}
+                                {/*    </div>*/}
+                                {/*</label>*/}
 
                                 <label className="payment-option d-flex align-items-center mb-3">
                                     <input
