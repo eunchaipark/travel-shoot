@@ -88,9 +88,7 @@ public class StayRecommendationResponse {
             }
             
             return stay.getRooms().stream()
-                .map(room -> room.getWeekdayPrice()
-                    .add(room.getWeekendPrice())
-                    .divide(BigDecimal.valueOf(2), 2, RoundingMode.HALF_UP))
+                .map(room -> room.getWeekdayPrice())
                 .min(BigDecimal::compareTo)
                 .orElse(BigDecimal.ZERO);
         }
