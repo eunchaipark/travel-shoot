@@ -45,6 +45,9 @@ application-openai.properties
 ### s3
 application-s3.properties
 
+### kakao-pay
+application-kakaopay.properties
+
 ### Docker 관련 파일들
 .bash_profile
 .bashrc
