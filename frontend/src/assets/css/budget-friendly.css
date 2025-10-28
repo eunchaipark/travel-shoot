@@ -25,8 +25,8 @@
 }
 
 .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-title {
-    font-size: 32px;
-    font-weight: 700;
+    font-size: 30px;
+    font-weight: 600;
     color: #333;
     margin-bottom: 0;
     text-align: left;
@@ -324,7 +324,7 @@
     }
     
     .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-title {
-        font-size: 28px;
+        font-size: 30px;
     }
     
     .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image {
@@ -360,6 +360,7 @@
         width: 33.33%;
     }
     .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .section-title {
+        font-weight: 600;
         font-size: 24px;
     }
     
@@ -439,6 +440,9 @@
 
 /* 작은 모바일 (480px 이하) */
 @media (max-width: 480px) {
+    .main{
+        padding-top: 67px;
+    }
     .main-page .additional-content-section .budget-friendly-section{
         padding-left: 15px;
         padding-right: 15px;

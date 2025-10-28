@@ -1,0 +1,439 @@
+/* 구현 중 UI */
+
+.product-detail-container .room-card-container .stay-img-container{
+   min-height: 100px;
+   max-height: 150px;
+}
+
+.product-detail-container .room-card-container .room-details-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.product-detail-container .room-card-container .room-amenities-section{
+    /* max-height: 150px; */
+    justify-content: space-between;
+}
+
+.product-detail-container .card-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+
+.product-detail-container .card-top .card-title-container{
+    display: flex;
+    align-items: center;
+}
+
+.product-detail-container .card-top .ai-badge {
+    margin-top: 1px;
+    color: white;
+    padding: 3px 9px;
+    padding-right: 11px;
+    border-radius: 12px;
+    font-size: 10px;
+    gap: 7px;
+    background: #fcf0f0;
+    color: #f56770;
+    border-radius: 20px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    max-width: 242px;
+    max-height: 25px;
+    align-items: center;
+    margin-left: 3px;
+
+}
+
+.product-detail-container .card-top .ai-icon {
+    width: 13px;
+    height: 13px;
+}
+
+.product-detail-container .rating-score {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    gap: 8px;
+}
+
+.product-detail-container .rating-score .star-icon {
+    color: #ff8888;
+    font-size: 25px;
+    
+}
+
+.product-detail-container .rating-score .score-number {
+    font-size: 25px;
+    font-weight: 600;
+    color: #333;
+    gap: 8px;
+}
+
+
+
+/* CSS from product-detail-page.css */
+.product-detail-container{
+    min-width: 400px;
+    margin-bottom: 4rem;
+}
+
+.product-detail-container small {
+    font-size: 0.73rem;
+}
+
+.product-detail-container .gray {
+    color: #808080;
+}
+
+.product-detail-container .hotel-location {
+    display: flex;
+    align-items: center;
+    color: #666;
+    font-size: 0.85em;
+}
+
+.product-detail-container .hotel-location .location-icon{
+    width: 20px;
+    height: 20px;
+    background-image: url(/images/common/gray-location-icon.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-right: 8px;
+}
+
+.product-detail-container .price-section {
+    text-align: right;
+}
+
+.product-detail-container .price-amount {
+    color: #f56770;
+    font-size: 21px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.product-detail-container .price-label {
+    color: #999;
+    font-size: 12px;
+}
+
+.product-detail-container .action-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.product-detail-container .heart-btn, 
+.product-detail-container .share-btn {
+    background: none;
+    border: none;
+    color: #ff8888;
+    font-size: 18px;
+    padding: 4px;
+    cursor: pointer;
+}
+
+.product-detail-container .gallery-overlay {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.product-detail-container .star-rating {
+    color: #FF8888 !important;
+}
+
+.product-detail-container .price-text {
+    color: #F56770 !important;
+    font-weight: bold;
+    font-size: 18px;
+    min-width: 100px;
+}
+
+.product-detail-container .btn-custom {
+    background-color: #FF8888 !important;
+    border-color: #FF8888 !important;
+    color: #FFFFFF !important;
+    font-size: .85em;
+    min-width: 90px;
+    height: 2rem;
+    margin-top: 11px;
+}
+
+.product-detail-container .btn-custom:hover {
+    background-color: #e67777 !important;
+    border-color: #e67777 !important;
+    color: #FFFFFF !important;
+}
+
+.product-detail-container .heart-icon, 
+.product-detail-container .share-icon {
+    color: #FF8888 !important;
+}
+
+.product-detail-container .facility-icon {
+    color: #FF8888 !important;
+}
+
+.product-detail-container .room-image {
+    /* height: 120px; */
+    /* height: 100%; */
+    object-fit: cover;
+}
+
+.product-detail-container .map-marker {
+    width: 30px;
+    height: 30px;
+    background-color: #FF8888;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.product-detail-container .room-details {
+    font-size: 0.8rem;
+    color: #4A4A4A;
+}
+
+.product-detail-container .font-12 {
+    font-size: 12px;
+}
+
+.product-detail-container .font-15 {
+    font-size: 15px;
+}
+
+.product-detail-container .card-title{
+    font-size: 1.25rem;
+    /* display: flex; */
+}
+
+.product-detail-container  .map-card.card .map-container .w-full.h-full {
+    min-height: 257px !important;
+}
+
+@media (min-width: 768px) {
+    .product-detail-container .room-card .col-md-4 { flex: 0 0 33%; max-width: 33%; }
+    .product-detail-container .room-card .col-md-3 { flex: 0 0 25%; max-width: 25%; }
+    .product-detail-container .room-card .col-md-5 { flex: 0 0 42%; max-width: 42%; }
+}
+
+@media(max-width: 1200px){
+    .product-detail-container .price-text {
+        color: #F56770 !important;
+        font-weight: bold;
+        font-size: 15px;
+        min-width: 100px;
+    }
+
+
+}
+
+@media(max-width:978px){
+
+}
+
+@media (max-width: 768px) {
+    .product-detail-container .room-details {
+        font-size: 0.8rem;
+    }
+
+    .product-detail-container .room-card-container{
+        /* margin-top: 0px; */
+    }
+}
+
+@media (max-width: 576px) {
+    .product-detail-container .room-details {
+        font-size: 0.75rem;
+    }
+
+    .product-detail-container .card .room-content {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 4;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .product-detail-container .price-amount {
+        color: #f56770;
+        font-size: 18.5px;
+        font-weight: 700;
+        margin-bottom: 2px;
+    }
+
+
+    /* 구현 중 UI */
+    .product-detail-container .card-top{
+        justify-content: space-between;
+        align-items: center;
+        
+    }
+
+    .product-detail-container .card-top .card-title-container{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .product-detail-container .card-top .ai-badge {
+        margin-top: 1px;
+        color: white;
+        padding: 3px 9px;
+        padding-right: 11px;
+        border-radius: 12px;
+        font-size: 10px;
+        gap: 7px;
+        background: #fcf0f0;
+        color: #f56770;
+        border-radius: 20px;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+        display: flex;
+        align-items: center;
+        max-width: 242px;
+        max-height: 25px;
+        align-items: center;
+        margin-left: 3px;
+
+    }
+
+    .product-detail-container .card-top .ai-icon {
+        width: 13px;
+        height: 13px;
+    }
+
+    .product-detail-container .card-top .rating-score{
+        display: flex;
+        align-items: flex-end;
+        font-size: 20px;
+        gap: 8px;
+        flex-direction: column;
+    }
+
+}
+
+.product-detail-container .ai-review-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.product-detail-container .ai-review-text {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+
+.product-detail-container .view-more-btn {
+    color: #ff8888;
+    font-size: 13px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.product-detail-container .view-more-btn:hover {
+    color: #e55555;
+    text-decoration: none;
+}
+
+.gallery-trigger {
+    /* cursor: pointer; */
+
+}
+
+/* 첫 번째 코드의 모달 스타일 적용 */
+.modal-main-image-container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
+.modal-main-display-image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    /* height: auto;
+    object-fit: contain; */
+    border-radius: 12px;
+}
+
+.modal-thumbnails-scroll-container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
+.modal-thumbnails-flex-wrapper {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 10px 0;
+    scroll-behavior: smooth;
+}
+
+.modal-thumbnails-flex-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+
+.modal-thumbnails-flex-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.modal-thumbnails-flex-wrapper::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.modal-thumbnails-flex-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.modal-gallery-thumbnail-image {
+    flex: 0 0 auto;
+    width: 150px;
+    height: 100px;
+    cursor: pointer;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    object-fit: cover;
+    /* 이미지 로딩 중 레이아웃 시프트 방지 */
+    aspect-ratio: 1 / 1;
+}
+
+.modal-gallery-thumbnail-image:hover {
+    border-color: #ff8888;
+    transform: scale(1.05);
+}
+
+.modal-gallery-thumbnail-image.active {
+    border-color: #ff8888;
+}
+
+

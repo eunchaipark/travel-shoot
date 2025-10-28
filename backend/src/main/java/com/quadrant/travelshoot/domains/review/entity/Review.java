@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class Review {
 
     @Id
@@ -43,7 +44,7 @@ public class Review {
 
     @DecimalMin("0.00")
     @DecimalMax("5.00")
-    @Column(name = "overall_rating", nullable = false, precision = 3, scale = 2) //TODO : 윤하님 확인 필요 DB랑 이름이 다름....ㅎ
+    @Column(name = "total_rating", nullable = false, precision = 3, scale = 2) //TODO : 윤하님 확인 필요 DB랑 이름이 다름....ㅎ
     private BigDecimal totalRating;
 
     @DecimalMin("0.00")
@@ -90,10 +91,5 @@ public class Review {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    // 추가: 리뷰 이미지
-//    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private ReviewImage reviewImage;
-
 
 }

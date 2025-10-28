@@ -5,12 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public interface FileUploadRepository extends JpaRepository<FileUpload, Long> {
-
-    List<FileUpload> findAllByReferenceTypeAndReferenceId(String stayType, Long stayId);
 
     @Query("SELECT f FROM FileUpload f " +
            "WHERE f.referenceType = :referenceType " +
@@ -22,4 +21,21 @@ public interface FileUploadRepository extends JpaRepository<FileUpload, Long> {
         @Param("referenceType") String referenceType,
         @Param("referenceId") Long referenceId
     );
+
+
+    List<FileUpload> findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc(String referenceType, Long referenceId);
+    // 이미지 1개만 조회
+    Optional<FileUpload> findFirstByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc(
+            String referenceType,
+            Long referenceId
+    );
+
+    // 숙소 썸네일 이미지 5개
+    List<FileUpload> findTop5ByReferenceTypeAndReferenceIdOrderBySortOrderAsc(String referenceType, Long referenceId);
+
+    // 숙소 전체 이미지 모달 - 최신순
+    List<FileUpload> findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderByUploadedAtDesc(String referenceType, Long referenceId);
+
+    // 숙소 이미지 개수
+//    Integer countByReferenceTypeAndReferenceIdAndIsDeletedFalse(String stay, Long stayId);
 }

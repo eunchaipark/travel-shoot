@@ -2,15 +2,19 @@ package com.quadrant.travelshoot.domains.stay.service.impl;
 
 import com.quadrant.travelshoot.domains.common.entity.FileUpload;
 import com.quadrant.travelshoot.domains.common.service.impl.FileUploadServiceImpl;
-import com.quadrant.travelshoot.domains.review.service.ReviewService;
+import com.quadrant.travelshoot.domains.review.repository.ReviewRepository;
 import com.quadrant.travelshoot.domains.review.service.impl.ReviewServiceImpl;
+import com.quadrant.travelshoot.domains.stay.dto.response.RoomFilterDto;
 import com.quadrant.travelshoot.domains.stay.dto.response.StayDetailResponse;
+import com.quadrant.travelshoot.domains.stay.dto.response.StayImageDto;
+import com.quadrant.travelshoot.domains.stay.dto.response.StayRatingResponse;
 import com.quadrant.travelshoot.domains.stay.entity.Room;
 import com.quadrant.travelshoot.domains.stay.entity.Stay;
 import com.quadrant.travelshoot.domains.stay.entity.StayAmenity;
 import com.quadrant.travelshoot.domains.stay.mapper.StayMapper;
 import com.quadrant.travelshoot.domains.stay.repository.RoomRepository;
 import com.quadrant.travelshoot.domains.stay.repository.StayRepository;
+import com.quadrant.travelshoot.domains.stay.service.StayImageService;
 import com.quadrant.travelshoot.domains.stay.service.StayService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +33,7 @@ public class StayServiceImpl implements StayService {
 
     private final StayRepository stayRepository;
     private final RoomRepository roomRepository;
+    private final StayImageService stayImageService;
     private final FileUploadServiceImpl fileUploadService;
     private final StayAmenityServiceImpl stayAmenityService;
     private final ReviewServiceImpl reviewService;
@@ -44,29 +49,27 @@ public class StayServiceImpl implements StayService {
     @Transactional
     public StayDetailResponse getStayDetail(Long stayId) {
         Stay stay = stayRepository.findByStayId(stayId)
-                .orElseThrow(() -> new IllegalArgumentException("이용할 수 없는 숙소입니다."));
-
-        // 조회수 증가 - 조회수 테이블 따로 있어서
-//        stayRepository.incrementViewCount(stayId);
-        String stayType = "숙소";
+                .orElseThrow(() -> new IllegalArgumentException("해당 숙소를 찾을 수 없습니다."));
 
         // 최저가 minPrice 조회
         BigDecimal minPrice = findRoomMinPrice(stay.getRooms());
         stay.setMinPrice(minPrice);
-
         // 리뷰 개수 reviewCount
         stay.setReviewCount(reviewService.countReview(stayId));
-
-        // 숙소 평균평점 averageRating
-        stay.updateAverageRating(reviewService.getStayAverageRating(stayId)); // 엔티티 갱신
-
         // 편의시설 조회
         List<StayAmenity> stayAmenities = stayAmenityService.findByStayId(stayId);
-        // 모든 이미지 조회
-        List<FileUpload> images = fileUploadService.findAllByReferenceTypeAndReferenceId(stayType, stayId);
-        return stayMapper.toStayDetailResponse(stay, images, stayAmenities);
+        // 썸네일 이미지 5개 조회
+        List<StayImageDto> thumbnailImages = stayImageService.getThumbnailImages(stayId);
+
+        return stayMapper.toStayDetailResponse(stay, thumbnailImages, stayAmenities);
     }
 
+    /**
+     * 숙소 내 객실 조회
+     */
+    public List<RoomFilterDto> getRoomFilters(Long stayId){
+        return roomRepository.findByStayId(stayId);
+    }
 
     /**
      * 최저가 구하는 메서드
@@ -83,5 +86,17 @@ public class StayServiceImpl implements StayService {
     public Stay getById(Long stayId) {
         return stayRepository.findById(stayId)
                 .orElseThrow(() -> new IllegalArgumentException("숙소 정보를 찾을 수 없습니다."));
+    }
+
+    /**
+     * 숙소 리뷰 별점 7개 조회
+     */
+    private final ReviewRepository reviewRepository;
+    public StayRatingResponse getStayRating(Long stayId) {
+
+        StayRatingResponse stayRatingResponse = reviewRepository.findStayRatingByStayId(stayId);
+        System.out.println("stayRatingResponse : " + stayRatingResponse);
+
+        return stayRatingResponse;
     }
 }

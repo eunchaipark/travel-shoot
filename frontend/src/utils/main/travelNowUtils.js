@@ -41,12 +41,12 @@ export const handleTouchGesture = (touchStart, touchEnd, threshold = 50) => {
 };
 
 // ===== API에서 데이터 가져오기 =====
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+// const API_BASE_URL =
+//   import.meta.env.VITE_API_URL || "http://localhost:8080/api";
 
 export const fetchTravelNowData = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/travel-now/destinations`);
+    const response = await fetch(`${window.API_BASE_URL}/api/travel-now/destinations`);
     if (!response.ok) {
       throw new Error("Failed to fetch destinations");
     }

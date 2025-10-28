@@ -2,7 +2,7 @@ import {useState, useEffect, useRef} from 'react';
 
 const KAKAO_JS_KEY = '3868e95750c9e60a60b89ae4b9455d38';
 
-export const useSearchKakaoMap = (isOpen, onModalClose, spotId, onUpdateSuccess) => {
+export const useSearchKakaoMap = (isOpen, onModalClose, spotId, onUpdateStart, onUpdateSuccess) => {
     const [kakaoLoaded, setKakaoLoaded] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
@@ -184,6 +184,14 @@ export const useSearchKakaoMap = (isOpen, onModalClose, spotId, onUpdateSuccess)
 
     const handlePlaceSelect = async (placeData) => {
         try {
+            if (onUpdateStart) {
+                onUpdateStart();
+            }
+
+            // 모달 먼저 닫기
+            if (onModalClose) {
+                onModalClose();
+            }
             setIsUpdating(true); // 로딩 시작
 
             const response = await fetch(`${window.API_BASE_URL}/api/ai/course/update`, {
@@ -191,6 +199,7 @@ export const useSearchKakaoMap = (isOpen, onModalClose, spotId, onUpdateSuccess)
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: 'include',
                 body: JSON.stringify({
                     spotId: spotId,
                     place: placeData
@@ -199,10 +208,6 @@ export const useSearchKakaoMap = (isOpen, onModalClose, spotId, onUpdateSuccess)
 
             if (response.ok) {
                 alert('일정이 수정되었습니다.');
-                if (onUpdateSuccess) {
-                    await onUpdateSuccess();
-                }
-
             } else {
                 alert('수정에 실패했습니다.');
             }
@@ -210,10 +215,10 @@ export const useSearchKakaoMap = (isOpen, onModalClose, spotId, onUpdateSuccess)
             console.error('Error updating course:', error);
             alert('오류가 발생했습니다.');
         } finally {
-            setIsUpdating(false);
-            if (onModalClose) {
-                onModalClose(); // 모달 닫기
+            if (onUpdateSuccess) {
+                await onUpdateSuccess();
             }
+            setIsUpdating(false);
         }
     };
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import SimpleHeader from '@/components/layout/SimpleHeader';
 import {useReservationDetail} from '@/hooks/useReservationDetail';
@@ -7,19 +7,34 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '@/assets/css/reservation.css';
 import SearchMapModal from '@/components/modals/SearchMapModal';
 import {getDayOfWeek} from '@/utils/formatters/dateFormatter';
+import CommonLoading from '@/components/loading/CommonLoading';
 
 const ReservationDetailPage = () => {
+    const navigate = useNavigate();
+    const queryParams = new URLSearchParams(window.location.search);
+    const reservationId = queryParams.get('reservationId');
+    useEffect(() => {
+        if (isNaN(Number(reservationId)) || reservationId === '') {
+            alert('잘못된 경로입니다.');
+            navigate(-1);
+            return;
+        }
+    }, [reservationId, navigate]);
     const [activeDay, setActiveDay] = useState(1);
     const [showSearchMap, setShowSearchMap] = useState(false);
     const [editingSpotId, setEditingSpotId] = useState(null);
-
-    // URL에서 reservationId 가져오기
-    const queryParams = new URLSearchParams(window.location.search);
-    const reservationId = queryParams.get('reservationId');
-    const navigate = useNavigate();
+    const [updatingSpotId, setUpdatingSpotId] = useState(null);
 
     // 커스텀 훅으로 데이터 관리
-    const { reservationData, courseData, loading, error, refetchCourseData } = useReservationDetail(reservationId);
+    const {
+        reservationData,
+        courseData,
+        loading,
+        courseLoading,
+        isCourseGenerating,
+        error,
+        refetchCourseData
+    } = useReservationDetail(reservationId);
     const pricePerNight = reservationData ? (reservationData.totalPrice / reservationData.totalNights).toLocaleString() : '0';
 
     const handleCopyAddress = (address) => {
@@ -104,7 +119,7 @@ const ReservationDetailPage = () => {
                                                         type="button"
                                                         value="예약 목록 보기"
                                                         className="review-btn"
-                                                        onClick={() => navigate("/mypage/reservation")}
+                                                        onClick={() => navigate("/mypage?type=reservation")}
                                                     />
                                                 </div>
                                                 <div className="col-6 d-flex justify-content-end">
@@ -127,7 +142,7 @@ const ReservationDetailPage = () => {
                                                         type="button"
                                                         value="예약 목록 보기"
                                                         className="review-btn"
-                                                        onClick={() => navigate("/mypage/reservation")}
+                                                        onClick={() => navigate("/mypage?type=reservation")}
                                                     />
                                                 </div>
                                                 <div className="col-6 d-flex justify-content-end">
@@ -247,7 +262,7 @@ const ReservationDetailPage = () => {
 
                         {/* 결제 정보 섹션 */}
                         <div className="col-lg-5 col-12 p-0">
-                            <div className="ms-3 content-section">
+                            <div className="ms-3 content-section payment-section">
                                 <div className="content-section-inner">
                                     <div className="content-section-title mb-4">결제 정보</div>
 
@@ -346,9 +361,8 @@ const ReservationDetailPage = () => {
                         <div className="col-12 content-section">
                             <div className="content-section-inner">
                                 <div className="content-section-title mb-3">AI 여행 추천코스</div>
-
                                 {/* 코스 데이터 로딩 중일 때 스켈레톤 */}
-                                {!courseData ? (
+                                {courseLoading ? (
                                     <div>
                                         {/* Day Tabs Skeleton */}
                                         <ul className="nav nav-pills day-tabs mb-4">
@@ -401,7 +415,21 @@ const ReservationDetailPage = () => {
                                             ))}
                                         </div>
                                     </div>
-                                ) : (
+                                ) : isCourseGenerating ? (
+                                    // 3번: API 호출 실패 (404) → CommonLoading
+                                    <div className={`course-loading-con`}>
+                                        <CommonLoading
+                                            title="사용자에게 맞는 여행 코스 추천중..."
+                                            description={
+                                                <>
+                                                    AI가 장소 정보를 분석하고 있습니다.<br/>
+                                                    최대 2분 정도 소요됩니다.
+                                                </>
+                                            }
+                                            isModal={false}
+                                        />
+                                    </div>
+                                ) : courseData ? (
                                     // 실제 코스 데이터
                                     <div>
                                         {/* Day Tabs */}
@@ -434,55 +462,100 @@ const ReservationDetailPage = () => {
                                                 .find(dc => dc.day === activeDay)
                                                 ?.spots.map((spot) => (
                                                     <div className="course-item" key={spot.spotId}>
-                                                        <div
-                                                            className={`course-number ${getSpotTypeClass(spot.spotType)}`}>
-                                                            {spot.order}
-                                                        </div>
-                                                        <div className="course-content">
-                                                            <div
-                                                                className="course-title d-flex flex-column justify-content-between flex-sm-row">
-                                                                <div>
-                                                                    <span className="me-1 mb-1 mb-sm-0">
-                                                                        [{spot.startTime.slice(0, 5)}~{spot.endTime.slice(0, 5)}]
-                                                                    </span>
-                                                                    <span className="me-1 mb-1 mb-sm-0">
-                                                                        {spot.spotName}
-                                                                    </span>
-                                                                    <span className="course-time">
-                                                                        {spot.spotType} | {spot.type}
-                                                                    </span>
+                                                        {/* 🆕 수정 중인지 체크 */}
+                                                        {updatingSpotId === spot.spotId ? (
+                                                            // 로딩 중일 때
+                                                            <>
+                                                                <div className="course-number course-attraction">{spot.order}</div>
+                                                                <div className="course-content">
+                                                                    <div className="course-title">
+                                                                        <div
+                                                                            style={{
+                                                                                height: '20px',
+                                                                                width: '70%',
+                                                                                background: '#e0e0e0',
+                                                                                borderRadius: '4px',
+                                                                                marginBottom: '8px'
+                                                                            }}
+                                                                        ></div>
+                                                                    </div>
+                                                                    <div
+                                                                        style={{
+                                                                            height: '16px',
+                                                                            width: '90%',
+                                                                            background: '#e0e0e0',
+                                                                            borderRadius: '4px',
+                                                                            marginBottom: '8px'
+                                                                        }}
+                                                                    ></div>
+                                                                    <div
+                                                                        style={{
+                                                                            height: '16px',
+                                                                            width: '60%',
+                                                                            background: '#e0e0e0',
+                                                                            borderRadius: '4px'
+                                                                        }}
+                                                                    ></div>
                                                                 </div>
-                                                                <div>
-                                                                    <button onClick={() => {
-                                                                        setEditingSpotId(spot.spotId);
-                                                                        setShowSearchMap(true);
-                                                                    }} className="edit-btn">
-                                                                        수정하기
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-
-                                                            <div className="course-description">
-                                                                {spot.aiComment}
-                                                            </div>
-                                                            <div className="course-location">
-                                                                <div className="location-icon"></div>
-                                                                {spot.address}
+                                                                </>
+                                                        ) : (
+                                                            // 정상일 때 - 기존 코드 그대로
+                                                            <>
                                                                 <div
-                                                                    className="copy-btn-con"
-                                                                    onClick={() => handleCopyAddress(spot.address)}
-                                                                    style={{cursor: 'pointer'}}
-                                                                >
-                                                                    <div className="copy-image"></div>
-                                                                    <span className="copy-btn">복사</span>
+                                                                    className={`course-number ${getSpotTypeClass(spot.spotType)}`}>
+                                                                    {spot.order}
                                                                 </div>
-                                                            </div>
-                                                        </div>
+                                                                <div className="course-content">
+                                                                    <div
+                                                                        className="course-title d-flex flex-column justify-content-between flex-sm-row">
+                                                                        <div>
+                                                                            <span className="me-1 mb-1 mb-sm-0">
+                                                                                [{spot.startTime.slice(0, 5)}~{spot.endTime.slice(0, 5)}]
+                                                                            </span>
+                                                                            <span className="me-1 mb-1 mb-sm-0">
+                                                                                {spot.spotName}
+                                                                            </span>
+                                                                            <span className="course-time">
+                                                                                {spot.spotType} | {spot.type}
+                                                                            </span>
+                                                                        </div>
+                                                                        {reservationData?.reservationStatus !== '예약취소' && (
+                                                                            <>
+                                                                                <div>
+                                                                                    <button onClick={() => {
+                                                                                        setEditingSpotId(spot.spotId);
+                                                                                        setShowSearchMap(true);
+                                                                                    }} className="edit-btn">
+                                                                                        수정하기
+                                                                                    </button>
+                                                                                </div>
+                                                                            </>
+                                                                        )}
+                                                                    </div>
+
+                                                                    <div className="course-description">
+                                                                        {spot.aiComment}
+                                                                    </div>
+                                                                    <div className="course-location">
+                                                                        <div className="location-icon"></div>
+                                                                        {spot.address}
+                                                                        <div
+                                                                            className="copy-btn-con"
+                                                                            onClick={() => handleCopyAddress(spot.address)}
+                                                                            style={{cursor: 'pointer'}}
+                                                                        >
+                                                                            <div className="copy-image"></div>
+                                                                            <span className="copy-btn">복사</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </>
+                                                        )}
                                                     </div>
                                                 ))}
                                         </div>
                                     </div>
-                                )}
+                                ) : null}
                             </div>
                         </div>
                     </div>
@@ -496,7 +569,11 @@ const ReservationDetailPage = () => {
                 }}
                 spotId={editingSpotId}
                 searchText={reservationData?.address.match(/^[^\s]+/)[0]}
-                onUpdateSuccess={refetchCourseData}
+                onUpdateStart={() => setUpdatingSpotId(editingSpotId)}
+                onUpdateSuccess={async () => {
+                    await refetchCourseData();
+                    setUpdatingSpotId(null);
+                }}
             />
         </>
     );

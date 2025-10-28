@@ -1,6 +1,3 @@
-// 환경 변수에서 API URL 가져오기 (없으면 기본값)
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
-
 //이메일 인증 코드 발송
 /**
  * @param {string} email - 사용자 이메일
@@ -9,7 +6,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api'
 export const sendVerificationCode = async (email) => {
     try {
         const response = await fetch(
-            `${API_BASE_URL}/auth/email/send-code?email=${encodeURIComponent(email)}`,
+            `${window.API_BASE_URL}/api/auth/email/send-code?email=${encodeURIComponent(email)}`,
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -55,7 +52,7 @@ export const sendVerificationCode = async (email) => {
  */
 export const verifyCode = async (email, code) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/auth/email/verify-code`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/auth/email/verify-code`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -84,7 +81,7 @@ export const verifyCode = async (email, code) => {
  */
 export const signup = async (signupData) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/auth/signup`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -115,7 +112,7 @@ export const signup = async (signupData) => {
  */
 export const login = async (loginData) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/auth/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -162,7 +159,7 @@ export const login = async (loginData) => {
  */
 export const requestPasswordReset = async (email) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/auth/password/reset-request?email=${encodeURIComponent(email)}`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/auth/password/reset-request?email=${encodeURIComponent(email)}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -190,7 +187,7 @@ export const requestPasswordReset = async (email) => {
  */
 export const resetPassword = async (resetData) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/auth/password/reset`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/auth/password/reset`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -219,7 +216,7 @@ export const resetPassword = async (resetData) => {
 
 export const logout = async () => {
     try {
-        const response = await fetch(`${API_BASE_URL}/auth/logout`, {
+        const response = await fetch(`${window.API_BASE_URL}/api/auth/logout`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

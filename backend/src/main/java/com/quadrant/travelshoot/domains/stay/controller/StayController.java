@@ -83,7 +83,7 @@ public class StayController {
      * GET /api/stays/find-recommendations
      */
     @GetMapping("/find-recommendations")
-    public ResponseEntity<Map<Long, List<Object>>> getStayBasedRecommendations(
+    public ResponseEntity<List<Object>> getStayBasedRecommendations(
             @RequestParam List<Long> stayIds,
             @RequestParam(defaultValue = "2") int restaurantCount,
             @RequestParam(defaultValue = "2") int activityCount) {
@@ -91,7 +91,7 @@ public class StayController {
         log.info("숙소 기반 추천 요청 - stayIds: {}, 맛집: {}개, 관광지: {}개",
                 stayIds, restaurantCount, activityCount);
 
-        Map<Long, List<Object>> responses = stayBasedFindService
+        List<Object> responses = stayBasedFindService
                 .findRecommendations(stayIds, restaurantCount, activityCount);
 
         return ResponseEntity.ok(responses);

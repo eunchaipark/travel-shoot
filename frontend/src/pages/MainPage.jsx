@@ -10,6 +10,7 @@ import { fetchCalendarCourses } from "@/services/main/calendarApiService";
 
 // Layout Components
 import SimpleHeader from "@/components/layout/SimpleHeader";
+import Footer from "@/components/layout/Footer";
 
 // Hooks
 import {
@@ -42,6 +43,7 @@ import "@/assets/css/recommend-stay.css";
 import "@/assets/css/trending-section.css";
 import "@/assets/css/budget-friendly.css";
 import "@/assets/css/travel-now.css";
+// import "@/assets/css/map.css";
 
 const MainPage = () => {
   const calendarRef = useRef(null);
@@ -90,9 +92,9 @@ const MainPage = () => {
         const reservationData = await fetchCalendarCourses(userId);
         const events = convertToCalendarEvents(reservationData);
         setCalendarEvents(events);
-        console.log("캘린더 이벤트 로드 성공:", events);
+        //console.log("캘린더 이벤트 로드 성공:", events);
       } catch (error) {
-        console.error("캘린더 데이터 로딩 실패, fallback 데이터 사용:", error);
+        //console.error("캘린더 데이터 로딩 실패, fallback 데이터 사용:", error);
         const fallbackEvents = convertToCalendarEvents(RAW_RESERVATION_DATA);
         setCalendarEvents(fallbackEvents);
       } finally {
@@ -133,17 +135,21 @@ const MainPage = () => {
     const props = info.event.extendedProps;
 
     if (props.isMainReservation) {
-      alert(
-        `"${
-          props.originalTitle || info.event.title
-        }" 예약 상세 페이지로 이동합니다.\n숙소: ${
-          props.accommodationName
-        }\n상태: ${props.status}\n예약 ID: ${props.reservationId}`
-      );
+      // alert(
+      //   `"${
+      //     props.originalTitle || info.event.title
+      //   }" 예약 상세 페이지로 이동합니다.\n숙소: ${
+      //     props.accommodationName
+      //   }\n상태: ${props.status}\n예약 ID: ${props.reservationId}`
+      // );
+      const moveUrl = `/reservation/detail?reservationId=${props.reservationId}`;
+      navigate(moveUrl);
     } else if (props.isSchedule) {
-      alert(
-        `"${props.originalScheduleTitle}" 일정에서 예약 상세 페이지로 이동합니다.\n소속 여행: ${props.parentTitle}\n시간: ${props.time}\n예약 ID: ${props.parentReservationId}`
-      );
+      // alert(
+      //   `"${props.originalScheduleTitle}" 일정에서 예약 상세 페이지로 이동합니다.\n소속 여행: ${props.parentTitle}\n시간: ${props.time}\n예약 ID: ${props.parentReservationId}`
+      // );
+      const moveUrl = `/reservation/detail?reservationId=${props.parentReservationId}`;
+      navigate(moveUrl);
     }
   };
 
@@ -177,8 +183,19 @@ const MainPage = () => {
   const navigate = useNavigate();
   // 검색 처리 
   const handleSearch = () => {
+    if(!locationValue & (!selectedDates.checkin || !selectedDates.checkout)){
+      alert("여행 가실 지역과 여행가실 날짜를 선택해주세요");
+      return;
+    }
+
+
     if (!selectedDates.checkin || !selectedDates.checkout) {
       alert("체크인/체크아웃 날짜를 선택해주세요.");
+      return;
+    }
+
+    if(!locationValue){
+      alert("여행 가실 지역을 정해주세요");
       return;
     }
 
@@ -191,9 +208,9 @@ const MainPage = () => {
       nights: nights,
       adults: guestCounts.adult,
       children: guestCounts.child,
-    };
+    };locationValue
 
-    console.log("검색 조건:", searchData);
+    //console.log("검색 조건:", searchData);
 
     const params = new URLSearchParams({
       region: locationValue,
@@ -204,16 +221,7 @@ const MainPage = () => {
     });
 
     const searchUrl = `/search?${params.toString()}`;
-    alert(
-      `검색 실행:
-      지역: ${locationValue}
-      체크인: ${selectedDates.checkin}
-      체크아웃: ${selectedDates.checkout}
-      ${nights}박 ${nights + 1}일
-      성인: ${guestCounts.adult}명
-      어린이: ${guestCounts.child}명
-      이동URL:${searchUrl}`
-    );
+
     navigate(searchUrl);
 
   };
@@ -224,27 +232,28 @@ const MainPage = () => {
     setActiveDropdown(null);
   }, []);
 
-  //  수정: 날짜 입력 클릭 - activeDropdown 사용
-  const handleDateInputClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    setShowLocationDropdown(false); // 지역 닫기
-
-    if (!dateSelectionMode && activeDropdown !== 'date') {
+  // 날짜 입력 클릭 핸들러
+  const handleDateInputClick = () => {
+    if (activeDropdown === 'date') {
+      setActiveDropdown(null);
+      deactivateSelectionMode();
+    } else {
+      setActiveDropdown('date');
       activateSelectionMode();
     }
-
-    setActiveDropdown(prev => prev === 'date' ? null : 'date'); // 토글
+    setShowLocationDropdown(false);
   };
 
-  //  수정: 인원 입력 클릭 - activeDropdown 사용
-  const handleGuestInputClick = (e) => {
-    e.stopPropagation();
-
-    setShowLocationDropdown(false); // 지역 닫기
-    setActiveDropdown(prev => prev === 'guest' ? null : 'guest'); // 토글
-  };
+  // 인원 입력 클릭 핸들러
+  const handleGuestInputClick = () => {
+    if (activeDropdown === 'guest') {
+      setActiveDropdown(null);
+    } else {
+      setActiveDropdown('guest');
+    }
+    setShowLocationDropdown(false);
+    deactivateSelectionMode();
+};
 
   // 지역 입력 포커스 (원본 로직 유지, 다른 드롭다운 닫기만 추가)
   const handleLocationFocus = () => {
@@ -269,10 +278,10 @@ const MainPage = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/stays/autocomplete?keyword=${encodeURIComponent(value)}`
+        `${window.API_BASE_URL}/api/stays/autocomplete?keyword=${encodeURIComponent(value)}`
       );
       const data = await response.json();
-      console.log('자동완성 결과:', data);
+      //console.log('자동완성 결과:', data);
       setSuggestions(data || []);
       setShowLocationDropdown(true);
     } catch (error) {
@@ -380,7 +389,7 @@ const MainPage = () => {
         // requestAnimationFrame으로 DOM 렌더링 완료 대기
         requestAnimationFrame(() => {
           const dropdownHeight = dropdown.offsetHeight;
-          console.log('드롭다운 높이:', dropdownHeight); // 디버깅용
+          //console.log('드롭다운 높이:', dropdownHeight); // 디버깅용
           
           if (dropdownHeight > 0) {
             nextCard.style.marginTop = `${dropdownHeight + 16}px`;
@@ -682,6 +691,7 @@ const MainPage = () => {
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 };

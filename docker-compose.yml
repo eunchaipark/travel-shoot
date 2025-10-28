@@ -29,6 +29,10 @@ services:
       - ./mysql/migrations/2025101013_08_drop_user_preferences.sql:/docker-entrypoint-initdb.d/2025101013_08_drop_user_preferences.sql
       - ./mysql/migrations/2025101013_09_add_viewCount_column.sql:/docker-entrypoint-initdb.d/2025101013_09_add_viewCount_column.sql
       - ./mysql/migrations/2025101015_01_drop_travel_courses_stay_id_column.sql:/docker-entrypoint-initdb.d/2025101015_01_drop_travel_courses_stay_id_column.sql
+      - ./mysql/migrations/2025101023_01_change_stays_check_in_out_column.sql:/docker-entrypoint-initdb.d/2025101023_01_change_stays_check_in_out_column.sql
+      - ./mysql/migrations/2025101023_02_add_review_summaries_review_count_column.sql:/docker-entrypoint-initdb.d/2025101023_02_add_review_summaries_review_count_column.sql
+      - ./mysql/migrations/2025101024_01_change_rooms_check_in_out_time_column.sql:/docker-entrypoint-initdb.d/2025101024_01_change_rooms_check_in_out_time_column.sql
+      - ./mysql/migrations/2025101024_02_insert_reviews_table.sql:/docker-entrypoint-initdb.d/2025101024_02_insert_reviews_table.sql
     networks:
       - backendnet
     healthcheck:

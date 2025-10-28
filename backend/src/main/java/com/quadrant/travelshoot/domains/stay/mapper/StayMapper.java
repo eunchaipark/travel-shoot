@@ -2,18 +2,19 @@ package com.quadrant.travelshoot.domains.stay.mapper;
 
 import com.quadrant.travelshoot.domains.common.dto.response.FileUploadResponse;
 import com.quadrant.travelshoot.domains.common.entity.FileUpload;
-import com.quadrant.travelshoot.domains.stay.dto.response.AmenityDto;
-import com.quadrant.travelshoot.domains.stay.dto.response.RoomDto;
-import com.quadrant.travelshoot.domains.stay.dto.response.StayDetailResponse;
+import com.quadrant.travelshoot.domains.stay.dto.response.*;
 import com.quadrant.travelshoot.domains.stay.entity.Amenity;
 import com.quadrant.travelshoot.domains.stay.entity.Room;
 import com.quadrant.travelshoot.domains.stay.entity.Stay;
 import com.quadrant.travelshoot.domains.stay.entity.StayAmenity;
+import com.quadrant.travelshoot.domains.stay.service.StayImageService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class StayMapper {
 
     public AmenityDto toAmenityDto(Amenity amenity) {
@@ -23,7 +24,11 @@ public class StayMapper {
                 .build();
     }
 
+    private final StayImageService stayImageService;
     public RoomDto toRoomDto(Room room) {
+
+        String roomImageUrl = stayImageService.getRoomImage(room.getId());
+
         return RoomDto.builder()
                 .roomId(room.getId())
                 .roomCode(room.getRoomCode())
@@ -49,18 +54,16 @@ public class StayMapper {
                 .isActive(room.getIsActive())
                 .viewCount(room.getViewCount())
                 .reservationCount(room.getReservationCount())
+                .roomImageUrl(roomImageUrl)
                 .build();
     }
 
-    public StayDetailResponse toStayDetailResponse(Stay stay, List<FileUpload> images, List<StayAmenity> stayAmenities){
+    public StayDetailResponse toStayDetailResponse(Stay stay, List<StayImageDto> images, List<StayAmenity> stayAmenities){
 
         if(stay==null){
             return null;
         }
-
-
-
-        // 4. DTO 변환 및 반환
+        // DTO 변환 및 반환
         return StayDetailResponse.builder()
                 .stayId(stay.getId())
                 .stayName(stay.getName())
@@ -80,16 +83,13 @@ public class StayMapper {
                 .isActive(stay.getIsActive())
                 .regionId(stay.getRegionId())
                 .minPrice(stay.getMinPrice())
-                .stayImages(images.stream()
-                        .map(FileUploadResponse::toFileUploadResponse)
-                        .toList())
+                .stayImages(images)
                 .amenities(stayAmenities.stream()
                            .map(a -> toAmenityDto(a.getAmenity())).toList())
                 .rooms(stay.getRooms().stream()
                         .map(this::toRoomDto)
                         .toList())
-                .overallSummary("ai 요약 내용")
                 .build();
-
     }
+
 }

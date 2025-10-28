@@ -43,7 +43,7 @@ const SimpleHeader = () => {
 
         try {
             const response = await fetch(
-                `http://localhost:8080/api/stays/autocomplete?keyword=${encodeURIComponent(value)}`
+                `${window.API_BASE_URL}/api/stays/autocomplete?keyword=${encodeURIComponent(value)}`
             );
             const data = await response.json();
             console.log('----------->>> 자동완성 결과:', data);
@@ -105,6 +105,32 @@ const SimpleHeader = () => {
         }
     };
 
+    const handleSearchSubmit = () => {
+        if (!searchValue.trim()) {
+            alert('검색어를 입력해주세요.');
+            return;
+        }
+
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const checkIn = tomorrow.toISOString().split('T')[0];
+
+        const dayAfter = new Date();
+        dayAfter.setDate(dayAfter.getDate() + 3);
+        const checkOut = dayAfter.toISOString().split('T')[0];
+
+        const params = new URLSearchParams({
+            checkIn,
+            checkOut,
+            adults: 2,
+            children: 0,
+            region: searchValue
+        });
+
+        navigate(`/search?${params.toString()}`);
+    };
+
+
     return (
         <>
             {/* Font Awesome CSS */}
@@ -160,7 +186,7 @@ const SimpleHeader = () => {
                                 </div>
                             </div>
                             <div className="col-md-3 d-flex justify-content-between col-3 px-0">
-                                <button className="icon-button">
+                                <button className="icon-button" onClick={handleSearchSubmit}>
                                     <div className="search-icon"></div>
                                 </button>
                                 <div className="col-auto h-100 d-flex">

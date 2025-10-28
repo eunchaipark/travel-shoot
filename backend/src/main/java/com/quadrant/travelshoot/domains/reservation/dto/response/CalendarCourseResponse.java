@@ -11,7 +11,8 @@ import java.util.List;
 @Builder
 public class CalendarCourseResponse {
 
-    private String id;                      // 예약 코드
+    private String id;                      
+    private String reservationCode;         // 예약 코드
     private String title;                   // "속초시 여행"
     private LocalDate startDate;            // 체크인 날짜
     private LocalDate endDate;              // 체크아웃 날짜

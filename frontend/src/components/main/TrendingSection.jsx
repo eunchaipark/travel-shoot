@@ -8,6 +8,8 @@ import { useTrendingSlider } from "@/hooks/main/useTrendingSlider";
 import { fetchAllTrendingData } from "@/services/main/trendingApiService";
 import { TRENDING_DATA, getSlideData } from "@/utils/main/trendingUtils";
 import { useNavigate } from 'react-router-dom';
+import { useDefaultStayParams } from "@/hooks/search/useDefaultStayParams"; //1024추가
+import useSearchParamsSync from "@/hooks/search/useSearchParamsSync"; //1024추가
 
 // ============================================================================
 // Bootstrap Skeleton Card 컴포넌트
@@ -299,6 +301,9 @@ const TrendingSection = () => {
 
   const { currentTab, switchTab } = useTrendingSlider();
 
+  const { getDefaultDates, getDefaultGuests } = useDefaultStayParams(); //1024
+  const { setDefaultParams } = useSearchParamsSync(); //1024
+
   // API에서 Trending 데이터 가져오기
   useEffect(() => {
     const loadTrendingData = async () => {
@@ -306,15 +311,15 @@ const TrendingSection = () => {
         setLoading(true);
         setError(null);
 
-        console.log("Trending 데이터 로딩 시작...");
+        //console.log("Trending 데이터 로딩 시작...");
         const data = await fetchAllTrendingData();
-        console.log("Trending 데이터 로딩 완료:", data);
+        //console.log("Trending 데이터 로딩 완료:", data);
 
         setTrendingData(data);
       } catch (err) {
-        console.error("Trending 데이터 로딩 실패:", err);
+        //console.error("Trending 데이터 로딩 실패:", err);
         setError(err.message);
-        console.log("기본 데이터 사용");
+        //console.log("기본 데이터 사용");
       } finally {
         setLoading(false);
       }
@@ -325,10 +330,26 @@ const TrendingSection = () => {
 
   const navigate = useNavigate();
   const handleCardClick = (item, tabType) => {
-    console.log("Trending 카드 클릭:", tabType, item.id);
+    //console.log("Trending 카드 클릭:", tabType, item.id);
 
     if (tabType === 'stay') {
-      navigate(`/stays/${item.id}`);
+
+      // navigate(`/stays/${item.id}`); //1024 주석처리함
+
+    setDefaultParams();
+        const { checkIn, checkOut } = getDefaultDates({ nights: 2, startFromTomorrow: true });
+        const { adults, children } = getDefaultGuests();
+
+        const params = new URLSearchParams({
+            checkIn,
+            checkOut,
+            adults,
+            children,
+            stayName: item.title || item.name || ""
+        });
+
+        navigate(`/stays/${item.id}?${params.toString()}`);
+
     } else if (tabType === 'restaurants' && item.latitude && item.longitude) {
       const url = `https://map.kakao.com/link/map/${encodeURIComponent(item.title)},${item.latitude},${item.longitude}`;
       window.open(url, '_blank');
@@ -344,7 +365,7 @@ const TrendingSection = () => {
       init: () => console.log("Trending Slider 이미 초기화됨"),
       switchTab: (tab) => switchTab(tab),
       reload: async () => {
-        console.log("Trending 데이터 재로딩...");
+        //console.log("Trending 데이터 재로딩...");
         try {
           const data = await fetchAllTrendingData();
           setTrendingData(data);
@@ -355,7 +376,7 @@ const TrendingSection = () => {
       },
     };
 
-    console.log("Trending Slider 초기화 완료");
+    //console.log("Trending Slider 초기화 완료");
 
     return () => {
       delete window.TrendingSection;

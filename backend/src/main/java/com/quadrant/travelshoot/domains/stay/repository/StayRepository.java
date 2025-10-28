@@ -53,13 +53,14 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                         "AND r.maximum_capacity >= :guests " +
                         "AND s.is_active = true " +
                         "AND r.is_available = true " +
-                        "AND r.room_id NOT IN ( " +
-                        "    SELECT res.room_id FROM reservations res " +
-                        "    WHERE res.reservation_status = '예약확정' " +
+                        "AND r.room_count > ( " +
+                        "    SELECT COUNT(*) FROM reservations res " +
+                        "    WHERE res.room_id = r.room_id " +
+                        "    AND res.reservation_status = '예약확정' " +
                         "    AND (res.check_in_date <= :checkOut AND res.check_out_date >= :checkIn) " +
                         ") " +
                         "GROUP BY s.stay_id " +
-                        "ORDER BY s.created_at DESC", countQuery = "SELECT COUNT(DISTINCT s.stay_id) FROM stays s " +
+                        "ORDER BY s.created_at DESC, s.stay_id ASC", countQuery = "SELECT COUNT(DISTINCT s.stay_id) FROM stays s " +
                                         "INNER JOIN rooms r ON s.stay_id = r.stay_id " +
                                         "INNER JOIN regions reg ON s.region_id = reg.region_id " +
                                         "WHERE (" +
@@ -82,13 +83,14 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                 "WHERE s.stay_name LIKE CONCAT('%', :stayName, '%') " +
                 "AND s.is_active = true " +
                 "AND r.is_available = true " +
-                "AND r.room_id NOT IN ( " +
-                "    SELECT res.room_id FROM reservations res " +
-                "    WHERE res.reservation_status = '예약확정' " +
+                "AND r.room_count > ( " +
+                "    SELECT COUNT(*) FROM reservations res " +
+                "    WHERE res.room_id = r.room_id " +
+                "    AND res.reservation_status = '예약확정' " +
                 "    AND (res.check_in_date <= :checkOut AND res.check_out_date >= :checkIn) " +
                 ") " +
                 "GROUP BY s.stay_id " +
-                "ORDER BY s.created_at DESC",
+                "ORDER BY s.created_at DESC, s.stay_id ASC",
                 countQuery =
                         "SELECT COUNT(DISTINCT s.stay_id) FROM stays s " +
                                 "INNER JOIN rooms r ON s.stay_id = r.stay_id " +
@@ -130,7 +132,7 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                         "AND s.is_active = true " +
                         "AND r.is_available = true " +
                         "GROUP BY s.stay_id " +
-                        "ORDER BY s.created_at DESC", countQuery = "SELECT COUNT(DISTINCT s.stay_id) FROM stays s " +
+                        "ORDER BY s.created_at DESC, s.stay_id ASC", countQuery = "SELECT COUNT(DISTINCT s.stay_id) FROM stays s " +
                                         "INNER JOIN rooms r ON s.stay_id = r.stay_id " +
                                         "INNER JOIN regions reg ON s.region_id = reg.region_id " +
                                         "WHERE (:region IS NULL OR reg.area_name LIKE CONCAT('%', :region, '%')) " +
@@ -353,10 +355,6 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
         @Query("SELECT s FROM Stay s WHERE s.id = :stayId")
         Optional<Stay> findByStayId(@Param("stayId") Long stayId);
 
-//        @Modifying
-//        @Query("UPDATE Stay s SET s.viewCount = s.viewCount + 1 WHERE s.id = :stayId")
-//        void incrementViewCount(Long stayId);
-
         Optional<Stay> findById(Long stayId);
 
 
@@ -378,7 +376,7 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
          * 전체 숙소의 평균 가격 계산 
          */
         @Query("""
-                SELECT AVG((r.weekdayPrice + r.weekendPrice) / 2)
+                SELECT AVG(r.weekdayPrice)
                 FROM Room r
                 WHERE r.isAvailable = true
         """)

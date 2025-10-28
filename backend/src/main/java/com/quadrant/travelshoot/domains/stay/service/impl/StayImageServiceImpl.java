@@ -1,0 +1,76 @@
+package com.quadrant.travelshoot.domains.stay.service.impl;
+
+import com.quadrant.travelshoot.domains.common.entity.FileUpload;
+import com.quadrant.travelshoot.domains.common.repository.FileUploadRepository;
+import com.quadrant.travelshoot.domains.stay.dto.response.StayImageDto;
+import com.quadrant.travelshoot.domains.stay.service.StayImageService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class StayImageServiceImpl implements StayImageService {
+
+    private final FileUploadRepository fileUploadRepository;
+
+    /**
+     * 숙소 썸네일 이미지 최소 5개
+     * @param stayId
+     * @return List<StayImageDto>
+     */
+    public List<StayImageDto> getThumbnailImages(Long stayId){
+        List<FileUpload> images = fileUploadRepository.findTop5ByReferenceTypeAndReferenceIdOrderBySortOrderAsc("STAY", stayId);
+
+        return images.stream()
+                .map(this::toStayImageDto)
+                .collect(Collectors.toList());
+    }
+
+
+    /**
+     * 숙소 전체 이미지 조회
+     */
+    public List<StayImageDto> getAllStayImages(Long stayId){
+//        List<FileUpload> images = fileUploadRepository.findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderByUploadedAtDesc("STAY", stayId);
+        List<FileUpload> images = fileUploadRepository.findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("STAY", stayId);
+        return images.stream().map(this::toStayImageDto).toList();
+    }
+
+    /**
+     * 객실 조회용 이미지 1개
+     * @param roomId
+     * @return
+     */
+    public String getRoomImage(Long roomId){
+        String roomImageUrl = fileUploadRepository.findFirstByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("ROOM", roomId)
+                .map(FileUpload::getS3Url)
+                .orElse("/images/product/hotel-bathroom-modern-design.jpg");
+        return roomImageUrl;
+    }
+
+
+
+    /**
+     * FileUpload -> 간단한 StayImageDto 변환
+     * private Long fileId;
+     *     private String s3Key;
+     *     private String s3Url;
+     *     private Integer sortOrder;
+     */
+    private StayImageDto toStayImageDto(FileUpload fileUpload) {
+        return StayImageDto.builder()
+                .imageId(fileUpload.getId())
+                .s3Key(fileUpload.getS3Key())
+                .s3Url(fileUpload.getS3Url())
+                .sortOrder(fileUpload.getSortOrder())
+                .build();
+    }
+
+
+}

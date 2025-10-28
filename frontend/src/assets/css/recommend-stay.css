@@ -334,16 +334,19 @@
    ========================================================================== */
 
 .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper .map-container {
-    flex: 1;
-    height: 900px;
+    height: 100%;
+    width: 100%;
     background: #f8f9fa;
     border-radius: 16px;
     border: 2px dashed #dee2e6;
-    display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-width: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper .map-container .w-full.h-full{
+    min-height: 900px !important;
 }
 
 .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper .map-container .map-placeholder {
@@ -432,8 +435,7 @@
         margin-top: -9px;
     }
     .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper .map-container {
-        display: flex;
-        min-height: 380px;
+        max-height: 380px;
     }
     
     .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .section-title {
@@ -483,7 +485,7 @@
     }
     
     .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper .map-container {
-        display: flex;
+        max-height: 380px;
     }
     
     .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper .accommodation-list-container .accommodation-list .accommodation-item {

@@ -4,6 +4,10 @@
   margin-top: 80px;
 }
 
+.reservation-detail-page .row > .content-section:last-child {
+  margin-bottom: 80px;
+}
+
 .reservation-detail-page .content-section .content-section-state-inner {
   padding: 75px;
 }
@@ -269,6 +273,11 @@
   word-break: keep-all;
 }
 
+.reservation-detail-page .course-loading-con > div{
+  padding: 250px 0;
+  background-color: unset;
+}
+
 .reservation-detail-page .course-item .copy-btn-con .copy-btn {
   color: #495057;
   font-size: 0.75em;
@@ -448,6 +457,12 @@
 
 .map-page .card-custom.search-card{
   height: 120px !important;
+}
+
+@media (max-width: 992px) {
+  .reservation-detail-page .content-section.payment-section {
+    margin-left:0 !important;
+  }
 }
 
 @media (max-width: 768px) {

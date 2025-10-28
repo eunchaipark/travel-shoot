@@ -1,34 +1,80 @@
-/**
- * 예약 상세 페이지에 필요한 모든 데이터를 관리하는 커스텀 훅
- * @param {string|number} reservationId - 예약 ID
- * @returns {Object} 예약 데이터, 코스 데이터, 로딩 상태, 에러
- */
-import { useState, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { fetchReservationDetail } from '@/services/reservation/reservationDetailApiService';
 import { fetchCourseData } from '@/services/reservation/courseApiService';
+
 export const useReservationDetail = (reservationId) => {
     const [reservationData, setReservationData] = useState(null);
     const [courseData, setCourseData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [courseLoading, setCourseLoading] = useState(true); // 코스 로딩 상태 추가
+    const [isCourseGenerating, setIsCourseGenerating] = useState(false); // AI 생성 중 상태 추가
     const [error, setError] = useState(null);
+    const pollingIntervalRef = useRef(null);
+
+    const pollCourseData = async () => {
+        const maxAttempts = 30;
+        let attempts = 0;
+
+        const poll = async () => {
+            try {
+                attempts++;
+                const course = await fetchCourseData(reservationId);
+
+                if (course) {
+                    // 성공: 실제 데이터 설정
+                    setCourseData(course);
+                    setCourseLoading(false);
+                    setIsCourseGenerating(false);
+                    if (pollingIntervalRef.current) {
+                        clearInterval(pollingIntervalRef.current);
+                    }
+                    return;
+                } else {
+                    // 실패(404 등): AI 생성 중
+                    setIsCourseGenerating(true);
+                    setCourseLoading(false);
+                }
+
+                if (attempts >= maxAttempts) {
+                    setError('코스 생성 시간이 초과되었습니다.');
+                    setCourseLoading(false);
+                    setIsCourseGenerating(false);
+                    if (pollingIntervalRef.current) {
+                        clearInterval(pollingIntervalRef.current);
+                    }
+                    return;
+                }
+            } catch (err) {
+                setError(err.message);
+                setCourseLoading(false);
+                setIsCourseGenerating(false);
+                if (pollingIntervalRef.current) {
+                    clearInterval(pollingIntervalRef.current);
+                }
+            }
+        };
+
+        await poll();
+
+        if (isCourseGenerating || !courseData) {
+            pollingIntervalRef.current = setInterval(poll, 10000);
+        }
+    };
 
     const fetchData = async () => {
         try {
             setLoading(true);
-            const [reservation, course] = await Promise.all([
-                fetchReservationDetail(reservationId),
-                fetchCourseData(reservationId)
-            ]);
+            const reservation = await fetchReservationDetail(reservationId);
             setReservationData(reservation);
-            setCourseData(course);
+            setLoading(false);
+
+            await pollCourseData();
         } catch (err) {
             setError(err.message);
-        } finally {
             setLoading(false);
         }
     };
 
-    // 코스 데이터만 다시 로드하는 함수
     const refetchCourseData = async () => {
         try {
             const course = await fetchCourseData(reservationId);
@@ -42,12 +88,20 @@ export const useReservationDetail = (reservationId) => {
         if (reservationId) {
             fetchData();
         }
+
+        return () => {
+            if (pollingIntervalRef.current) {
+                clearInterval(pollingIntervalRef.current);
+            }
+        };
     }, [reservationId]);
 
     return {
         reservationData,
         courseData,
         loading,
+        courseLoading,
+        isCourseGenerating,
         error,
         refetchCourseData
     };

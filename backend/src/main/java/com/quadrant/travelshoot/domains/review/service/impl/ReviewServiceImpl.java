@@ -1,17 +1,24 @@
 package com.quadrant.travelshoot.domains.review.service.impl;
 
+import com.quadrant.travelshoot.common.service.S3Service;
+import com.quadrant.travelshoot.domains.ai.service.ReviewAiSummaryService;
+import com.quadrant.travelshoot.domains.common.entity.FileUpload;
+import com.quadrant.travelshoot.domains.common.repository.FileUploadRepository;
+import com.quadrant.travelshoot.domains.common.service.FileUploadService;
+import com.quadrant.travelshoot.domains.reservation.entity.Reservation;
 import com.quadrant.travelshoot.domains.review.dto.request.ReviewRegistRequest;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewDetailResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewListResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewPageResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewRegistResponse;
 import com.quadrant.travelshoot.domains.review.entity.Review;
+import com.quadrant.travelshoot.domains.review.entity.ReviewAiSummary;
 import com.quadrant.travelshoot.domains.review.mapper.ReviewMapper;
+import com.quadrant.travelshoot.domains.review.repository.ReviewAiSummaryRepository;
 import com.quadrant.travelshoot.domains.review.repository.ReviewRepository;
 import com.quadrant.travelshoot.domains.reservation.repository.ReservationRepository;
 import com.quadrant.travelshoot.domains.review.service.ReviewService;
 import com.quadrant.travelshoot.domains.user.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +31,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -32,16 +42,42 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
+    private final ReviewAiSummaryRepository reviewAiSummaryRepository;
+    private final ReviewAiSummaryService reviewAiSummaryService;
+    private final FileUploadService fileUploadService;
 
-    /* 이미지 업로드 */
 
-    /* 예약 검증 메서드 - 리뷰 등록, 수정, 삭제 전 검증 */
-    // 예약이 존재하는지
-    // 예약 상태가 '이용완료'인지
-    // 예약자와 사용자가 일치하는지
+
+    /**
+     * 기존 ai요약 검증
+     */
+    @Transactional
+    public String getReviewSummary(Long stayId) {
+        // 현재 리뷰 개수 조회
+        int currentReviewCount = reviewRepository.countByStayId(stayId);
+        if (currentReviewCount == 0) {
+            return "아직 숙소의 리뷰가 없습니다.";
+        }
+
+        // 기존 AI 요약 조회
+        ReviewAiSummary existingSummary = reviewAiSummaryRepository.findByStayId(stayId)
+                .orElse(null);
+
+        // 기존 요약이 없거나, 리뷰가 5개 이상 증가했으면 새로 생성
+        if (existingSummary == null || currentReviewCount >= existingSummary.getReviewCount() + 5) {
+            log.info("AI 요약 새로 생성 - stayId: {}, 현재 리뷰: {}, 이전 리뷰: {}",
+                    stayId, currentReviewCount, existingSummary != null ? existingSummary.getReviewCount() : 0);
+            return reviewAiSummaryService.generateAiSummary(stayId, currentReviewCount, existingSummary);
+        }
+
+        // 기존 요약 반환
+        log.info("기존 AI 요약 반환 - stayId: {}", stayId);
+        return existingSummary.getOverallSummary();
+    }
+
+
     /**
      * 리뷰 등록
-     *
      * @param userId
      * @param request
      * @return
@@ -52,12 +88,14 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewRegistResponse createReview(Long userId, @Valid ReviewRegistRequest request) {
         log.info("리뷰 등록 시작 - userId: {}, reservationId: {}", userId, request.getReservationId());
 
+        // + 예약 내역에서 예약 상태가 '이용 완료'여야 한다.
+
         // 리뷰 중복 검증
         if (reviewRepository.existsByReservationId(request.getReservationId())) {
             throw new IllegalStateException("이미 해당 예약에 대한 리뷰가 존재합니다.");
         }
 
-        // 저장
+        // 1. 리뷰 생성하고 저장
         Review review = Review.builder()
                 .reservation(reservationRepository.getReferenceById(request.getReservationId()))
                 .user(userRepository.getReferenceById(userId))
@@ -71,13 +109,32 @@ public class ReviewServiceImpl implements ReviewService {
                 .valueRating(request.getValueRating())
                 .reviewContent(request.getReviewContent())
                 .isRecommended(request.getIsRecommended())
-//                .reviewImageUrl(imageUrl)
                 .build();
 
-        Review newReview = reviewRepository.save(review);
-        log.info("리뷰 등록 완료 - reviewId: {}", newReview.getReviewId());
+        Review savedReview = reviewRepository.save(review);
 
-        return reviewMapper.toReviewRegistResponse(newReview);
+        // 2. 이미지 업로드 처리
+        String imageUrl = null;
+        if (request.getReviewImage() != null && !request.getReviewImage().isEmpty()) {
+            try {
+                FileUpload fileUpload = fileUploadService.uploadAndSave(
+                        request.getReviewImage(),
+                        "REVIEW",
+                        savedReview.getReviewId(),
+                        userId,
+                        0,
+                        true
+                );
+                imageUrl = fileUpload.getS3Url();
+                log.info("리뷰 이미지 업로드 성공 - fileId: {}, s3Url: {}",
+                        fileUpload.getId(), fileUpload.getS3Url());
+            } catch (Exception e) {
+                log.error("리뷰 이미지 업로드 실패", e);
+                throw new RuntimeException("이미지 업로드 실패", e);
+            }
+        }
+
+        return reviewMapper.toReviewRegistResponse(savedReview, imageUrl);
     }
 
 
@@ -138,24 +195,46 @@ public class ReviewServiceImpl implements ReviewService {
         review.setIsRecommended(reviewUpdateRequest.getIsRecommended());
 
         // 이미지 수정
+        String imageUrl = null;
 
         Review updatedReview = reviewRepository.save(review);
 
-        return reviewMapper.toReviewRegistResponse(updatedReview);
+        return reviewMapper.toReviewRegistResponse(updatedReview, imageUrl);
     }
 
 
     /**
      * 리뷰 상세 조회
      *
-     * @param reviewId
+     * @param reservationId
      * @return
      */
-    public ReviewDetailResponse getReviewDetail(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new EntityNotFoundException("리뷰를 찾을 수 없습니다. ID: " + reviewId));
+    public ReviewDetailResponse getReviewDetail(Long reservationId) {
 
-        return reviewMapper.toReviewDetailResponse(review);
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("예약을 찾을 수 없습니다"));
+
+        log.info("예약 조회 - {}",  reservation);
+
+        Optional<Review> reviewInfo = reviewRepository.findByReservation_Id(reservationId);
+//                .orElseThrow(() -> new EntityNotFoundException("해당 예약에 대한 리뷰가 없습니다. ID: " + reservationId));
+
+        log.info("리뷰 조회 - {}", reviewInfo);
+
+        ReviewDetailResponse response;
+        if (reviewInfo.isPresent()) {
+            // 리뷰가 있는 경우 - 전체 정보 반환
+            Review review = reviewInfo.get();
+            response = reviewMapper.toReviewDetailResponse(review);
+        } else {
+            // 리뷰가 없는 경우 - 예약 정보만 반환
+            response = ReviewDetailResponse.builder()
+                    .reservationInfoDto(reviewMapper.toReservationInfoDto(reservation))
+                    .build();
+            // @JsonInclude(NON_NULL) 덕분에 null 필드는 자동 제외됨
+        }
+
+        return response;
     }
 
 
@@ -173,12 +252,8 @@ public class ReviewServiceImpl implements ReviewService {
         log.info("숙박시설 리뷰 페이징 조회 - stayId: {}, roomId : {}, page: {}, size: {}, sortBy: {}",
                 stayId, roomId, page, size, sortBy);
 
-        // 숙소에 6개 평점 추가 안하면 ? - 리뷰의 평점 불러온 다음 그걸로 계산해서 dto에 세팅해서 보여주어야 함
-        // 숙소에 6개 평점 추가 하면 ? - 추가 하면 계산한 다음 저장할 수 있긴 한데, 어차피 다음 번에 리뷰 갱신 전 이력을 안 불러와도 됨
-
         // pageable
         Pageable pageable = createPageable(page, size, sortBy);
-
         // roomId 필터링 & 페이징
         Page<Review> reviewPage;
         if(roomId != null){
@@ -187,15 +262,50 @@ public class ReviewServiceImpl implements ReviewService {
             reviewPage = reviewRepository.findPageByStayId(stayId, pageable);
         }
 
+
+
+        // 단일 파일 버전
+        Page<ReviewListResponse> responsePage = reviewPage.map(
+                review -> {
+                    List<FileUpload> fileUploads = fileUploadService.findAllByReferenceTypeAndReferenceId("REVIEW", review.getReviewId());
+
+                    String imageUrl;
+                    if(!fileUploads.isEmpty()){
+                        imageUrl = fileUploads.get(0).getS3Url();
+                    }else{ // 이미지가 없는 경우(등록할 때 강제할거임)
+                        imageUrl = "/images/product/hotel-room-city-view.png";
+                    }
+                    return reviewMapper.toReviewListResponse(review, imageUrl);
+                });
+
+        // 파일 여러 개 버전
+//        return reviewPage.map(
+//            review -> {
+//                List<FileUpload> fileUploads = fileUploadService.findByReferenceTypeAndReferenceId("REVIEW", review.getReviewId());
+//                List<String> imageUrls = fileUploads.stream()
+//                        .map(FileUpload::getS3Url)
+//                        .toList();
+//
+//                String representativeUrl = fileUploads.stream()
+//                        .filter(FileUpload::getIsRepresentative)
+//                        .findFirst()
+//                        .map(FileUpload::getS3Url)
+//                        .orElseGet(() -> imageUrls.isEmpty() ? null : imageUrls.get(0));
+//
+//                // Mapper에 이미지 URL 전달
+//                return reviewMapper.toListResponse(review, representativeUrl, imageUrls);
+//            }
+//        ).toList();
+
         // Review -> ReviewResponse 변환
-        Page<ReviewListResponse> responsePage = reviewPage.map(reviewMapper::toReviewListResponse);
+//        Page<ReviewListResponse> responsePage = reviewPage.map(reviewMapper::toReviewListResponse);
+//        Page<ReviewListResponse> responsePage = reviewPage.map(r -> reviewMapper.toReviewListResponse(r));
         return ReviewPageResponse.of(responsePage);
     }
 
-
     /**
      * 숙소에 따른 리뷰 개수
-     * 만약 리뷰 개수가 2,147,483,647 (Integer 최대값)보다 많아지면 오버플로우 발생
+     * 만약 리뷰 개수가 2,147,483,647(Integer 최대값)보다 많아지면 오버플로우 발생
      */
     public Integer countReview(Long stayId){
         return Math.toIntExact(reviewRepository.countByStayId(stayId));
@@ -207,16 +317,15 @@ public class ReviewServiceImpl implements ReviewService {
      * 2. 조회한 값을 숙소 엔티티에 setAverageRating(1번)
      * 3. 그거를 리뷰 cud에 호출
      */
-
     public BigDecimal getStayAverageRating(Long stayId){
         Double totalRating = reviewRepository.findAverageByStayId(stayId);
 
         if(totalRating == null){
             totalRating = 0.0;
         }
-
         return BigDecimal.valueOf(totalRating).setScale(2, RoundingMode.HALF_UP); // 2자리까지
     }
+
 
     /**
      * Pageable 객체 생성
@@ -248,8 +357,26 @@ public class ReviewServiceImpl implements ReviewService {
                 sort = Sort.by(Sort.Direction.DESC, "createdAt");
                 break;
         }
-
         return PageRequest.of(page, size, sort);
+    }
+
+    /**
+     * 리뷰 이미지 목록
+     * @param stayId
+     * @return
+     */
+    private final FileUploadRepository fileUploadRepository;
+    public List<String> getReviewImagesUrl(Long stayId) {
+        // stayId로 모든 review의 id를 조회
+        List<Long> reviewIds = reviewRepository.findIdsByStayId(stayId);
+
+        // 각 review마다 이미지 조회
+        return reviewIds.stream()
+            .flatMap(reviewId -> fileUploadService
+                    .findAllByReferenceTypeAndReferenceId("REVIEW", reviewId)
+                    .stream()
+                    .map(FileUpload::getS3Url))
+            .collect(Collectors.toList());
     }
 
 }

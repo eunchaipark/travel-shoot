@@ -1,9 +1,11 @@
 package com.quadrant.travelshoot.common.service;
 
+import com.quadrant.travelshoot.domains.common.dto.response.FileUploadResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -26,8 +28,46 @@ public class S3Service {
     @Value("${s3.region}")
     private String region;
 
+
+
+    /**
+     * 파일 업로드 + File 저장
+     * uploadFile과 따로 만든 이유는 File 엔티티 저장하기 위함
+     */
+    @Transactional
+    public FileUploadResponse saveFileUpload(MultipartFile file) {
+        String s3Key = createFileName(file.getOriginalFilename());
+
+        try {
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                    .bucket(bucket)
+                    .key(s3Key)
+                    .contentType(file.getContentType())
+                    .build();
+
+            s3Client.putObject(putObjectRequest,
+                    RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+
+            String s3Url = getFileUrl(s3Key);
+
+            return FileUploadResponse.builder()
+                    .originalFilename(file.getOriginalFilename())
+                    .s3Key(s3Key)
+                    .s3Url(s3Url)
+                    .bucketName(bucket)
+                    .fileSize(file.getSize())
+                    .contentType(file.getContentType())
+                    .build();
+
+        } catch (IOException e) {
+            log.error("S3 파일 업로드 실패", e);
+            throw new RuntimeException("S3 파일 업로드 실패", e);
+        }
+    }
+
+
+
     // S3에 파일 업로드
-     
     public String uploadFile(MultipartFile file) {
         String fileName = createFileName(file.getOriginalFilename());
         

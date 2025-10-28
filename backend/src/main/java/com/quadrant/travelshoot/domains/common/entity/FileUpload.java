@@ -60,7 +60,7 @@ public class FileUpload {
     @Column(name = "sort_order", nullable = false)
     @Comment("정렬 순서")
     @Builder.Default
-    private Integer sortOrder = 0;
+    private Integer sortOrder = 1;
 
     @Column(name = "is_representative", nullable = false)
     @Comment("대표 여부")
@@ -85,4 +85,8 @@ public class FileUpload {
     @Comment("삭제 여부")
     @Builder.Default
     private Boolean isDeleted = false;
+
+    public void updateSortOrder(Integer newOrder) {
+        this.sortOrder = newOrder;
+    }
 }
