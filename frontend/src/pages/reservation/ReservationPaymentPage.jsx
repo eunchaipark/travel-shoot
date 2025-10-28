@@ -240,7 +240,9 @@ const ReservationPaymentPage = () => {
                                         {priceData && (
                                             <div className="price-highlight text-nowrap">
                                                 <span className="small-text me-2 mb-1 standard">숙박/1박당</span>
-                                                ₩ {reservationFormatters.formatPrice(Math.round(priceData.subtotal / priceData.totalNights))}
+                                                ₩ {reservationFormatters.formatPrice(
+                                                priceData.dailyPrices?.find(d => d.dayType === '평일')?.price || 0
+                                            )}
                                             </div>
                                         )}
                                     </div>
@@ -495,9 +497,25 @@ const ReservationPaymentPage = () => {
                                                 <div className="vr pay-line"></div>
                                             </div>
                                             <div className="col-11">
-                                                <div className="final-payment-detail text-muted small mb-1">
-                                                    1박당 가격 : {reservationFormatters.formatPrice(Math.round(priceData.subtotal / priceData.totalNights))}원
-                                                </div>
+                                                {priceData.dailyPrices && (() => {
+                                                    const weekdayDays = priceData.dailyPrices.filter(d => d.dayType === '평일');
+                                                    const weekendDays = priceData.dailyPrices.filter(d => d.dayType === '주말');
+
+                                                    return (
+                                                        <>
+                                                            {weekdayDays.length > 0 && (
+                                                                <div className="final-payment-detail final-payment-detail-won text-muted small mb-1">
+                                                                    평일 {reservationFormatters.formatPrice(weekdayDays[0].price)}원 × {weekdayDays.length}박
+                                                                </div>
+                                                            )}
+                                                            {weekendDays.length > 0 && (
+                                                                <div className="final-payment-detail final-payment-detail-won text-muted small mb-1">
+                                                                    주말 {reservationFormatters.formatPrice(weekendDays[0].price)}원 × {weekendDays.length}박
+                                                                </div>
+                                                            )}
+                                                        </>
+                                                    );
+                                                })()}
                                                 <div className="final-payment-detail text-muted small">
                                                     이용 인원 : {guestCount}명
                                                 </div>
