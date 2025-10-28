@@ -3,7 +3,7 @@ import MainContent from "@/components/stay-detail/MainContent";
 import PhotoModal from '@/components/stay-detail/modal/PhotoModal';
 import "@/assets/css/stay-detail.css";
 import { useParams, useSearchParams } from "react-router-dom";
-import { getStayDetail } from "@/services/stay-detail/stayDetailApiService";
+import { getStayDetail, getAllStayImages } from "@/services/stay-detail/stayDetailApiService";
 import Header from '@/components/layout/Header';
 
 const StayDetailPage = () => {
@@ -17,35 +17,28 @@ const StayDetailPage = () => {
   const children = searchParams.get('children');
 
   const [stayData, setStayData] = useState(null);
+  const [stayImages, setStayImages] = useState([]);
 
-  // 임시 이미지
-  const imageData = [
-    "/images/product/ocean-view-hotel-room-with-balcony.jpg",
-    "/images/product/modern-hotel-lobby-interior.jpg",
-    "/images/product/hotel-room-city-view.png",
-    "/images/product/hotel-bathroom-modern-design.jpg",
-    "/images/product/hotel-dining-area.jpg",
-    "/images/product/ocean-view-hotel-room-with-balcony.jpg",
-    "/images/product/modern-hotel-lobby-interior.jpg"
-  ];
-
-  const fetchStayDetail = async() => {
-
+  const fetchData = async () => {
     if (!stayId) return;
-
-    try{
-      const response = await getStayDetail(stayId);
-      setStayData(response);
-      console.log(response);
-      
-
-    }catch(error){
-      console.error("숙소 조회 실패");
+    try {
+      const [stayResponse, imageResponse] = await Promise.all([
+        getStayDetail(stayId),
+        getAllStayImages(stayId),
+      ]);
+      setStayData(stayResponse);
+      setStayImages(imageResponse);
+      console.log("숙소 상세:", stayResponse);
+      console.log("이미지 목록:", imageResponse);
+    } catch (error) {
+      console.error("숙소 데이터 병렬 요청 실패:", error);
     }
-  }
+  };
 
   useEffect(()=>{
-    fetchStayDetail();
+    if(stayId){
+      fetchData();
+    }
   }, [stayId])
 
 
@@ -56,8 +49,7 @@ const StayDetailPage = () => {
       <main>
         <MainContent data={stayData} searchParams={{ checkIn, checkOut, adults, children, stayId }}/>
       </main>
-      {/* <PhotoModal imgs={stayData.stayImages} /> */}
-      <PhotoModal imgs={imageData} />
+      {stayImages && <PhotoModal stayImages={stayImages} stayId={stayId} />}
     </>
   )
 

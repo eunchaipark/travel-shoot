@@ -203,7 +203,7 @@ public class ReservationController {
             @Valid @RequestBody CancelRequest request,
             Authentication authentication) {
         Long userId = Long.valueOf(authentication.getName());
-        log.info("비밀번호 변경 API: userId: {}", userId);
+        log.info("예약 취소 API: userId: {}", userId);
         reservationService.cancelReservation(userId, request);
         return ResponseEntity.ok().build();
     }

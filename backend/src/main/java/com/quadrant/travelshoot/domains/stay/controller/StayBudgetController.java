@@ -1,10 +1,8 @@
 package com.quadrant.travelshoot.domains.stay.controller;
 
-import com.quadrant.travelshoot.domains.stay.dto.response.BudgetFriendlyResponse;
-import com.quadrant.travelshoot.domains.stay.dto.response.RoomFilterDto;
-import com.quadrant.travelshoot.domains.stay.dto.response.StayRatingResponse;
+import com.quadrant.travelshoot.domains.stay.dto.response.*;
 import com.quadrant.travelshoot.domains.stay.service.BudgetFriendlyService;
-import com.quadrant.travelshoot.domains.stay.dto.response.StayDetailResponse;
+import com.quadrant.travelshoot.domains.stay.service.StayImageService;
 import com.quadrant.travelshoot.domains.stay.service.StayService;
 import com.quadrant.travelshoot.domains.stay.service.impl.StayServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +21,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StayBudgetController {
 
-    private final BudgetFriendlyService budgetFriendlyService;
     private final StayService stayService;
+    private final StayImageService stayImageService;
+
     /**
      * 숙소 상세 조회
      */
@@ -43,6 +42,16 @@ public class StayBudgetController {
         List<RoomFilterDto> rooms = stayService.getRoomFilters(stayId);
         return ResponseEntity.ok(rooms);
     }
+
+    /**
+     * 숙소 전체 이미지 조회 - 모달용
+     */
+    @GetMapping("/{stayId}/images")
+    public ResponseEntity<List<StayImageDto>> getAllStayImages(@PathVariable Long stayId) {
+        List<StayImageDto> images = stayImageService.getAllStayImages(stayId);
+        return ResponseEntity.ok(images);
+    }
+
 
     /**
      * 리뷰 집계한 숙소 평점평균 조회

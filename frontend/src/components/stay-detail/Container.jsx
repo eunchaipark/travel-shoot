@@ -6,6 +6,8 @@ import InformationCard from "./card/InformationCard";
 import ReservationNoticeCard from "./card/ReservationNoticeCard";
 import RoomSelectionCard from "./card/RoomSelectionCard";
 import StayDetailTitleCard from "./card/StayDetailTitleCard";
+import PhotoModal from "./modal/PhotoModal";
+
 
 const Container = ({data, searchParams}) => {
 
@@ -39,6 +41,7 @@ const Container = ({data, searchParams}) => {
                 <RoomSelectionCard searchParams={searchParams} rooms={data.rooms} />
                 <ReservationNoticeCard notice={data.reservationNotice}/>
             </div>
+            {/* <PhotoModal stayId={data.stayId} /> */}
         </div>
     )
 }
