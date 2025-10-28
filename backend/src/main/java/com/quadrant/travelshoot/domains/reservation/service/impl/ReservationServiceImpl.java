@@ -185,8 +185,10 @@ public class ReservationServiceImpl implements ReservationService {
                 .reservationId(savedReservation.getId())
                 .paymentMethod(request.getPaymentMethod())
                 .paymentAmount(request.getTotalPrice())
-                .paymentStatus(PaymentStatus.결제완료)
-                .completedAt(LocalDateTime.now())
+//                .paymentStatus(PaymentStatus.결제완료)
+                .paymentStatus(PaymentStatus.결제대기) //1027 카카오페이 적용
+                .completedAt(null) //1027 카카오페이 적용
+//                .completedAt(LocalDateTime.now())
                 .build();
 
         paymentService.save(payment);

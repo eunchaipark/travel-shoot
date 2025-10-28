@@ -823,7 +823,7 @@
         width: 100%;
         height: 100%;
         background: white;
-        z-index: 1500;
+        z-index: 999999 !important;
         flex-direction: column;
     }
 
@@ -884,7 +884,7 @@
 
     .staylist-page {
         max-width: 100%;
-        padding: 0 16px;
+        padding: 80px 16px 0 16px;
     }
 
     .staylist-page .staylist-layout {
@@ -1285,6 +1285,18 @@
 
     .staylist-page .stay_location-mobile {
         display: inline;
+    }
+
+    .staylist-page .search-results-section .no-search-result {
+        padding: 100px 20px;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .staylist-page .search-results-section .no-search-result-sub {
+        font-size: 12px;
+        margin-top: 8px;
+        color: grey;
     }
 
 }
