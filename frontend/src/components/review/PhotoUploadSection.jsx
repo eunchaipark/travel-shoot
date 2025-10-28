@@ -51,6 +51,15 @@ const PhotoUploadSection = ({ uploadedFile, existedImageUrl, onFileChange, onFil
     return (
         <section className="photo-upload-section">
             <h3 className="section-title">사진 업로드 *</h3>
+
+            {/* 성공 메시지 */}
+            {hasImage && isNewUpload && 
+                <div className="upload-success-message">
+                    <i className="fas fa-check-circle"></i>
+                    {uploadedFile ? '사진이 업로드되었습니다.' : ''}
+                </div>
+            }
+
             
             <input 
                 type="file" 
@@ -84,22 +93,17 @@ const PhotoUploadSection = ({ uploadedFile, existedImageUrl, onFileChange, onFil
             <div 
                 className="photo-preview" 
                 id="photo-preview" 
-                style={{ display: hasImage  ? 'block' : 'none' }}
+                style={{ display: hasImage  ? 'flex' : 'none' }}
             >
                 {hasImage && (
                     <>
-                        <img className="preview-image" id="preview-image" alt="미리보기" src={fileUrl} />
-                        <button type="button" className="remove-photo-button" id="remove-photo"
-                        onClick={onFileRemove}>
-                            <i className="fas fa-times"></i>
-                        </button>
-
-                        {isNewUpload && 
-                            <div className="upload-success-message">
-                                <i className="fas fa-check-circle"></i>
-                                {uploadedFile ? '사진이 업로드되었습니다.' : ''}
-                            </div>
-                        }
+                        <div className="preview-image-wrapper">
+                            <img className="preview-image" id="preview-image" alt="미리보기" src={fileUrl} />
+                            <button type="button" className="remove-photo-button" id="remove-photo"
+                            onClick={onFileRemove}>
+                                <i className="fas fa-times"></i>
+                            </button>
+                        </div>
 
                          {/* 사진 변경 버튼 */}
                         <button 
@@ -108,7 +112,7 @@ const PhotoUploadSection = ({ uploadedFile, existedImageUrl, onFileChange, onFil
                             onClick={handleBrowseClick}
                         >
                             <i className="fas fa-sync-alt"></i>
-                            다른 사진으로 변경
+                             {` 다른 사진으로 변경`}
                         </button>
                     </>
                 )}

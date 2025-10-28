@@ -10,10 +10,19 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
     const { isAuthenticated, openLoginModal } = useAuth(); //TODO : 1023 김이슬 코드 추가
     const urlParams = useSearchParamsSync(); //1024추가
 
-    // const { stayId, checkIn, checkOut, adults, children } = searchParams; //1024 주석
+    useEffect(() => {
+        console.log(urlParams.checkIn, urlParams.checkOut);
+        
+    }, [urlParams])
 
     // 1024 위에 주석 처리 후 아래 5줄 코드 추가
     const { stayId } = searchParams;
+
+    const formatDate = (date) => date.toISOString().split('T')[0];
+    const today = new Date();
+    const defaultCheckOut = new Date();
+    defaultCheckOut.setDate(today.getDate() + 2);
+
     const checkIn = searchParams.checkIn || urlParams.checkIn;
     const checkOut = searchParams.checkOut || urlParams.checkOut;
     const adults = searchParams.adults || urlParams.adults || 2;
