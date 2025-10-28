@@ -283,7 +283,7 @@ public class BudgetFriendlyServiceImpl implements BudgetFriendlyService {
     private String getThumbnailImage(Long stayId) {
         try {
             String sql = "SELECT s3_url FROM files " +
-                    "WHERE reference_type = 'STAY' " +
+                    "WHERE reference_type = 'STAYS' " +
                     "AND reference_id = ? " +
                     "AND is_representative = true " +
                     "AND is_deleted = false " +
