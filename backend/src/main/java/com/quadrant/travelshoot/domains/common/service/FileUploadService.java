@@ -17,4 +17,6 @@ public interface FileUploadService {
             Integer sortOrder,
             Boolean isRepresentative
     );
+
+    String getMainImageUrl(Long stayId);
 }

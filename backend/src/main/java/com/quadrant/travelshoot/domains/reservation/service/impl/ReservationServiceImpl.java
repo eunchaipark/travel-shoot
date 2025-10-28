@@ -1,5 +1,6 @@
 package com.quadrant.travelshoot.domains.reservation.service.impl;
 
+import com.quadrant.travelshoot.domains.common.service.FileUploadService;
 import com.quadrant.travelshoot.domains.payment.enums.PaymentStatus;
 import com.quadrant.travelshoot.domains.payment.service.PaymentService;
 import com.quadrant.travelshoot.domains.reservation.dto.request.*;
@@ -41,6 +42,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final RoomRepository roomRepository;
     private final StayService stayService;
     private final PaymentService paymentService;
+    private final FileUploadService fileUploadService;
 
     //TODO : 가격 계산 추후에 추가할 가능성 염두
 //    private static final BigDecimal TAX_RATE = new BigDecimal("0.10"); //TODO : 세금 10% 청구
@@ -516,7 +518,7 @@ public class ReservationServiceImpl implements ReservationService {
                             .reservationCode(reservation.getReservationCode())
                             .stayId(reservation.getRoom().getStay().getId())
                             .stayName(reservation.getRoom().getStay().getName())
-                            .mainImageUrl(reservation.getRoom().getStay().getMainImageUrl())
+                            .mainImageUrl(fileUploadService.getMainImageUrl(reservation.getRoom().getStay().getId()))
                             .checkInDate(reservation.getCheckInDate())
                             .checkOutDate(reservation.getCheckOutDate())
                             .checkInTime(reservation.getRoom().getStay().getCheckInTime())

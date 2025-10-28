@@ -7,6 +7,7 @@ import com.quadrant.travelshoot.domains.common.repository.FileUploadRepository;
 import com.quadrant.travelshoot.domains.common.service.FileUploadService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,5 +57,17 @@ public class FileUploadServiceImpl implements FileUploadService {
 
         return fileUploadRepository.save(fileUpload);
 
+    }
+
+    @Cacheable(value = "mainImages", key = "'stay-' + #stayId")
+    public String getMainImageUrl(Long stayId) {
+        List<FileUpload> images = findAllByReferenceTypeAndReferenceId("STAYS", stayId);
+
+        return images.stream()
+                .filter(img -> Boolean.TRUE.equals(img.getIsRepresentative()))
+                .findFirst()
+                .or(() -> images.stream().findFirst())
+                .map(FileUpload::getS3Url)
+                .orElse(null);
     }
 }
