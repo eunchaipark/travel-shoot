@@ -79,23 +79,24 @@ const ReservationPaymentPage = () => {
 
         // 5. 모든 검증 통과 시 예약 진행
         try {
-            setIsPaymentLoading(true); // 로딩 시작
+            setIsPaymentLoading(true);
 
             const result = await createReservation(formData);
 
-            if (result && result.success) {
-                // navigate("/payment-complete");
-                // navigate(`/payment-complete?reservationId=${result.reservationId}`);
-                navigate(`/payment-complete?reservationId=${result.reservationId}`, { replace: true }); // 뒤로가기 막기
-
-            } else {
-                alert("결제 처리 중 오류가 발생했습니다.");
+            // 카카오페이는 result를 반환하지 않음 (postMessage로 처리)
+            if (result) {
+                // 카드결제, 네이버페이 등
+                if (result.success) {
+                    navigate(`/payment-complete?reservationId=${result.reservationId}`, { replace: true });
+                } else {
+                    alert("결제 처리 중 오류가 발생했습니다.");
+                    setIsPaymentLoading(false);
+                }
             }
         } catch (error) {
             console.error(error);
             alert("결제 처리 중 문제가 발생했습니다.");
-        } finally {
-            setIsPaymentLoading(false); // 로딩 종료
+            setIsPaymentLoading(false);
         }
     };
 
