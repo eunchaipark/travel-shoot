@@ -414,12 +414,12 @@ const AuthModal = ({ isOpen, onClose }) => {
                         <button className="login-btn btn-email" onClick={() => navigateToStep(2)}>
                             이메일로 시작하기
                         </button>
-                        <button className="login-btn btn-naver">
-                            네이버로 시작하기
-                        </button>
-                        <button className="login-btn btn-kakao">
-                            카카오로 시작하기
-                        </button>
+                        {/*<button className="login-btn btn-naver">*/}
+                        {/*    네이버로 시작하기*/}
+                        {/*</button>*/}
+                        {/*<button className="login-btn btn-kakao">*/}
+                        {/*    카카오로 시작하기*/}
+                        {/*</button>*/}
                     </div>
                 </div>
 
