@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.quadrant.travelshoot.domains.payment.entity.Payment;
+import com.quadrant.travelshoot.domains.common.service.FileUploadService;
 
 import java.time.LocalDateTime;
 import java.math.BigDecimal;
@@ -96,7 +97,8 @@ public class ReservationServiceImpl implements ReservationService {
                 .stayId(stay.getStayId())
                 .stayName(stay.getStayName())
                 .address(stay.getAddress() + " " + (stay.getAddressDetail() != null ? stay.getAddressDetail() : ""))
-                .mainImageUrl(stay.getStayImages().isEmpty() ? null : stay.getStayImages().get(0).getS3Url())
+//                .mainImageUrl(stay.getStayImages().isEmpty() ? null : stay.getStayImages().get(0).getS3Url())
+                .mainImageUrl(fileUploadService.getMainImageUrl(stay.getStayId()))
                 .latitude(stay.getLatitude().doubleValue())
                 .longitude(stay.getLongitude().doubleValue())
                 .roomId(room.getRoomId())
@@ -430,7 +432,6 @@ public class ReservationServiceImpl implements ReservationService {
                 .totalNights(reservation.getTotalNights())
                 .totalPrice(reservation.getTotalPrice())
                 .reservationStatus(reservation.getReservationStatus())
-//                .transportationMethod(reservation.getTransportationMethod())
                 .transportationMethod(reservation.getTransportationMethod().getDisplayName())
                 .cancelReason(reservation.getCancelReason())
                 .cancelDetail(reservation.getCancelDetail())

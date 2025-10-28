@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.quadrant.travelshoot.common.enums.PlaceType; //추가 1010
 import org.springframework.data.domain.PageRequest;
+import com.quadrant.travelshoot.domains.common.service.FileUploadService;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -38,6 +39,7 @@ public class StaySearchServiceImpl implements StaySearchService {
     private final StayRepository stayRepository;
 //    private final SearchHistoryRepository searchHistoryRepository; //TODO 1021
     private final JdbcTemplate jdbcTemplate;
+    private final FileUploadService fileUploadService;
 
     @Override
     public List<AutocompleteResponse> autocomplete(String keyword) {
@@ -368,7 +370,7 @@ public class StaySearchServiceImpl implements StaySearchService {
     private StayListItem toStayListItem(Stay stay) {
         String regionName = getRegionName(stay.getRegionId());
         BigDecimal minPrice = getMinPrice(stay.getId());
-        String thumbnailImage = getThumbnailImage(stay.getId());
+        String thumbnailImage = fileUploadService.getMainImageUrl(stay.getId());
         List<String> amenities = getAmenities(stay.getId());
         String checkInTimeStr = stay.getCheckInTime() != null
                 ? stay.getCheckInTime().format(DateTimeFormatter.ofPattern("HH:mm"))
@@ -409,17 +411,6 @@ public class StaySearchServiceImpl implements StaySearchService {
         } catch (Exception e) {
             log.warn("최저가 조회 실패 - stayId: {}", stayId);
             return BigDecimal.ZERO;
-        }
-    }
-
-    private String getThumbnailImage(Long stayId) {
-        try {
-            String sql = "SELECT image_url FROM stay_images WHERE stay_id = ? ORDER BY display_order LIMIT 1";
-            List<String> images = jdbcTemplate.queryForList(sql, String.class, stayId);
-            return images.isEmpty() ? null : images.get(0);
-        } catch (Exception e) {
-            log.warn("썸네일 이미지 조회 실패 - stayId: {}", stayId);
-            return null;
         }
     }
 
