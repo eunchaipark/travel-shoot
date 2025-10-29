@@ -135,6 +135,10 @@
     object-fit: cover;
 }
 
+.product-detail-container .col-lg-8 > .card-section-border:nth-child(3) {
+    flex: 1;
+}
+
 .product-detail-container .map-marker {
     width: 30px;
     height: 30px;
@@ -165,7 +169,7 @@
 }
 
 .product-detail-container  .map-card.card .map-container .w-full.h-full {
-    min-height: 257px !important;
+    min-height: 150px !important;
 }
 
 @media (min-width: 768px) {
