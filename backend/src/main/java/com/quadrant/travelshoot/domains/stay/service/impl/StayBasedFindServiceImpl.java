@@ -56,7 +56,7 @@ public class StayBasedFindServiceImpl implements StayBasedFindService {
     }
 
     /**
-     * 단일 숙소에 대한 맛집/관광지 추천
+     *  숙소에 대한 맛집/관광지 추천
      * 순서: 숙소 정보 -> 맛집들 -> 관광지들
      */
     private List<Object> findForStay(Long stayId, int restaurantCount, int activityCount) {

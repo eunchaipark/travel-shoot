@@ -36,7 +36,7 @@ public class ReviewDetailResponse {
 
     private String reviewContent;
     private Boolean isRecommended;  // 0
-    //리뷰 이미지 상세 정보 필요할 수 있음
+
     private String reviewImageUrl;
 
     private LocalDateTime createdAt;

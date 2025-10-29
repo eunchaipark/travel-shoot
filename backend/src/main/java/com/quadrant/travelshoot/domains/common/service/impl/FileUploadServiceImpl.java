@@ -70,4 +70,17 @@ public class FileUploadServiceImpl implements FileUploadService {
                 .map(FileUpload::getS3Url)
                 .orElse(null);
     }
+
+    /**
+     * 파일 삭제
+     */
+    public void deleteFile(Long fileId) {
+        FileUpload fileUpload = fileUploadRepository.findById(fileId)
+                .orElseThrow(() -> new IllegalArgumentException("파일을 찾을 수 없습니다."));
+        // S3에서 삭제
+        s3Service.deleteFile(fileUpload.getS3Key());
+        // DB에서 삭제
+        fileUploadRepository.delete(fileUpload);
+    }
+
 }
