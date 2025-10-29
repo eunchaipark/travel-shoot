@@ -285,8 +285,6 @@ public class BudgetFriendlyServiceImpl implements BudgetFriendlyService {
             String sql = "SELECT s3_url FROM files " +
                     "WHERE reference_type = 'STAYS' " +
                     "AND reference_id = ? " +
-                    "AND is_representative = true " +
-                    "AND is_deleted = false " +
                     "ORDER BY sort_order LIMIT 1";
             List<String> images = jdbcTemplate.queryForList(sql, String.class, stayId);
             return images.isEmpty() ? null : images.get(0);
