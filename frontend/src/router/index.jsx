@@ -19,6 +19,11 @@ import AuthModal from '@/components/modals/AuthModal';
 import PaymentCompletePage from "@/pages/reservation/PaymentCompletePage.jsx";
 import MyPage from '@/pages/MyPage';
 
+//카카오페이
+import PaymentSuccess from '@/pages/payment/PaymentSuccess';
+import PaymentCancel from '@/pages/payment/PaymentCancel';
+import PaymentFail from '@/pages/payment/PaymentFail';
+
 //리액트쿼리 클라이언트 생성해야함 (무한스크롤)
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -72,6 +77,9 @@ function Router() {
         <Route path="/reservation/payment" element={<ReservationPaymentPage />} />
         <Route path="/payment-complete" element={<PaymentCompletePage />} />
         <Route path="/mypage" element={<MyPage />} />
+        <Route path="/payment/success" element={<PaymentSuccess />} />
+        <Route path="/payment/cancel" element={<PaymentCancel />} />
+        <Route path="/payment/fail" element={<PaymentFail />} />
       </Routes>
     </BrowserRouter>
     </AuthProvider>

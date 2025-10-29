@@ -79,23 +79,24 @@ const ReservationPaymentPage = () => {
 
         // 5. 모든 검증 통과 시 예약 진행
         try {
-            setIsPaymentLoading(true); // 로딩 시작
+            setIsPaymentLoading(true);
 
             const result = await createReservation(formData);
 
-            if (result && result.success) {
-                // navigate("/payment-complete");
-                // navigate(`/payment-complete?reservationId=${result.reservationId}`);
-                navigate(`/payment-complete?reservationId=${result.reservationId}`, { replace: true }); // 뒤로가기 막기
-
-            } else {
-                alert("결제 처리 중 오류가 발생했습니다.");
+            // 카카오페이는 result를 반환하지 않음 (postMessage로 처리)
+            if (result) {
+                // 카드결제, 네이버페이 등
+                if (result.success) {
+                    navigate(`/payment-complete?reservationId=${result.reservationId}`, { replace: true });
+                } else {
+                    alert("결제 처리 중 오류가 발생했습니다.");
+                    setIsPaymentLoading(false);
+                }
             }
         } catch (error) {
             console.error(error);
             alert("결제 처리 중 문제가 발생했습니다.");
-        } finally {
-            setIsPaymentLoading(false); // 로딩 종료
+            setIsPaymentLoading(false);
         }
     };
 
@@ -239,7 +240,9 @@ const ReservationPaymentPage = () => {
                                         {priceData && (
                                             <div className="price-highlight text-nowrap">
                                                 <span className="small-text me-2 mb-1 standard">숙박/1박당</span>
-                                                ₩ {reservationFormatters.formatPrice(Math.round(priceData.subtotal / priceData.totalNights))}
+                                                ₩ {reservationFormatters.formatPrice(
+                                                priceData.dailyPrices?.find(d => d.dayType === '평일')?.price || 0
+                                            )}
                                             </div>
                                         )}
                                     </div>
@@ -307,20 +310,20 @@ const ReservationPaymentPage = () => {
                         <div className="section-card mb-4">
                             <div className="section-header">결제 방법</div>
                             <div className="payment-options">
-                                <label className="payment-option d-flex align-items-center mb-3">
-                                    <input
-                                        type="radio"
-                                        name="payment"
-                                        value="카드결제"
-                                        checked={formData.paymentMethod === '카드결제'}
-                                        onChange={(e) => handleChange('paymentMethod', e.target.value)}
-                                    />
-                                    <span className="radio-custom"></span>
-                                    <div className="payment-info d-flex align-items-center ms-3">
-                                        <img className="payment_images" src="/images/reservation/payment-card.svg" alt="카드결제" />
-                                        <span className="payment-text">일반 카드 결제</span>
-                                    </div>
-                                </label>
+                                {/*<label className="payment-option d-flex align-items-center mb-3">*/}
+                                {/*    <input*/}
+                                {/*        type="radio"*/}
+                                {/*        name="payment"*/}
+                                {/*        value="카드결제"*/}
+                                {/*        checked={formData.paymentMethod === '카드결제'}*/}
+                                {/*        onChange={(e) => handleChange('paymentMethod', e.target.value)}*/}
+                                {/*    />*/}
+                                {/*    <span className="radio-custom"></span>*/}
+                                {/*    <div className="payment-info d-flex align-items-center ms-3">*/}
+                                {/*        <img className="payment_images" src="/images/reservation/payment-card.svg" alt="카드결제" />*/}
+                                {/*        <span className="payment-text">일반 카드 결제</span>*/}
+                                {/*    </div>*/}
+                                {/*</label>*/}
 
                                 <label className="payment-option d-flex align-items-center mb-3">
                                     <input
@@ -494,9 +497,25 @@ const ReservationPaymentPage = () => {
                                                 <div className="vr pay-line"></div>
                                             </div>
                                             <div className="col-11">
-                                                <div className="final-payment-detail text-muted small mb-1">
-                                                    1박당 가격 : {reservationFormatters.formatPrice(Math.round(priceData.subtotal / priceData.totalNights))}원
-                                                </div>
+                                                {priceData.dailyPrices && (() => {
+                                                    const weekdayDays = priceData.dailyPrices.filter(d => d.dayType === '평일');
+                                                    const weekendDays = priceData.dailyPrices.filter(d => d.dayType === '주말');
+
+                                                    return (
+                                                        <>
+                                                            {weekdayDays.length > 0 && (
+                                                                <div className="final-payment-detail final-payment-detail-won text-muted small mb-1">
+                                                                    평일 {reservationFormatters.formatPrice(weekdayDays[0].price)}원 × {weekdayDays.length}박
+                                                                </div>
+                                                            )}
+                                                            {weekendDays.length > 0 && (
+                                                                <div className="final-payment-detail final-payment-detail-won text-muted small mb-1">
+                                                                    주말 {reservationFormatters.formatPrice(weekendDays[0].price)}원 × {weekendDays.length}박
+                                                                </div>
+                                                            )}
+                                                        </>
+                                                    );
+                                                })()}
                                                 <div className="final-payment-detail text-muted small">
                                                     이용 인원 : {guestCount}명
                                                 </div>

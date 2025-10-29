@@ -183,7 +183,7 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                 
                 (SELECT f.s3_url 
                 FROM files f 
-                WHERE f.reference_type = 'STAY' 
+                WHERE f.reference_type = 'STAYS' 
                 AND f.reference_id = s.stay_id 
                 AND f.is_representative = true 
                 AND f.is_deleted = false
@@ -376,7 +376,7 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
          * 전체 숙소의 평균 가격 계산 
          */
         @Query("""
-                SELECT AVG((r.weekdayPrice + r.weekendPrice) / 2)
+                SELECT AVG(r.weekdayPrice)
                 FROM Room r
                 WHERE r.isAvailable = true
         """)

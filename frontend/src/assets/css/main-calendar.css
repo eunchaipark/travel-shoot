@@ -1382,6 +1382,12 @@
 }
 
 /* 모바일 화면 (768px 이하) - 개선된 텍스트 표시 */
+@media (max-width: 768px){
+  main.main-page {
+    padding-top: 68px !important;
+  }
+}
+
 /* 작은 모바일 화면 (576px 이하) - 더욱 작은 텍스트 */
 @media (max-width: 576px) {
   .main-page
