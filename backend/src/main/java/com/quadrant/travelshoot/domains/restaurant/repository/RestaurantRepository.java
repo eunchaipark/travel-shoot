@@ -25,8 +25,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
              FROM files f 
              WHERE f.reference_type = 'RESTAURANT' 
              AND f.reference_id = r.restaurant_id 
-             AND f.is_representative = true 
-             AND f.is_deleted = false
              LIMIT 1) as thumbnailImage,
             
             r.latitude as latitude,

@@ -26,8 +26,6 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
              FROM files f 
              WHERE f.reference_type = 'ACTIVITY' 
              AND f.reference_id = a.activity_id 
-             AND f.is_representative = true 
-             AND f.is_deleted = false
              LIMIT 1) as thumbnailImage,
             
             a.latitude as latitude,
