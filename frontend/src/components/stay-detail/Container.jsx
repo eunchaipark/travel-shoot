@@ -17,8 +17,8 @@ const Container = ({data, searchParams}) => {
 
     return (
         <div className="container">
-            <div className="row align-items-start">
-                <div className="col-lg-8">
+            <div className="row align-items-stretch">
+                <div className="col-lg-8 d-flex flex-column">
                     <div className="card mb-4 card-section-border">
                         <StayDetailTitleCard
                             hotelName={data.stayName}
