@@ -347,6 +347,7 @@
 
 .staylist-page .search-results-section .hotel-card .hotel-stay_image {
     width: 250px;
+    height: 200px;
     position: relative;
     overflow: hidden;
     flex-shrink: 0;
@@ -620,6 +621,7 @@
 
     .staylist-page .search-results-section .hotel-card .hotel-stay_image {
         width: 220px;
+        height: 180px;
     }
 
     .staylist-page .stay_content .stay_info .stay_name {
@@ -682,6 +684,7 @@
 
     .staylist-page .search-results-section .hotel-card .hotel-stay_image {
         width: 180px;
+        height: 150px;
         flex-shrink: 0;
     }
 
@@ -775,6 +778,7 @@
 
     .staylist-page .search-results-section .hotel-card .hotel-stay_image {
         width: 180px;
+        height: 150px;
     }
 
     .staylist-page .stay_content .stay_info .stay_name {
@@ -917,7 +921,8 @@
 
     .staylist-page .search-results-section .hotel-card .hotel-stay_image {
         width: 140px;
-        height: auto;
+        height: 120px;
+        /*height: auto;*/
         margin-bottom: 0;
         margin-right: 12px;
         flex-shrink: 0;
