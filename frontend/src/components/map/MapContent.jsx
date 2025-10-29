@@ -17,12 +17,6 @@ const MapContent = ({ mapRef, kakaoLoaded, selectedLocation }) => {
             {selectedLocation && (
                 <div
                     className="map-card-overlay"
-                    // onClick={() => {
-                    //     if (selectedLocation.placeType === "stay") {
-                    //         navigate(`/stays/${selectedLocation?.id}`);
-                    //     }
-                    // }}
-                    //1024 추가
                     onClick={() => {
                         if (selectedLocation.placeType === "stay") {
                             setDefaultParams();
@@ -51,7 +45,7 @@ const MapContent = ({ mapRef, kakaoLoaded, selectedLocation }) => {
                                 <>
                                     <div className="col-4 h-100">
                                         <img
-                                            src={selectedLocation.image || "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=400&h=300&fit=crop"}
+                                            src={selectedLocation.image || selectedLocation.mainImageUrl || "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=400&h=300&fit=crop"}
                                             alt={selectedLocation.name}
                                             className="stay-image"
                                         />
