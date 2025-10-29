@@ -193,7 +193,7 @@ const ReviewWritePage = () => {
                 
             } catch (error) {
                 console.error(`리뷰 ${isEditMode ? '수정' : '등록'} 실패:`, error);
-                alert(`리뷰 ${isEditMode ? '수정' : '등록'}에 실패했습니다. 다시 시도해주세요.`);
+                alert(`리뷰 ${isEditMode ? '수정' : '등록'}에 실패했습니다. ${ error.message}`);
             }
         } else {
             alert('모든 필수 항목을 입력해주세요.');

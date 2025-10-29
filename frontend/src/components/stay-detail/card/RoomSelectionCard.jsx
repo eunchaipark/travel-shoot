@@ -12,16 +12,11 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
 
     useEffect(() => {
         console.log(urlParams.checkIn, urlParams.checkOut);
-        
     }, [urlParams])
 
     // 1024 위에 주석 처리 후 아래 5줄 코드 추가
     const { stayId } = searchParams;
 
-    const formatDate = (date) => date.toISOString().split('T')[0];
-    const today = new Date();
-    const defaultCheckOut = new Date();
-    defaultCheckOut.setDate(today.getDate() + 2);
 
     const checkIn = searchParams.checkIn || urlParams.checkIn;
     const checkOut = searchParams.checkOut || urlParams.checkOut;

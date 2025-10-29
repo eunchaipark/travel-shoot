@@ -119,7 +119,7 @@ public class ReviewServiceImpl implements ReviewService {
             try {
                 FileUpload fileUpload = fileUploadService.uploadAndSave(
                         request.getReviewImage(),
-                        "REVIEW",
+                        "REVIEWS",
                         savedReview.getReviewId(),
                         userId,
                         0,
@@ -170,7 +170,7 @@ public class ReviewServiceImpl implements ReviewService {
         String imageUrl = null;
 
         // 기존 리뷰 이미지 조회
-        Optional<FileUpload> existedImage = fileUploadRepository.findFirstByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("REVIEW", reviewId);
+        Optional<FileUpload> existedImage = fileUploadRepository.findFirstByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("REVIEWS", reviewId);
 
         // 새로운 이미지 등록
         if (reviewUpdateRequest.getReviewImage() != null && !reviewUpdateRequest.getReviewImage().isEmpty()) {
@@ -181,7 +181,7 @@ public class ReviewServiceImpl implements ReviewService {
 
                 FileUpload fileUpload = fileUploadService.uploadAndSave(
                         reviewUpdateRequest.getReviewImage(),
-                        "REVIEW",
+                        "REVIEWS",
                         updatedReview.getReviewId(),
                         userId,
                         0,
@@ -226,14 +226,14 @@ public class ReviewServiceImpl implements ReviewService {
         log.info("리뷰 조회 - {}", reviewInfo);
 
         // 숙소 이미지 1개 조회
-        String reservationImageUrl = fileUploadRepository.findFirstByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("STAY", reservation.getRoom().getStay().getId())
+        String reservationImageUrl = fileUploadRepository.findFirstByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("STAYS", reservation.getRoom().getStay().getId())
                 .map(FileUpload::getS3Url).orElse("/images/product/hotel-bathroom-modern-design.jpg");
 
         ReviewDetailResponse response;
         if (reviewInfo.isPresent()) {
             // 리뷰가 있는 경우 - 전체 정보 반환
             Review review = reviewInfo.get();
-            Optional<FileUpload> optionalFileUpload = fileUploadRepository.findFirstByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("REVIEW", review.getReviewId());
+            Optional<FileUpload> optionalFileUpload = fileUploadRepository.findFirstByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("REVIEWS", review.getReviewId());
 
             String reviewImageUrl = optionalFileUpload
                     .map(FileUpload::getS3Url)
@@ -280,7 +280,7 @@ public class ReviewServiceImpl implements ReviewService {
         // 단일 파일 버전
         Page<ReviewListResponse> responsePage = reviewPage.map(
                 review -> {
-                    List<FileUpload> fileUploads = fileUploadService.findAllByReferenceTypeAndReferenceId("REVIEW", review.getReviewId());
+                    List<FileUpload> fileUploads = fileUploadService.findAllByReferenceTypeAndReferenceId("REVIEWS", review.getReviewId());
 
                     String imageUrl;
                     if(!fileUploads.isEmpty()){
@@ -294,7 +294,7 @@ public class ReviewServiceImpl implements ReviewService {
         // 파일 여러 개 버전
 //        return reviewPage.map(
 //            review -> {
-//                List<FileUpload> fileUploads = fileUploadService.findByReferenceTypeAndReferenceId("REVIEW", review.getReviewId());
+//                List<FileUpload> fileUploads = fileUploadService.findByReferenceTypeAndReferenceId("REVIEWS", review.getReviewId());
 //                List<String> imageUrls = fileUploads.stream()
 //                        .map(FileUpload::getS3Url)
 //                        .toList();
@@ -386,7 +386,7 @@ public class ReviewServiceImpl implements ReviewService {
         // 각 review마다 이미지 조회
         return reviewIds.stream()
             .flatMap(reviewId -> fileUploadService
-                    .findAllByReferenceTypeAndReferenceId("REVIEW", reviewId)
+                    .findAllByReferenceTypeAndReferenceId("REVIEWS", reviewId)
                     .stream()
                     .map(FileUpload::getS3Url))
             .collect(Collectors.toList());

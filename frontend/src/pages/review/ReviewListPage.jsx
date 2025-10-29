@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import ReviewCard from "@/components/review/ReviewCard";
 import ReviewFilter from "@/components/review/ReviewFilter";
 import ReviewHeader from "@/components/review/ReviewHeader";
 import ReviewPhotoList from "@/components/review/ReviewPhotoList";
 import ReviewAvgRating from "@/components/review/ReviewAvgRating";
+
+import {useInView} from "react-intersection-observer";
 import "@/assets/css/review-list.css";
 import { useParams } from "react-router-dom";
 import {
@@ -21,12 +23,17 @@ const sortOptions = [
 
 const ReviewListPage = () => {
     const { stayId } = useParams();
-    const [reviews, setReviews] = useState([]);
     const [stayRating, setStayRating] = useState(null);
     const [rooms, setRooms] = useState([]);
     const [reviewImages, setReviewImages] = useState([]);
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    
+    const [ref, inView] = useInView();
+    const [page, setPage] = useState(0);
+    const [reviews, setReviews] = useState([]);
+    const [hasMore, setHasMore] = useState(true); // 더 불러올 데이터가 있는지
 
     const [sortFilter, setSortFilter] = useState(sortOptions[0].value);
     const selectedOption = sortOptions.find(opt => opt.value === sortFilter);
@@ -34,40 +41,75 @@ const ReviewListPage = () => {
     const [roomFilter, setRoomFilter] = useState("객실 전체");
     const selectedRoomId = rooms.find(room => room.roomName === roomFilter)?.roomId;
 
-    const fetchReviews = async () => {
+    // 중복 호출 방지를 위한 ref
+    const isFetchingRef = useRef(false);
+
+    // fetchReviews를 useCallback으로 감싸서 의존성 관리
+    const fetchReviews = useCallback(async (currentPage, isReset = false) => {
+        // 이미 로딩 중이거나 더 이상 데이터가 없으면 return
+        if (isFetchingRef.current || (!hasMore && !isReset)) {
+            return;
+        }
+
+        isFetchingRef.current = true;
         setLoading(true);
         setError(null);
+
         try {
             const reviewData = await getReviews(stayId, {
                 roomId: selectedRoomId,
-                page: 0,
-                size: 100,
+                page: currentPage,
+                size: 10,
                 sortBy: sortFilter,
             });
 
-            // API 응답 구조
             const reviewList = reviewData.content || reviewData;
-            console.log(reviewList.map(r => r));
+            console.log(`fetch page : ${currentPage}`, reviewList);
             
-
-            setReviews(Array.isArray(reviewList) ? reviewList : []);
-            
+            if (Array.isArray(reviewList)) {
+                if (reviewList.length === 0) {
+                    // 더 이상 데이터가 없음
+                    setHasMore(false);
+                } else {
+                    // 리셋인 경우 기존 데이터 대체, 아니면 추가
+                    setReviews(prev => isReset ? reviewList : [...prev, ...reviewList]);
+                    setPage(currentPage + 1);
+                    
+                    // 받아온 데이터가 요청한 사이즈보다 적으면 마지막 페이지
+                    if (reviewList.length < 10) {
+                        setHasMore(false);
+                    }
+                }
+            }
         } catch (err) {
             console.error("리뷰 로드 실패:", err);
             setError(err.message);
-            setReviews([]);
+            if (isReset) {
+                setReviews([]);
+            }
         } finally {
             setLoading(false);
+            isFetchingRef.current = false;
         }
-    };
+    }, [stayId, selectedRoomId, sortFilter, hasMore]);
 
-    // 숙박시설 평점 및 객실 목록 조회
+    // 무한 스크롤 감지
+    useEffect(() => {
+        if (inView && hasMore && !loading) {
+            console.log("스크롤 요청", inView, "현재 페이지:", page);
+            fetchReviews(page);
+        }
+    }, [inView, hasMore, loading, page, fetchReviews]);
+
+    
+    // 초기 데이터 로드
     useEffect(() => {
         const fetchInitialData = async () => {
+            console.log("초기 데이터 호출");
+            
             setLoading(true);
             setError(null);
             try {
-
                 const [ratingData, roomsData, imagesData] = await Promise.all([
                     getStayRating(stayId),
                     getRoomFilters(stayId),
@@ -84,19 +126,37 @@ const ReviewListPage = () => {
                 setLoading(false);
             }
         };
+
         if (stayId) {
             fetchInitialData();
-            // fetchReviews();
         }
     }, [stayId]);
 
 
-    // 리뷰 목록 조회 (정렬 필터 변경 시)
+    // 필터 변경 시 리뷰 목록 리셋 및 재조회
     useEffect(() => {
-        if (stayId) {
-            fetchReviews();
+        if (stayId && rooms.length > 0) {
+            console.log("필터 변경 감지 - 리뷰 리셋");
+            // 상태 초기화
+            setReviews([]);
+            setPage(0);
+            setHasMore(true);
+            isFetchingRef.current = false;
+            
+            // 첫 페이지 데이터 로드
+            fetchReviews(0, true);
         }
-    }, [stayId, sortFilter, selectedRoomId]);
+    }, [stayId, sortFilter, selectedRoomId, rooms.length]);
+
+    // 정렬 필터 변경 핸들러
+    const handleSortChange = (value) => {
+        setSortFilter(value);
+    };
+
+    // 객실 필터 변경 핸들러
+    const handleRoomChange = (roomName) => {
+        setRoomFilter(roomName);
+    };
 
     return (
         <div className="review-list-container">
@@ -133,7 +193,10 @@ const ReviewListPage = () => {
                                                 <li key={opt.value}>
                                                     <button
                                                         className="dropdown-item"
-                                                        onClick={() => setSortFilter(opt.value)}
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            handleSortChange(opt.value);
+                                                        }}
                                                     >
                                                         <span className="review-star-color me-2">★</span>
                                                         {opt.option}
@@ -161,7 +224,10 @@ const ReviewListPage = () => {
                                             <li>
                                                 <button
                                                     className="dropdown-item"
-                                                    onClick={() => setRoomFilter("객실 전체")}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        handleRoomChange("객실 전체");
+                                                    }}
                                                 >
                                                     객실 전체
                                                 </button>
@@ -170,7 +236,10 @@ const ReviewListPage = () => {
                                                 <li key={room.roomId}>
                                                     <button
                                                         className="dropdown-item"
-                                                        onClick={() => setRoomFilter(room.roomName)}
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            handleRoomChange(room.roomName);
+                                                        }}
                                                     >
                                                         {room.roomName}
                                                     </button>
@@ -185,15 +254,34 @@ const ReviewListPage = () => {
 
                     {/* 리뷰 리스트 */}
                     <div className="reviews-list-section">
-                        {loading && <div className="text-center">로딩 중...</div>}
                         {error && <div className="alert alert-danger">{error}</div>}
-                        {!loading && reviews.length > 0 ? (
-                            reviews.map(review => (
-                                <ReviewCard review={review} />
-                            ))
-                        ) : (
-                            !loading && <div>리뷰가 없습니다.</div>
-                        )}
+
+                        <div className="list-scroll-container">
+                            {reviews.length > 0 ? (
+                                <>
+                                    {reviews.map(review => (
+                                        <ReviewCard key={review.reviewId} review={review} />
+                                    ))}
+                                    
+                                    {/* 무한 스크롤 트리거 */}
+                                    {hasMore && (
+                                        <div ref={ref} className={`scroll-trigger ${loading ? "active" : ""}`}>
+                                            {loading ? '로딩 중...' : ''}
+                                        </div>
+                                    )}
+                                    
+                                    {!hasMore && (
+                                        <div style={{ padding: '20px', textAlign: 'center', color: '#999' }}>
+                                            {/* 모든 리뷰를 불러왔습니다. */}
+                                        </div>
+                                    )}
+                                </>
+                            ) : (
+                                <div style={{ padding: '40px', textAlign: 'center' }}>
+                                    {loading ? '로딩 중...' : '리뷰가 없습니다.'}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

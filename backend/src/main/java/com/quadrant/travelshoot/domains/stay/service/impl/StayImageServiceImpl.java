@@ -31,7 +31,7 @@ public class StayImageServiceImpl implements StayImageService {
         Stay stay = stayRepository.findById(stayId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 숙소입니다."));
 
-        List<FileUpload> images = fileUploadRepository.findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("STAY", stay.getId());
+        List<FileUpload> images = fileUploadRepository.findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("STAYS", stay.getId());
         stay.setStayImages(images);
         return stay;
     }
@@ -42,7 +42,7 @@ public class StayImageServiceImpl implements StayImageService {
      * @return List<StayImageDto>
      */
     public List<StayImageDto> getThumbnailImages(Long stayId){
-        List<FileUpload> images = fileUploadRepository.findTop5ByReferenceTypeAndReferenceIdOrderBySortOrderAsc("STAY", stayId);
+        List<FileUpload> images = fileUploadRepository.findTop5ByReferenceTypeAndReferenceIdOrderBySortOrderAsc("STAYS", stayId);
 
         return images.stream()
                 .map(this::toStayImageDto)
@@ -53,8 +53,7 @@ public class StayImageServiceImpl implements StayImageService {
      * 숙소 전체 이미지 조회
      */
     public List<StayImageDto> getAllStayImages(Long stayId){
-//        List<FileUpload> images = fileUploadRepository.findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderByUploadedAtDesc("STAY", stayId);
-        List<FileUpload> images = fileUploadRepository.findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("STAY", stayId);
+        List<FileUpload> images = fileUploadRepository.findAllByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("STAYS", stayId);
         return images.stream().map(this::toStayImageDto).toList();
     }
 
@@ -64,13 +63,12 @@ public class StayImageServiceImpl implements StayImageService {
      * @return
      */
     public String getRoomImage(Long roomId){
-        String roomImageUrl = fileUploadRepository.findFirstByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("ROOM", roomId)
+        String roomImageUrl = fileUploadRepository.findFirstByReferenceTypeAndReferenceIdAndIsDeletedFalseOrderBySortOrderAsc("ROOMS", roomId)
                 .map(FileUpload::getS3Url)
                 .orElse("/images/product/hotel-bathroom-modern-design.jpg");
+
         return roomImageUrl;
     }
-
-
 
     /**
      * FileUpload -> 간단한 StayImageDto 변환
