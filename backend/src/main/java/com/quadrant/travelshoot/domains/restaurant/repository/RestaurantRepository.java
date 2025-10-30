@@ -23,7 +23,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
             
             (SELECT f.s3_url 
              FROM files f 
-             WHERE f.reference_type = 'RESTAURANT' 
+             WHERE f.reference_type = 'RESTAURANTS' 
              AND f.reference_id = r.restaurant_id 
              ORDER BY sort_order LIMIT 1) as thumbnailImage,
             
