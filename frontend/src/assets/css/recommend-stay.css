@@ -398,6 +398,7 @@
     }
     
     .main-page .additional-content-section .recommend-stay-section .recommend-stay-container .content-wrapper {
+        height: 700px;
         gap: 30px;
     }
     
