@@ -476,7 +476,7 @@ const MainPage = () => {
                 >
                   <div className="search-icon-box">
                     <img
-                      src="../../public/images/main/main-calendar-searchcard-location-icon.svg"
+                      src="https://travelshoot-s3.s3.ap-southeast-2.amazonaws.com/images/main/main-calendar-searchcard-location-icon.svg"
                       alt="지역아이콘"
                     />
                   </div>
@@ -517,7 +517,7 @@ const MainPage = () => {
                 <div className="search-card" ref={dateCardRef}>
                   <div className="search-icon-box">
                     <img
-                      src="../../public/images/main/main-calendar-searchcard-calendar-icon.svg"
+                      src="https://travelshoot-s3.s3.ap-southeast-2.amazonaws.com/images/main/main-calendar-searchcard-calendar-icon.svg"
                       alt="달력 아이콘"
                     />
                   </div>
@@ -553,7 +553,7 @@ const MainPage = () => {
                 >
                   <div className="search-icon-box">
                     <img
-                      src="../../public/images/main/main-calendar-searchcard-user-icon.svg"
+                      src="https://travelshoot-s3.s3.ap-southeast-2.amazonaws.com/images/main/main-calendar-searchcard-user-icon.svg"
                       alt="유저 아이콘"
                     />
                   </div>
