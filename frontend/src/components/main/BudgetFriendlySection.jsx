@@ -8,6 +8,7 @@ import { useBudgetSlider } from "@/hooks/main/useBudgetSlider";
 import { useDefaultStayParams } from "@/hooks/search/useDefaultStayParams"; //1024 추가
 import useSearchParamsSync from "@/hooks/search/useSearchParamsSync"; //1024 추가
 
+
 import {
   formatNumber,
   getSlideData,
