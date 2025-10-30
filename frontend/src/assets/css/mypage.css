@@ -314,6 +314,7 @@
   border-radius: 10px;
   object-fit: cover;
   flex-shrink: 0;
+  cursor: pointer;
 }
 
 .mypage .booking-list .lodging-name {
@@ -322,6 +323,7 @@
   color: #333;
   margin-bottom: 8px;
   margin-top: 8px;
+  cursor: pointer;
 }
 
 .mypage .booking-list .booking-dates {
