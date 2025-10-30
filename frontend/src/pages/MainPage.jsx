@@ -17,7 +17,7 @@ import {
   useCalendar,
   useGuest,
   useDropdownPosition,
-} from "../hooks/main/useCalendarHooks";
+} from "@/hooks/main/useCalendarHooks";
 
 // Components
 import { MiniCalendar } from "@/components/main/CalendarComponents";

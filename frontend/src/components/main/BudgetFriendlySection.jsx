@@ -15,7 +15,7 @@ import {
   getGridJustifyContent,
   getSliderWidth,
   getSlideWidth,
-} from "../../utils/main/budgetUtils";
+} from "@/utils/main/budgetUtils";
 import { fetchBudgetFriendlyStays } from "@/services/main/budgetApiService";
 
 // ============================================================================
