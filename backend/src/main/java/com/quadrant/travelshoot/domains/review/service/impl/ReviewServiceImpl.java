@@ -64,7 +64,8 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElse(null);
 
         // 기존 요약이 없거나, 리뷰가 5개 이상 증가했으면 새로 생성
-        if (existingSummary == null || currentReviewCount >= existingSummary.getReviewCount() + 5) {
+        // 시연을 위해 리뷰 1개만 증가해도 새로 생성
+        if (existingSummary == null || currentReviewCount >= existingSummary.getReviewCount() + 1) {
             log.info("AI 요약 새로 생성 - stayId: {}, 현재 리뷰: {}, 이전 리뷰: {}",
                     stayId, currentReviewCount, existingSummary != null ? existingSummary.getReviewCount() : 0);
             return reviewAiSummaryService.generateAiSummary(stayId, currentReviewCount, existingSummary);
