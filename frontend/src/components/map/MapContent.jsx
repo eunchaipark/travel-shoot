@@ -2,7 +2,8 @@ import React from 'react';
 import { getStayType } from '@/utils/formatters';
 import { useNavigate } from "react-router-dom";
 import { useDefaultStayParams } from "@/hooks/search/useDefaultStayParams"; //1024 추가
-import useSearchParamsSync from "@/hooks/search/useSearchParamsSync"; //1024 추가
+import useSearchParamsSync from "@/hooks/search/useSearchParamsSync";
+import {navigateToStayDetail} from "@/utils/stay/stayNavigationUtil";
 
 const MapContent = ({ mapRef, kakaoLoaded, selectedLocation }) => {
     const navigate = useNavigate();
@@ -19,20 +20,14 @@ const MapContent = ({ mapRef, kakaoLoaded, selectedLocation }) => {
                     className="map-card-overlay"
                     onClick={() => {
                         if (selectedLocation.placeType === "stay") {
-                            setDefaultParams();
-
-                            const { checkIn, checkOut } = getDefaultDates({ nights: 2, startFromTomorrow: true });
-                            const { adults, children } = getDefaultGuests();
-
-                            const params = new URLSearchParams({
-                                checkIn,
-                                checkOut,
-                                adults,
-                                children,
-                                stayName: selectedLocation.name || ""
+                            navigateToStayDetail({
+                                stayId: selectedLocation.id,
+                                stayName: selectedLocation.name,
+                                navigate,
+                                setDefaultParams,
+                                getDefaultDates,
+                                getDefaultGuests
                             });
-
-                            navigate(`/stays/${selectedLocation.id}?${params.toString()}`);
                         }
                     }}
                     style={{
