@@ -467,7 +467,7 @@ const MainPage = () => {
 
               {/* 검색 섹션 */}
               <div className="search-section-container">
-                <div className="slogan">끊임없는 여행</div>
+                <div className="slogan">끊김없는 여행</div>
 
                 {/* 지역 검색 */}
                 <div
