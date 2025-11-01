@@ -141,7 +141,7 @@ const ReviewListPage = () => {
         if (stayId && rooms.length > 0) {
             console.log("필터 변경 감지 - 리뷰 리셋");
             
-            // setReviews([]) 제거! 대신 필터 변경 플래그만 설정
+            // setReviews([]) 대신 필터 변경 플래그만 설정
             setIsFilterChanging(true);
             setPage(0);
             setHasMore(true);

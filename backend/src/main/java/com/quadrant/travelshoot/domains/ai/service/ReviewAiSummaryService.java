@@ -26,7 +26,10 @@ public class ReviewAiSummaryService {
     public String generateAiSummary(Long stayId, int currentReviewCount, ReviewAiSummary existingSummary) {
 
             // 리뷰 데이터 최근 10개 조회
-            List<Review> reviews = reviewRepository.findTop10ByStayIdOrderByCreatedAtDesc(stayId);
+//            List<Review> reviews = reviewRepository.findTop10ByStayIdOrderByCreatedAtDesc(stayId);
+
+            // 리뷰 데이터 최근 5개 조회
+            List<Review> reviews = reviewRepository.findTop5ByStayIdOrderByCreatedAtDesc(stayId);
 
             // 리뷰 내용만 추출
             String reviewContents = reviews.stream()

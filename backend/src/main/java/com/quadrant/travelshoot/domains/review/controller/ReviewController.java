@@ -51,19 +51,7 @@ public class ReviewController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<ReviewRegistResponse>> createReview(
             HttpSession session,
-            @Valid @ModelAttribute ReviewRegistRequest reviewRegistRequest,
-            BindingResult bindingResult) {
-
-        // Validation 에러 처리
-        if (bindingResult.hasErrors()) {
-            List<String> errorMessages = bindingResult.getFieldErrors().stream()
-                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                    .collect(Collectors.toList());
-            String errorMessage = String.join(", ", errorMessages);
-            log.warn("리뷰 등록 검증 실패 - {}", errorMessage);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ApiResponse.error("입력값이 올바르지 않습니다. " + errorMessage, null));
-        }
+            @Valid @ModelAttribute ReviewRegistRequest reviewRegistRequest){
 
         Long userId = (Long) session.getAttribute("userId");
 
@@ -88,23 +76,12 @@ public class ReviewController {
     public ResponseEntity<ApiResponse<ReviewRegistResponse>> updateReview(
             HttpSession session,
             @PathVariable Long reviewId,
-            @Valid @ModelAttribute ReviewRegistRequest reviewUpdateRequest,
-            BindingResult bindingResult) {
-
-        // Validation 에러 처리
-        if (bindingResult.hasErrors()) {
-            List<String> errorMessages = bindingResult.getFieldErrors().stream()
-                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                    .collect(Collectors.toList());
-            String errorMessage = String.join(", ", errorMessages);
-            log.warn("리뷰 등록 검증 실패 - {}", errorMessage);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ApiResponse.error("입력값이 올바르지 않습니다. " + errorMessage, null));
-        }
+            @Valid @ModelAttribute ReviewRegistRequest reviewUpdateRequest) {
 
         Long userId = (Long) session.getAttribute("userId");
 
         log.info("리뷰 수정 요청 - userId: {}, reviewId: {}", userId, reviewId);
+        reviewUpdateRequest.setReviewId(reviewId);
         ReviewRegistResponse response = reviewService.updateReview(userId, reviewId, reviewUpdateRequest);
 
         return ResponseEntity.ok(ApiResponse.success("리뷰 수정 성공", response));

@@ -8,7 +8,7 @@ import { useState } from "react";
  * @param {function} props.onFileChange - 파일 변경 핸들러
  * @param {function} props.onFileRemove - 파일 제거 핸들러
  */
-const PhotoUploadSection = ({ uploadedFile, existedImageUrl, onFileChange, onFileRemove, photoInputRef }) => {
+const PhotoUploadSection = ({ uploadedFile, existedImageUrl, onFileChange, onFileRemove, photoInputRef, errorMsg }) => {
 
     const [isDragOver, setIsDragOver] = useState(false);
 
@@ -60,7 +60,12 @@ const PhotoUploadSection = ({ uploadedFile, existedImageUrl, onFileChange, onFil
                 </div>
             }
 
-            
+            {errorMsg && (
+                <div className="error-message">
+                    {errorMsg}
+                </div>
+            )}
+
             <input 
                 type="file" 
                 id="photo-input" 
