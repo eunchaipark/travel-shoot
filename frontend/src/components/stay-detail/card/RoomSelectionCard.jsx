@@ -10,19 +10,22 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
     const { isAuthenticated, openLoginModal } = useAuth(); //TODO : 1023 김이슬 코드 추가
     const urlParams = useSearchParamsSync(); //1024추가
 
-    // const { stayId, checkIn, checkOut, adults, children } = searchParams; //1024 주석
+    useEffect(() => {
+        console.log(urlParams.checkIn, urlParams.checkOut);
+    }, [urlParams])
 
     // 1024 위에 주석 처리 후 아래 5줄 코드 추가
     const { stayId } = searchParams;
+
+
     const checkIn = searchParams.checkIn || urlParams.checkIn;
     const checkOut = searchParams.checkOut || urlParams.checkOut;
     const adults = searchParams.adults || urlParams.adults || 2;
     const children = searchParams.children || urlParams.children || 0;
 
     // searchParams 에서 LocalDate로 받아온다고 가정
-    const checkInDate = new Date("2025-10-27");
-    const checkOutDate = new Date("2025-10-29");
-
+    const checkInDate = new Date(checkIn);
+    const checkOutDate = new Date(checkOut);
     const nights = Number((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
 
     // TODO : 윤하님 원래 코드 일단 주석처리

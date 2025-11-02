@@ -1,5 +1,6 @@
 package com.quadrant.travelshoot.domains.reservation.service.impl;
 
+import com.quadrant.travelshoot.domains.common.service.FileUploadService;
 import com.quadrant.travelshoot.domains.payment.enums.PaymentStatus;
 import com.quadrant.travelshoot.domains.payment.service.PaymentService;
 import com.quadrant.travelshoot.domains.reservation.dto.request.*;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.quadrant.travelshoot.domains.payment.entity.Payment;
+import com.quadrant.travelshoot.domains.common.service.FileUploadService;
 
 import java.time.LocalDateTime;
 import java.math.BigDecimal;
@@ -41,6 +43,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final RoomRepository roomRepository;
     private final StayService stayService;
     private final PaymentService paymentService;
+    private final FileUploadService fileUploadService;
 
     //TODO : 가격 계산 추후에 추가할 가능성 염두
 //    private static final BigDecimal TAX_RATE = new BigDecimal("0.10"); //TODO : 세금 10% 청구
@@ -94,7 +97,8 @@ public class ReservationServiceImpl implements ReservationService {
                 .stayId(stay.getStayId())
                 .stayName(stay.getStayName())
                 .address(stay.getAddress() + " " + (stay.getAddressDetail() != null ? stay.getAddressDetail() : ""))
-                .mainImageUrl(stay.getStayImages().isEmpty() ? null : stay.getStayImages().get(0).getS3Url())
+//                .mainImageUrl(stay.getStayImages().isEmpty() ? null : stay.getStayImages().get(0).getS3Url())
+                .mainImageUrl(fileUploadService.getMainImageUrl(stay.getStayId()))
                 .latitude(stay.getLatitude().doubleValue())
                 .longitude(stay.getLongitude().doubleValue())
                 .roomId(room.getRoomId())
@@ -428,7 +432,6 @@ public class ReservationServiceImpl implements ReservationService {
                 .totalNights(reservation.getTotalNights())
                 .totalPrice(reservation.getTotalPrice())
                 .reservationStatus(reservation.getReservationStatus())
-//                .transportationMethod(reservation.getTransportationMethod())
                 .transportationMethod(reservation.getTransportationMethod().getDisplayName())
                 .cancelReason(reservation.getCancelReason())
                 .cancelDetail(reservation.getCancelDetail())
@@ -472,7 +475,7 @@ public class ReservationServiceImpl implements ReservationService {
                 .reservationCode(reservation.getReservationCode())
                 .stayId(stay.getId())
                 .stayName(stay.getName())
-                .mainImageUrl(stay.getMainImageUrl())
+                .mainImageUrl(fileUploadService.getMainImageUrl(stay.getId()))
                 .latitude(stay.getLatitude())
                 .longitude(stay.getLongitude())
                 .checkInDate(reservation.getCheckInDate())
@@ -516,7 +519,7 @@ public class ReservationServiceImpl implements ReservationService {
                             .reservationCode(reservation.getReservationCode())
                             .stayId(reservation.getRoom().getStay().getId())
                             .stayName(reservation.getRoom().getStay().getName())
-                            .mainImageUrl(reservation.getRoom().getStay().getMainImageUrl())
+                            .mainImageUrl(fileUploadService.getMainImageUrl(reservation.getRoom().getStay().getId()))
                             .checkInDate(reservation.getCheckInDate())
                             .checkOutDate(reservation.getCheckOutDate())
                             .checkInTime(reservation.getRoom().getStay().getCheckInTime())

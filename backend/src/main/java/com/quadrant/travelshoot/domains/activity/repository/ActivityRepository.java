@@ -24,11 +24,9 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
             -- 이미지
             (SELECT f.s3_url 
              FROM files f 
-             WHERE f.reference_type = 'ACTIVITY' 
+             WHERE f.reference_type = 'ACTIVITIES' 
              AND f.reference_id = a.activity_id 
-             AND f.is_representative = true 
-             AND f.is_deleted = false
-             LIMIT 1) as thumbnailImage,
+             ORDER BY sort_order LIMIT 1) as thumbnailImage,
             
             a.latitude as latitude,
             a.longitude as longitude,

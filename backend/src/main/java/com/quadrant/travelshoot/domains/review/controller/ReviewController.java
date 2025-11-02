@@ -17,9 +17,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -49,7 +51,19 @@ public class ReviewController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<ReviewRegistResponse>> createReview(
             HttpSession session,
-            @Valid @ModelAttribute ReviewRegistRequest reviewRegistRequest) {
+            @Valid @ModelAttribute ReviewRegistRequest reviewRegistRequest,
+            BindingResult bindingResult) {
+
+        // Validation 에러 처리
+        if (bindingResult.hasErrors()) {
+            List<String> errorMessages = bindingResult.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            String errorMessage = String.join(", ", errorMessages);
+            log.warn("리뷰 등록 검증 실패 - {}", errorMessage);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.error("입력값이 올바르지 않습니다. " + errorMessage, null));
+        }
 
         Long userId = (Long) session.getAttribute("userId");
 
@@ -74,7 +88,19 @@ public class ReviewController {
     public ResponseEntity<ApiResponse<ReviewRegistResponse>> updateReview(
             HttpSession session,
             @PathVariable Long reviewId,
-            @Valid @ModelAttribute ReviewRegistRequest reviewUpdateRequest) {
+            @Valid @ModelAttribute ReviewRegistRequest reviewUpdateRequest,
+            BindingResult bindingResult) {
+
+        // Validation 에러 처리
+        if (bindingResult.hasErrors()) {
+            List<String> errorMessages = bindingResult.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            String errorMessage = String.join(", ", errorMessages);
+            log.warn("리뷰 등록 검증 실패 - {}", errorMessage);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.error("입력값이 올바르지 않습니다. " + errorMessage, null));
+        }
 
         Long userId = (Long) session.getAttribute("userId");
 

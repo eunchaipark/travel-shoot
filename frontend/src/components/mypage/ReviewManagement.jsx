@@ -2,9 +2,16 @@ import React from 'react';
 import useReservation from '@/hooks/mypage/useReservation';
 import {formatDate, formatDateWithDay, formatTime} from "@/utils/formatters/dateFormatter.js";
 import { useNavigate } from "react-router-dom";
+import {navigateToStayDetail} from "@/utils/stay/stayNavigationUtil";
+import useSearchParamsSync from '@/hooks/search/useSearchParamsSync';
+import {useDefaultStayParams} from '@/hooks/search/useDefaultStayParams';
+
 const ReviewManagement = () => {
     const { reviews } = useReservation();
     const navigate = useNavigate();
+    const {getDefaultDates, getDefaultGuests} = useDefaultStayParams(); //1024
+    const {setDefaultParams} = useSearchParamsSync();
+
     return (
         <div className="profile-form">
             <h2 className="form-title">이용 후기</h2>
@@ -31,9 +38,29 @@ const ReviewManagement = () => {
                                 src={review.mainImageUrl}
                                 alt={review.stayName}
                                 className="lodging-image"
+                                onClick={() => {
+                                    navigateToStayDetail({
+                                        stayId: review.stayId,
+                                        stayName: review.stayName,
+                                        navigate,
+                                        setDefaultParams,
+                                        getDefaultDates,
+                                        getDefaultGuests
+                                    });
+                                }}
                             />
                             <div className="booking-info">
-                                <div className="lodging-name">{review.stayName}</div>
+                                <div className="lodging-name"
+                                     onClick={() => {
+                                         navigateToStayDetail({
+                                             stayId: review.stayId,
+                                             stayName: review.stayName,
+                                             navigate,
+                                             setDefaultParams,
+                                             getDefaultDates,
+                                             getDefaultGuests
+                                         });
+                                     }}>{review.stayName}</div>
                                 <div className="booking-dates mb-1">
                                     {formatDateWithDay(review.checkInDate)} ~ {formatDateWithDay(review.checkOutDate)} | {review.totalNights}박
                                 </div>

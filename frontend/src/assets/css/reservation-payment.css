@@ -372,6 +372,10 @@ main {
     font-size: 15px;
 }
 
+.payment-page .final-payment-detail.final-payment-detail-won{
+    font-size: 11px;
+}
+
 .payment-page .section-card .final-payment-info .col-1 {
     padding-left: 10px;
 }

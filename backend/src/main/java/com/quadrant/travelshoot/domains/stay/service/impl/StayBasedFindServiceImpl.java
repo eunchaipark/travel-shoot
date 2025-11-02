@@ -56,7 +56,7 @@ public class StayBasedFindServiceImpl implements StayBasedFindService {
     }
 
     /**
-     * 단일 숙소에 대한 맛집/관광지 추천
+     *  숙소에 대한 맛집/관광지 추천
      * 순서: 숙소 정보 -> 맛집들 -> 관광지들
      */
     private List<Object> findForStay(Long stayId, int restaurantCount, int activityCount) {
@@ -72,7 +72,7 @@ public class StayBasedFindServiceImpl implements StayBasedFindService {
         stay.setMinPrice(minPrice);
 
         // 이미지 설정
-        List<FileUpload> images = fileUploadService.findAllByReferenceTypeAndReferenceId("숙소", stayId);
+        List<FileUpload> images = fileUploadService.findAllByReferenceTypeAndReferenceId("STAYS", stayId);
         String mainImageUrl = "";
         if (!images.isEmpty()) {
             mainImageUrl = images.stream()

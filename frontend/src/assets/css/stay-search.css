@@ -347,6 +347,7 @@
 
 .staylist-page .search-results-section .hotel-card .hotel-stay_image {
     width: 250px;
+    height: 200px;
     position: relative;
     overflow: hidden;
     flex-shrink: 0;
@@ -593,7 +594,8 @@
 @media (max-width: 945px) {
     .staylist-page {
         max-width: 100%;
-        padding: 0 20px;
+        padding-left: 20px;
+        padding-right: 20px;
     }
 
     .staylist-page .staylist-layout {
@@ -619,6 +621,7 @@
 
     .staylist-page .search-results-section .hotel-card .hotel-stay_image {
         width: 220px;
+        height: 180px;
     }
 
     .staylist-page .stay_content .stay_info .stay_name {
@@ -647,7 +650,7 @@
 
 @media (max-width: 850px) {
     .staylist-page {
-        padding: 0 16px;
+        padding: 96px 16px;
     }
 
     .staylist-page .staylist-layout {
@@ -681,6 +684,7 @@
 
     .staylist-page .search-results-section .hotel-card .hotel-stay_image {
         width: 180px;
+        height: 150px;
         flex-shrink: 0;
     }
 
@@ -774,6 +778,7 @@
 
     .staylist-page .search-results-section .hotel-card .hotel-stay_image {
         width: 180px;
+        height: 150px;
     }
 
     .staylist-page .stay_content .stay_info .stay_name {
@@ -814,7 +819,7 @@
 }
 
 /* 모바일 버전 ========== 이 아래부터는 반드시 필요한 부분 */
-@media (max-width: 412px) {
+@media (max-width: 479px) {
     .mobile-filter-modal {
         display: none;
         position: fixed;
@@ -916,7 +921,8 @@
 
     .staylist-page .search-results-section .hotel-card .hotel-stay_image {
         width: 140px;
-        height: auto;
+        height: 120px;
+        /*height: auto;*/
         margin-bottom: 0;
         margin-right: 12px;
         flex-shrink: 0;

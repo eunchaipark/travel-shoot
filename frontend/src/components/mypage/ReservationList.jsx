@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import useReservation from '@/hooks/mypage/useReservation';
 import {formatDate, formatDateWithDay, formatTime} from "@/utils/formatters/dateFormatter.js";
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import CancelModal from '@/components/modals/CancelModal';
+import {navigateToStayDetail} from "@/utils/stay/stayNavigationUtil";
+import useSearchParamsSync from '@/hooks/search/useSearchParamsSync';
+import {useDefaultStayParams} from '@/hooks/search/useDefaultStayParams';
 
 const ReservationList = () => {
     const { reservations, loading, isSubmitting, handleCancelReservation } = useReservation();
@@ -11,6 +14,8 @@ const ReservationList = () => {
     const [selectedReservation, setSelectedReservation] = useState(null);
     const [cancelReason, setCancelReason] = useState('');
     const [cancelDetail, setCancelDetail] = useState('');
+    const {getDefaultDates, getDefaultGuests} = useDefaultStayParams();
+    const {setDefaultParams} = useSearchParamsSync();
 
     const handleCancelClick = (reservation) => {
         setSelectedReservation(reservation);
@@ -76,9 +81,31 @@ const ReservationList = () => {
                                         src={reservation.mainImageUrl}
                                         alt={reservation.stayName}
                                         className="lodging-image"
+                                        onClick={() => {
+                                            navigateToStayDetail({
+                                                stayId: reservation.stayId,
+                                                stayName: reservation.stayName,
+                                                navigate,
+                                                setDefaultParams,
+                                                getDefaultDates,
+                                                getDefaultGuests
+                                            });
+                                        }}
                                     />
                                     <div className="booking-info">
-                                        <div className="lodging-name">{reservation.stayName}</div>
+                                        <div
+                                            className="lodging-name"
+                                            onClick={() => {
+                                                navigateToStayDetail({
+                                                    stayId: reservation.stayId,
+                                                    stayName: reservation.stayName,
+                                                    navigate,
+                                                    setDefaultParams,
+                                                    getDefaultDates,
+                                                    getDefaultGuests
+                                                });
+                                            }}
+                                        >{reservation.stayName}</div>
                                         <div className="booking-dates mb-1">
                                             {formatDateWithDay(reservation.checkInDate)} ~ {formatDateWithDay(reservation.checkOutDate)} | {reservation.totalNights}박
                                         </div>

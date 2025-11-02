@@ -183,11 +183,9 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                 
                 (SELECT f.s3_url 
                 FROM files f 
-                WHERE f.reference_type = 'STAY' 
+                WHERE f.reference_type = 'STAYS' 
                 AND f.reference_id = s.stay_id 
-                AND f.is_representative = true 
-                AND f.is_deleted = false
-                LIMIT 1) as thumbnailImage,
+                ORDER BY sort_order LIMIT 1) as thumbnailImage,
                 
                 -- 최저가
                 (SELECT MIN(rm.weekday_price) 
