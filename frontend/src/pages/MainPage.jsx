@@ -12,12 +12,12 @@ import { fetchCalendarCourses } from "@/services/main/calendarApiService";
 import SimpleHeader from "@/components/layout/SimpleHeader";
 import Footer from "@/components/layout/Footer";
 
-// Hooks
+//  Hooks
 import {
   useCalendar,
   useGuest,
   useDropdownPosition,
-} from "../hooks/main/useCalendarHooks";
+} from "@/hooks/main/useCalendarHooks";
 
 // Components
 import { MiniCalendar } from "@/components/main/CalendarComponents";
@@ -467,7 +467,7 @@ const MainPage = () => {
 
               {/* 검색 섹션 */}
               <div className="search-section-container">
-                <div className="slogan">끊임없는 여행</div>
+                <div className="slogan">끊김없는 여행</div>
 
                 {/* 지역 검색 */}
                 <div
@@ -476,7 +476,7 @@ const MainPage = () => {
                 >
                   <div className="search-icon-box">
                     <img
-                      src="../../public/images/main/main-calendar-searchcard-location-icon.svg"
+                      src="https://travelshoot-s3.s3.ap-southeast-2.amazonaws.com/images/main/main-calendar-searchcard-location-icon.svg"
                       alt="지역아이콘"
                     />
                   </div>
@@ -517,7 +517,7 @@ const MainPage = () => {
                 <div className="search-card" ref={dateCardRef}>
                   <div className="search-icon-box">
                     <img
-                      src="../../public/images/main/main-calendar-searchcard-calendar-icon.svg"
+                      src="https://travelshoot-s3.s3.ap-southeast-2.amazonaws.com/images/main/main-calendar-searchcard-calendar-icon.svg"
                       alt="달력 아이콘"
                     />
                   </div>
@@ -553,7 +553,7 @@ const MainPage = () => {
                 >
                   <div className="search-icon-box">
                     <img
-                      src="../../public/images/main/main-calendar-searchcard-user-icon.svg"
+                      src="https://travelshoot-s3.s3.ap-southeast-2.amazonaws.com/images/main/main-calendar-searchcard-user-icon.svg"
                       alt="유저 아이콘"
                     />
                   </div>

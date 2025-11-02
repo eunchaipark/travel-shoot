@@ -35,10 +35,17 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
         List<String> findRegionsByKeyword(@Param("keyword") String keyword);
 
         // 자동완성 ( 검색창 - 숙소명 )
-        @Query("SELECT DISTINCT s.name " +
-                        "FROM Stay s " +
-                        "WHERE s.name LIKE CONCAT('%', :keyword, '%') " +
-                        "AND s.isActive = true")
+        @Query(value =
+                "SELECT stay_name " +
+                        "FROM ( " +
+                        "    SELECT DISTINCT s.stay_name, s.average_rating " +
+                        "    FROM stays s " +
+                        "    WHERE s.stay_name LIKE CONCAT('%', :keyword, '%') " +
+                        "    AND s.is_active = 1 " +
+                        ") AS subquery " +
+                        "ORDER BY average_rating DESC, stay_name ASC " +
+                        "LIMIT 10",
+                nativeQuery = true)
         List<String> findStayNamesByKeyword(@Param("keyword") String keyword);
 
         // 기본 검색창 검색 ( 지역, 날짜, 인원수 )

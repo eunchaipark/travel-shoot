@@ -241,7 +241,17 @@ const ReservationPaymentPage = () => {
                                             <div className="price-highlight text-nowrap">
                                                 <span className="small-text me-2 mb-1 standard">숙박/1박당</span>
                                                 ₩ {reservationFormatters.formatPrice(
-                                                priceData.dailyPrices?.find(d => d.dayType === '평일')?.price || 0
+                                                (() => {
+                                                    const weekdayPrice = priceData.dailyPrices?.find(d => d.dayType === '평일')?.price;
+                                                    const weekendPrice = priceData.dailyPrices?.find(d => d.dayType === '주말')?.price;
+
+                                                    // 둘 다 있으면 평균을 1000원 단위로 반올림
+                                                    if (weekdayPrice && weekendPrice) {
+                                                        const average = (weekdayPrice + weekendPrice) / 2;
+                                                        return Math.round(average / 1000) * 1000;
+                                                    }
+                                                    return weekdayPrice || weekendPrice || 0;
+                                                })()
                                             )}
                                             </div>
                                         )}
