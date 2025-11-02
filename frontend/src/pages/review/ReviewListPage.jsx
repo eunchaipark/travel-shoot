@@ -27,6 +27,7 @@ const ReviewListPage = () => {
     const [rooms, setRooms] = useState([]);
     const [reviewImages, setReviewImages] = useState([]);
 
+    const [initialLoading, setInitialLoading] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     
@@ -110,7 +111,7 @@ const ReviewListPage = () => {
         const fetchInitialData = async () => {
             console.log("초기 데이터 호출");
             
-            setLoading(true);
+             setInitialLoading(true); // 초기 로딩 시작
             setError(null);
             try {
                 const [ratingData, roomsData, imagesData] = await Promise.all([
@@ -126,7 +127,7 @@ const ReviewListPage = () => {
                 console.error("초기 데이터 로드 실패:", err);
                 setError(err.message);
             } finally {
-                setLoading(false);
+                setInitialLoading(false); // 초기 로딩 완료
             }
         };
 
@@ -162,7 +163,25 @@ const ReviewListPage = () => {
         setRoomFilter(roomName);
     };
 
+
+        // 초기 데이터 로딩 중일 때 로딩 화면 표시
+    if (initialLoading) {
+        return (
+            <div className="review-list-container">
+                <ReviewHeader />
+                <div className="container-fluid py-5">
+                    <div className="spinner-container">
+                        <div className="spinner-border" role="status">
+                            <span className="visually-hidden">로딩 중...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
+
         <div className="review-list-container">
             <ReviewHeader />
 
@@ -262,19 +281,10 @@ const ReviewListPage = () => {
 
                         {/* 필터 변경 중일 때 오버레이 표시 */}
                         {isFilterChanging && (
-                            <div style={{
-                                position: 'absolute',
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
-                                background: 'rgba(255, 255, 255, 0.7)',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                zIndex: 10
-                            }}>
-                                <div></div>
+                            <div className="filter-change">
+                                {/* <div className="spinner-border" style={{ color: '#ff8888' }} role="status">
+                                    <span className="visually-hidden">로딩 중...</span>
+                                </div> */}
                             </div>
                         )}
 
