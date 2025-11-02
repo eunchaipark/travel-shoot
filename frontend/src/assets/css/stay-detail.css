@@ -208,14 +208,6 @@
         font-size: 0.75rem;
     }
 
-    .product-detail-container .card .room-content {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 4;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
     .product-detail-container .price-amount {
         color: #f56770;
         font-size: 18.5px;
@@ -604,7 +596,7 @@
 }
 
 /* 텍스트 오버플로우 처리 */
-.ai-summary-card-container .room-content {
+/* .ai-summary-card-container .room-content {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 4;
@@ -612,7 +604,7 @@
     text-overflow: ellipsis;
     word-break: keep-all;
     word-wrap: break-word;
-}
+} */
 
 /* ===================================
    리뷰 없음 상태 스타일
@@ -723,3 +715,148 @@
         font-size: 12px;
     }
 }
+
+/* ===================================
+   장점/단점 섹션 스타일 (새로 추가)
+   =================================== */
+
+.ai-summary-card-container .ai-review-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.ai-summary-card-container .ai-review-section {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 장점 섹션 아이콘 */
+.ai-summary-card-container .pros-section .ai-review-title i {
+    color: #02b8eb;
+    font-size: 16px;
+}
+
+/* 단점 섹션 아이콘 */
+.ai-summary-card-container .cons-section .ai-review-title i {
+    color: #ff8888;
+    font-size: 16px;
+}
+
+
+/* ===================================
+   AI 로딩 애니메이션 스타일 (추가/수정)
+   =================================== */
+
+/* 기존 .ai-loading-container 수정 */
+.ai-summary-card-container .ai-loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 1rem;
+    margin-bottom: 0.8rem;
+
+}
+
+/* 로딩 텍스트 - 새로 추가 */
+.ai-summary-card-container .ai-loading-text {
+    text-align: center;
+}
+
+/* 메인 텍스트 - 새로 추가 */
+.ai-summary-card-container .loading-main-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4d4c4c;
+    margin-bottom: 1.1rem;
+}
+
+/* 로딩 점 애니메이션 - 새로 추가 */
+.ai-summary-card-container .loading-dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 20px;
+}
+
+.ai-summary-card-container .loading-dots span {
+    width: 6px;
+    height: 6px;
+    background: #f56770;
+    border-radius: 50%;
+    animation: bounce-dots 1.4s ease-in-out infinite;
+}
+
+.ai-summary-card-container .loading-dots span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.ai-summary-card-container .loading-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.ai-summary-card-container .loading-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* 튀는 점 애니메이션 - 새로 추가 */
+@keyframes bounce-dots {
+    0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.4;
+    }
+    30% {
+        transform: translateY(-10px);
+        opacity: 1;
+    }
+}
+
+/* 모바일 반응형 - 로딩 (수정) */
+@media (max-width: 576px) {
+    .ai-summary-card-container .ai-loading-container {
+        padding: 1.5rem 0.75rem;
+        min-height: 100px; /* 기존 180px에서 100px로 변경 */
+    }
+
+    .ai-summary-card-container .loading-main-text {
+        font-size: 14px;
+    }
+
+    .ai-summary-card-container .loading-dots span {
+        width: 5px;
+        height: 5px;
+    }
+}
+
+@media (max-width: 410px) {
+    .ai-summary-card-container .ai-loading-container {
+        padding: 1.25rem 0.5rem;
+        min-height: 90px; /* 기존 160px에서 90px로 변경 */
+    }
+
+    .ai-summary-card-container .loading-main-text {
+        font-size: 13px;
+    }
+
+    .ai-summary-card-container .loading-dots span {
+        width: 4px;
+        height: 4px;
+        gap: 5px;
+    }
+
+    @keyframes bounce-dots {
+        0%, 60%, 100% {
+            transform: translateY(0);
+            opacity: 0.4;
+        }
+        30% {
+            transform: translateY(-8px);
+            opacity: 1;
+        }
+    }
+}
+
+

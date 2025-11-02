@@ -66,8 +66,7 @@ export const getReviewSummary = async (stayId) => {
             throw error;
         }
         
-        // 백엔드에서 String을 반환하므로 text()로 받음
-        return await response.text();
+        return await handleResponse(response);
     } catch (error) {
         console.error('Error fetching review summary:', error);
         throw error;

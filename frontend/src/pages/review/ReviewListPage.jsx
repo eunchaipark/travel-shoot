@@ -274,7 +274,7 @@ const ReviewListPage = () => {
                                 alignItems: 'center',
                                 zIndex: 10
                             }}>
-                                <div>로딩 중...</div>
+                                <div></div>
                             </div>
                         )}
 
@@ -288,7 +288,7 @@ const ReviewListPage = () => {
                                     {/* 무한 스크롤 트리거 */}
                                     {hasMore && (
                                         <div ref={ref} className={`scroll-trigger ${loading ? "active" : ""}`}>
-                                            {loading ? '로딩 중...' : ''}
+                                            {loading ? '' : ''}
                                         </div>
                                     )}
                                     
@@ -300,7 +300,7 @@ const ReviewListPage = () => {
                                 </>
                             ) : (
                                 <div style={{ padding: '40px', textAlign: 'center' }}>
-                                    {loading ? '로딩 중...' : '리뷰가 없습니다.'}
+                                    {/* {loading ? '로딩 중...' : '리뷰가 없습니다.'} */}
                                 </div>
                             )}
                         </div>

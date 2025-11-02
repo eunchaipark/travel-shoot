@@ -1,12 +1,12 @@
 package com.quadrant.travelshoot.domains.review.controller;
 
 import com.quadrant.travelshoot.domains.ai.dto.response.ReviewAiSummaryResponse;
-import com.quadrant.travelshoot.domains.ai.service.ReviewAiSummaryService;
 import com.quadrant.travelshoot.domains.review.dto.request.ReviewRegistRequest;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewDetailResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewListResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewPageResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewRegistResponse;
+import com.quadrant.travelshoot.domains.review.entity.Review;
 import com.quadrant.travelshoot.domains.review.service.impl.ReviewServiceImpl;
 import com.quadrant.travelshoot.shared.response.ApiResponse;
 import jakarta.servlet.http.HttpSession;
@@ -17,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,14 +29,14 @@ import java.util.stream.Collectors;
 public class ReviewController {
 
     private final ReviewServiceImpl reviewService;
-    private final ReviewAiSummaryService reviewAiSummaryService;
 
     @GetMapping("/ai-summary/{stayId}")
-    public ResponseEntity<String> getReviewSummary(@PathVariable Long stayId) {
+    public ResponseEntity<ReviewAiSummaryResponse> getReviewSummary(@PathVariable Long stayId) {
         log.info("리뷰 AI 요약 요청 - stayId: {}", stayId);
 
-        String response = reviewService.getReviewSummary(stayId);
-        return ResponseEntity.ok(response);
+//        String response = reviewService.getReviewSummary(stayId);
+        ReviewAiSummaryResponse aiSummaryResponse = reviewService.getReviewSummary(stayId);
+        return ResponseEntity.ok(aiSummaryResponse);
     }
 
     /**

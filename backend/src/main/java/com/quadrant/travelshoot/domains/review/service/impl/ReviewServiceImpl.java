@@ -1,6 +1,7 @@
 package com.quadrant.travelshoot.domains.review.service.impl;
 
 import com.quadrant.travelshoot.common.service.S3Service;
+import com.quadrant.travelshoot.domains.ai.dto.response.ReviewAiSummaryResponse;
 import com.quadrant.travelshoot.domains.ai.service.ReviewAiSummaryService;
 import com.quadrant.travelshoot.domains.common.entity.FileUpload;
 import com.quadrant.travelshoot.domains.common.repository.FileUploadRepository;
@@ -52,11 +53,11 @@ public class ReviewServiceImpl implements ReviewService {
      * 기존 ai요약 검증
      */
     @Transactional
-    public String getReviewSummary(Long stayId) {
+    public ReviewAiSummaryResponse getReviewSummary(Long stayId) {
         // 현재 리뷰 개수 조회
         int currentReviewCount = reviewRepository.countByStayId(stayId);
         if (currentReviewCount == 0) {
-            return "아직 숙소의 리뷰가 없습니다.";
+            throw new IllegalArgumentException("아직 숙소의 리뷰가 없습니다.");
         }
 
         // 기존 AI 요약 조회
@@ -73,7 +74,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         // 기존 요약 반환
         log.info("기존 AI 요약 반환 - stayId: {}", stayId);
-        return existingSummary.getOverallSummary();
+        return ReviewAiSummaryResponse.from(existingSummary);
     }
 
 
