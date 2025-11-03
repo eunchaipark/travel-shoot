@@ -4,7 +4,7 @@
  * @param {object} props.ratings - 현재 평점 상태
  * @param {function} props.onRatingChange - 평점 변경 핸들러
  */
-const ReviewRatingSection = ({ stayName, ratings, onRatingChange, detailCategories }) => {
+const ReviewRatingSection = ({ stayName, ratings, onRatingChange, detailCategories, errorMsg }) => {
     
     /**
      * 특정 카테고리의 별점 클릭 핸들러
