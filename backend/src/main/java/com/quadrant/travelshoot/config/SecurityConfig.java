@@ -83,7 +83,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/reservations/calendar-courses/**").permitAll()
 
                         // 리뷰 조회
-                        .requestMatchers("GET", "/api/reviews/**").permitAll()
+                        .requestMatchers("GET", "/api/reviews/ai-summary/**").permitAll()
+                        .requestMatchers("GET", "/api/reviews/stays/**").permitAll()
+                        .requestMatchers("GET", "/api/reviews/*/review-images").permitAll()
 
                         // 맛집/관광지
                         .requestMatchers("/api/restaurants/**", "/api/activities/**").permitAll()
@@ -116,6 +118,7 @@ public class SecurityConfig {
                         .requestMatchers("POST", "/api/reviews/**").authenticated()
                         .requestMatchers("PUT", "/api/reviews/**").authenticated()
                         .requestMatchers("DELETE", "/api/reviews/**").authenticated()
+                        .requestMatchers("GET", "/api/reviews/reservations/**").authenticated()
 
                         // AI 여행 코스
                         .requestMatchers("/api/ai/**").authenticated()

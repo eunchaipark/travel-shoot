@@ -141,4 +141,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Object[]> findReviewIdsByReservationIds(@Param("reservationIds") List<Long> reservationIds);
 
     Optional<Reservation> findByIdAndUserIdAndReservationStatus(Long reservationId, Long userId, ReservationStatus reservationStatus );
+
+    // 체크아웃 완료 후 이용완료으로 db 상태 변경하기
+    List<Reservation> findByCheckOutDateBeforeAndReservationStatus(
+            LocalDate checkOutDate,
+            ReservationStatus status
+    );
 }
