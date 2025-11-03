@@ -27,13 +27,15 @@ const ReviewListPage = () => {
     const [rooms, setRooms] = useState([]);
     const [reviewImages, setReviewImages] = useState([]);
 
+    const [initialLoading, setInitialLoading] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     
     const [ref, inView] = useInView();
     const [page, setPage] = useState(0);
     const [reviews, setReviews] = useState([]);
-    const [hasMore, setHasMore] = useState(true); // 더 불러올 데이터가 있는지
+    const [hasMore, setHasMore] = useState(true);
+    const [isFilterChanging, setIsFilterChanging] = useState(false); // 필터 변경 중인지
 
     const [sortFilter, setSortFilter] = useState(sortOptions[0].value);
     const selectedOption = sortOptions.find(opt => opt.value === sortFilter);
@@ -41,12 +43,10 @@ const ReviewListPage = () => {
     const [roomFilter, setRoomFilter] = useState("객실 전체");
     const selectedRoomId = rooms.find(room => room.roomName === roomFilter)?.roomId;
 
-    // 중복 호출 방지를 위한 ref
     const isFetchingRef = useRef(false);
 
-    // fetchReviews를 useCallback으로 감싸서 의존성 관리
+    // fetchReviews 수정
     const fetchReviews = useCallback(async (currentPage, isReset = false) => {
-        // 이미 로딩 중이거나 더 이상 데이터가 없으면 return
         if (isFetchingRef.current || (!hasMore && !isReset)) {
             return;
         }
@@ -68,17 +68,20 @@ const ReviewListPage = () => {
             
             if (Array.isArray(reviewList)) {
                 if (reviewList.length === 0) {
-                    // 더 이상 데이터가 없음
                     setHasMore(false);
                 } else {
                     // 리셋인 경우 기존 데이터 대체, 아니면 추가
                     setReviews(prev => isReset ? reviewList : [...prev, ...reviewList]);
                     setPage(currentPage + 1);
                     
-                    // 받아온 데이터가 요청한 사이즈보다 적으면 마지막 페이지
                     if (reviewList.length < 10) {
                         setHasMore(false);
                     }
+                }
+                
+                // 필터 변경 완료
+                if (isReset) {
+                    setIsFilterChanging(false);
                 }
             }
         } catch (err) {
@@ -87,6 +90,7 @@ const ReviewListPage = () => {
             if (isReset) {
                 setReviews([]);
             }
+            setIsFilterChanging(false);
         } finally {
             setLoading(false);
             isFetchingRef.current = false;
@@ -95,19 +99,19 @@ const ReviewListPage = () => {
 
     // 무한 스크롤 감지
     useEffect(() => {
-        if (inView && hasMore && !loading) {
+        if (inView && hasMore && !loading && !isFilterChanging) {
             console.log("스크롤 요청", inView, "현재 페이지:", page);
             fetchReviews(page);
         }
-    }, [inView, hasMore, loading, page, fetchReviews]);
+    }, [inView, hasMore, loading, page, fetchReviews, isFilterChanging]);
 
     
-    // 초기 데이터 로드
+    // 초기 데이터 로드 (동일)
     useEffect(() => {
         const fetchInitialData = async () => {
             console.log("초기 데이터 호출");
             
-            setLoading(true);
+             setInitialLoading(true); // 초기 로딩 시작
             setError(null);
             try {
                 const [ratingData, roomsData, imagesData] = await Promise.all([
@@ -123,7 +127,7 @@ const ReviewListPage = () => {
                 console.error("초기 데이터 로드 실패:", err);
                 setError(err.message);
             } finally {
-                setLoading(false);
+                setInitialLoading(false); // 초기 로딩 완료
             }
         };
 
@@ -137,8 +141,9 @@ const ReviewListPage = () => {
     useEffect(() => {
         if (stayId && rooms.length > 0) {
             console.log("필터 변경 감지 - 리뷰 리셋");
-            // 상태 초기화
-            setReviews([]);
+            
+            // setReviews([]) 대신 필터 변경 플래그만 설정
+            setIsFilterChanging(true);
             setPage(0);
             setHasMore(true);
             isFetchingRef.current = false;
@@ -158,7 +163,25 @@ const ReviewListPage = () => {
         setRoomFilter(roomName);
     };
 
+
+        // 초기 데이터 로딩 중일 때 로딩 화면 표시
+    if (initialLoading) {
+        return (
+            <div className="review-list-container">
+                <ReviewHeader />
+                <div className="container-fluid py-5">
+                    <div className="spinner-container">
+                        <div className="spinner-border" role="status">
+                            <span className="visually-hidden">로딩 중...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
+
         <div className="review-list-container">
             <ReviewHeader />
 
@@ -256,7 +279,16 @@ const ReviewListPage = () => {
                     <div className="reviews-list-section">
                         {error && <div className="alert alert-danger">{error}</div>}
 
-                        <div className="list-scroll-container">
+                        {/* 필터 변경 중일 때 오버레이 표시 */}
+                        {isFilterChanging && (
+                            <div className="filter-change">
+                                {/* <div className="spinner-border" style={{ color: '#ff8888' }} role="status">
+                                    <span className="visually-hidden">로딩 중...</span>
+                                </div> */}
+                            </div>
+                        )}
+
+                        <div className="list-scroll-container" style={{ position: 'relative' }}>
                             {reviews.length > 0 ? (
                                 <>
                                     {reviews.map(review => (
@@ -266,7 +298,7 @@ const ReviewListPage = () => {
                                     {/* 무한 스크롤 트리거 */}
                                     {hasMore && (
                                         <div ref={ref} className={`scroll-trigger ${loading ? "active" : ""}`}>
-                                            {loading ? '로딩 중...' : ''}
+                                            {loading ? '' : ''}
                                         </div>
                                     )}
                                     
@@ -278,7 +310,7 @@ const ReviewListPage = () => {
                                 </>
                             ) : (
                                 <div style={{ padding: '40px', textAlign: 'center' }}>
-                                    {loading ? '로딩 중...' : '리뷰가 없습니다.'}
+                                    {/* {loading ? '로딩 중...' : '리뷰가 없습니다.'} */}
                                 </div>
                             )}
                         </div>

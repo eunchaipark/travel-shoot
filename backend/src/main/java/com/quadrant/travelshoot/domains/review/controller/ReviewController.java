@@ -1,12 +1,12 @@
 package com.quadrant.travelshoot.domains.review.controller;
 
 import com.quadrant.travelshoot.domains.ai.dto.response.ReviewAiSummaryResponse;
-import com.quadrant.travelshoot.domains.ai.service.ReviewAiSummaryService;
 import com.quadrant.travelshoot.domains.review.dto.request.ReviewRegistRequest;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewDetailResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewListResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewPageResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewRegistResponse;
+import com.quadrant.travelshoot.domains.review.entity.Review;
 import com.quadrant.travelshoot.domains.review.service.impl.ReviewServiceImpl;
 import com.quadrant.travelshoot.shared.response.ApiResponse;
 import jakarta.servlet.http.HttpSession;
@@ -17,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,14 +29,14 @@ import java.util.stream.Collectors;
 public class ReviewController {
 
     private final ReviewServiceImpl reviewService;
-    private final ReviewAiSummaryService reviewAiSummaryService;
 
     @GetMapping("/ai-summary/{stayId}")
-    public ResponseEntity<String> getReviewSummary(@PathVariable Long stayId) {
+    public ResponseEntity<ReviewAiSummaryResponse> getReviewSummary(@PathVariable Long stayId) {
         log.info("리뷰 AI 요약 요청 - stayId: {}", stayId);
 
-        String response = reviewService.getReviewSummary(stayId);
-        return ResponseEntity.ok(response);
+//        String response = reviewService.getReviewSummary(stayId);
+        ReviewAiSummaryResponse aiSummaryResponse = reviewService.getReviewSummary(stayId);
+        return ResponseEntity.ok(aiSummaryResponse);
     }
 
     /**
@@ -51,19 +50,7 @@ public class ReviewController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse<ReviewRegistResponse>> createReview(
             HttpSession session,
-            @Valid @ModelAttribute ReviewRegistRequest reviewRegistRequest,
-            BindingResult bindingResult) {
-
-        // Validation 에러 처리
-        if (bindingResult.hasErrors()) {
-            List<String> errorMessages = bindingResult.getFieldErrors().stream()
-                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                    .collect(Collectors.toList());
-            String errorMessage = String.join(", ", errorMessages);
-            log.warn("리뷰 등록 검증 실패 - {}", errorMessage);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ApiResponse.error("입력값이 올바르지 않습니다. " + errorMessage, null));
-        }
+            @Valid @ModelAttribute ReviewRegistRequest reviewRegistRequest){
 
         Long userId = (Long) session.getAttribute("userId");
 
@@ -88,23 +75,12 @@ public class ReviewController {
     public ResponseEntity<ApiResponse<ReviewRegistResponse>> updateReview(
             HttpSession session,
             @PathVariable Long reviewId,
-            @Valid @ModelAttribute ReviewRegistRequest reviewUpdateRequest,
-            BindingResult bindingResult) {
-
-        // Validation 에러 처리
-        if (bindingResult.hasErrors()) {
-            List<String> errorMessages = bindingResult.getFieldErrors().stream()
-                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                    .collect(Collectors.toList());
-            String errorMessage = String.join(", ", errorMessages);
-            log.warn("리뷰 등록 검증 실패 - {}", errorMessage);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ApiResponse.error("입력값이 올바르지 않습니다. " + errorMessage, null));
-        }
+            @Valid @ModelAttribute ReviewRegistRequest reviewUpdateRequest) {
 
         Long userId = (Long) session.getAttribute("userId");
 
         log.info("리뷰 수정 요청 - userId: {}, reviewId: {}", userId, reviewId);
+        reviewUpdateRequest.setReviewId(reviewId);
         ReviewRegistResponse response = reviewService.updateReview(userId, reviewId, reviewUpdateRequest);
 
         return ResponseEntity.ok(ApiResponse.success("리뷰 수정 성공", response));

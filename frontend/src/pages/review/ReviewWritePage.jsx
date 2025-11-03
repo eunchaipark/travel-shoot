@@ -36,6 +36,9 @@ const ReviewWritePage = () => {
     const isUpdatingFromTotalRef = useRef(false);
     const photoInputRef = useRef(null);
 
+    const [errorMsgs, setErrorMsgs] = useState({});
+    const hasErrors = Object.values(errorMsgs).some(msg => msg !== '');
+
     // 전체 평점 평균 계산 로직
     const calculateOverallAverage = useCallback(() => {
         const validRatings = detailCategories
@@ -145,8 +148,23 @@ const ReviewWritePage = () => {
     // 제출 버튼 활성화 조건
     const isSubmitEnabled = detailCategories.every(cat => ratings[cat.key] > 0) && ratings.totalRating > 0;
     
+    // 리뷰 텍스트 후기 핸들러
+    const handleReviewContent = (e) => {
+        setReviewText(e.target.value);
+        // 텍스트 입력 만족 시 에러 메시지 제거
+        if(errorMsgs.reviewContent){
+            setErrorMsgs(prev => ({...prev, reviewContent: ''}));
+        }
+    }
+    
     // 파일 변경/제거 핸들러
-    const handleFileChange = (file) => setUploadedFile(file);
+    const handleFileChange = (file) => {
+        setUploadedFile(file);
+        // 파일 첨부 시 에러 메서지 제거
+        if(errorMsgs.reviewImage){
+            setErrorMsgs(prev => ({...prev, reviewImage: ''}));
+        }
+    }
 
     const handleFileRemove = () => {
         setUploadedFile(null);
@@ -157,7 +175,7 @@ const ReviewWritePage = () => {
 
     // 제출 버튼 핸들러
     const handleSubmit = async() => {
-        if (isSubmitEnabled) {
+        // if (isSubmitEnabled) {
             try {
                 // FormData 생성
                 const formData = new FormData();
@@ -192,12 +210,64 @@ const ReviewWritePage = () => {
                 navigate('/mypage?type=review'); 
                 
             } catch (error) {
-                console.error(`리뷰 ${isEditMode ? '수정' : '등록'} 실패:`, error);
-                alert(`리뷰 ${isEditMode ? '수정' : '등록'}에 실패했습니다. ${ error.message}`);
+                console.error(`리뷰 ${isEditMode ? '수정' : '등록'} 실패:`, error.validationMsgs);
+                
+                // 검증 실패 메세지 받기
+                if(error.validationMsgs){
+                    const validationMsgs = error.validationMsgs;
+
+                     const newErrors = {
+                        rating: '',
+                        reviewContent: '',
+                        reviewImage: ''
+                    };
+
+                    // 평점 관련 에러
+                    if (validationMsgs.totalRating || validationMsgs.cleanRating || 
+                        validationMsgs.convenienceRating || validationMsgs.checkinRating ||
+                        validationMsgs.communicationRating || validationMsgs.locationRating ||
+                        validationMsgs.valueRating) {
+                        newErrors.rating = validationMsgs.totalRating || 
+                                          validationMsgs.cleanRating || 
+                                          validationMsgs.convenienceRating ||
+                                          validationMsgs.checkinRating ||
+                                          validationMsgs.communicationRating ||
+                                          validationMsgs.locationRating ||
+                                          validationMsgs.valueRating;
+                    }
+
+                    // 리뷰 내용 에러
+                    if (validationMsgs.reviewContent) {
+                        newErrors.reviewContent = validationMsgs.reviewContent;
+                    }
+
+                    // 이미지 관련 에러
+                    if (validationMsgs.reviewImage || validationMsgs.reviewImageValid) {
+                        newErrors.reviewImage = validationMsgs.reviewImage || validationMsgs.reviewImageValid;
+                    }
+
+                    setErrorMsgs(newErrors);
+
+                    requestAnimationFrame(() => {
+                        document.querySelector('.global-error-banner')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    })
+
+                    // 첫 번째 에러로 스크롤 이동
+                    // if (newErrors.rating) {
+                    //     document.querySelector('.rating-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // } else if (newErrors.reviewContent) {
+                    //     document.querySelector('.text-review-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // } else if (newErrors.reviewImage) {
+                    //     document.querySelector('.photo-upload-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    // }
+                }else {
+                    alert(`리뷰 ${isEditMode ? '수정' : '등록'}에 실패했습니다.`);
+                }
             }
-        } else {
-            alert('모든 필수 항목을 입력해주세요.');
-        }
+        // } else {
+        //     alert('모든 필수 항목을 입력해주세요.');
+        // }
     };
 
 
@@ -213,23 +283,51 @@ const ReviewWritePage = () => {
         <div className="review-write-page">
             {/* 헤더 */}
             <ReviewWriteHeader />
+             
+
             {/* 메인 콘텐츠 */}
-            <main className="main-content py-5">
+            <main className="main-content">
+                {/*전역 에러 배너*/}
+            {hasErrors && (
+                <div className="global-error-banner">
+                    <div className="error-banner-content">
+                        <i className="fas fa-exclamation-circle"></i>
+                        <div className="error-messages">
+                            {errorMsgs.rating && (
+                                <div className="error-item">{errorMsgs.rating}</div>
+                            )}
+                            {errorMsgs.reviewContent && (
+                                <div className="error-item">{errorMsgs.reviewContent}</div>
+                            )}
+                            {errorMsgs.reviewImage && (
+                                <div className="error-item">{errorMsgs.reviewImage}</div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+            
                 {/* 숙소 예약 정보 */}
                 {reservationInfo && <ReviewReservationSection reservationInfo={reservationInfo}/> }
 
                 {/* 평점 섹션 (전체 + 세부) */}
-                {reservationInfo && <ReviewRatingSection stayName={reservationInfo.stayName} ratings={ratings} onRatingChange={handleRatingChange} detailCategories={detailCategories}/> }
+                {reservationInfo && <ReviewRatingSection stayName={reservationInfo.stayName} ratings={ratings} onRatingChange={handleRatingChange} detailCategories={detailCategories} errorMsg={errorMsgs?.rating}/> }
+        
                 {/* 텍스트 후기 */}
                 <section className="text-review-section">
                     <h3 className="section-title">텍스트 후기 작성 *</h3>
+                    {errorMsgs.reviewContent && (
+                        <div className="error-message">
+                            {errorMsgs.reviewContent}
+                        </div>
+                    )}
                     <textarea 
                         className="review-textarea" 
                         placeholder="이용한 경험을 자세히 알려주세요." 
                         rows="4"
                         value={reviewText}
-                        onChange={(e) => setReviewText(e.target.value)}
-                    ></textarea>
+                        onChange={handleReviewContent}
+                    ></textarea> 
                 </section>
 
                 {/* 사진 업로드 */}
@@ -239,6 +337,7 @@ const ReviewWritePage = () => {
                     onFileChange={handleFileChange} 
                     onFileRemove={handleFileRemove} 
                     photoInputRef={photoInputRef}
+                    errorMsg={errorMsgs.reviewImage}
                 />
 
                 {/* 추천 여부 */}
@@ -264,10 +363,11 @@ const ReviewWritePage = () => {
                         >취소</button>
 
                         <button 
-                            className={`submit-button ${isSubmitEnabled ? 'active' : ''}`} 
+                            // className={`submit-button ${isSubmitEnabled ? 'active' : ''}`} 
+                            className={`submit-button ${isSubmitEnabled ? 'active' : 'active'}`} 
                             id="submit-button" 
                             type="button"
-                            disabled={!isSubmitEnabled}
+                            // disabled={!isSubmitEnabled}
                             onClick={handleSubmit}
                         > {isEditMode ? '수정' : '등록'} </button>
                     </div>

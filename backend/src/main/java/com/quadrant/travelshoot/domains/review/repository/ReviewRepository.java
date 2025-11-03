@@ -62,4 +62,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Optional<Review> findByReservation_Id(Long reservationId);
 
     List<Review> findTop10ByStayIdOrderByCreatedAtDesc(Long stayId);
+
+    List<Review> findTop5ByStayIdOrderByCreatedAtDesc(Long stayId);
 }
