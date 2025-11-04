@@ -101,7 +101,7 @@ const TrendingCard = ({item, currentTab, onClick}) => {
                 <div className="card-details">
                     <div className="rating-info">
                         <span className="rating">★ {item.rating}</span>
-                        <span className="reviews">({item.reviews})</span>
+                        {currentTab ==="stay" && <span className="reviews">({item.reviews})</span>} 
                     </div>
                     {currentTab === "stay" && <div className="price">₩{item.price}</div>}
                 </div>
