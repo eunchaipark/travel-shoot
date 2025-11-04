@@ -11,5 +11,5 @@ ALTER TABLE reviews ADD INDEX idx_total_rating (total_rating);
 -- 4. 새로운 제약조건 추가
 ALTER TABLE reviews ADD CONSTRAINT chk_total_rating CHECK (total_rating >= 0 AND total_rating <= 5);
 ALTER TABLE reviews ADD CONSTRAINT chk_clean_rating CHECK (clean_rating >= 0 AND clean_rating <= 5);
-commit;
+COMMIT;
 select * from reviews;
