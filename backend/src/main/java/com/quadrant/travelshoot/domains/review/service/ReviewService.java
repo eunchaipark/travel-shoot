@@ -14,6 +14,6 @@ public interface ReviewService {
     ReviewRegistResponse updateReview(Long userId, Long reviewId, @Valid ReviewRegistRequest reviewUpdateRequest);
     ReviewDetailResponse getReviewDetail(Long reservationId);
     ReviewPageResponse<ReviewListResponse> getReviewsWithPaging(Long stayId, Long roomId, int page, int size, String sortBy);
-
+    boolean existsByReservationId(Long reservationId);
 
 }

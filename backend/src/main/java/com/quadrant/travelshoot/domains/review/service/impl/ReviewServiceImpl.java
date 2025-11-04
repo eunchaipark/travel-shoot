@@ -78,6 +78,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
 
+    @Override
+    public boolean existsByReservationId(Long reservationId){
+        return reviewRepository.existsByReservationId(reservationId);
+    }
+
     /**
      * 리뷰 등록
      * @param userId
@@ -93,7 +98,7 @@ public class ReviewServiceImpl implements ReviewService {
         // + 예약 내역에서 예약 상태가 '이용 완료'여야 한다.
 
         // 리뷰 중복 검증
-        if (reviewRepository.existsByReservationId(request.getReservationId())) {
+        if (existsByReservationId(request.getReservationId())) {
             throw new IllegalStateException("이미 해당 예약에 대한 리뷰가 존재합니다.");
         }
 

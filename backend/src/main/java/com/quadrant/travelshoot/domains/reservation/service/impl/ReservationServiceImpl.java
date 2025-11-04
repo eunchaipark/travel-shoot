@@ -10,6 +10,7 @@ import com.quadrant.travelshoot.domains.reservation.enums.ReservationStatus;
 import com.quadrant.travelshoot.domains.reservation.enums.TransportationMethod;
 import com.quadrant.travelshoot.domains.reservation.repository.ReservationRepository;
 import com.quadrant.travelshoot.domains.reservation.service.ReservationService;
+import com.quadrant.travelshoot.domains.review.service.ReviewService;
 import com.quadrant.travelshoot.domains.stay.entity.Room;
 import com.quadrant.travelshoot.domains.stay.entity.Stay;
 import com.quadrant.travelshoot.domains.stay.repository.RoomRepository;
@@ -44,6 +45,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final StayService stayService;
     private final PaymentService paymentService;
     private final FileUploadService fileUploadService;
+    private final ReviewService reviewService;
 
     //TODO : 가격 계산 추후에 추가할 가능성 염두
 //    private static final BigDecimal TAX_RATE = new BigDecimal("0.10"); //TODO : 세금 10% 청구
@@ -469,6 +471,7 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation reservation = reservationRepository.findByIdAndUserIdWithStay(reservationId, userId) .orElseThrow(() -> new IllegalArgumentException("조회할 수 없는 예약 정보입니다."));;
         Stay stay = reservation.getRoom().getStay();
         Payment payment = paymentService.getByReservationId(reservation.getId());
+        boolean isReview = reviewService.existsByReservationId(reservationId);
 
         return ReservationWithPaymentResponse
                 .builder()
@@ -492,6 +495,7 @@ public class ReservationServiceImpl implements ReservationService {
                 .createdAt(reservation.getCreatedAt())
                 .paymentMethod(payment.getPaymentMethod())
                 .address(stay.getAddress())
+                .review(isReview)
                 .build();
     }
 

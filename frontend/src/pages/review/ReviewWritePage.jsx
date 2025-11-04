@@ -88,7 +88,11 @@ const ReviewWritePage = () => {
         const fetchReviewData = async () => {
             try {
                 // 예약번호를 기반으로 리뷰 조회 API 호출
-                const response = await fetch(`${window.API_BASE_URL}/api/reviews/reservations/${reservationId}`);
+                // const response = await fetch(`${window.API_BASE_URL}/api/reviews/reservations/${reservationId}`);
+
+                const response = await fetch(`${window.API_BASE_URL}/api/reviews/reservations/${reservationId}`, {
+                    credentials: 'include' // 오류나서 수정함 ...!
+                });
                 
                 if (response.ok) {
                     const result = await response.json();
