@@ -108,7 +108,7 @@ const transformStayData = (backendData) => {
     title: item.stayName,
     image: item.thumbnailImage || "/images/main/main-example.svg",
     rating: item.averageRating ? item.averageRating.toFixed(1) : "0.0",
-    reviews: formatViewCount(item.recent7DaysViews), // 조회수를 리뷰처럼 표시
+    reviews: formatViewCount(item.reviewCount), // 조회수를 리뷰처럼 표시
     price: formatPrice(item.price),
     category: item.stayType,
 
