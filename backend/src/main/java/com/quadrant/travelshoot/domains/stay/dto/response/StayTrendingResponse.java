@@ -26,10 +26,9 @@ public class StayTrendingResponse {
  
     private String checkInTime;
     private String checkOutTime;
-    
  
     private String stayType;
-
+    private Integer reviewCount;
     private Long recent7DaysReservations;
     private Long recent7DaysViews;
     

@@ -206,6 +206,8 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                 TIME_FORMAT(s.check_out_time, '%H:%i') as checkOutTime,
                 s.stay_type as stayType,
                 
+                s.review_count as reviewCount,
+
                 COUNT(DISTINCT CASE 
                         WHEN res.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) 
                         THEN res.reservation_id 
@@ -307,7 +309,7 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                 AND vh.viewed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
                 WHERE s.is_active = 1
                 GROUP BY s.stay_id, s.stay_name, s.address, s.average_rating,
-                        s.latitude, s.longitude, s.check_in_time, s.check_out_time, s.stay_type
+                        s.latitude, s.longitude, s.check_in_time, s.check_out_time, s.stay_type, s.review_count
                 HAVING reservationGrowthRate >= 0 OR viewGrowthRate >= 0
                 ORDER BY 
                 reservationGrowthRate DESC, 
