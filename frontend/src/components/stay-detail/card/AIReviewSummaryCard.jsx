@@ -86,7 +86,7 @@ const AIReviewSummaryCard = ({stayId, score, reviewCount}) => {
                                             <i className="bi bi-hand-thumbs-up-fill me-2"></i>
                                             주요 장점
                                         </div>
-                                        <div className="ai-review-text room-content">
+                                        <div className="ai-review-text">
                                             {aiSummary.positive_summary}
                                         </div>
                                     </div>
@@ -99,7 +99,7 @@ const AIReviewSummaryCard = ({stayId, score, reviewCount}) => {
                                             <i className="bi bi-hand-thumbs-down-fill me-2"></i>
                                             주요 단점
                                         </div>
-                                        <div className="ai-review-text room-content">
+                                        <div className="ai-review-text">
                                             {aiSummary.negative_summary}
                                         </div>
                                     </div>

@@ -8,6 +8,47 @@ const StayDetailTitleCard = ({ hotelName, address, price, like }) => {
     useEffect(() => {
         like();
     }, [isLike])
+
+
+    const handleShare = () => {
+        const url = window.location.href;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: hotelName,
+                text: address,
+                url: url
+            }).catch(() => {});
+        } else {
+            navigator.clipboard.writeText(url).then(() => {
+                alert('링크가 복사되었습니다!');
+            });
+        }
+    };
+
+    
+    const copyToClipboard = async (text) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            alert('링크가 복사되었습니다!');
+        } catch (err) {
+            // Fallback: 텍스트 선택 방식
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.opacity = '0';
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert('링크가 복사되었습니다!');
+            } catch (e) {
+                alert('복사에 실패했습니다.');
+            }
+            document.body.removeChild(textArea);
+        }
+    };
+
     return (
         <div className="card-body">
             <div className="d-flex">
@@ -24,11 +65,8 @@ const StayDetailTitleCard = ({ hotelName, address, price, like }) => {
                     <div className="action-buttons mb-2 mt-1">
                         <button style={{position:'relative'}} onClick={() => setIsLike(!isLike)} className="heart-btn">
                             <i className={"bi bi-heart" + (isLike ? "-fill" : "")}></i>
-                            {/* {isLike&&
-                            <Lottie style={{position:'absolute', top:-5,left:-1, scale:4.5}} animationData={animation} loop={false} />
-                            } */}
                         </button>
-                        <button className="share-btn">
+                        <button className="share-btn" onClick={handleShare}>
                             <i className="bi bi-share"></i>
                         </button>
                     </div>
