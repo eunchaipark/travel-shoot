@@ -97,7 +97,7 @@ const ReservationDetailPage = () => {
                                                 <div className="col-6 d-flex justify-content-start">
                                                     <input
                                                         type="button"
-                                                        value="후기 작성하기"
+                                                        value={reservationData?.review ? "후기 수정하기" : "후기 작성하기"}
                                                         className="review-btn"
                                                         onClick={() => navigate(`/reviews/reservations/${reservationId}`)}
                                                     />
