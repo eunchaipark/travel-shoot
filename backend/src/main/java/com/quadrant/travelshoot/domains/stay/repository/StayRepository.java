@@ -206,6 +206,10 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                 TIME_FORMAT(s.check_out_time, '%H:%i') as checkOutTime,
                 s.stay_type as stayType,
                 
+                (SELECT COUNT(*) 
+                FROM reviews r 
+                WHERE r.stay_id = s.stay_id ) as reviewCount,
+
                 COUNT(DISTINCT CASE 
                         WHEN res.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) 
                         THEN res.reservation_id 
