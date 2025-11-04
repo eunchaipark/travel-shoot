@@ -33,7 +33,7 @@ const Container = ({data, searchParams}) => {
                     <InformationCard information={data.description} />
                     {/* <AIReviewSummaryCard stayId={data.stayId} score={data.averageRating} reviewCount={data.reviewCount}/> */}
                 </div>
-                <div className="col-lg-4" style={{ position: 'sticky', top: '100px' }}>
+                <div className="col-lg-4 right-container">
                     <AIReviewSummaryCard stayId={data.stayId} score={data.averageRating} reviewCount={data.reviewCount}/>
                     <HotelMapCard stay={data}/>
                 </div>

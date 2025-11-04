@@ -1,5 +1,10 @@
 /* 구현 중 UI */
 
+.product-detail-container .container .right-container{
+    position: sticky;
+    top: 100px;
+}
+
 .product-detail-container .room-card-container .stay-img-container{
    min-height: 100px;
    max-height: 150px;
@@ -75,7 +80,7 @@
     background: none;
     border: none;
     color: #ff8888;
-    font-size: 18px;
+    font-size: 22px;
     padding: 4px;
     cursor: pointer;
 }
@@ -189,7 +194,11 @@
 
 }
 
-@media(max-width:978px){
+@media(max-width:995px){
+    .product-detail-container .container .right-container{
+        position: relative;
+        top: 0px;
+    }
 
 }
 
@@ -226,7 +235,7 @@
 
 .product-detail-container .ai-review-text {
     color: #666;
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.4;
     margin-bottom: 12px;
 }
@@ -430,12 +439,7 @@
     margin-bottom: 0.5rem;
 }
 
-.ai-summary-card-container .ai-review-text {
-    color: #666;
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 0.75rem;
-}
+
 
 .ai-summary-card-container .view-more-btn {
     color: #ff8888;
@@ -595,16 +599,10 @@
     }
 }
 
-/* 텍스트 오버플로우 처리 */
-/* .ai-summary-card-container .room-content {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: keep-all;
-    word-wrap: break-word;
-} */
+
+.product-detail-container .room-content {
+    font-size: 15.5px;
+}
 
 /* ===================================
    리뷰 없음 상태 스타일
@@ -858,5 +856,6 @@
         }
     }
 }
+
 
 
