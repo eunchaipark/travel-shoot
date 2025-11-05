@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/components/context/AuthContext';
 import { useReservation } from '@/hooks/reservation/useReservation';
@@ -12,6 +12,30 @@ import PaymentLoading from "@/components/loading/PaymentLoading";
 const ReservationPaymentPage = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // 페이지 로드 시 완료된 예약이 있는지 체크
+        const completedReservationId = sessionStorage.getItem('completedReservationId');
+        if (completedReservationId &&
+            completedReservationId === searchParams.get('reservationId')) {
+            alert("이미 결제가 완료된 내역입니다.");
+            navigate(`/payment-complete?reservationId=${completedReservationId}`, { replace: true });
+            return;
+        }
+
+        const checkCompletedReservation = () => {
+            const completedReservationId = sessionStorage.getItem('completedReservationId');
+            if (completedReservationId) {
+                alert("이미 결제가 완료된 내역입니다.");
+                navigate(`/payment-complete?reservationId=${completedReservationId}`, { replace: true });
+            }
+        };
+
+        window.addEventListener('popstate', checkCompletedReservation);
+
+        return () => window.removeEventListener('popstate', checkCompletedReservation);
+    }, [navigate, searchParams]);
+
     const { isAuthenticated } = useAuth();
 
 
@@ -87,6 +111,7 @@ const ReservationPaymentPage = () => {
             if (result) {
                 // 카드결제, 네이버페이 등
                 if (result.success) {
+                    sessionStorage.setItem('completedReservationId', result.reservationId);
                     navigate(`/payment-complete?reservationId=${result.reservationId}`, { replace: true });
                 } else {
                     alert("결제 처리 중 오류가 발생했습니다.");

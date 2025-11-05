@@ -9,19 +9,42 @@ function PaymentCompletePage() {
     const queryParams = new URLSearchParams(window.location.search);
     const reservationId = queryParams.get("reservationId");
 
-    // 뒤로가기 방지 추가
+    // // 뒤로가기 방지 추가
+    // useEffect(() => {
+    //     const preventGoBack = () => {
+    //         window.history.pushState(null, '', window.location.href);
+    //     };
+    //
+    //     preventGoBack();
+    //     window.addEventListener('popstate', preventGoBack);
+    //
+    //     return () => {
+    //         window.removeEventListener('popstate', preventGoBack);
+    //     };
+    // }, []);
+
+    // 뒤로가기 완전히 막지말고 alter으로 처리
     useEffect(() => {
-        const preventGoBack = () => {
+        const preventGoBack = (e) => {
+            // 세션에 완료된 예약 ID 저장
+            sessionStorage.setItem('completedReservationId', reservationId);
+
+            // alert 표시
+            alert("이미 결제가 완료된 내역입니다.");
+
+            // 현재 페이지 유지
             window.history.pushState(null, '', window.location.href);
         };
 
-        preventGoBack();
+        // 초기 히스토리 설정
+        window.history.pushState(null, '', window.location.href);
+
         window.addEventListener('popstate', preventGoBack);
 
         return () => {
             window.removeEventListener('popstate', preventGoBack);
         };
-    }, []);
+    }, [reservationId]);
 
     return(
         <>
