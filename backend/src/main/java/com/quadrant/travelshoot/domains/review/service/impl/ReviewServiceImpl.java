@@ -1,6 +1,7 @@
 package com.quadrant.travelshoot.domains.review.service.impl;
 
 import com.quadrant.travelshoot.common.service.S3Service;
+import com.quadrant.travelshoot.domains.ai.dto.response.ReviewAiSummaryResponse;
 import com.quadrant.travelshoot.domains.ai.service.ReviewAiSummaryService;
 import com.quadrant.travelshoot.domains.common.entity.FileUpload;
 import com.quadrant.travelshoot.domains.common.repository.FileUploadRepository;
@@ -52,11 +53,11 @@ public class ReviewServiceImpl implements ReviewService {
      * 기존 ai요약 검증
      */
     @Transactional
-    public String getReviewSummary(Long stayId) {
+    public ReviewAiSummaryResponse getReviewSummary(Long stayId) {
         // 현재 리뷰 개수 조회
         int currentReviewCount = reviewRepository.countByStayId(stayId);
         if (currentReviewCount == 0) {
-            return "아직 숙소의 리뷰가 없습니다.";
+            throw new IllegalArgumentException("아직 숙소의 리뷰가 없습니다.");
         }
 
         // 기존 AI 요약 조회
@@ -64,7 +65,8 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElse(null);
 
         // 기존 요약이 없거나, 리뷰가 5개 이상 증가했으면 새로 생성
-        if (existingSummary == null || currentReviewCount >= existingSummary.getReviewCount() + 5) {
+        // 시연을 위해 리뷰 1개만 증가해도 새로 생성
+        if (existingSummary == null || currentReviewCount >= existingSummary.getReviewCount() + 1) {
             log.info("AI 요약 새로 생성 - stayId: {}, 현재 리뷰: {}, 이전 리뷰: {}",
                     stayId, currentReviewCount, existingSummary != null ? existingSummary.getReviewCount() : 0);
             return reviewAiSummaryService.generateAiSummary(stayId, currentReviewCount, existingSummary);
@@ -72,9 +74,14 @@ public class ReviewServiceImpl implements ReviewService {
 
         // 기존 요약 반환
         log.info("기존 AI 요약 반환 - stayId: {}", stayId);
-        return existingSummary.getOverallSummary();
+        return ReviewAiSummaryResponse.from(existingSummary);
     }
 
+
+    @Override
+    public boolean existsByReservationId(Long reservationId){
+        return reviewRepository.existsByReservationId(reservationId);
+    }
 
     /**
      * 리뷰 등록
@@ -91,7 +98,7 @@ public class ReviewServiceImpl implements ReviewService {
         // + 예약 내역에서 예약 상태가 '이용 완료'여야 한다.
 
         // 리뷰 중복 검증
-        if (reviewRepository.existsByReservationId(request.getReservationId())) {
+        if (existsByReservationId(request.getReservationId())) {
             throw new IllegalStateException("이미 해당 예약에 대한 리뷰가 존재합니다.");
         }
 

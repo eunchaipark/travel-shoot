@@ -55,4 +55,13 @@ public class ReviewAiSummary {
         this.overallSummary = overallSummary;
         this.reviewCount = reviewCount;
     }
+
+    /**
+     * 장점/단점 요약 업데이트
+     */
+    public void updateStructuredSummary(String positiveSummary, String negativeSummary, Integer reviewCount) {
+        this.positiveSummary = positiveSummary;
+        this.negativeSummary = negativeSummary;
+        this.reviewCount = reviewCount;
+    }
 }

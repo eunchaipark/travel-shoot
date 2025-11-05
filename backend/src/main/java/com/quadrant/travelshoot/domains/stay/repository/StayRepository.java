@@ -35,10 +35,17 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
         List<String> findRegionsByKeyword(@Param("keyword") String keyword);
 
         // 자동완성 ( 검색창 - 숙소명 )
-        @Query("SELECT DISTINCT s.name " +
-                        "FROM Stay s " +
-                        "WHERE s.name LIKE CONCAT('%', :keyword, '%') " +
-                        "AND s.isActive = true")
+        @Query(value =
+                "SELECT stay_name " +
+                        "FROM ( " +
+                        "    SELECT DISTINCT s.stay_name, s.average_rating " +
+                        "    FROM stays s " +
+                        "    WHERE s.stay_name LIKE CONCAT('%', :keyword, '%') " +
+                        "    AND s.is_active = 1 " +
+                        ") AS subquery " +
+                        "ORDER BY average_rating DESC, stay_name ASC " +
+                        "LIMIT 10",
+                nativeQuery = true)
         List<String> findStayNamesByKeyword(@Param("keyword") String keyword);
 
         // 기본 검색창 검색 ( 지역, 날짜, 인원수 )
@@ -199,6 +206,8 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                 TIME_FORMAT(s.check_out_time, '%H:%i') as checkOutTime,
                 s.stay_type as stayType,
                 
+                s.review_count as reviewCount,
+
                 COUNT(DISTINCT CASE 
                         WHEN res.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) 
                         THEN res.reservation_id 
@@ -300,7 +309,7 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                 AND vh.viewed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
                 WHERE s.is_active = 1
                 GROUP BY s.stay_id, s.stay_name, s.address, s.average_rating,
-                        s.latitude, s.longitude, s.check_in_time, s.check_out_time, s.stay_type
+                        s.latitude, s.longitude, s.check_in_time, s.check_out_time, s.stay_type, s.review_count
                 HAVING reservationGrowthRate >= 0 OR viewGrowthRate >= 0
                 ORDER BY 
                 reservationGrowthRate DESC, 

@@ -37,4 +37,5 @@ public class ReservationWithPaymentResponse {
     private LocalDateTime createdAt;
     private PaymentMethod paymentMethod;
     private String address;
+    private boolean review;
 }
