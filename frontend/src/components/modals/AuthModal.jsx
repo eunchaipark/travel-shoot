@@ -472,7 +472,9 @@ const AuthModal = ({ isOpen, onClose }) => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
-                                <button onClick={sendSignupVerification}>
+                                <button onClick={sendSignupVerification}
+                                        disabled={isSignupTimerActive}>
+
                                     이메일 인증
                                 </button>
                             </div>
@@ -557,7 +559,8 @@ const AuthModal = ({ isOpen, onClose }) => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
-                                <button onClick={sendResetVerification}>
+                                <button onClick={sendResetVerification}
+                                        disabled={isResetTimerActive}>
                                     이메일 인증
                                 </button>
                             </div>

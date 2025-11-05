@@ -83,14 +83,11 @@ export const useAuth = () => {
 
     const sendVerificationCode = useCallback(async (email) => {
         setError(null);
-        try {
-            const response = await authApi.sendVerificationCode(email);
-            return { success: true, data: response };
-        } catch (err) {
-            const errorMessage = err.message || '인증번호 발송에 실패했습니다';
-            setError(errorMessage);
-            return { success: false, error: errorMessage };
+        const result = await authApi.sendVerificationCode(email);
+        if (!result.success) {
+            setError(result.error);
         }
+        return result;
     }, []);
 
     const verifyCode = useCallback(async (email, code) => {
@@ -131,14 +128,11 @@ export const useAuth = () => {
 
     const requestPasswordReset = useCallback(async (email) => {
         setError(null);
-        try {
-            const response = await authApi.requestPasswordReset(email);
-            return { success: true, data: response };
-        } catch (err) {
-            const errorMessage = err.message || '비밀번호 재설정 요청에 실패했습니다';
-            setError(errorMessage);
-            return { success: false, error: errorMessage };
+        const result = await authApi.requestPasswordReset(email);
+        if (!result.success) {
+            setError(result.error);
         }
+        return result;
     }, []);
 
     const resetPassword = useCallback(async (resetData) => {
