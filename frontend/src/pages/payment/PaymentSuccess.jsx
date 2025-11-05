@@ -1,94 +1,61 @@
 import { useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import { kakaoPayService } from '@/services/payment/kakaoPayService';
-import reservationApiService from '@/services/reservation/reservationApiService';
+import { useSearchParams } from 'react-router-dom';
 
 function PaymentSuccess() {
     const [searchParams] = useSearchParams();
-    const navigate = useNavigate();
 
     useEffect(() => {
-        const processPayment = async () => {
+        const processPayment = () => {
             const pgToken = searchParams.get('pg_token');
+            const isPopup = sessionStorage.getItem('isKakaoPayPopup') === 'true';
+            if (isPopup) {
+                // opener가 있으면 사용, 없으면 다른 방법
+                if (window.opener && !window.opener.closed) {
+                    window.opener.postMessage({
+                        type: 'KAKAOPAY_SUCCESS',
+                        pgToken: pgToken
+                    }, window.location.origin);
+                } else {
+                    // ⭐ opener가 없어도 localStorage로 통신
+                    localStorage.setItem('kakaoPayResult', JSON.stringify({
+                        type: 'KAKAOPAY_SUCCESS',
+                        pgToken: pgToken,
+                        timestamp: Date.now()
+                    }));
+                }
 
-            console.log('=== PaymentSuccess 시작 ===');
-            console.log('pg_token:', pgToken);
+                console.log('메시지 전송 완료');
 
-            // pg_token이 없으면 아직 결제 전
-            if (!pgToken) {
-                console.log('pg_token 없음 - 결제 대기 중');
+                // 팝업 정보 삭제
+                sessionStorage.removeItem('isKakaoPayPopup');
+
+                // 팝업 닫기 시도
+                window.close();
+
+                // 닫히지 않으면 안내
+                setTimeout(() => {
+                    document.body.innerHTML = `
+                    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column;">
+                        <p style="font-size: 18px; margin-bottom: 20px;">✅ 결제가 완료되었습니다.</p>
+                        <p style="font-size: 14px; color: #666; margin-bottom: 20px;">이 창을 닫아주세요.</p>
+                        <button onclick="window.close()" style="padding: 10px 30px; font-size: 16px; cursor: pointer; border: 1px solid #3498db; border-radius: 5px; background: #3498db; color: white;">
+                            창 닫기
+                        </button>
+                    </div>
+                `;
+                }, 100);
+
                 return;
             }
 
-            try {
-                // 세션 데이터 가져오기
-                const tid = sessionStorage.getItem('tid');
-                const orderDataStr = sessionStorage.getItem('orderData');
-                const reservationDataStr = sessionStorage.getItem('reservationData');
-
-                console.log('세션 데이터 확인:', {
-                    tid: !!tid,
-                    orderData: !!orderDataStr,
-                    reservationData: !!reservationDataStr
-                });
-
-                if (!tid || !orderDataStr || !reservationDataStr) {
-                    console.error('세션 데이터 없음');
-                    alert('결제 정보를 찾을 수 없습니다. 다시 시도해주세요.');
-                    navigate('/');
-                    return;
-                }
-
-                const orderData = JSON.parse(orderDataStr);
-                const reservationData = JSON.parse(reservationDataStr);
-
-                console.log('결제 승인 API 호출 시작');
-
-                // 결제 승인
-                const approveResult = await kakaoPayService.approve(
-                    pgToken,
-                    tid,
-                    orderData.orderId,
-                    orderData.userId
-                );
-                console.log('결제 승인 완료:', approveResult);
-
-                // 예약 생성
-                console.log('예약 생성 시작');
-                const result = await reservationApiService.processReservation(reservationData);
-                console.log('예약 생성 완료:', result.reservationId);
-
-                // AI 코스 생성
-                const totalNights = reservationData.totalNights ||
-                    Math.ceil((new Date(reservationData.checkOutDate) - new Date(reservationData.checkInDate)) / (1000 * 60 * 60 * 24));
-
-                console.log('AI 코스 생성 시작, totalNights:', totalNights);
-                try {
-                    await reservationApiService.generateAiCourse(result.reservationId, totalNights);
-                    console.log('AI 코스 생성 완료');
-                } catch (aiError) {
-                    console.error('AI 코스 생성 실패 (무시):', aiError);
-                }
-
-                // 세션 정리
-                sessionStorage.removeItem('tid');
-                sessionStorage.removeItem('orderData');
-                sessionStorage.removeItem('reservationData');
-                console.log('세션 정리 완료');
-
-                // 완료 페이지로 리다이렉트
-                console.log('완료 페이지로 이동');
-                navigate(`/payment-complete?reservationId=${result.reservationId}`, { replace: true });
-
-            } catch (error) {
-                console.error('결제 처리 실패:', error);
-                alert('결제 처리 중 오류가 발생했습니다.');
-                navigate('/');
-            }
+            // 일반 접근
+            console.log('잘못된 접근');
+            alert('잘못된 접근입니다.');
+            window.location.href = '/';
         };
 
         processPayment();
-    }, [searchParams, navigate]);
+    }, [searchParams]);
 
     return (
         <div style={{
@@ -120,13 +87,6 @@ function PaymentSuccess() {
                 color: '#333'
             }}>
                 결제를 처리하고 있습니다.
-            </p>
-            <p style={{
-                marginTop: '10px',
-                fontSize: '14px',
-                color: '#666'
-            }}>
-                잠시만 기다려주세요
             </p>
         </div>
     );
