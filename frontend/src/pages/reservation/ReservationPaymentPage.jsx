@@ -81,7 +81,7 @@ const ReservationPaymentPage = () => {
         try {
             setIsPaymentLoading(true);
 
-            const result = await createReservation(formData);
+            const result = await createReservation(formData, setIsPaymentLoading);
 
             // 카카오페이는 result를 반환하지 않음 (postMessage로 처리)
             if (result) {
