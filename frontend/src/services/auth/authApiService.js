@@ -20,9 +20,9 @@ export const sendVerificationCode = async (email) => {
 
             try {
                 const errorData = await response.json();
-                // if (errorData.message) {
-                //     errorMessage = errorData.message;
-                // }
+                if (errorData.message) {
+                    errorMessage = errorData.message;
+                }
                 if (errorData.error?.message) {
                     errorMessage = errorData.error.message;
                 }
@@ -168,15 +168,29 @@ export const requestPasswordReset = async (email) => {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+            let errorMessage = `HTTP error! status: ${response.status}`;
 
+            try {
+                const errorData = await response.json();
+                if (errorData.message) {
+                    errorMessage = errorData.message;
+                }
+                if (errorData.error?.message) {
+                    errorMessage = errorData.error.message;
+                }
+            } catch {
+                const text = await response.text();
+                if (text) errorMessage = text;
+            }
+
+            return { success: false, error: errorMessage };
+        }
         const data = await response.json();
         console.log("비밀번호 재설정 요청 성공:", data);
-        return data;
+        return { success: true, data };
     } catch (error) {
         console.error("비밀번호 재설정 요청 실패:", error);
-        throw error;
+        return { success: false, error: "서버와 통신 중 오류가 발생했습니다." };
     }
 };
 
