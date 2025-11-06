@@ -1472,12 +1472,10 @@ FROM stays WHERE stay_name = '소랑호젠' LIMIT 1;
 -- 솔바람풍경소리
 INSERT INTO files (original_filename, s3_key, s3_url, bucket_name, file_size, content_type, reference_type, reference_id, sort_order, is_representative, creator_id, is_public)
 SELECT '솔바람풍경소리_1.jpg', 'images/stays/pension/%EC%86%94%EB%B0%94%EB%9E%8C%ED%92%8D%EA%B2%BD%EC%86%8C%EB%A6%AC_1.jpg', 'https://travelshoot-s3.s3.ap-southeast-2.amazonaws.com/images/stays/pension/%EC%86%94%EB%B0%94%EB%9E%8C%ED%92%8D%EA%B2%BD%EC%86%8C%EB%A6%AC_1.jpg', @bucket_name, 13722, 'image/jpeg', 'STAYS', stay_id, 1, TRUE, @creator_id, TRUE
-
 FROM stays WHERE stay_name = '솔바람풍경소리' LIMIT 1;
 
 -- 제주스카이휴양펜션
 INSERT INTO files (original_filename, s3_key, s3_url, bucket_name, file_size, content_type, reference_type, reference_id, sort_order, is_representative, creator_id, is_public)
-
 SELECT '제주스카이휴양펜션_1.jpg', 'images/stays/pension/%EC%A0%9C%EC%A3%BC%EC%8A%A4%EC%B9%B4%EC%9D%B4%ED%9C%B4%EC%96%91%ED%8E%9C%EC%85%98_1.jpg', 'https://travelshoot-s3.s3.ap-southeast-2.amazonaws.com/images/stays/pension/%EC%A0%9C%EC%A3%BC%EC%8A%A4%EC%B9%B4%EC%9D%B4%ED%9C%B4%EC%96%91%ED%8E%9C%EC%85%98_1.jpg', @bucket_name, 11366, 'image/jpeg', 'STAYS', stay_id, 1, TRUE, @creator_id, TRUE
 FROM stays WHERE stay_name = '제주스카이휴양펜션' LIMIT 1;
 
