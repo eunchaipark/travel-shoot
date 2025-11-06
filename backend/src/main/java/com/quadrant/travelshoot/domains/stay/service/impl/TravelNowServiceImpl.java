@@ -89,7 +89,7 @@ public class TravelNowServiceImpl implements TravelNowService {
                 .location("수도권")
                 .image("https://travelshoot-s3.s3.ap-southeast-2.amazonaws.com/images/main/travelNow/6cde004e-5a5d-4b8e-877d-46719c677341_Ex_seoul.jpg")
                 .features(Arrays.asList("벚꽃", "도심", "쇼핑"))
-                .accommodationCount(9L)
+                .accommodationCount(0L)
                 .build(),
             
             TravelNowResponse.builder()
@@ -98,7 +98,7 @@ public class TravelNowServiceImpl implements TravelNowService {
                 .location("경상남도")
                 .image("https://travelshoot-s3.s3.ap-southeast-2.amazonaws.com/images/main/travelNow/6f79aa0a-7089-4a8a-b123-3d2f28c9443e_TrvaelNowJeonju.jpg")
                 .features(Arrays.asList("해변", "온천", "맛집"))
-                .accommodationCount(8L)
+                .accommodationCount(0L)
                 .build(),
             
             TravelNowResponse.builder()
@@ -107,7 +107,7 @@ public class TravelNowServiceImpl implements TravelNowService {
                 .location("경상북도")
                 .image("https://travelshoot-s3.s3.ap-southeast-2.amazonaws.com/images/main/travelNow/ed03a2b7-b827-4435-baa3-030f1c26f0b2_TrvaelNowDegue.jpg")
                 .features(Arrays.asList("문화", "야경", "전통"))
-                .accommodationCount(7L)
+                .accommodationCount(0L)
                 .build(),
             
             TravelNowResponse.builder()
@@ -116,7 +116,7 @@ public class TravelNowServiceImpl implements TravelNowService {
                 .location("경기도")
                 .image("https://travelshoot-s3.s3.ap-southeast-2.amazonaws.com/images/main/travelNow/96109dad-81b1-4bb6-a723-c522eff2ff1e_TrvaelNowIncheon.jpg")
                 .features(Arrays.asList("공항", "항구", "차이나타운"))
-                .accommodationCount(6L)
+                .accommodationCount(0L)
                 .build(),
             
             TravelNowResponse.builder()
@@ -125,7 +125,7 @@ public class TravelNowServiceImpl implements TravelNowService {
                 .location("전라북도")
                 .image("https://travelshoot-s3.s3.ap-southeast-2.amazonaws.com/images/main/travelNow/6f79aa0a-7089-4a8a-b123-3d2f28c9443e_TrvaelNowJeonju.jpg")
                 .features(Arrays.asList("한옥", "전통", "맛집"))
-                .accommodationCount(5L)
+                .accommodationCount(0L)
                 .build(),
             
             TravelNowResponse.builder()
@@ -134,7 +134,7 @@ public class TravelNowServiceImpl implements TravelNowService {
                 .location("경상북도")
                 .image("https://travelshoot-s3.s3.ap-southeast-2.amazonaws.com/images/main/travelNow/14786a47-e684-4913-ae68-c06bf6e3b686_TravelNowGyeongju.jpg")
                 .features(Arrays.asList("역사", "문화", "유적"))
-                .accommodationCount(4L)
+                .accommodationCount(0L)
                 .build(),
             
             TravelNowResponse.builder()
@@ -143,7 +143,7 @@ public class TravelNowServiceImpl implements TravelNowService {
                 .location("전라남도")
                 .image("https://travelshoot-s3.s3.ap-southeast-2.amazonaws.com/images/main/travelNow/f5ef1a6b-392a-4bf9-bf1d-a27ebd3f0093_TravelNowYeosu.jpg")
                 .features(Arrays.asList("해상", "야경", "섬"))
-                .accommodationCount(3L)
+                .accommodationCount(0L)
                 .build(),
             
             TravelNowResponse.builder()
@@ -152,7 +152,7 @@ public class TravelNowServiceImpl implements TravelNowService {
                 .location("경상남도")
                 .image("https://travelshoot-s3.s3.ap-southeast-2.amazonaws.com/images/main/travelNow/14ed76f9-41fc-4a5f-bf35-bf6602b7809e_TravelNowTongyeong.jpg")
                 .features(Arrays.asList("바다", "케이블카", "굴"))
-                .accommodationCount(2L)
+                .accommodationCount(0L)
                 .build(),
             
             TravelNowResponse.builder()
@@ -161,7 +161,7 @@ public class TravelNowServiceImpl implements TravelNowService {
                 .location("경상북도")
                 .image("https://travelshoot-s3.s3.ap-southeast-2.amazonaws.com/images/main/travelNow/2436466b-d8a8-4eb0-ac1a-f0701de5a444_TravelNowAndong.jpg")
                 .features(Arrays.asList("하회마을", "전통", "역사"))
-                .accommodationCount(1L)
+                .accommodationCount(0L)
                 .build()
         );
     }
