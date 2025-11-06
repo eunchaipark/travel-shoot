@@ -858,4 +858,99 @@
 }
 
 
+.product-detail-container .gallery-trigger{
+    cursor: pointer;
+}
 
+
+/* 모바일에서 이미지 높이 조정 */
+@media (max-width: 768px) {
+    .product-detail-container .gallery-trigger {
+        height: 250px !important; /* 모바일에서 1개/2개 이미지 높이 */
+    }
+}
+
+
+
+/* 이미지 카운터 스타일 */
+.image-counter {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  padding-left: 16px;
+  margin-top: 8px;
+  background-color: #f8f9fa;
+  border-radius: 20px;
+}
+
+.image-counter i {
+  font-size: 16px;
+}
+
+/* 메인 이미지 컨테이너 - 줌 기능을 위한 상대 위치 */
+.modal-main-image-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  user-select: none; /* 드래그 중 텍스트 선택 방지 */
+}
+
+/* 메인 이미지 - 기본 상태 */
+.modal-main-display-image {
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease;
+  display: block;
+}
+
+/* 메인 이미지 - 드래그 중일 때는 transition 제거 (부드러운 드래그를 위해) */
+.modal-main-display-image.dragging {
+  transition: none;
+}
+
+/* 줌 안내 텍스트 */
+.zoom-hint {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  border-radius: 20px;
+  font-size: 13px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* 메인 이미지에 마우스 오버 시 줌 안내 텍스트 표시 */
+.modal-main-image-container:hover .zoom-hint {
+  opacity: 1;
+}
+
+.zoom-hint i {
+  font-size: 14px;
+}
+
+/* 모바일 대응 - 작은 화면에서 카운터 크기 조정 */
+@media (max-width: 768px) {
+  .image-counter {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+  
+  .image-counter i {
+    font-size: 14px;
+  }
+  
+  .zoom-hint {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+}

@@ -19,6 +19,8 @@ import com.quadrant.travelshoot.domains.review.repository.ReviewAiSummaryReposit
 import com.quadrant.travelshoot.domains.review.repository.ReviewRepository;
 import com.quadrant.travelshoot.domains.reservation.repository.ReservationRepository;
 import com.quadrant.travelshoot.domains.review.service.ReviewService;
+import com.quadrant.travelshoot.domains.stay.repository.StayRepository;
+import com.quadrant.travelshoot.domains.stay.service.StayService;
 import com.quadrant.travelshoot.domains.user.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +48,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewAiSummaryRepository reviewAiSummaryRepository;
     private final ReviewAiSummaryService reviewAiSummaryService;
     private final FileUploadService fileUploadService;
+    private final StayRepository stayRepository;
 
 
 
@@ -120,6 +123,8 @@ public class ReviewServiceImpl implements ReviewService {
 
         Review savedReview = reviewRepository.save(review);
 
+
+
         // 2. 이미지 업로드 처리
         String imageUrl = null;
         if (request.getReviewImage() != null && !request.getReviewImage().isEmpty()) {
@@ -141,6 +146,8 @@ public class ReviewServiceImpl implements ReviewService {
             }
         }
 
+        // 숙소 별점 업데이트
+        stayRepository.updateAverageRating(request.getStayId());
         return reviewMapper.toReviewRegistResponse(savedReview, imageUrl);
     }
 
@@ -209,6 +216,9 @@ public class ReviewServiceImpl implements ReviewService {
             log.info("기존 리뷰 이미지 유지 - s3Url: {}", imageUrl);
 
         }
+
+        // 숙소 별점 업데이트
+        stayRepository.updateAverageRating(reviewUpdateRequest.getStayId());
 
         return reviewMapper.toReviewRegistResponse(updatedReview, imageUrl);
     }
@@ -330,22 +340,6 @@ public class ReviewServiceImpl implements ReviewService {
     public Integer countReview(Long stayId){
         return Math.toIntExact(reviewRepository.countByStayId(stayId));
     }
-
-    /**
-     * 리뷰 별점에 따른 숙소 평균별점
-     * 1. 리뷰들 모아서 집계 평균 조회
-     * 2. 조회한 값을 숙소 엔티티에 setAverageRating(1번)
-     * 3. 그거를 리뷰 cud에 호출
-     */
-    public BigDecimal getStayAverageRating(Long stayId){
-        Double totalRating = reviewRepository.findAverageByStayId(stayId);
-
-        if(totalRating == null){
-            totalRating = 0.0;
-        }
-        return BigDecimal.valueOf(totalRating).setScale(2, RoundingMode.HALF_UP); // 2자리까지
-    }
-
 
     /**
      * Pageable 객체 생성
