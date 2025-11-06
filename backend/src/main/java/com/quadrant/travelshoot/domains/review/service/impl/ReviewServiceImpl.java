@@ -19,6 +19,8 @@ import com.quadrant.travelshoot.domains.review.repository.ReviewAiSummaryReposit
 import com.quadrant.travelshoot.domains.review.repository.ReviewRepository;
 import com.quadrant.travelshoot.domains.reservation.repository.ReservationRepository;
 import com.quadrant.travelshoot.domains.review.service.ReviewService;
+import com.quadrant.travelshoot.domains.stay.repository.StayRepository;
+import com.quadrant.travelshoot.domains.stay.service.StayService;
 import com.quadrant.travelshoot.domains.user.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +48,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewAiSummaryRepository reviewAiSummaryRepository;
     private final ReviewAiSummaryService reviewAiSummaryService;
     private final FileUploadService fileUploadService;
+    private final StayRepository stayRepository;
 
 
 
@@ -120,6 +123,8 @@ public class ReviewServiceImpl implements ReviewService {
 
         Review savedReview = reviewRepository.save(review);
 
+
+
         // 2. 이미지 업로드 처리
         String imageUrl = null;
         if (request.getReviewImage() != null && !request.getReviewImage().isEmpty()) {
@@ -140,6 +145,12 @@ public class ReviewServiceImpl implements ReviewService {
                 throw new RuntimeException("이미지 업로드 실패", e);
             }
         }
+
+        // 숙소 별점 업데이트
+        stayRepository.getReferenceById(request.getStayId()).setAverageRating(getStayAverageRating(request.getStayId()));
+
+
+
 
         return reviewMapper.toReviewRegistResponse(savedReview, imageUrl);
     }
