@@ -389,5 +389,15 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
         """)
         BigDecimal calculateAveragePrice();
 
-        
+    /**
+     * 리뷰 등록, 수정 시 숙소 평균평점 업데이트
+     */
+    @Modifying
+    @Query("UPDATE Stay s SET s.averageRating = " +
+            "(SELECT COALESCE(ROUND(AVG(r.totalRating), 2), 0.0) " +
+            "FROM Review r WHERE r.stayId = s.id) " +
+            "WHERE s.id = :stayId")
+    void updateAverageRating(@Param("stayId") Long stayId);
+
+
 }
