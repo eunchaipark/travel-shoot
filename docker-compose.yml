@@ -62,6 +62,32 @@ services:
     networks:
       - backendnet
 
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: elasticsearch-container
+    restart: unless-stopped
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"  # 메모리 설정 (개발 환경용)
+      - bootstrap.memory_lock=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    networks:
+      - backendnet
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
   # === Spring Boot Backend ===
   backend:
     build:
@@ -85,6 +111,7 @@ services:
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: 6379
+      SPRING_ELASTICSEARCH_URIS: http://elasticsearch:9200
     volumes:
       - ./backend/src:/app/src
     networks:
@@ -133,3 +160,4 @@ networks:
 volumes:
   mysql-data:
   redis-data:
+  elasticsearch-data: 
