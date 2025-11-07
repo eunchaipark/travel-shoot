@@ -310,6 +310,8 @@ const MainPage = () => {
   // 외부 클릭 핸들러 - 의존성 최소화
   useEffect(() => {
     const handleClickOutside = (e) => {
+      const isSearchButton = e.target.closest(".main-calendar-search-button");
+      if (isSearchButton) return;
       const isDateCard = e.target
         .closest(".search-card")
         ?.querySelector(".main-calendar-date-input");
