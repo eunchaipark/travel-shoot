@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -399,5 +400,8 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
             "WHERE s.id = :stayId")
     void updateAverageRating(@Param("stayId") Long stayId);
 
+
+    @Query("SELECT s FROM Stay s WHERE s.updatedAt > :afterTime")
+    List<Stay> findByUpdatedAtAfter(@Param("afterTime") LocalDateTime afterTime);
 
 }

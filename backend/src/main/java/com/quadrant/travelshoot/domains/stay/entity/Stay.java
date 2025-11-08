@@ -87,10 +87,14 @@ public class Stay {
     @Builder.Default
     private List<StayAmenity> stayAmenities = new ArrayList<>();
 
+    // Region 관계 추가
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id", insertable = false, updatable = false)
+    private Region region;
+
     @Transient
     @Builder.Default
     private List<FileUpload> stayImages = new ArrayList<>();
-    /// ////////////////////
 
     @Transient
     private String regionName;
@@ -103,6 +107,29 @@ public class Stay {
 
     @Transient
     private Integer maxGuests;
+
+    // ===== Elasticsearch 동기화용 메서드 =====
+    
+    /**
+     * 편의시설 목록 조회
+     */
+    public List<StayAmenity> getAmenities() {
+        return this.stayAmenities;
+    }
+
+    /**
+     * Region 엔티티 조회
+     */
+    public Region getRegion() {
+        return this.region;
+    }
+
+    /**
+     * 활성 상태 조회
+     */
+    public Boolean getIsActive() {
+        return this.isActive;
+    }
 
     public void setRegionName(String regionName) {
         this.regionName = regionName;
@@ -150,17 +177,6 @@ public class Stay {
 
     // ===== 검색용 편의 메서드 =====
 
-    /**
-     * 지역명 조회를 위한 메서드 (검색용)
-     * 실제로는 Region 엔티티를 조인해야 하지만,
-     * 검색 성능을 위해 regionId로만 처리
-     */
-    public String getRegion() {
-        // 이 메서드는 Repository에서 JOIN으로 처리하거나
-        // 별도의 Region 조회 로직 필요
-        return "지역_" + regionId; // 임시
-    }
-
     // 숙소 대표 이미지
     public String getThumbnailImage() {
         // 실제로는 Room 또는 별도 이미지 테이블에서 가져와야 함
@@ -171,12 +187,6 @@ public class Stay {
     public BigDecimal getBasePrice() {
         // 실제로는 Room 테이블에서 최저가 조회 필요
         return BigDecimal.valueOf(100000); // 임시
-    }
-
-    // 최대 수용 가능 인원수
-    public Integer getMaxGuests() {
-        // 실제로는 Room 테이블에서 최대값 조회 필요
-        return 4; // 임시
     }
 
     // 예약 가능 여부

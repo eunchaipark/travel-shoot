@@ -24,9 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Elasticsearch 기반 숙소 검색 서비스
- */
 @Slf4j
 @Service("elasticsearchService")
 @RequiredArgsConstructor
@@ -91,49 +88,47 @@ public class StayElasticsearchService implements StaySearchService {
         log.info("🔍 ES 검색 - region: {}, stayName: {}", request.getRegion(), request.getStayName());
 
         try {
-            List<Query> mustQueries = new ArrayList<>();
-            mustQueries.add(Query.of(q -> q.term(t -> t.field("isActive").value(true))));
-
-            List<Query> shouldQueries = new ArrayList<>();
+            BoolQuery.Builder boolBuilder = new BoolQuery.Builder();
+            boolBuilder.must(m -> m.term(t -> t.field("isActive").value(true)));
 
             if (request.getStayName() != null && !request.getStayName().isEmpty()) {
-                shouldQueries.add(Query.of(q -> q.match(m -> m
+                boolBuilder.should(sh -> sh.match(m -> m
                     .field("name")
                     .query(request.getStayName())
                     .boost(2.0f)
-                )));
-                shouldQueries.add(Query.of(q -> q.match(m -> m
+                ));
+                boolBuilder.should(sh -> sh.match(m -> m
                     .field("name.ngram")
                     .query(request.getStayName())
-                )));
+                ));
             }
 
             if (request.getRegion() != null && !request.getRegion().isEmpty()) {
-                shouldQueries.add(Query.of(q -> q.match(m -> m
+                boolBuilder.should(sh -> sh.match(m -> m
                     .field("region.areaName")
                     .query(request.getRegion())
-                )));
-                shouldQueries.add(Query.of(q -> q.match(m -> m
+                ));
+                boolBuilder.should(sh -> sh.match(m -> m
                     .field("region.cityName")
                     .query(request.getRegion())
-                )));
+                ));
+            }
+
+            if (request.getStayName() != null || request.getRegion() != null) {
+                boolBuilder.minimumShouldMatch("1");
             }
 
             if (request.getTotalGuests() != null) {
                 Integer totalGuests = request.getTotalGuests();
-                Query nestedQuery = Query.of(q -> q.nested(n -> n
+                boolBuilder.must(m -> m.nested(n -> n
                     .path("rooms")
                     .query(nq -> nq.range(r -> r
-                        .field("rooms.capacity")
-                        .gte(JsonData.of(totalGuests))
+                        .number(nr -> nr
+                            .field("rooms.capacity")
+                            .gte((double) totalGuests)
+                        )
                     ))
                 ));
-                mustQueries.add(nestedQuery);
-            }
-
-            BoolQuery.Builder boolBuilder = new BoolQuery.Builder().must(mustQueries);
-            if (!shouldQueries.isEmpty()) {
-                boolBuilder.should(shouldQueries).minimumShouldMatch("1");
             }
 
             co.elastic.clients.elasticsearch.core.SearchResponse<StayDocument> esResponse = 
@@ -159,40 +154,29 @@ public class StayElasticsearchService implements StaySearchService {
         log.info("🔍 ES 필터 검색 - 활성 필터: {}개", request.getActiveFilterCount());
 
         try {
-            List<Query> mustQueries = new ArrayList<>();
-            mustQueries.add(Query.of(q -> q.term(t -> t.field("isActive").value(true))));
+            BoolQuery.Builder boolBuilder = new BoolQuery.Builder();
+            boolBuilder.must(m -> m.term(t -> t.field("isActive").value(true)));
 
             // ===== 가격 범위 =====
             if (request.getMinPrice() != null || request.getMaxPrice() != null) {
                 BigDecimal minPriceBD = request.getMinPrice();
                 BigDecimal maxPriceBD = request.getMaxPrice();
                 
-                Query priceQuery = Query.of(q -> q.nested(n -> n
+                boolBuilder.must(m -> m.nested(n -> n
                     .path("rooms")
-                    .query(nq -> {
-                        if (minPriceBD != null && maxPriceBD != null) {
-                            // 최소/최대 둘 다 있을 때
-                            return nq.range(r -> r
-                                .field("rooms.weekdayPrice")
-                                .gte(JsonData.of(minPriceBD.intValue()))
-                                .lte(JsonData.of(maxPriceBD.intValue()))
-                            );
-                        } else if (minPriceBD != null) {
-                            // 최소만 있을 때
-                            return nq.range(r -> r
-                                .field("rooms.weekdayPrice")
-                                .gte(JsonData.of(minPriceBD.intValue()))
-                            );
-                        } else {
-                            // 최대만 있을 때
-                            return nq.range(r -> r
-                                .field("rooms.weekdayPrice")
-                                .lte(JsonData.of(maxPriceBD.intValue()))
-                            );
-                        }
-                    })
+                    .query(nq -> nq.range(r -> r
+                        .number(nr -> {
+                            nr.field("rooms.weekdayPrice");
+                            if (minPriceBD != null) {
+                                nr.gte(minPriceBD.doubleValue());
+                            }
+                            if (maxPriceBD != null) {
+                                nr.lte(maxPriceBD.doubleValue());
+                            }
+                            return nr;
+                        })
+                    ))
                 ));
-                mustQueries.add(priceQuery);
             }
 
             // ===== 숙소 타입 =====
@@ -201,36 +185,36 @@ public class StayElasticsearchService implements StaySearchService {
                     .map(FieldValue::of)
                     .collect(Collectors.toList());
                 
-                Query typeQuery = Query.of(q -> q.terms(t -> t
+                boolBuilder.must(m -> m.terms(t -> t
                     .field("stayType")
                     .terms(tv -> tv.value(typeValues))
                 ));
-                mustQueries.add(typeQuery);
             }
 
             // ===== 평점 =====
             if (request.getRatings() != null && !request.getRatings().isEmpty()) {
-                List<Query> ratingQueries = new ArrayList<>();
+                BoolQuery.Builder ratingBool = new BoolQuery.Builder();
+                
                 for (Integer rating : request.getRatings()) {
-                    Query ratingQuery = Query.of(q -> q.range(r -> r
-                        .field("rating")
-                        .gte(JsonData.of(rating))
-                        .lt(JsonData.of(rating + 1))
+                    ratingBool.should(sh -> sh.range(r -> r
+                        .number(nr -> nr
+                            .field("rating")
+                            .gte((double) rating)
+                            .lt((double) (rating + 1))
+                        )
                     ));
-                    ratingQueries.add(ratingQuery);
                 }
-                Query ratingBoolQuery = Query.of(q -> q.bool(b -> b.should(ratingQueries)));
-                mustQueries.add(ratingBoolQuery);
+                
+                boolBuilder.must(m -> m.bool(ratingBool.build()));
             }
 
             // ===== 편의시설 =====
             if (request.getAmenities() != null && !request.getAmenities().isEmpty()) {
                 for (String amenity : request.getAmenities()) {
-                    Query amenityQuery = Query.of(q -> q.term(t -> t
+                    boolBuilder.must(m -> m.term(t -> t
                         .field("amenities")
                         .value(amenity)
                     ));
-                    mustQueries.add(amenityQuery);
                 }
             }
 
@@ -239,35 +223,38 @@ public class StayElasticsearchService implements StaySearchService {
                 Integer bedroomCount = request.getBedroomCount();
                 Integer bathroomCount = request.getBathroomCount();
                 
-                Query roomNestedQuery = Query.of(q -> q.nested(n -> n
+                BoolQuery.Builder roomBool = new BoolQuery.Builder();
+                
+                if (bedroomCount != null) {
+                    roomBool.must(rm -> rm.range(r -> r
+                        .number(nr -> nr
+                            .field("rooms.bedroomCount")
+                            .gte((double) bedroomCount)
+                        )
+                    ));
+                }
+                
+                if (bathroomCount != null) {
+                    roomBool.must(rm -> rm.range(r -> r
+                        .number(nr -> nr
+                            .field("rooms.bathroomCount")
+                            .gte((double) bathroomCount)
+                        )
+                    ));
+                }
+                
+                Query roomQuery = roomBool.build()._toQuery();
+                
+                boolBuilder.must(m -> m.nested(n -> n
                     .path("rooms")
-                    .query(nq -> {
-                        List<Query> roomQueries = new ArrayList<>();
-                        
-                        if (bedroomCount != null) {
-                            roomQueries.add(Query.of(rq -> rq.range(r -> r
-                                .field("rooms.bedroomCount")
-                                .gte(JsonData.of(bedroomCount))
-                            )));
-                        }
-                        
-                        if (bathroomCount != null) {
-                            roomQueries.add(Query.of(rq -> rq.range(r -> r
-                                .field("rooms.bathroomCount")
-                                .gte(JsonData.of(bathroomCount))
-                            )));
-                        }
-                        
-                        return nq.bool(b -> b.must(roomQueries));
-                    })
+                    .query(roomQuery)
                 ));
-                mustQueries.add(roomNestedQuery);
             }
 
             co.elastic.clients.elasticsearch.core.SearchResponse<StayDocument> esResponse = 
                 esClient.search(s -> s
                     .index("stays")
-                    .query(q -> q.bool(b -> b.must(mustQueries)))
+                    .query(q -> q.bool(boolBuilder.build()))
                     .from(pageable.getPageNumber() * pageable.getPageSize())
                     .size(pageable.getPageSize())
                     .sort(sort -> sort.field(f -> f.field("rating").order(SortOrder.Desc)))
@@ -296,8 +283,6 @@ public class StayElasticsearchService implements StaySearchService {
             return search(searchRequest, pageable);
         }
     }
-
-    // ===== Private Methods =====
 
     private SearchResponse buildSearchResponse(
         co.elastic.clients.elasticsearch.core.SearchResponse<StayDocument> esResponse,
