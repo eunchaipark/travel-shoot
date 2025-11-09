@@ -325,8 +325,8 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                 "INNER JOIN rooms r ON s.stay_id = r.stay_id " +
                 "INNER JOIN regions reg ON s.region_id = reg.region_id " +
                 "WHERE s.is_active = true " +
-                "AND s.average_rating >= 3.5 " +
-                "AND s.review_count >= 10 " +
+                "AND s.average_rating >= 3.0 " +
+                "AND s.review_count >= 0 " +
                 "AND r.is_available = true " +
                 "AND r.is_active = true " +
                 "AND reg.city_name IS NOT NULL " +
