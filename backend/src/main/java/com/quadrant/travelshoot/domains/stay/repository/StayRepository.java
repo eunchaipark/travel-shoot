@@ -310,7 +310,7 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                 WHERE s.is_active = 1
                 GROUP BY s.stay_id, s.stay_name, s.address, s.average_rating,
                         s.latitude, s.longitude, s.check_in_time, s.check_out_time, s.stay_type, s.review_count
-                HAVING reservationGrowthRate >= 0 OR viewGrowthRate >= 0
+                HAVING (reservationGrowthRate >= 0 OR viewGrowthRate >= 0) AND recent7DaysReservations >= 3
                 ORDER BY 
                 reservationGrowthRate DESC, 
                 viewGrowthRate DESC,
