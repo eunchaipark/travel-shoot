@@ -132,18 +132,29 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
                                             </div>
                                         </div>
 
-                                        {room.roomCount && room.isAvailable ? 
+                                        {/*{room.roomCount && room.isAvailable ?*/}
+                                        {/*    <button className="btn btn-custom fw-bold"*/}
+                                        {/*        onClick={()=>handleReservation(room.roomId)}>*/}
+                                        {/*        예약하기*/}
+                                        {/*    </button> :*/}
+                                        {/*    <button*/}
+                                        {/*        className="btn btn-custom fw-bold"*/}
+                                        {/*        disabled>*/}
+                                        {/*        예약마감*/}
+                                        {/*    </button>*/}
+
+
+                                        {/*}*/}
+                                        {room.isAvailable && room.availableRooms > 0 ?
                                             <button className="btn btn-custom fw-bold"
-                                                onClick={()=>handleReservation(room.roomId)}>
+                                                    onClick={()=>handleReservation(room.roomId)}>
                                                 예약하기
                                             </button> :
-                                            <button 
+                                            <button
                                                 className="btn btn-custom fw-bold"
                                                 disabled>
                                                 예약마감
                                             </button>
-
-                                    
                                         }
                                         
                                     </div>
