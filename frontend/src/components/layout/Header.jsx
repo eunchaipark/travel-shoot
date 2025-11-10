@@ -292,28 +292,6 @@ const Header = () => {
                                                 onClick={handleSearchClick}
                                             />
 
-                                            {/* 숙소명 지우기 버튼 */}
-                                            {stayName && (
-                                                <button
-                                                    onClick={() => {
-                                                        setSearchValue('');
-                                                        setStayName('');
-                                                        setSelectedType('REGION');
-                                                    }}
-                                                    style={{
-                                                        position: 'absolute',
-                                                        right: '8px',
-                                                        background: 'none',
-                                                        border: 'none',
-                                                        cursor: 'pointer',
-                                                        fontSize: '16px',
-                                                        color: '#999'
-                                                    }}
-                                                >
-                                                    ✕
-                                                </button>
-                                            )}
-
                                             {/* 드롭다운 suggestions */}
                                             <div
                                                 ref={suggestionsRef}
