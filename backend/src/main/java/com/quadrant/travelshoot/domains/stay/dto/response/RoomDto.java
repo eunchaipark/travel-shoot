@@ -58,4 +58,5 @@ public class RoomDto {
     private Long viewCount;
     private Integer reservationCount;
 
+    private Integer availableRooms;
 }

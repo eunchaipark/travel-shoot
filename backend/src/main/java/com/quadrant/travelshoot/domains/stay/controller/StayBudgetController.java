@@ -9,7 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.format.annotation.DateTimeFormat;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -28,9 +29,14 @@ public class StayBudgetController {
      * 숙소 상세 조회
      */
     @GetMapping("/{stayId}")
-    public ResponseEntity<?> getStayDetail(@PathVariable Long stayId){
+    public ResponseEntity<?> getStayDetail(@PathVariable Long stayId,
+     @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkIn,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkOut
+    ){
 
-        StayDetailResponse response = stayService.getStayDetail(stayId);
+        StayDetailResponse response = stayService.getStayDetail(stayId, checkIn, checkOut);
         return ResponseEntity.ok(response);
     }
 
