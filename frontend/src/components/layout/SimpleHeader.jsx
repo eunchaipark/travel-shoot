@@ -124,7 +124,7 @@ const SimpleHeader = () => {
             checkOut,
             adults: 2,
             children: 0,
-            region: searchValue
+            stayName: searchValue
         });
 
         navigate(`/search?${params.toString()}`);

@@ -247,9 +247,17 @@
     margin-right: 3px;
 }
 
-.staylist-page .filter-sidebar .filter-section .filter-cnt-btn:hover{
+/* 선택된 상태 */
+.staylist-page .filter-sidebar .filter-section .filter-cnt-btn.active {
     border: 1px solid #ff6b6b;
-    background-color: #FFF4EC ;
+    background-color: #FFF4EC;
+    font-weight: 600;
+}
+
+/* hover 시 - border를 투명하게 해서 크기 유지 */
+.staylist-page .filter-sidebar .filter-section .filter-cnt-btn:hover:not(.active) {
+    border: 1px solid transparent;
+    background-color: #FFF4EC;
     font-weight: 600;
 }
 
@@ -644,6 +652,10 @@
 
     .staylist-page .stay_location-mobile {
         display: inline;
+    }
+
+    .staylist-page .filter-sidebar .filter-section .filter-cnt-btn {
+        padding: 6px 16px;
     }
 
 }
@@ -1111,22 +1123,21 @@
         font-weight: 600;
     }
 
-    .mobile-filter-modal .filter-cnt-btn:hover{
-        border: 4px solid #ff6b6b;
-        background-color: white ;
-        color: #000000;
-        font-weight: 600;
-    }
-
     .mobile-filter-modal .mfilter-person-icon{
         margin-right: 1px;
         width: 20px;
         height: 20px;
     }
 
-    .mobile-filter-modal .filter-cnt-btn:hover{
+    .mobile-filter-modal .filter-cnt-btn.active {
         border: 1px solid #ff6b6b;
-        background-color: #FFF4EC ;
+        background-color: #FFF4EC;
+        font-weight: 600;
+    }
+
+    .mobile-filter-modal .filter-cnt-btn:hover:not(.active) {
+        border: 1px solid transparent;
+        background-color: #FFF4EC;
         font-weight: 600;
     }
 
