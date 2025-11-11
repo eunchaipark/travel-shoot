@@ -7,6 +7,7 @@ import com.quadrant.travelshoot.domains.travelcourse.service.TravelCourseService
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,9 @@ public class TravelCourseController {
         log.info("여행 코스 조회 요청 - id: {}, type: {}", id, type);
         Long userId = Long.valueOf(authentication.getName());
         TravelCourseResponse response = travelCourseService.getCourse(id, type, userId);
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // 204 No Content
+        }
         return ResponseEntity.ok(response);
     }
 
