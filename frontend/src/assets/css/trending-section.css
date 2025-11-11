@@ -457,7 +457,7 @@
     .main-page .additional-content-section .trending-section{
         padding-left: 15px;
         padding-right: 15px;
-
+        padding-bottom: 45px;
     }
     .main-page .additional-content-section .trending-section .trending-container .content-wrapper .slider-container .trending-grid {
         gap: 6px;
