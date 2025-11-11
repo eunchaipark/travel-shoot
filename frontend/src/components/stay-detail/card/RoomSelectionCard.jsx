@@ -120,6 +120,12 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
                                 </div>
 
                                 <div className="col-lg-4 col-md-5 text-md-end text-sm-end mt-md-5 room-details-container ">
+
+                                    {/* 윤하님 남은객실 2개 아래면 빨강으로 표시하면 좋을거 같다는 의견으로 효과 찾아서 그냥 넣어봤습니다. 예뽀게 수정해주세요~ */}
+                                    <span className={room.availableRooms <= 2 ? 'text-danger fw-bold' : 'text-muted'}>
+                                        남은 객실: {room.availableRooms}개
+                                    </span>
+
                                     <div className="room-details text-muted font-12 fw-bold mb-2 dark-gray d-flex justify-content-end">
                                         체크인 {room.checkInTime.slice(0, 5)} ~ 체크아웃 {room.checkOutTime.slice(0, 5)}
                                     </div>
