@@ -81,7 +81,10 @@ export const MiniCalendar = ({ selectedDates, onDateSelect }) => {
           key={dateStr}
           className={classes}
           data-date={dateStr}
-          onClick={() => !isPast && handleDayClick(dateStr)}
+          onClick={(e) => {
+            e.stopPropagation();  
+            if (!isPast) handleDayClick(dateStr);
+          }}
           style={{ cursor: isPast ? "not-allowed" : "pointer" }}
         >
           {day}
@@ -98,7 +101,10 @@ export const MiniCalendar = ({ selectedDates, onDateSelect }) => {
         <button
           type="button"
           className="mini-cal-prev"
-          onClick={handlePrevMonth}
+          onClick={(e) => {
+            e.stopPropagation();  
+            handlePrevMonth();
+          }}
         >
           ‹
         </button>
@@ -108,7 +114,10 @@ export const MiniCalendar = ({ selectedDates, onDateSelect }) => {
         <button
           type="button"
           className="mini-cal-next"
-          onClick={handleNextMonth}
+          onClick={(e) => {
+            e.stopPropagation();  
+            handleNextMonth();
+          }}
         >
           ›
         </button>

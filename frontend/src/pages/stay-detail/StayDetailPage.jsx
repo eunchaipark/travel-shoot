@@ -23,7 +23,7 @@ const StayDetailPage = () => {
     if (!stayId) return;
     try {
       const [stayResponse, imageResponse] = await Promise.all([
-        getStayDetail(stayId),
+        getStayDetail(stayId, checkIn, checkOut),
         getAllStayImages(stayId),
       ]);
       setStayData(stayResponse);
@@ -39,7 +39,8 @@ const StayDetailPage = () => {
     if(stayId){
       fetchData();
     }
-  }, [stayId])
+  }, [stayId, checkIn, checkOut]) //아아아아악 화난다...후하
+  // }, [stayId])
 
 
   return (

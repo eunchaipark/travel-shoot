@@ -310,6 +310,8 @@ const MainPage = () => {
   // 외부 클릭 핸들러 - 의존성 최소화
   useEffect(() => {
     const handleClickOutside = (e) => {
+      const isSearchButton = e.target.closest(".main-calendar-search-button");
+      if (isSearchButton) return;
       const isDateCard = e.target
         .closest(".search-card")
         ?.querySelector(".main-calendar-date-input");
@@ -320,12 +322,13 @@ const MainPage = () => {
         .closest(".search-card")
         ?.querySelector(".main-calendar-location-input");
       const isDateDropdown = e.target.closest(".date-dropdown-container");
+      const isMiniCalendar = e.target.closest(".mini-calendar");
       const isGuestDropdown = e.target.closest(".guest-dropdown-container");
       const isLocationDropdown = e.target.closest(".dropdown-suggestions");
       const isCalendar = e.target.closest("#calendar");
 
       // 날짜 드롭다운 닫기
-      if (!isDateCard && !isDateDropdown && !isCalendar && activeDropdown === 'date') {
+      if (!isDateCard && !isDateDropdown && !isMiniCalendar && !isCalendar && activeDropdown === 'date') {
         setActiveDropdown(null);
         if (!selectedDates.checkin || !selectedDates.checkout) {
           deactivateSelectionMode();
@@ -488,6 +491,7 @@ const MainPage = () => {
                     value={locationValue}
                     onChange={handleLocationInput}
                     onFocus={handleLocationFocus}
+                    onMouseDown={(e) => e.stopPropagation()}
                   />
 
                   {showLocationDropdown && suggestions.length > 0 && (
@@ -527,6 +531,7 @@ const MainPage = () => {
                     value={getDateDisplayText()}
                     readOnly
                     onClick={handleDateInputClick}
+                    onMouseDown={(e) => e.stopPropagation()}
                     style={{ cursor: "pointer" }}
                   />
                 </div>
@@ -563,6 +568,7 @@ const MainPage = () => {
                     value={getGuestText()}
                     readOnly
                     onClick={handleGuestInputClick}
+                    onMouseDown={(e) => e.stopPropagation()}
                     style={{ cursor: "pointer" }}
                   />
                 </div>

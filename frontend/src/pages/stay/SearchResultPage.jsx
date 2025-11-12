@@ -125,6 +125,9 @@ function StayCard({ stay }) {
                         {stay.amenities?.slice(0, 3).map((amenity, idx) => (
                             <span key={idx} className="tag">{amenity}</span>
                         ))}
+                        {stay.amenities?.length > 3 && (
+                            <span className="tag">+{stay.amenities.length - 3}</span>
+                        )}
                     </div>
                 </div>
                 <div className="card_bottom">
@@ -526,39 +529,24 @@ export default function SearchResultPage() {
                             <div className="filter-subsection">
                                 <div className="filter-subsection_title">침실 수</div>
                                 <div className="filter-bed-btn">
-                                    <button
-                                        className="filter-cnt-btn"
-                                        onClick={() => handleBedroomSelect(1)}
-                                        style={filters.bedroomCount === 1 ? {
-                                            borderColor: '#ff6b6b',
-                                            backgroundColor: '#FFF4EC',
-                                            fontWeight: 600
-                                        } : {}}
-                                    >
-                                        1개
-                                    </button>
-                                    <button
-                                        className="filter-cnt-btn"
-                                        onClick={() => handleBedroomSelect(2)}
-                                        style={filters.bedroomCount === 2 ? {
-                                            borderColor: '#ff6b6b',
-                                            backgroundColor: '#FFF4EC',
-                                            fontWeight: 600
-                                        } : {}}
-                                    >
-                                        2개
-                                    </button>
-                                    <button
-                                        className="filter-cnt-btn"
-                                        onClick={() => handleBedroomSelect(3)}
-                                        style={filters.bedroomCount === 3 ? {
-                                            borderColor: '#ff6b6b',
-                                            backgroundColor: '#FFF4EC',
-                                            fontWeight: 600
-                                        } : {}}
-                                    >
-                                        3개 이상
-                                    </button>
+                            <button
+                                className={`filter-cnt-btn ${filters.bedroomCount === 1 ? 'active' : ''}`}
+                                onClick={() => handleBedroomSelect(1)}
+                            >
+                                1개
+                            </button>
+                            <button
+                                className={`filter-cnt-btn ${filters.bedroomCount === 2 ? 'active' : ''}`}
+                                onClick={() => handleBedroomSelect(2)}
+                            >
+                                2개
+                            </button>
+                            <button
+                                className={`filter-cnt-btn ${filters.bedroomCount === 3 ? 'active' : ''}`}
+                                onClick={() => handleBedroomSelect(3)}
+                            >
+                                3개 이상
+                            </button>
                                 </div>
                             </div>
 
@@ -566,28 +554,18 @@ export default function SearchResultPage() {
                             <div className="filter-subsection">
                                 <div className="filter-subsection_title">욕실 수</div>
                                 <div className="filter-bath-btn">
-                                    <button
-                                        className="filter-cnt-btn"
-                                        onClick={() => handleBathroomSelect(1)}
-                                        style={filters.bathroomCount === 1 ? {
-                                            borderColor: '#ff6b6b',
-                                            backgroundColor: '#FFF4EC',
-                                            fontWeight: 600
-                                        } : {}}
-                                    >
-                                        1개
-                                    </button>
-                                    <button
-                                        className="filter-cnt-btn"
-                                        onClick={() => handleBathroomSelect(2)}
-                                        style={filters.bathroomCount === 2 ? {
-                                            borderColor: '#ff6b6b',
-                                            backgroundColor: '#FFF4EC',
-                                            fontWeight: 600
-                                        } : {}}
-                                    >
-                                        2개 이상
-                                    </button>
+                            <button
+                                className={`filter-cnt-btn ${filters.bathroomCount === 1 ? 'active' : ''}`}
+                                onClick={() => handleBathroomSelect(1)}
+                            >
+                                1개
+                            </button>
+                            <button
+                                className={`filter-cnt-btn ${filters.bathroomCount === 2 ? 'active' : ''}`}
+                                onClick={() => handleBathroomSelect(2)}
+                            >
+                                2개 이상
+                            </button>
                                 </div>
                             </div>
 
@@ -648,8 +626,8 @@ export default function SearchResultPage() {
                         <div className="filter-section">
                             <div className="filter-section_title">이용가능한 서비스 / 옵션</div>
                             <div className="filter-checkbox-group">
-                                {['조식 포함', '무료 취소일', '수영장', 'OTT 이용가능', '주차장', '금연',
-                                    '피트니스 센터', '반려동물 동반 가능', '장애인용 편의시설', '공항 이동 교통편 서비스'].map((option) => (
+                                {['조식 포함', '무료 취소일', '수영장', 'OTT 가능', '주차장', '금연',
+                                    '피트니스 센터', '반려동물 동반', '장애인용 편의 시설', '공항 셔틀'].map((option) => (
                                     <label key={option} className="form-checkbox">
                                         <input
                                             type="checkbox"
@@ -800,7 +778,6 @@ export default function SearchResultPage() {
                         {/* 숙소 특성 */}
                         <div className="filter-section">
                             <div className="mfilter-section_title">숙소 특성</div>
-
                             {/* 침실 수 */}
                             <div className="mobile-feature-section">
                                 <div className="mfilter-subsection_title">침실 수</div>
@@ -808,13 +785,8 @@ export default function SearchResultPage() {
                                     {[1, 2, 3].map((count) => (
                                         <button
                                             key={count}
-                                            className="filter-cnt-btn"
+                                            className={`filter-cnt-btn ${filters.bedroomCount === count ? 'active' : ''}`}
                                             onClick={() => handleBedroomSelect(count)}
-                                            style={filters.bedroomCount === count ? {
-                                                borderColor: '#ff6b6b',
-                                                backgroundColor: '#FFF4EC',
-                                                fontWeight: 600
-                                            } : {}}
                                         >
                                             {count === 3 ? '3개 이상' : `${count}개`}
                                         </button>
@@ -829,13 +801,8 @@ export default function SearchResultPage() {
                                     {[1, 2].map((count) => (
                                         <button
                                             key={count}
-                                            className="filter-cnt-btn"
+                                            className={`filter-cnt-btn ${filters.bathroomCount === count ? 'active' : ''}`}
                                             onClick={() => handleBathroomSelect(count)}
-                                            style={filters.bathroomCount === count ? {
-                                                borderColor: '#ff6b6b',
-                                                backgroundColor: '#FFF4EC',
-                                                fontWeight: 600
-                                            } : {}}
                                         >
                                             {count === 2 ? '2개 이상' : `${count}개`}
                                         </button>
@@ -902,8 +869,8 @@ export default function SearchResultPage() {
                         <div className="filter-section">
                             <div className="mfilter-section_title">이용가능한 서비스 / 옵션</div>
                             <div className="filter-checkbox-group">
-                                {['조식 포함', '무료 취소일', '수영장', 'OTT 이용가능', '주차장', '금연',
-                                    '피트니스 센터', '반려동물 동반 가능', '장애인용 편의시설', '공항 이동 교통편 서비스'].map((option) => (
+                                {['조식 포함', '무료 취소일', '수영장', 'OTT 가능', '주차장', '금연',
+                                    '피트니스 센터', '반려동물 동반', '장애인용 편의 시설', '공항 셔틀'].map((option) => (
                                     <label key={option} className="form-checkbox">
                                         <input
                                             type="checkbox"
