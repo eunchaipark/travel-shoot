@@ -1,14 +1,21 @@
 
 // API 응답 타입 검사 및 에러 처리
 const handleResponse = async (response) => {
+    const data = await response.json();
+    // 전체 응답 구조 확인
+    console.log('Response status:', response.status);
+    console.log('Response data:', data.data);
+    
     if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        const error = new Error(errorData.message || `HTTP error! status: ${response.status}`);
-        error.status = response.status;
-        error.data = errorData;
-        throw error;
+        // validation 에러 처리
+        if (response.status === 400) {
+            const error = new Error(data.error.code || '입력 값이 올바르지 않습니다.');
+            error.validationMsgs = data.data; // 현재 valid message
+            error.status = response.status; // 에러 상태 코드
+            throw error;
+        }
     }
-    return response.json();
+    return data;
 };
 
 /**
@@ -25,7 +32,7 @@ export const createReview = async (formData) => {
         });
         return await handleResponse(response);
     } catch (error) {
-        console.error('Error creating review:', error);
+        console.error(error);
         throw error;
     }
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/components/context/AuthContext';
 import { useReservation } from '@/hooks/reservation/useReservation';
@@ -12,6 +12,30 @@ import PaymentLoading from "@/components/loading/PaymentLoading";
 const ReservationPaymentPage = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // 페이지 로드 시 완료된 예약이 있는지 체크
+        const completedReservationId = sessionStorage.getItem('completedReservationId');
+        if (completedReservationId &&
+            completedReservationId === searchParams.get('reservationId')) {
+            alert("이미 결제가 완료된 내역입니다.");
+            navigate(`/payment-complete?reservationId=${completedReservationId}`, { replace: true });
+            return;
+        }
+
+        const checkCompletedReservation = () => {
+            const completedReservationId = sessionStorage.getItem('completedReservationId');
+            if (completedReservationId) {
+                alert("이미 결제가 완료된 내역입니다.");
+                navigate(`/payment-complete?reservationId=${completedReservationId}`, { replace: true });
+            }
+        };
+
+        window.addEventListener('popstate', checkCompletedReservation);
+
+        return () => window.removeEventListener('popstate', checkCompletedReservation);
+    }, [navigate, searchParams]);
+
     const { isAuthenticated } = useAuth();
 
 
@@ -81,12 +105,13 @@ const ReservationPaymentPage = () => {
         try {
             setIsPaymentLoading(true);
 
-            const result = await createReservation(formData);
+            const result = await createReservation(formData, setIsPaymentLoading);
 
             // 카카오페이는 result를 반환하지 않음 (postMessage로 처리)
             if (result) {
                 // 카드결제, 네이버페이 등
                 if (result.success) {
+                    sessionStorage.setItem('completedReservationId', result.reservationId);
                     navigate(`/payment-complete?reservationId=${result.reservationId}`, { replace: true });
                 } else {
                     alert("결제 처리 중 오류가 발생했습니다.");
@@ -241,7 +266,17 @@ const ReservationPaymentPage = () => {
                                             <div className="price-highlight text-nowrap">
                                                 <span className="small-text me-2 mb-1 standard">숙박/1박당</span>
                                                 ₩ {reservationFormatters.formatPrice(
-                                                priceData.dailyPrices?.find(d => d.dayType === '평일')?.price || 0
+                                                (() => {
+                                                    const weekdayPrice = priceData.dailyPrices?.find(d => d.dayType === '평일')?.price;
+                                                    const weekendPrice = priceData.dailyPrices?.find(d => d.dayType === '주말')?.price;
+
+                                                    // 둘 다 있으면 평균을 1000원 단위로 반올림
+                                                    if (weekdayPrice && weekendPrice) {
+                                                        const average = (weekdayPrice + weekendPrice) / 2;
+                                                        return Math.round(average / 1000) * 1000;
+                                                    }
+                                                    return weekdayPrice || weekendPrice || 0;
+                                                })()
                                             )}
                                             </div>
                                         )}

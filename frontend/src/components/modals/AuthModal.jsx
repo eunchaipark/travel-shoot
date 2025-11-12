@@ -244,7 +244,7 @@ const AuthModal = ({ isOpen, onClose }) => {
             alert('인증번호가 확인되었습니다');
         }else{
             console.error('회원가입 인증 코드 확인 실패:', result.error);
-            alert(result.error || '인증번호가 일치하지 않습니다');
+            alert('인증번호가 일치하지 않습니다');
         }
     };
 
@@ -264,7 +264,7 @@ const AuthModal = ({ isOpen, onClose }) => {
             alert('인증번호가 확인되었습니다');
         }else{
             console.error('비밀번호 재설정 인증 코드 확인 실패:', result.error);
-            alert(result.error || '인증번호가 일치하지 않습니다');
+            alert('인증번호가 일치하지 않습니다');
         }
     };
 
@@ -472,7 +472,9 @@ const AuthModal = ({ isOpen, onClose }) => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
-                                <button onClick={sendSignupVerification}>
+                                <button onClick={sendSignupVerification}
+                                        disabled={isSignupTimerActive}>
+
                                     이메일 인증
                                 </button>
                             </div>
@@ -557,7 +559,8 @@ const AuthModal = ({ isOpen, onClose }) => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
-                                <button onClick={sendResetVerification}>
+                                <button onClick={sendResetVerification}
+                                        disabled={isResetTimerActive}>
                                     이메일 인증
                                 </button>
                             </div>

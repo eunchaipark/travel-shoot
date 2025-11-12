@@ -10,6 +10,7 @@ import com.quadrant.travelshoot.domains.reservation.enums.ReservationStatus;
 import com.quadrant.travelshoot.domains.reservation.enums.TransportationMethod;
 import com.quadrant.travelshoot.domains.reservation.repository.ReservationRepository;
 import com.quadrant.travelshoot.domains.reservation.service.ReservationService;
+import com.quadrant.travelshoot.domains.review.service.ReviewService;
 import com.quadrant.travelshoot.domains.stay.entity.Room;
 import com.quadrant.travelshoot.domains.stay.entity.Stay;
 import com.quadrant.travelshoot.domains.stay.repository.RoomRepository;
@@ -44,6 +45,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final StayService stayService;
     private final PaymentService paymentService;
     private final FileUploadService fileUploadService;
+    private final ReviewService reviewService;
 
     //TODO : 가격 계산 추후에 추가할 가능성 염두
 //    private static final BigDecimal TAX_RATE = new BigDecimal("0.10"); //TODO : 세금 10% 청구
@@ -160,6 +162,26 @@ public class ReservationServiceImpl implements ReservationService {
         Room room = roomRepository.findById(request.getRoomId())
                 .orElseThrow(() -> new IllegalArgumentException("객실을 찾을 수 없습니다"));
 
+        // ⭐️ 재고 재확인 (추가된 부분) ⭐️
+        Long maxBookingCount = reservationRepository.findMaxDailyBookingCount(
+                request.getRoomId(),
+                request.getCheckInDate().toString(),
+                request.getCheckOutDate().toString()
+        );
+
+        long availableRooms = room.getRoomCount() - maxBookingCount;
+
+        if (availableRooms <= 0) {
+            log.warn("재고 부족 - roomId: {}, 날짜: {} ~ {}",
+                    request.getRoomId(), request.getCheckInDate(), request.getCheckOutDate());
+            throw new IllegalStateException(
+                    "죄송합니다. 다른 사용자가 먼저 예약하여 객실이 매진되었습니다. " +
+                            "다른 날짜를 선택해 주세요."
+            );
+        }
+
+        log.info("재고 확인 통과 - 남은 방: {}개", availableRooms);
+
         Reservation reservation = Reservation.builder()
                 .userId(userId)
                 .room(room)
@@ -189,10 +211,8 @@ public class ReservationServiceImpl implements ReservationService {
                 .reservationId(savedReservation.getId())
                 .paymentMethod(request.getPaymentMethod())
                 .paymentAmount(request.getTotalPrice())
-//                .paymentStatus(PaymentStatus.결제완료)
-                .paymentStatus(PaymentStatus.결제대기) //1027 카카오페이 적용
-                .completedAt(null) //1027 카카오페이 적용
-//                .completedAt(LocalDateTime.now())
+                .paymentStatus(PaymentStatus.결제대기)
+                .completedAt(null)
                 .build();
 
         paymentService.save(payment);
@@ -247,16 +267,27 @@ public class ReservationServiceImpl implements ReservationService {
                     .build();
         }
 
-        boolean hasConflict = reservationRepository.existsConflictingReservation(
+        // ⭐️ 재고 확인 로직 (변경된 부분) ⭐️
+        Long maxBookingCount = reservationRepository.findMaxDailyBookingCount(
                 request.getRoomId(),
-                request.getCheckInDate(),
-                request.getCheckOutDate()
+                request.getCheckInDate().toString(),
+                request.getCheckOutDate().toString()
         );
 
-        if (hasConflict) {
+        // Room 엔티티 조회 (roomCount 필요)
+        Room roomEntity = roomRepository.findById(request.getRoomId())
+                .orElseThrow(() -> new IllegalArgumentException("객실을 찾을 수 없습니다"));
+
+        int totalRooms = roomEntity.getRoomCount();
+        long availableRooms = totalRooms - maxBookingCount;
+
+        log.info("재고 확인 - roomId: {}, 전체: {}개, 예약됨: {}개, 남음: {}개",
+                roomEntity.getId(), totalRooms, maxBookingCount, availableRooms);
+
+        if (availableRooms <= 0) {
             return AvailabilityResponse.builder()
                     .available(false)
-                    .message("해당 날짜에 이미 예약이 있습니다")
+                    .message("선택하신 기간에 예약 가능한 객실이 없습니다")
                     .build();
         }
 
@@ -469,6 +500,7 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation reservation = reservationRepository.findByIdAndUserIdWithStay(reservationId, userId) .orElseThrow(() -> new IllegalArgumentException("조회할 수 없는 예약 정보입니다."));;
         Stay stay = reservation.getRoom().getStay();
         Payment payment = paymentService.getByReservationId(reservation.getId());
+        boolean isReview = reviewService.existsByReservationId(reservationId);
 
         return ReservationWithPaymentResponse
                 .builder()
@@ -492,6 +524,7 @@ public class ReservationServiceImpl implements ReservationService {
                 .createdAt(reservation.getCreatedAt())
                 .paymentMethod(payment.getPaymentMethod())
                 .address(stay.getAddress())
+                .review(isReview)
                 .build();
     }
 

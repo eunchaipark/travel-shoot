@@ -108,7 +108,7 @@ const transformStayData = (backendData) => {
     title: item.stayName,
     image: item.thumbnailImage || "/images/main/main-example.svg",
     rating: item.averageRating ? item.averageRating.toFixed(1) : "0.0",
-    reviews: formatViewCount(item.recent7DaysViews), // 조회수를 리뷰처럼 표시
+    reviews: formatViewCount(item.reviewCount), // 조회수를 리뷰처럼 표시
     price: formatPrice(item.price),
     category: item.stayType,
 
@@ -132,7 +132,6 @@ const transformRestaurantData = (backendData) => {
     title: item.restaurantName,
     image: item.thumbnailImage || "/images/main/main-example.svg",
     rating: item.rating ? item.rating.toFixed(1) : "0.0",
-    reviews: formatViewCount(item.recent7DaysViews), // 조회수를 리뷰처럼 표시
     price: "0", // 가격 정보 없음 (임시)
     category: item.foodType,
 
@@ -156,7 +155,6 @@ const transformActivityData = (backendData) => {
     title: item.activityName,
     image: item.thumbnailImage || "/images/main/main-example.svg",
     rating: item.rating ? item.rating.toFixed(1) : "0.0",
-    reviews: formatViewCount(item.recent7DaysViews), // 조회수를 리뷰처럼 표시
     price: "0", // 가격 정보 없음 (임시)
     category: item.activityType,
 

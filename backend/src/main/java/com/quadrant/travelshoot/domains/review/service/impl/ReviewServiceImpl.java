@@ -1,6 +1,7 @@
 package com.quadrant.travelshoot.domains.review.service.impl;
 
 import com.quadrant.travelshoot.common.service.S3Service;
+import com.quadrant.travelshoot.domains.ai.dto.response.ReviewAiSummaryResponse;
 import com.quadrant.travelshoot.domains.ai.service.ReviewAiSummaryService;
 import com.quadrant.travelshoot.domains.common.entity.FileUpload;
 import com.quadrant.travelshoot.domains.common.repository.FileUploadRepository;
@@ -18,6 +19,8 @@ import com.quadrant.travelshoot.domains.review.repository.ReviewAiSummaryReposit
 import com.quadrant.travelshoot.domains.review.repository.ReviewRepository;
 import com.quadrant.travelshoot.domains.reservation.repository.ReservationRepository;
 import com.quadrant.travelshoot.domains.review.service.ReviewService;
+import com.quadrant.travelshoot.domains.stay.repository.StayRepository;
+import com.quadrant.travelshoot.domains.stay.service.StayService;
 import com.quadrant.travelshoot.domains.user.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +48,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewAiSummaryRepository reviewAiSummaryRepository;
     private final ReviewAiSummaryService reviewAiSummaryService;
     private final FileUploadService fileUploadService;
+    private final StayRepository stayRepository;
 
 
 
@@ -52,11 +56,11 @@ public class ReviewServiceImpl implements ReviewService {
      * 기존 ai요약 검증
      */
     @Transactional
-    public String getReviewSummary(Long stayId) {
+    public ReviewAiSummaryResponse getReviewSummary(Long stayId) {
         // 현재 리뷰 개수 조회
         int currentReviewCount = reviewRepository.countByStayId(stayId);
         if (currentReviewCount == 0) {
-            return "아직 숙소의 리뷰가 없습니다.";
+            throw new IllegalArgumentException("아직 숙소의 리뷰가 없습니다.");
         }
 
         // 기존 AI 요약 조회
@@ -64,7 +68,8 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElse(null);
 
         // 기존 요약이 없거나, 리뷰가 5개 이상 증가했으면 새로 생성
-        if (existingSummary == null || currentReviewCount >= existingSummary.getReviewCount() + 5) {
+        // 시연을 위해 리뷰 1개만 증가해도 새로 생성
+        if (existingSummary == null || currentReviewCount >= existingSummary.getReviewCount() + 1) {
             log.info("AI 요약 새로 생성 - stayId: {}, 현재 리뷰: {}, 이전 리뷰: {}",
                     stayId, currentReviewCount, existingSummary != null ? existingSummary.getReviewCount() : 0);
             return reviewAiSummaryService.generateAiSummary(stayId, currentReviewCount, existingSummary);
@@ -72,9 +77,14 @@ public class ReviewServiceImpl implements ReviewService {
 
         // 기존 요약 반환
         log.info("기존 AI 요약 반환 - stayId: {}", stayId);
-        return existingSummary.getOverallSummary();
+        return ReviewAiSummaryResponse.from(existingSummary);
     }
 
+
+    @Override
+    public boolean existsByReservationId(Long reservationId){
+        return reviewRepository.existsByReservationId(reservationId);
+    }
 
     /**
      * 리뷰 등록
@@ -91,7 +101,7 @@ public class ReviewServiceImpl implements ReviewService {
         // + 예약 내역에서 예약 상태가 '이용 완료'여야 한다.
 
         // 리뷰 중복 검증
-        if (reviewRepository.existsByReservationId(request.getReservationId())) {
+        if (existsByReservationId(request.getReservationId())) {
             throw new IllegalStateException("이미 해당 예약에 대한 리뷰가 존재합니다.");
         }
 
@@ -112,6 +122,8 @@ public class ReviewServiceImpl implements ReviewService {
                 .build();
 
         Review savedReview = reviewRepository.save(review);
+
+
 
         // 2. 이미지 업로드 처리
         String imageUrl = null;
@@ -134,6 +146,8 @@ public class ReviewServiceImpl implements ReviewService {
             }
         }
 
+        // 숙소 별점 업데이트
+        stayRepository.updateAverageRating(request.getStayId());
         return reviewMapper.toReviewRegistResponse(savedReview, imageUrl);
     }
 
@@ -202,6 +216,9 @@ public class ReviewServiceImpl implements ReviewService {
             log.info("기존 리뷰 이미지 유지 - s3Url: {}", imageUrl);
 
         }
+
+        // 숙소 별점 업데이트
+        stayRepository.updateAverageRating(reviewUpdateRequest.getStayId());
 
         return reviewMapper.toReviewRegistResponse(updatedReview, imageUrl);
     }
@@ -323,22 +340,6 @@ public class ReviewServiceImpl implements ReviewService {
     public Integer countReview(Long stayId){
         return Math.toIntExact(reviewRepository.countByStayId(stayId));
     }
-
-    /**
-     * 리뷰 별점에 따른 숙소 평균별점
-     * 1. 리뷰들 모아서 집계 평균 조회
-     * 2. 조회한 값을 숙소 엔티티에 setAverageRating(1번)
-     * 3. 그거를 리뷰 cud에 호출
-     */
-    public BigDecimal getStayAverageRating(Long stayId){
-        Double totalRating = reviewRepository.findAverageByStayId(stayId);
-
-        if(totalRating == null){
-            totalRating = 0.0;
-        }
-        return BigDecimal.valueOf(totalRating).setScale(2, RoundingMode.HALF_UP); // 2자리까지
-    }
-
 
     /**
      * Pageable 객체 생성

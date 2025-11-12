@@ -7,6 +7,8 @@ import com.quadrant.travelshoot.domains.review.dto.response.ReviewPageResponse;
 import com.quadrant.travelshoot.domains.review.dto.response.ReviewRegistResponse;
 import jakarta.validation.Valid;
 
+import java.math.BigDecimal;
+
 public interface ReviewService {
 
     ReviewRegistResponse createReview(Long userId, @Valid ReviewRegistRequest request);
@@ -14,6 +16,6 @@ public interface ReviewService {
     ReviewRegistResponse updateReview(Long userId, Long reviewId, @Valid ReviewRegistRequest reviewUpdateRequest);
     ReviewDetailResponse getReviewDetail(Long reservationId);
     ReviewPageResponse<ReviewListResponse> getReviewsWithPaging(Long stayId, Long roomId, int page, int size, String sortBy);
-
+    boolean existsByReservationId(Long reservationId);
 
 }

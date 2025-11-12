@@ -89,13 +89,26 @@ public class StaySearchServiceImpl implements StaySearchService {
                     request.getCheckOut(),
                     pageable
             );
-        } else {
+
+            // 숙소명 검색 결과가 없으면 지역으로 다시 검색
+            if (stays.isEmpty() && request.getRegion() != null && !request.getRegion().isEmpty()) {
+                stays = stayRepository.searchStays(
+                        request.getRegion(),
+                        request.getCheckIn(),
+                        request.getCheckOut(),
+                        request.getTotalGuests(),
+                        pageable);
+            }
+        } else if (request.getRegion() != null && !request.getRegion().isEmpty()) {
             stays = stayRepository.searchStays(
-                request.getRegion(),
-                request.getCheckIn(),
-                request.getCheckOut(),
-                request.getTotalGuests(),
-                pageable);
+                    request.getRegion(),
+                    request.getCheckIn(),
+                    request.getCheckOut(),
+                    request.getTotalGuests(),
+                    pageable);
+        } else {
+            // 둘 다 없으면 빈 결과
+            stays = Page.empty(pageable);
         }
 
         return buildSearchResponse(stays,pageable.getPageNumber());

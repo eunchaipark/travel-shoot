@@ -5,7 +5,7 @@ import com.quadrant.travelshoot.domains.stay.dto.response.StayDetailResponse;
 import com.quadrant.travelshoot.domains.stay.dto.response.StayImageDto;
 import com.quadrant.travelshoot.domains.stay.dto.response.StayRatingResponse;
 import com.quadrant.travelshoot.domains.stay.entity.Stay;
-
+import java.time.LocalDate;
 import java.util.List;
 
 public interface StayService {
@@ -16,4 +16,5 @@ public interface StayService {
     List<RoomFilterDto> getRoomFilters(Long stayId);
     StayRatingResponse getStayRating(Long stayId);
 
+    StayDetailResponse getStayDetail(Long stayId, LocalDate checkIn, LocalDate checkOut);
 }

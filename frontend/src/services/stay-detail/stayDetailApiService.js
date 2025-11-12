@@ -35,18 +35,35 @@ export const getAllStayImages = async (stayId) => {
  * @param {Long} stayId - 숙소 ID
  * @returns {Promise<StayDetailResponse>}
  */
-export const getStayDetail = async (stayId) => {
+// export const getStayDetail = async (stayId) => {
+//     try {
+//         const response = await fetch(`${window.API_BASE_URL}/api/stays/${stayId}`, {
+//             method: 'GET',
+//         });
+//         return await handleResponse(response);
+//     } catch (error) {
+//         console.error('Error fetching stay detail:', error);
+//         throw error;
+//     }
+// };
+
+export const getStayDetail = async (stayId, checkIn, checkOut) => {
     try {
-        const response = await fetch(`${window.API_BASE_URL}/api/stays/${stayId}`, {
-            method: 'GET',
-        });
+        // 기본 URL
+        let url = `${window.API_BASE_URL}/api/stays/${stayId}`;
+
+        // 날짜 파라미터가 있으면 추가
+        if (checkIn && checkOut) {
+            url += `?checkIn=${checkIn}&checkOut=${checkOut}`;
+        }
+
+        const response = await fetch(url, { method: 'GET' });
         return await handleResponse(response);
     } catch (error) {
         console.error('Error fetching stay detail:', error);
         throw error;
     }
 };
-
 
 /**
  * 숙소 리뷰 AI 요약 조회
@@ -66,8 +83,7 @@ export const getReviewSummary = async (stayId) => {
             throw error;
         }
         
-        // 백엔드에서 String을 반환하므로 text()로 받음
-        return await response.text();
+        return await handleResponse(response);
     } catch (error) {
         console.error('Error fetching review summary:', error);
         throw error;

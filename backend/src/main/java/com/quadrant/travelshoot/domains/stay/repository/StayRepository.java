@@ -35,10 +35,17 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
         List<String> findRegionsByKeyword(@Param("keyword") String keyword);
 
         // 자동완성 ( 검색창 - 숙소명 )
-        @Query("SELECT DISTINCT s.name " +
-                        "FROM Stay s " +
-                        "WHERE s.name LIKE CONCAT('%', :keyword, '%') " +
-                        "AND s.isActive = true")
+        @Query(value =
+                "SELECT stay_name " +
+                        "FROM ( " +
+                        "    SELECT DISTINCT s.stay_name, s.average_rating " +
+                        "    FROM stays s " +
+                        "    WHERE s.stay_name LIKE CONCAT('%', :keyword, '%') " +
+                        "    AND s.is_active = 1 " +
+                        ") AS subquery " +
+                        "ORDER BY average_rating DESC, stay_name ASC " +
+                        "LIMIT 10",
+                nativeQuery = true)
         List<String> findStayNamesByKeyword(@Param("keyword") String keyword);
 
         // 기본 검색창 검색 ( 지역, 날짜, 인원수 )
@@ -199,6 +206,8 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                 TIME_FORMAT(s.check_out_time, '%H:%i') as checkOutTime,
                 s.stay_type as stayType,
                 
+                s.review_count as reviewCount,
+
                 COUNT(DISTINCT CASE 
                         WHEN res.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) 
                         THEN res.reservation_id 
@@ -300,8 +309,8 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                 AND vh.viewed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
                 WHERE s.is_active = 1
                 GROUP BY s.stay_id, s.stay_name, s.address, s.average_rating,
-                        s.latitude, s.longitude, s.check_in_time, s.check_out_time, s.stay_type
-                HAVING reservationGrowthRate >= 0 OR viewGrowthRate >= 0
+                        s.latitude, s.longitude, s.check_in_time, s.check_out_time, s.stay_type, s.review_count
+                HAVING (reservationGrowthRate >= 0 OR viewGrowthRate >= 0) AND recent7DaysReservations >= 3
                 ORDER BY 
                 reservationGrowthRate DESC, 
                 viewGrowthRate DESC,
@@ -316,8 +325,8 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                 "INNER JOIN rooms r ON s.stay_id = r.stay_id " +
                 "INNER JOIN regions reg ON s.region_id = reg.region_id " +
                 "WHERE s.is_active = true " +
-                "AND s.average_rating >= 3.5 " +
-                "AND s.review_count >= 20 " +
+                "AND s.average_rating >= 3.0 " +
+                "AND s.review_count >= 0 " +
                 "AND r.is_available = true " +
                 "AND r.is_active = true " +
                 "AND reg.city_name IS NOT NULL " +
@@ -380,5 +389,15 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
         """)
         BigDecimal calculateAveragePrice();
 
-        
+    /**
+     * 리뷰 등록, 수정 시 숙소 평균평점 업데이트
+     */
+    @Modifying
+    @Query("UPDATE Stay s SET s.averageRating = " +
+            "(SELECT COALESCE(ROUND(AVG(r.totalRating), 2), 0.0) " +
+            "FROM Review r WHERE r.stayId = s.id) " +
+            "WHERE s.id = :stayId")
+    void updateAverageRating(@Param("stayId") Long stayId);
+
+
 }

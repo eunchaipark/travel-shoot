@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -13,7 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class GPTRequest {
     private String model;
-    private List<Message> messages;
+    private String input;
+    private Map<String, String> reasoning;
 
     @Data
     @Builder
