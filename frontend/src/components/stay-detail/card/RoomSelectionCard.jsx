@@ -120,6 +120,7 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
                                 </div>
 
                                 <div className="col-lg-4 col-md-5 text-md-end text-sm-end mt-md-5 room-details-container ">
+                                    <div className="text-muted font-12">남은 객실 <span>{room.roomCount}</span></div>
                                     <div className="room-details text-muted font-12 fw-bold mb-2 dark-gray d-flex justify-content-end">
                                         체크인 {room.checkInTime.slice(0, 5)} ~ 체크아웃 {room.checkOutTime.slice(0, 5)}
                                     </div>
@@ -132,7 +133,7 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
                                             </div>
                                         </div>
 
-                                        {room.roomCount && room.isAvailable ? 
+                                        {room.roomCount ? 
                                             <button className="btn btn-custom fw-bold"
                                                 onClick={()=>handleReservation(room.roomId)}>
                                                 예약하기

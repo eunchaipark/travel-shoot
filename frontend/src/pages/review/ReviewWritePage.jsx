@@ -257,14 +257,7 @@ const ReviewWritePage = () => {
 
                     })
 
-                    // 첫 번째 에러로 스크롤 이동
-                    // if (newErrors.rating) {
-                    //     document.querySelector('.rating-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    // } else if (newErrors.reviewContent) {
-                    //     document.querySelector('.text-review-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    // } else if (newErrors.reviewImage) {
-                    //     document.querySelector('.photo-upload-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    // }
+
                 }else {
                     alert(`리뷰 ${isEditMode ? '수정' : '등록'}에 실패했습니다.`);
                 }
@@ -345,7 +338,7 @@ const ReviewWritePage = () => {
                 />
 
                 {/* 추천 여부 */}
-                <section className="recommendation-section">
+                {/* <section className="recommendation-section">
                     <div className="recommendation-question">이 숙소를 다른 사람에게 추천하시겠습니까?</div>
                     <button 
                         className={`recommendation-button ${isRecommended ? 'active' : ''}`} 
@@ -355,7 +348,7 @@ const ReviewWritePage = () => {
                     >
                         <i className="fas fa-heart"></i>네, 추천합니다.
                     </button>
-                </section>
+                </section> */}
 
                 {/* 액션 버튼 */}
                 <section className="action-buttons-section">

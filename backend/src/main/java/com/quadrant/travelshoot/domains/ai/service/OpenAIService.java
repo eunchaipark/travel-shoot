@@ -1,7 +1,9 @@
 package com.quadrant.travelshoot.domains.ai.service;
 
+
 import com.quadrant.travelshoot.domains.ai.dto.request.GPTRequest;
 import com.quadrant.travelshoot.domains.ai.dto.response.GPTResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class OpenAIService {
 
     private WebClient webClient;
@@ -84,4 +87,5 @@ public class OpenAIService {
             throw new RuntimeException("GPT 호출 실패: " + e.getMessage(), e);
         }
     }
+
 }

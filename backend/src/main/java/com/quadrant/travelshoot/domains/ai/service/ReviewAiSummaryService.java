@@ -52,11 +52,11 @@ public class ReviewAiSummaryService {
                 리뷰 내용:
                 %s
                 
-                요구사항:
+                #요구사항
                 1. 장점(positive_summary): 숙소의 좋은 점을 2-3줄로 요약
                 2. 단점(negative_summary): 숙소의 불편하거나 아쉬운 점을 2-3줄로 요약
                 
-                반드시 아래 JSON 형식으로만 응답해주세요:
+                반드시 아래 JSON 형식으로 응답:
                 {
                   "positive_summary": "장점 요약 내용",
                   "negative_summary": "단점 요약 내용"
