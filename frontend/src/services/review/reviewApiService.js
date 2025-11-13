@@ -4,7 +4,6 @@ const handleResponse = async (response) => {
     const data = await response.json();
     // 전체 응답 구조 확인
     console.log('Response status:', response.status);
-    console.log('Response data:', data.data);
     
     if (!response.ok) {
         // validation 에러 처리
