@@ -388,9 +388,9 @@ const BudgetFriendlySection = () => {
                 {/* 섹션 헤더 */}
                 <div className="section-header">
                     <h2 className="section-title">
-                        <span className="budget-highlight">가격착한</span> 숙소
+                        <span className="budget-highlight">착한</span> 숙소
                     </h2>
-                    <p className="section-subtitle">합리적인 가격의 인기 숙소</p>
+                    <p className="section-subtitle">합리적인 가격의 숙소</p>
                 </div>
 
                 {/* 슬라이더 */}
