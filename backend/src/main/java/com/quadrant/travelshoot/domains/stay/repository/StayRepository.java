@@ -310,7 +310,7 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                 WHERE s.is_active = 1
                 GROUP BY s.stay_id, s.stay_name, s.address, s.average_rating,
                         s.latitude, s.longitude, s.check_in_time, s.check_out_time, s.stay_type, s.review_count
-                HAVING reservationGrowthRate >= 0 OR viewGrowthRate >= 0
+                HAVING (reservationGrowthRate >= 0 OR viewGrowthRate >= 0) AND recent7DaysReservations >= 3
                 ORDER BY 
                 reservationGrowthRate DESC, 
                 viewGrowthRate DESC,
@@ -325,8 +325,8 @@ public interface StayRepository extends JpaRepository<Stay, Long> {
                 "INNER JOIN rooms r ON s.stay_id = r.stay_id " +
                 "INNER JOIN regions reg ON s.region_id = reg.region_id " +
                 "WHERE s.is_active = true " +
-                "AND s.average_rating >= 3.5 " +
-                "AND s.review_count >= 10 " +
+                "AND s.average_rating >= 3.0 " +
+                "AND s.review_count >= 0 " +
                 "AND r.is_available = true " +
                 "AND r.is_active = true " +
                 "AND reg.city_name IS NOT NULL " +

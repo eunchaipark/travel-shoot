@@ -446,6 +446,8 @@
     .main-page .additional-content-section .budget-friendly-section{
         padding-left: 15px;
         padding-right: 15px;
+        padding-top: 45px;
+        padding-bottom: 45px;
     }
     .main-page .additional-content-section .budget-friendly-section .budget-friendly-container .content-wrapper .budget-slide-grid .budget-item-card .budget-card-image .budget-discount-badge{
         font-size: 13px;

@@ -5,7 +5,6 @@ import com.quadrant.travelshoot.domains.stay.entity.Stay;
 import com.quadrant.travelshoot.domains.stay.repository.StayRepository;
 import com.quadrant.travelshoot.domains.stay.service.BudgetFriendlyService;
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,9 +16,6 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * 가격착한 숙소 서비스 구현체
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -33,51 +29,47 @@ public class BudgetFriendlyServiceImpl implements BudgetFriendlyService {
     public List<BudgetFriendlyResponse> getBudgetFriendlyStays() {
         log.info("가격착한 숙소 조회 시작");
 
-        // 1. 기본 필터링된 후보 조회
         List<Stay> candidates = stayRepository.findBudgetFriendlyCandidates();
-        log.info("후보 숙소 개수: {}", candidates.size());
 
         if (candidates.isEmpty()) {
             log.warn("가격착한 숙소 후보가 없습니다.");
             return Collections.emptyList();
         }
 
-        // 2. 각 숙소의 평균 최저가 계산 & 지역 정보 추가
-        List<StayWithPrice> staysWithPrice = candidates.stream()
-                .map(this::enrichStayData)
-                .filter(Objects::nonNull)
-                .sorted(Comparator
-                        .comparing(StayWithPrice::getAveragePrice)
-                        .thenComparing(s -> s.getStay().getAverageRating(), Comparator.reverseOrder())
-                        .thenComparing(s -> s.getStay().getReviewCount(), Comparator.reverseOrder()))
-                .collect(Collectors.toList());
+        Map<String, List<Stay>> byType = candidates.stream()
+                .collect(Collectors.groupingBy(Stay::getStayType));
 
-        log.info("가격 계산 완료: {} 개", staysWithPrice.size());
+        List<StayWithPrice> allProcessed = new ArrayList<>();
+        String[] types = {"모텔", "호텔", "펜션"};
 
-        // 3. 타입별로 최저가 1개씩 선택 (최대 3개)
-        List<StayWithPrice> selected = selectOnePerType(staysWithPrice);
-        log.info("타입별 선택 완료: {} 개", selected.size());
+        for (String type : types) {
+            List<Stay> typeStays = byType.getOrDefault(type, Collections.emptyList());
 
-        // 4. 남은 자리 채우기 (최대 6개)
-        fillRemaining(selected, staysWithPrice);
-        log.info("최종 선택 완료: {} 개", selected.size());
+            List<StayWithPrice> typeSorted = typeStays.stream()
+                    .map(this::enrichStayData)
+                    .filter(Objects::nonNull)
+                    .sorted(Comparator
+                            .comparing(StayWithPrice::getDiscountRate, Comparator.reverseOrder())
+                            .thenComparing(StayWithPrice::getAveragePrice)
+                            .thenComparing(s -> s.getStay().getAverageRating(),
+                                    Comparator.reverseOrder()))
+                    .collect(Collectors.toList());
 
-        // 5. DTO 변환
+            allProcessed.addAll(typeSorted);
+        }
+
+        List<StayWithPrice> selected = selectWithRoundRobin(allProcessed, types);
+
         return selected.stream()
                 .map(this::convertToBudgetFriendlyResponse)
                 .collect(Collectors.toList());
     }
 
-    // ========== Private 헬퍼 메서드들 ==========
-
-    /**
-     * Stay 데이터에 가격, 지역명 추가
-     */
     private StayWithPrice enrichStayData(Stay stay) {
         try {
             BigDecimal averagePrice = calculateAveragePrice(stay.getId());
             String cityName = getCityName(stay.getRegionId());
-            Integer discountRate = calculateDiscountRate(averagePrice, cityName);
+            Integer discountRate = calculateDiscountRate(averagePrice, cityName, stay.getStayType());
 
             return StayWithPrice.builder()
                     .stay(stay)
@@ -91,124 +83,30 @@ public class BudgetFriendlyServiceImpl implements BudgetFriendlyService {
         }
     }
 
-    /**
-     * 타입별로 최저가 1개씩 선택
-     */
-    private List<StayWithPrice> selectOnePerType(List<StayWithPrice> candidates) {
-        List<StayWithPrice> selected = new ArrayList<>();
-        Set<String> usedCities = new HashSet<>();
+    private List<StayWithPrice> selectWithRoundRobin(List<StayWithPrice> allStays, String[] types) {
+        List<StayWithPrice> result = new ArrayList<>();
 
-        String[] targetTypes = { "모텔", "호텔", "펜션" };
+        Map<String, List<StayWithPrice>> byType = allStays.stream()
+                .collect(Collectors.groupingBy(s -> s.getStay().getStayType()));
 
-        for (String type : targetTypes) {
-            Optional<StayWithPrice> found = candidates.stream()
-                    .filter(s -> type.equals(s.getStay().getStayType()))
-                    .filter(s -> !usedCities.contains(s.getCityName()) ||
-                            countSameCity(selected, s.getCityName()) < 2)
-                    .findFirst();
+        int maxRounds = byType.values().stream()
+                .mapToInt(List::size)
+                .max()
+                .orElse(0);
 
-            if (found.isPresent()) {
-                StayWithPrice stay = found.get();
-                selected.add(stay);
-                usedCities.add(stay.getCityName());
-                log.info("타입 선택: {} - {} ({}원)", type, stay.getStay().getName(),
-                        stay.getAveragePrice());
-            }
-        }
-
-        return selected;
-    }
-
-    /**
-     * 남은 자리 채우기
-     */
-    private void fillRemaining(List<StayWithPrice> selected, List<StayWithPrice> candidates) {
-        Set<Long> selectedIds = selected.stream()
-                .map(s -> s.getStay().getId())
-                .collect(Collectors.toSet());
-
-        Map<String, Long> typeCounts = selected.stream()
-                .collect(Collectors.groupingBy(
-                        s -> s.getStay().getStayType(),
-                        Collectors.counting()));
-
-        for (StayWithPrice candidate : candidates) {
-            if (selected.size() >= 6) {
-                break;
-            }
-
-            if (selectedIds.contains(candidate.getStay().getId())) {
-                continue;
-            }
-
-            String type = candidate.getStay().getStayType();
-            String city = candidate.getCityName();
-
-            long typeCount = typeCounts.getOrDefault(type, 0L);
-            if (typeCount >= 2) {
-                continue;
-            }
-
-            long cityCount = countSameCity(selected, city);
-            if (cityCount >= 2) {
-                continue;
-            }
-
-            selected.add(candidate);
-            selectedIds.add(candidate.getStay().getId());
-            typeCounts.put(type, typeCount + 1);
-
-            log.info("추가 선택 (제약 준수): {} - {} ({}원)", type, candidate.getStay().getName(),
-                    candidate.getAveragePrice());
-        }
-
-        // 2단계: 6개 미만이면 제약 완화하여 추가
-        if (selected.size() < 6) {
-            log.warn("6개 미만 감지 ({}개), 제약 조건 완화하여 채우기 시작", selected.size());
-            
-            for (StayWithPrice candidate : candidates) {
-                if (selected.size() >= 6) {
-                    break;
+        for (int round = 0; round < maxRounds && result.size() < 6; round++) {
+            for (String type : types) {
+                List<StayWithPrice> typeList = byType.get(type);
+                if (typeList != null && round < typeList.size()) {
+                    result.add(typeList.get(round));
+                    if (result.size() >= 6) break;
                 }
-
-                if (selectedIds.contains(candidate.getStay().getId())) {
-                    continue;
-                }
-
-                // 제약 없이 추가 (같은 타입, 같은 도시 제한 무시)
-                selected.add(candidate);
-                selectedIds.add(candidate.getStay().getId());
-
-                String type = candidate.getStay().getStayType();
-                typeCounts.put(type, typeCounts.getOrDefault(type, 0L) + 1);
-
-                log.info("추가 선택 (제약 완화): {} - {} ({}원)", 
-                        type, 
-                        candidate.getStay().getName(),
-                        candidate.getAveragePrice());
             }
         }
 
-        log.info("최종 선택된 숙소 개수: {} / 6", selected.size());
-        
-        // 최종 검증: 여전히 6개 미만이면 경고
-        if (selected.size() < 6) {
-            log.error("⚠️ 경고: 후보 숙소가 부족하여 6개를 채우지 못했습니다. (현재: {}개)", selected.size());
-        }
+        return result;
     }
 
-    /**
-     * 같은 시에서 선택된 숙소 개수
-     */
-    private long countSameCity(List<StayWithPrice> selected, String cityName) {
-        return selected.stream()
-                .filter(s -> cityName.equals(s.getCityName()))
-                .count();
-    }
-
-    /**
-     * 평균 최저가 계산 (평일 + 주말) / 2
-     */
     private BigDecimal calculateAveragePrice(Long stayId) {
         List<Object[]> result = stayRepository.findMinPricesByStayId(stayId);
 
@@ -219,43 +117,41 @@ public class BudgetFriendlyServiceImpl implements BudgetFriendlyService {
         BigDecimal weekdayPrice = (BigDecimal) result.get(0)[0];
         BigDecimal weekendPrice = (BigDecimal) result.get(0)[1];
         return weekdayPrice;
-        // return weekdayPrice.add(weekendPrice)
-        //         .divide(new BigDecimal("2"), 0, RoundingMode.HALF_UP);
     }
 
-    /**
-     * 할인율 계산 (해당 시 평균가 대비)
-     */
-    private Integer calculateDiscountRate(BigDecimal stayPrice, String cityName) {
+    private Integer calculateDiscountRate(BigDecimal stayPrice, String cityName, String stayType) {
         try {
-            // city_name만 추출 (예: "강원도 춘천시" -> "춘천시")
             String city = extractCityName(cityName);
 
-            BigDecimal cityAverage = stayRepository.findAveragePriceByCityName(city);
+            String sql = """
+                SELECT COALESCE(AVG(r.weekday_price), 0)
+                FROM stays s
+                INNER JOIN rooms r ON s.stay_id = r.stay_id
+                INNER JOIN regions reg ON s.region_id = reg.region_id
+                WHERE reg.city_name = ?
+                  AND s.stay_type = ?
+                  AND r.is_active = true
+                  AND s.is_active = true
+                """;
 
-            if (cityAverage == null || cityAverage.compareTo(BigDecimal.ZERO) == 0) {
-                log.warn("지역 평균가 조회 실패 - cityName: {}", city);
+            BigDecimal cityTypeAverage = jdbcTemplate.queryForObject(sql, BigDecimal.class, city, stayType);
+
+            if (cityTypeAverage == null || cityTypeAverage.compareTo(BigDecimal.ZERO) == 0) {
                 return 0;
             }
 
-            // 할인율 = (평균가 - 현재가) / 평균가 * 100
-            BigDecimal discount = cityAverage.subtract(stayPrice)
-                    .divide(cityAverage, 4, RoundingMode.HALF_UP)
+            BigDecimal discount = cityTypeAverage.subtract(stayPrice)
+                    .divide(cityTypeAverage, 4, RoundingMode.HALF_UP)
                     .multiply(new BigDecimal("100"));
 
             int discountRate = discount.intValue();
 
-            // 0보다 작으면 0으로 (할인이 아닌 경우)
             return Math.max(0, discountRate);
         } catch (Exception e) {
-            log.warn("할인율 계산 실패 - cityName: {}", cityName, e);
             return 0;
         }
     }
 
-    /**
-     * "강원도 춘천시" -> "춘천시" 추출
-     */
     private String extractCityName(String fullName) {
         if (fullName == null)
             return "";
@@ -263,9 +159,6 @@ public class BudgetFriendlyServiceImpl implements BudgetFriendlyService {
         return parts.length > 1 ? parts[1] : parts[0];
     }
 
-    /**
-     * 시(city_name) 조회
-     */
     private String getCityName(Long regionId) {
         try {
             String sql = "SELECT CONCAT(area_name, ' ', city_name) " +
@@ -277,9 +170,6 @@ public class BudgetFriendlyServiceImpl implements BudgetFriendlyService {
         }
     }
 
-    /**
-     * 대표 이미지 조회
-     */
     private String getThumbnailImage(Long stayId) {
         try {
             String sql = "SELECT s3_url FROM files " +
@@ -294,9 +184,6 @@ public class BudgetFriendlyServiceImpl implements BudgetFriendlyService {
         }
     }
 
-    /**
-     * 편의시설 조회 (최대 5개)
-     */
     private List<String> getAmenities(Long stayId) {
         try {
             String sql = "SELECT a.amenity_name " +
@@ -311,9 +198,6 @@ public class BudgetFriendlyServiceImpl implements BudgetFriendlyService {
         }
     }
 
-    /**
-     * BudgetFriendlyResponse 변환
-     */
     private BudgetFriendlyResponse convertToBudgetFriendlyResponse(StayWithPrice stayWithPrice) {
         Stay stay = stayWithPrice.getStay();
 
@@ -334,11 +218,6 @@ public class BudgetFriendlyServiceImpl implements BudgetFriendlyService {
                 .build();
     }
 
-    // ========== 내부 DTO ==========
-
-    /**
-     * 내부 DTO: Stay + 가격 + 지역명 + 할인율
-     */
     @lombok.Getter
     @lombok.Builder
     private static class StayWithPrice {

@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import jakarta.annotation.PostConstruct;
-import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -42,16 +42,8 @@ public class OpenAIService {
 
             GPTRequest request = GPTRequest.builder()
                     .model(model)
-                    .messages(List.of(
-                            GPTRequest.Message.builder()
-                                    .role("developer")
-                                    .content(systemPrompt)
-                                    .build(),
-                            GPTRequest.Message.builder()
-                                    .role("user")
-                                    .content(userPrompt)
-                                    .build()
-                    ))
+                    .input(systemPrompt + "\n\n" + userPrompt)
+                    .reasoning(Map.of("effort", "minimal"))
                     .build();
 
             GPTResponse response = webClient.post()
@@ -63,17 +55,32 @@ public class OpenAIService {
                     .bodyToMono(GPTResponse.class)
                     .block();
 
-            if (response != null && !response.getChoices().isEmpty()) {
-                String content = response.getChoices().get(0).getMessage().getContent();
-                log.info("GPT 응답 수신 성공");
+            if (response != null) {
+                String content = null;
+                if (response.getOutput() != null && !response.getOutput().isEmpty()) {
+                    for (GPTResponse.Output outputItem : response.getOutput()) {
+                        if ("message".equals(outputItem.getType()) &&
+                                outputItem.getContent() != null &&
+                                !outputItem.getContent().isEmpty()) {
 
-                if (response.getUsage() != null && response.getUsage().getCompletionTokensDetails() != null) {
-                    log.info("토큰 사용량 - reasoning: {}",
-                            response.getUsage().getCompletionTokensDetails().getReasoningTokens());
+                            for (GPTResponse.Content contentItem : outputItem.getContent()) {
+                                if (contentItem.getText() != null) {
+                                    content = contentItem.getText();
+                                    break;
+                                }
+                            }
+                            if (content != null) break;
+                        }
+                    }
+                    log.info("GPT-5 output 응답 수신");
                 }
 
-                return content != null ? content.trim() : "";
+                if (content != null && !content.isEmpty()) {
+                    log.info("GPT 응답 수신 성공 - 길이: {}", content.length());
+                    return content.trim();
+                }
             }
+
 
             log.warn("GPT 응답이 비어있음");
             throw new RuntimeException("GPT 응답이 비어있습니다.");

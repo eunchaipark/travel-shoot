@@ -1,9 +1,11 @@
 package com.quadrant.travelshoot.domains.ai.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.result.Output;
 
 import java.util.List;
 
@@ -12,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GPTResponse {
     private List<Choice> choices;
+    private List<Output> output;
     private Usage usage;
 
     @Data
@@ -30,6 +33,29 @@ public class GPTResponse {
         private String role;
         private String content;
         private String refusal;
+        private List<String> annotations;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Output {
+        private String id;
+        private String type;
+        private String status;
+        private List<Content> content;
+        private String role;
+    }
+
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Content {
+        private String type;
+        private String text;
         private List<String> annotations;
     }
 
