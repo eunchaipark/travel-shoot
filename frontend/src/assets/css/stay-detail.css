@@ -954,3 +954,8 @@
     padding: 6px 12px;
   }
 }
+
+.product-detail-container .room-card-container .low-room {
+  color: #F56770;
+  font-weight: bold;
+}

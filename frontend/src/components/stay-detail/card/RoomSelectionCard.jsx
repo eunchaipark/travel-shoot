@@ -122,9 +122,12 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
                                 <div className="col-lg-4 col-md-5 text-md-end text-sm-end mt-md-5 room-details-container ">
 
                                     {/* 윤하님 남은객실 2개 아래면 빨강으로 표시하면 좋을거 같다는 의견으로 효과 찾아서 그냥 넣어봤습니다. 예뽀게 수정해주세요~ */}
-                                    <span className={room.availableRooms <= 2 ? 'text-danger fw-bold' : 'text-muted'}>
+                                    <span
+                                        className={room.availableRooms <= 2 ? 'low-room' : 'text-muted'}
+                                        style={{ fontSize: '15px' }}
+                                        >
                                         남은 객실: {room.availableRooms}개
-                                    </span>
+                                        </span>
 
                                     <div className="room-details text-muted font-12 fw-bold mb-2 dark-gray d-flex justify-content-end">
                                         체크인 {room.checkInTime.slice(0, 5)} ~ 체크아웃 {room.checkOutTime.slice(0, 5)}
@@ -137,20 +140,7 @@ const RoomSelectionCard = ({ searchParams, rooms }) => {
                                                 ₩ {formatNumber(room.weekdayPrice * nights)} <small>/{nights}박</small>
                                             </div>
                                         </div>
-
-                                        {/*{room.roomCount && room.isAvailable ?*/}
-                                        {/*    <button className="btn btn-custom fw-bold"*/}
-                                        {/*        onClick={()=>handleReservation(room.roomId)}>*/}
-                                        {/*        예약하기*/}
-                                        {/*    </button> :*/}
-                                        {/*    <button*/}
-                                        {/*        className="btn btn-custom fw-bold"*/}
-                                        {/*        disabled>*/}
-                                        {/*        예약마감*/}
-                                        {/*    </button>*/}
-
-
-                                        {/*}*/}
+                                        
                                         {room.isAvailable && room.availableRooms > 0 ?
                                             <button className="btn btn-custom fw-bold"
                                                     onClick={()=>handleReservation(room.roomId)}>
