@@ -32,7 +32,6 @@ const Header = () => {
     const { getDefaultDates, getDefaultGuests } = useDefaultStayParams();
 
     // 검색창 초기값: URL에서 가져온 값 사용
-    // region 또는 stayName 중 있는 값 표시
     const [searchValue, setSearchValue] = useState(stayName || region || '');
     const [suggestions, setSuggestions] = useState([]);
 
@@ -47,20 +46,59 @@ const Header = () => {
         setSelectedType(stayName ? "STAY" : "REGION");
     }, [stayName, region]);
 
-    // 날짜 초기값: URL에서 가져온 값 사용 (기본값 설정)
-    const [selectedDates, setSelectedDates] = useState(() => {
+    //날짜 초기값: URL이 우선, 없으면 기본값 사용
+    const getInitialDates = () => {
+        // URL에 날짜 파라미터가 있으면 그걸로 사용
+        if (checkIn && checkOut) {
+            return { checkin: checkIn, checkout: checkOut };
+        }
+        // 없으면 기본값 사용
         const { checkIn: defIn, checkOut: defOut } = getDefaultDates({ nights: 2, startFromTomorrow: true });
-        return {
-            checkin: checkIn || defIn,
-            checkout: checkOut || defOut
-        };
-    });
+        return { checkin: defIn, checkout: defOut };
+    };
 
-    // 인원 초기값: URL에서 가져온 값 사용
-    const [adultCount, setAdultCount] = useState(adults || getDefaultGuests().adults);
-    const [childCount, setChildCount] = useState(children || getDefaultGuests().children);
+    const [selectedDates, setSelectedDates] = useState(getInitialDates);
+
+    //URL 파라미터 변경 감지하면 selectedDates 업데이트
+    useEffect(() => {
+        // URL에 날짜 파라미터가 있으면 업데이트
+        if (checkIn && checkOut) {
+            setSelectedDates({
+                checkin: checkIn,
+                checkout: checkOut
+            });
+        }
+    }, [checkIn, checkOut]);
+
+    // 인원 초기값: URL이 우선으로 변경!!! 없으면 기본값 사용
+    const getInitialGuests = () => {
+        const defaultGuests = getDefaultGuests();
+        return {
+            adults: adults || defaultGuests.adults,
+            children: children || defaultGuests.children
+        };
+    };
+
+    const initialGuests = getInitialGuests();
+    const [adultCount, setAdultCount] = useState(initialGuests.adults);
+    const [childCount, setChildCount] = useState(initialGuests.children);
+
+    // URL 파라미터 변경 감지하면 인원 업데이트
+    useEffect(() => {
+        if (adults !== undefined && adults !== null) {
+            setAdultCount(Number(adults));
+        }
+    }, [adults]);
+
+    useEffect(() => {
+        if (children !== undefined && children !== null) {
+            setChildCount(Number(children));
+        }
+    }, [children]);
 
     console.log('Header - isAuthenticated:', isAuthenticated);
+    console.log('Header - URL 파라미터:', { checkIn, checkOut, adults, children });
+    console.log('Header - State 날짜:', selectedDates);
 
     const searchInputRef = useRef(null);
     const suggestionsRef = useRef(null);
@@ -185,7 +223,7 @@ const Header = () => {
         return `${month}.${day}(${weekday})`;
     };
 
-    // 검색 실행 (URL 파라미터 사용)
+    // 검색 실행 (현재 state 값 사용)
     const handleSearchSubmit = () => {
         if (!searchValue.trim()) {
             alert('검색어를 입력해주세요');
