@@ -57,7 +57,7 @@ export const useReservationDetail = (reservationId) => {
         await poll();
 
         if (isCourseGenerating || !courseData) {
-            pollingIntervalRef.current = setInterval(poll, 10000);
+            pollingIntervalRef.current = setInterval(poll, 2000);
         }
     };
 
