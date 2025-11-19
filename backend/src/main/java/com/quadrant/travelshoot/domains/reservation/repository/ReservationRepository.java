@@ -81,7 +81,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "LEFT JOIN regions reg ON s.region_id = reg.region_id " +  // LEFT JOIN으로 변경!
             "WHERE tc.user_id = :userId " +  // tc.user_id로 변경!
             "AND tc.generation_status = '생성완료' " +
-            "ORDER BY r.check_in_date ASC, tc.course_id, cs.day, cs.spot_order",
+            "ORDER BY r.check_in_date ASC, tc.course_id, cs.day, cs.start_time, cs.spot_order",
             nativeQuery = true)
     List<Object[]> findReservationsWithCoursesByUserId(@Param("userId") Long userId);
 
