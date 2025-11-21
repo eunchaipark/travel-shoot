@@ -63,7 +63,7 @@ services:
       - backendnet
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.3  # 8.11.0 -> 8.11.1로 버전 통일
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.3
     container_name: elasticsearch-container
     restart: unless-stopped
     ports:
@@ -74,7 +74,7 @@ services:
       - xpack.security.enabled=false
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - bootstrap.memory_lock=true
-      - TZ=Asia/Seoul  # 타임존 추가
+      - TZ=Asia/Seoul
     ulimits:
       memlock:
         soft: -1
@@ -89,6 +89,13 @@ services:
       timeout: 10s
       retries: 5
       start_period: 60s
+    command: >
+      bash -c "
+      if [ ! -d /usr/share/elasticsearch/plugins/analysis-nori ]; then
+        /usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-nori -b;
+      fi;
+      /usr/local/bin/docker-entrypoint.sh eswrapper
+      "
 
   # === Spring Boot Backend ===
   backend:

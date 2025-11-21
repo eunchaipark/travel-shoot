@@ -1,5 +1,6 @@
 package com.quadrant.travelshoot.domains.stay.document;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,23 +14,23 @@ import java.util.List;
 
 /**
  * Elasticsearch 숙소 검색용 Document
- * 위치: backend/src/main/java/com/quadrant/travelshoot/domains/stay/document/StayDocument.java
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(indexName = "stays")
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Document(indexName = "stays", createIndex = false)
 public class StayDocument {
 
     @Id
     private Long stayId;
 
     @MultiField(
-            mainField = @Field(type = FieldType.Text, analyzer = "nori"),
+            mainField = @Field(type = FieldType.Text, analyzer = "korean_nori_analyzer"),
             otherFields = {
                     @InnerField(suffix = "keyword", type = FieldType.Keyword),
-                    @InnerField(suffix = "ngram", type = FieldType.Text, analyzer = "ngram_analyzer")
+                    @InnerField(suffix = "ngram", type = FieldType.Text, analyzer = "korean_ngram_analyzer")
             }
     )
     private String name;
@@ -40,7 +41,7 @@ public class StayDocument {
     @Field(type = FieldType.Object)
     private RegionInfo region;
 
-    @Field(type = FieldType.Text, analyzer = "nori")
+    @Field(type = FieldType.Text, analyzer = "korean_nori_analyzer")
     private String address;
 
     @GeoPointField
@@ -76,16 +77,17 @@ public class StayDocument {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class RegionInfo {
         private Long id;
 
         @MultiField(
-                mainField = @Field(type = FieldType.Text, analyzer = "nori"),
+                mainField = @Field(type = FieldType.Text, analyzer = "korean_nori_analyzer"),
                 otherFields = @InnerField(suffix = "keyword", type = FieldType.Keyword)
         )
         private String areaName;
 
-        @Field(type = FieldType.Text, analyzer = "nori")
+        @Field(type = FieldType.Text, analyzer = "korean_nori_analyzer")
         private String cityName;
     }
 
@@ -93,10 +95,11 @@ public class StayDocument {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class RoomInfo {
         private Long roomId;
 
-        @Field(type = FieldType.Text, analyzer = "nori")
+        @Field(type = FieldType.Text, analyzer = "korean_nori_analyzer")
         private String name;
 
         @Field(type = FieldType.Integer)
@@ -119,6 +122,7 @@ public class StayDocument {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class GeoPoint {
         private double lat;
         private double lon;

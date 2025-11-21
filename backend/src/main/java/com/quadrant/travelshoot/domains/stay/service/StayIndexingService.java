@@ -1,5 +1,8 @@
 package com.quadrant.travelshoot.domains.stay.service;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch.indices.CreateIndexRequest;
+import co.elastic.clients.elasticsearch.indices.ExistsRequest;
 import com.quadrant.travelshoot.domains.stay.document.StayDocument;
 import com.quadrant.travelshoot.domains.stay.entity.Room;
 import com.quadrant.travelshoot.domains.stay.entity.Stay;
@@ -11,6 +14,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,7 +23,6 @@ import java.util.stream.Collectors;
 
 /**
  * MySQL → Elasticsearch 데이터 동기화 서비스
- * 위치: backend/src/main/java/com/quadrant/travelshoot/domains/stay/service/StayIndexingService.java
  */
 @Slf4j
 @Service
@@ -27,13 +31,51 @@ public class StayIndexingService {
 
     private final StayRepository mysqlRepository;
     private final StayElasticsearchRepository esRepository;
+    private final ElasticsearchClient esClient;
+
+    /**
+     * Elasticsearch 인덱스 생성 (최초 1회 실행)
+     */
+    public void createIndex() throws IOException {
+        // 인덱스 존재 여부 확인
+        boolean exists = esClient.indices()
+            .exists(ExistsRequest.of(e -> e.index("stays")))
+            .value();
+
+        if (exists) {
+            log.warn("stays 인덱스가 이미 존재합니다.");
+            return;
+        }
+
+        log.info("stays 인덱스 생성 중...");
+
+        // JSON 파일에서 매핑 읽기
+        try (InputStream inputStream = getClass()
+                .getResourceAsStream("/elasticsearch/stays-index.json")) {
+            
+            if (inputStream == null) {
+                throw new RuntimeException("stays-index.json 파일을 찾을 수 없습니다. 경로: /elasticsearch/stays-index.json");
+            }
+
+            // 인덱스 생성
+            esClient.indices().create(CreateIndexRequest.of(c -> c
+                .index("stays")
+                .withJson(inputStream)
+            ));
+
+            log.info("stays 인덱스 생성 완료!");
+        } catch (Exception e) {
+            log.error("인덱스 생성 실패", e);
+            throw new RuntimeException("인덱스 생성 중 오류 발생: " + e.getMessage(), e);
+        }
+    }
 
     /**
      * 전체 숙소 데이터 재색인 (초기 구축 또는 재구축 시)
      */
     @Transactional(readOnly = true)
     public void reindexAll() {
-        log.info("🔄 전체 숙소 재색인 시작...");
+        log.info("전체 숙소 재색인 시작...");
 
         List<Stay> stays = mysqlRepository.findAll();
         List<StayDocument> documents = stays.stream()
@@ -42,7 +84,7 @@ public class StayIndexingService {
 
         esRepository.saveAll(documents);
 
-        log.info("✅ 재색인 완료 - 총 {}개 숙소", documents.size());
+        log.info("재색인 완료 - 총 {}개 숙소", documents.size());
     }
 
     /**
@@ -56,7 +98,7 @@ public class StayIndexingService {
         StayDocument document = convertToDocument(stay);
         esRepository.save(document);
 
-        log.info("✅ 숙소 색인 완료 - stayId: {}", stayId);
+        log.info("숙소 색인 완료 - stayId: {}", stayId);
     }
 
     /**
@@ -64,7 +106,7 @@ public class StayIndexingService {
      */
     public void deleteStay(Long stayId) {
         esRepository.deleteById(stayId);
-        log.info("✅ 숙소 삭제 완료 - stayId: {}", stayId);
+        log.info("숙소 삭제 완료 - stayId: {}", stayId);
     }
 
     /**
@@ -73,7 +115,7 @@ public class StayIndexingService {
     @Scheduled(cron = "0 0 3 * * *")
     @Transactional(readOnly = true)
     public void syncRecentChanges() {
-        log.info("🔄 증분 동기화 시작...");
+        log.info("증분 동기화 시작...");
 
         // 최근 24시간 내 업데이트된 숙소만 동기화
         List<Stay> recentlyUpdated = mysqlRepository
@@ -87,7 +129,7 @@ public class StayIndexingService {
             esRepository.saveAll(documents);
         }
 
-        log.info("✅ 증분 동기화 완료 - 업데이트: {}개", documents.size());
+        log.info("증분 동기화 완료 - 업데이트: {}개", documents.size());
     }
 
     // ===== 변환 메서드 =====
