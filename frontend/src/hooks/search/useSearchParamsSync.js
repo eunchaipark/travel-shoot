@@ -1,7 +1,3 @@
-/**
- * URL 기반 검색 파라미터 관리 Hook
- */
-
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useCallback, useMemo } from 'react';
 import { useDefaultStayParams } from '@/hooks/search/useDefaultStayParams';
@@ -13,13 +9,12 @@ const useSearchParamsSync = () => {
 
     //URL에서 파라미터 읽기
     const params = useMemo(() => {
-        // 상세 페이지용 파라미터
-        const checkIn = searchParams.get('checkIn') || '';
-        const checkOut = searchParams.get('checkOut') || '';
+        const checkIn = searchParams.get('checkIn');
+        const checkOut = searchParams.get('checkOut');
         const adults = parseInt(searchParams.get('adults')) || 2;
         const children = parseInt(searchParams.get('children')) || 0;
-        const region = searchParams.get('region') || '';
-        const stayName = searchParams.get('stayName') || '';
+        const region = searchParams.get('region');
+        const stayName = searchParams.get('stayName');
 
         // 예약 페이지용 파라미터
         const checkInDate = searchParams.get('checkInDate') || checkIn;
@@ -56,7 +51,7 @@ const useSearchParamsSync = () => {
 
         setSearchParams(current, { replace });
         console.log('파라미터 업데이트:', Object.fromEntries(current));
-        }, [setSearchParams]);
+    }, [setSearchParams]);
 
     //기본 파라미터 설정
     const setDefaultParams = useCallback((path) => {
@@ -70,10 +65,10 @@ const useSearchParamsSync = () => {
             if (path) {
                 const queryString = new URLSearchParams(defaultParams).toString();
                 navigate(`${path}?${queryString}`);
-                } else {
+            } else {
                 updateParams(defaultParams);
-                }
             }
+        }
 
         console.log('기본 파라미터 설정:', defaultParams);
     }, [navigate, updateParams, getDefaultDates, getDefaultGuests, searchParams]);
